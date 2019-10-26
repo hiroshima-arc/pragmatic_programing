@@ -487,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 「Buzz」を出力できるようにする</p>
 </li>
 <li>
-<p>&#10063; 「FizzBuzz」を出力できるようにする</p>
+<p>&#10003; 「FizzBuzz」を出力できるようにする</p>
 </li>
 </ul>
 </div>
@@ -638,8 +638,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                     &gt;
                   &lt;/li&gt;
                   &lt;li&gt;
-                    3 と 5
-                    両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする
+                    &lt;del&gt;
+                      3 と 5
+                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする
+                    &lt;/del&gt;
                   &lt;/li&gt;
                 &lt;/ul&gt;
               &lt;/div&gt;
@@ -766,7 +768,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
       function fizzBuzz(number) {
         let result = number;
-        if (number % 3 === 0) {
+        if (number % 3 === 0 &amp;&amp; number % 5 === 0) {
+          result = "FizzBuzz";
+        } else if (number % 3 === 0) {
           result = "Fizz";
         } else if (number % 5 === 0) {
           result = "Buzz";
@@ -802,7 +806,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 15:49:42 JST
+Last updated 2019-10-26 15:55:01 JST
 </div>
 </div>
 </body>
