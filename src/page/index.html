@@ -233,8 +233,9 @@
         };
         const body = function() {
           let result = "<tr>";
+          let list = print1To100();
           for (i = 0; i < 100; i++) {
-            result += `<td>${fizzBuzz(i + 1)}</td>`;
+            result += `<td>${list[i]}</td>`;
             if ((i + 1) % 10 === 0) result += `</tr><tr>`;
           }
           result += "</tr>";
