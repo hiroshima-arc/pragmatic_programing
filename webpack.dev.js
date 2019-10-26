@@ -19,24 +19,20 @@ module.exports = {
   },
 
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              presets: [
-                "@babel/preset-env"
-              ]
-            }
+        use: [{
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env"
+            ]
           }
-        ]
+        }]
       },
       {
         test: /\.css$/,
-        use: [
-          {
+        use: [{
             loader: MiniCssExtractPlugin.loader,
           },
           "css-loader"
@@ -46,7 +42,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/page/index.html",
+      template: "!!html-loader!./src/page/index.html",
       filename: "index.html"
     }),
     new MiniCssExtractPlugin({
