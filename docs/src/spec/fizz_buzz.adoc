@@ -13,50 +13,22 @@
 
 == 設計
 === TODOリスト
+* [ ] 繰り返し実行できるようにする
 * [ ] 「Fizz」を出力できるようにする
 * [ ] 「Buzz」を出力できるようにする
 * [ ] 「FizzBuzz」を出力できるようにする
-* [ ] 繰り返し実行できるようにする
 
 === ユースケース図
-[plantuml]
-----
-left to right direction
-skinparam packageStyle rectangle
-actor User
-rectangle FizzBuzz {
-  User -- (Put Value)
-}
-----
 
 === クラス図
-[plantuml]
-----
-class FizzBuzz {
-+ {static}generate(number)
-+ iterate(count)
-}
-----
 
 === シーケンス図
-[plantuml]
-----
-actor User
-
-User -> FizzBuzz: iterate
-loop for each iterate
-      activate FizzBuzz
-      FizzBuzz -> FizzBuzz: generate
-            User <- FizzBuzz
-      deactivate FizzBuzz
-end
-----
 
 == 開発
 
 [source, html]
 ----
-include::../../../src/index.html[]
+include::../../../src/page/index.html[]
 ----
 
 == 参照

@@ -478,6 +478,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
+<p>&#10063; 繰り返し実行できるようにする</p>
+</li>
+<li>
 <p>&#10063; 「Fizz」を出力できるようにする</p>
 </li>
 <li>
@@ -486,35 +489,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10063; 「FizzBuzz」を出力できるようにする</p>
 </li>
-<li>
-<p>&#10063; 繰り返し実行できるようにする</p>
-</li>
 </ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_ユースケース図">2.2. ユースケース図</h3>
-<div class="imageblock">
-<div class="content">
-<img src="diag-4f263079be7bc4314bfa9b8d2fc6aa0c.png" alt="diag 4f263079be7bc4314bfa9b8d2fc6aa0c" width="212" height="110">
-</div>
-</div>
+
 </div>
 <div class="sect2">
 <h3 id="_クラス図">2.3. クラス図</h3>
-<div class="imageblock">
-<div class="content">
-<img src="diag-65e63f88ddabd9fb3eaf6430854ef5dd.png" alt="diag 65e63f88ddabd9fb3eaf6430854ef5dd" width="139" height="91">
-</div>
-</div>
+
 </div>
 <div class="sect2">
 <h3 id="_シーケンス図">2.4. シーケンス図</h3>
-<div class="imageblock">
-<div class="content">
-<img src="diag-226e0ed5d3d2842e7c6c109615641edc.png" alt="diag 226e0ed5d3d2842e7c6c109615641edc" width="210" height="309">
-</div>
-</div>
+
 </div>
 </div>
 </div>
@@ -523,7 +511,243 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-html" data-lang="html">Unresolved directive in fizz_buzz.adoc - include::../../../src/index.html[]</code></pre>
+<pre class="highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;!-- Required meta tags --&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    /&gt;
+
+    &lt;!-- Bootstrap CSS --&gt;
+    &lt;link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    /&gt;
+
+    &lt;title&gt;アプリケーションプログラマのための練習プログラム集&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- ヘッダー --&gt;
+    &lt;header class="py-4"&gt;&lt;/header&gt;
+    &lt;!-- /ヘッダー --&gt;
+    &lt;div class="container text-center"&gt;
+      &lt;h1&gt;アプリケーションプログラマのための練習プログラム集&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;!-- ナビゲーションバー --&gt;
+    &lt;nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top"&gt;
+      &lt;!-- サブコンポーネント --&gt;
+      &lt;div class="container"&gt;
+        &lt;a href="index.html" class="navbar-brand"&gt;Etude&lt;/a&gt;
+        &lt;!-- 切り替えボタン --&gt;
+        &lt;button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbar-content"
+          aria-controls="navbar-content"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        &gt;
+          &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;!-- ナビゲーション --&gt;
+        &lt;div class="collapse navbar-collapse" id="navbar-content"&gt;
+          &lt;!-- ナビゲーションメニュー --&gt;
+          &lt;!-- 左側メニュー: トップページの各コンテンツへのリンク --&gt;
+          &lt;ul class="navbar-nav mr-auto"&gt;
+            &lt;li class="nav-item active"&gt;
+              &lt;a href="#" class="nav-link"
+                &gt;Top &lt;span class="sr-only"&gt;(current)&lt;/span&gt;&lt;/a
+              &gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+              &lt;a href="#" class="nav-link"&gt;About&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item dropdown"&gt;
+              &lt;a
+                href="#"
+                class="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-hhaspopup="true"
+                aria-expanded="false"
+              &gt;
+                Contents
+              &lt;/a&gt;
+              &lt;div class="dropdown-menu" aria-labelledby="navbarDropdown"&gt;
+                &lt;a href="#" class="dropdown-item"&gt;FizzBuzz&lt;/a&gt;
+              &lt;/div&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;!-- /ナビゲーションメニュー --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;!-- サブコンポーネント --&gt;
+    &lt;/nav&gt;
+    &lt;!-- /ナビゲーションバー --&gt;
+    &lt;!-- メイン --&gt;
+    &lt;main&gt;
+      &lt;!-- コンテンツ01 --&gt;
+      &lt;div class="py-4"&gt;
+        &lt;section id="fizz-buzz"&gt;
+          &lt;div class="container"&gt;
+            &lt;div class="row"&gt;
+              &lt;h2&gt;FizzBuzz&lt;/h2&gt;
+            &lt;/div&gt;
+            &lt;div class="row p-3"&gt;
+              &lt;!-- 左側カラム（画面幅md以上）　--&gt;
+              &lt;div class="col-md-2"&gt;
+                &lt;h3&gt;仕様&lt;/h3&gt;
+              &lt;/div&gt;
+              &lt;!-- 右側カラム（画面幅md以上） --&gt;
+              &lt;div class="col-md-10"&gt;
+                &lt;p&gt;1 から 100 までの数をプリントするプログラムを書け。&lt;/p&gt;
+                &lt;p&gt;
+                  ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5
+                  の倍数のときは｢Buzz｣とプリントし、
+                &lt;/p&gt;
+                &lt;p&gt;3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="row p-3"&gt;
+              &lt;!-- 左側カラム（画面幅md以上）　--&gt;
+              &lt;div class="col-md-2"&gt;
+                &lt;h3&gt;ToDoリスト&lt;/h3&gt;
+              &lt;/div&gt;
+              &lt;!-- 右側カラム（画面幅md以上） --&gt;
+              &lt;div class="col-md-10"&gt;
+                &lt;ul&gt;
+                  &lt;li&gt;1 から 100 まで数をプリントできるようにする。&lt;/li&gt;
+                  &lt;li&gt;
+                    3
+                    の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                  &lt;/li&gt;
+                  &lt;li&gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/li&gt;
+                  &lt;li&gt;
+                    3 と 5
+                    両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする
+                  &lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;dvi class="row p-3"&gt;
+              &lt;div class="col-md-12 order-md-2"&gt;
+                &lt;table class="table table-striped"&gt;
+                  &lt;thead&gt;
+                    &lt;th&gt;1&lt;/th&gt;
+                    &lt;th&gt;2&lt;/th&gt;
+                    &lt;th&gt;3&lt;/th&gt;
+                    &lt;th&gt;4&lt;/th&gt;
+                    &lt;th&gt;5&lt;/th&gt;
+                    &lt;th&gt;6&lt;/th&gt;
+                    &lt;th&gt;7&lt;/th&gt;
+                    &lt;th&gt;8&lt;/th&gt;
+                    &lt;th&gt;9&lt;/th&gt;
+                    &lt;th&gt;10&lt;/th&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody&gt;
+                    &lt;tr&gt;
+                      &lt;td&gt;1&lt;/td&gt;
+                      &lt;td&gt;2&lt;/td&gt;
+                      &lt;td&gt;Fizz&lt;/td&gt;
+                      &lt;td&gt;4&lt;/td&gt;
+                      &lt;td&gt;Buzz&lt;/td&gt;
+                      &lt;td&gt;Fizz&lt;/td&gt;
+                      &lt;td&gt;7&lt;/td&gt;
+                      &lt;td&gt;8&lt;/td&gt;
+                      &lt;td&gt;Fizz&lt;/td&gt;
+                      &lt;td&gt;Buzz&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;td&gt;11&lt;/td&gt;
+                      &lt;td&gt;Fizz&lt;/td&gt;
+                      &lt;td&gt;13&lt;/td&gt;
+                      &lt;td&gt;14&lt;/td&gt;
+                      &lt;td&gt;FizzBuzz&lt;/td&gt;
+                      &lt;td&gt;16&lt;/td&gt;
+                      &lt;td&gt;17&lt;/td&gt;
+                      &lt;td&gt;18&lt;/td&gt;
+                      &lt;td&gt;19&lt;/td&gt;
+                      &lt;td&gt;Buzz&lt;/td&gt;
+                    &lt;/tr&gt;
+                  &lt;/tbody&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/dvi&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+        &lt;section id="mocha"&gt;&lt;/section&gt;
+      &lt;/div&gt;
+      &lt;!-- /コンテンツ01 --&gt;
+    &lt;/main&gt;
+    &lt;!-- /メイン --&gt;
+    &lt;!-- フッター --&gt;
+    &lt;footer class="py-4 bg-dark text-light"&gt;
+      &lt;div class="container text-center"&gt;
+        &lt;!-- ナビゲーション --&gt;
+        &lt;ul class="nav justify-content-center mb-3"&gt;
+          &lt;li class="nav-item"&gt;
+            &lt;a href="#" class="nav-link"&gt;Top&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li class="nav-item"&gt;
+            &lt;a href="#" class="nav-link"&gt;About&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li class="nav-item"&gt;
+            &lt;a href="#" class="nav-link"&gt;Contents&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;!-- /ナビゲーション --&gt;
+        &lt;p&gt;
+          &lt;small&gt;Copyright &amp;copy;2019 HiroshiamARC, All Rights Reserved.&lt;/small&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+    &lt;!-- /フッター --&gt;
+    &lt;!-- Optional JavaScript --&gt;
+    &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
+    &lt;script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    &gt;&lt;/script&gt;
+    &lt;script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    &gt;&lt;/script&gt;
+    &lt;script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    &gt;&lt;/script&gt;
+    &lt;script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      mocha.setup("tdd");
+    &lt;/script&gt;
+    &lt;script&gt;
+      const assert = chai.assert;
+      suite("FizzBuzzTest", () =&gt; {
+        test("greeting", () =&gt; {
+          assert.equal(greeting(), "Hello, world");
+        });
+      });
+      function greeting() {
+        return "Hello, world";
+      }
+    &lt;/script&gt;
+    &lt;script&gt;
+      mocha.globals(["jQuery"]);
+      mocha.run();
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -546,7 +770,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-24 10:22:16 JST
+Last updated 2019-10-26 15:11:28 JST
 </div>
 </div>
 </body>
