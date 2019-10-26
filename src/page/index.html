@@ -224,18 +224,13 @@
         return result;
       }
       function renderTable() {
-        const header = `
-              <th>1</th>
-              <th>2</th>
-              <th>3</th>
-              <th>4</th>
-              <th>5</th>
-              <th>6</th>
-              <th>7</th>
-              <th>8</th>
-              <th>9</th>
-              <th>10</th>
-        `;
+        const header = function() {
+          let result = "";
+          for (i = 1; i <= 10; i++) {
+            result += `<th>${i}</th>`;
+          }
+          return result;
+        };
         const body = `
               <tr>
                 <td>1</td>
@@ -265,7 +260,7 @@
         const result = `
             <table class="table table-striped">
               <thead>
-                ${header}
+                ${header()}
               </thead>
                 ${body}
               <tbody>
