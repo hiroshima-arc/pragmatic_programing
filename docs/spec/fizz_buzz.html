@@ -737,19 +737,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         return result;
       }
       function renderTable() {
+        const header = `
+              &lt;th&gt;1&lt;/th&gt;
+              &lt;th&gt;2&lt;/th&gt;
+              &lt;th&gt;3&lt;/th&gt;
+              &lt;th&gt;4&lt;/th&gt;
+              &lt;th&gt;5&lt;/th&gt;
+              &lt;th&gt;6&lt;/th&gt;
+              &lt;th&gt;7&lt;/th&gt;
+              &lt;th&gt;8&lt;/th&gt;
+              &lt;th&gt;9&lt;/th&gt;
+              &lt;th&gt;10&lt;/th&gt;
+        `;
         const result = `
             &lt;table class="table table-striped"&gt;
               &lt;thead&gt;
-                &lt;th&gt;1&lt;/th&gt;
-                &lt;th&gt;2&lt;/th&gt;
-                &lt;th&gt;3&lt;/th&gt;
-                &lt;th&gt;4&lt;/th&gt;
-                &lt;th&gt;5&lt;/th&gt;
-                &lt;th&gt;6&lt;/th&gt;
-                &lt;th&gt;7&lt;/th&gt;
-                &lt;th&gt;8&lt;/th&gt;
-                &lt;th&gt;9&lt;/th&gt;
-                &lt;th&gt;10&lt;/th&gt;
+                ${header}
               &lt;/thead&gt;
               &lt;tbody&gt;
                 &lt;tr&gt;
@@ -811,7 +814,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 16:04:12 JST
+Last updated 2019-10-26 16:44:46 JST
 </div>
 </div>
 </body>
