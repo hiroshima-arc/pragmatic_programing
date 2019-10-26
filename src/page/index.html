@@ -234,7 +234,7 @@
         const body = function() {
           let result = "<tr>";
           for (i = 0; i < 100; i++) {
-            result += `<td>${i + 1}</td>`;
+            result += `<td>${fizzBuzz(i + 1)}</td>`;
             if ((i + 1) % 10 === 0) result += `</tr><tr>`;
           }
           result += "</tr>";

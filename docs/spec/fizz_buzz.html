@@ -747,7 +747,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         const body = function() {
           let result = "&lt;tr&gt;";
           for (i = 0; i &lt; 100; i++) {
-            result += `&lt;td&gt;${i + 1}&lt;/td&gt;`;
+            result += `&lt;td&gt;${fizzBuzz(i + 1)}&lt;/td&gt;`;
             if ((i + 1) % 10 === 0) result += `&lt;/tr&gt;&lt;tr&gt;`;
           }
           result += "&lt;/tr&gt;";
@@ -795,7 +795,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 16:52:09 JST
+Last updated 2019-10-26 16:53:11 JST
 </div>
 </div>
 </body>
