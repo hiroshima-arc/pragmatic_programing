@@ -741,6 +741,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           assert.equal(1, result[0]);
           assert.equal(100, result[99]);
         });
+        test("3で割り切れる場合はFizzをプリントする", () =&gt; {
+          assert.equal("Fizz", fizzBuzz(3));
+        });
       });
       function print1To100() {
         let result = [];
@@ -778,7 +781,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 15:24:36 JST
+Last updated 2019-10-26 15:30:10 JST
 </div>
 </div>
 </body>
