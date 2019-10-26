@@ -481,7 +481,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 繰り返し実行できるようにする</p>
 </li>
 <li>
-<p>&#10063; 「Fizz」を出力できるようにする</p>
+<p>&#10003; 「Fizz」を出力できるようにする</p>
 </li>
 <li>
 <p>&#10063; 「Buzz」を出力できるようにする</p>
@@ -627,8 +627,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                     &lt;del&gt;1 から 100 まで数をプリントできるようにする。&lt;/del&gt;
                   &lt;/li&gt;
                   &lt;li&gt;
-                    3
-                    の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                    &lt;del&gt;
+                      3
+                      の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                    &lt;/del&gt;
                   &lt;/li&gt;
                   &lt;li&gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/li&gt;
                   &lt;li&gt;
@@ -752,6 +754,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
         return result;
       }
+      function fizzBuzz(number) {
+        let result = number;
+        if (number % 3 === 0) {
+          result = "Fizz";
+        }
+        return result;
+      }
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -781,7 +790,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 15:30:10 JST
+Last updated 2019-10-26 15:38:46 JST
 </div>
 </div>
 </body>

@@ -114,8 +114,10 @@
                     <del>1 から 100 まで数をプリントできるようにする。</del>
                   </li>
                   <li>
-                    3
-                    の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                    <del>
+                      3
+                      の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                    </del>
                   </li>
                   <li>5 の倍数のときは｢Buzz｣とプリントできるようにする。</li>
                   <li>
@@ -236,6 +238,13 @@
         let result = [];
         for (let i = 0; i < 100; i++) {
           result[i] = i + 1;
+        }
+        return result;
+      }
+      function fizzBuzz(number) {
+        let result = number;
+        if (number % 3 === 0) {
+          result = "Fizz";
         }
         return result;
       }
