@@ -161,3 +161,6 @@ fabric.properties
 
 .idea
 /pragmatic_programing.iml
+.gradle
+dist
+.asciidoctor

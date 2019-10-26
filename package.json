@@ -17,7 +17,12 @@
     "watch": "npm-run-all watch:*",
     "watch:format": "watch 'npm-run-all format' ./src ",
     "watch:webpack": "webpack --watch",
-    "watch:test": "watch 'npm-run-all test:unit' ./src "
+    "watch:test": "watch 'npm-run-all test:unit' ./src ",
+    "docs:start": "nf start -j docs/Procfile",
+    "docs:asciidocs:local": "gradle livereload",
+    "docs:asciidocs:proxy": "browser-sync start --config docs/bs-config.js",
+    "docs:asciidocs:build": "gradle asciidoctor",
+    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src"
   },
   "repository": {
     "type": "git",
