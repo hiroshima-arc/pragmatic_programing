@@ -478,7 +478,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; 繰り返し実行できるようにする</p>
+<p>&#10003; 繰り返し実行できるようにする</p>
 </li>
 <li>
 <p>&#10063; 「Fizz」を出力できるようにする</p>
@@ -623,7 +623,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;!-- 右側カラム（画面幅md以上） --&gt;
               &lt;div class="col-md-10"&gt;
                 &lt;ul&gt;
-                  &lt;li&gt;1 から 100 まで数をプリントできるようにする。&lt;/li&gt;
+                  &lt;li&gt;
+                    &lt;del&gt;1 から 100 まで数をプリントできるようにする。&lt;/del&gt;
+                  &lt;/li&gt;
                   &lt;li&gt;
                     3
                     の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
@@ -735,12 +737,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       const assert = chai.assert;
       suite("FizzBuzzTest", () =&gt; {
         test("1から100までをプリントする", () =&gt; {
-          assert.equal(1, print1To100());
-          assert.equal(100, print1To100());
+          const result = print1To100();
+          assert.equal(1, result[0]);
+          assert.equal(100, result[99]);
         });
       });
       function print1To100() {
-        return 1;
+        let result = [];
+        for (let i = 0; i &lt; 100; i++) {
+          result[i] = i + 1;
+        }
+        return result;
       }
     &lt;/script&gt;
     &lt;script&gt;
@@ -771,7 +778,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 15:19:43 JST
+Last updated 2019-10-26 15:24:36 JST
 </div>
 </div>
 </body>
