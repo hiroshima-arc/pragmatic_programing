@@ -164,3 +164,6 @@ fabric.properties
 .gradle
 dist
 .asciidoctor
+.DS_Store
+.project
+/.settings/org.eclipse.buildship.core.prefs
