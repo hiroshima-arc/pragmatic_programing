@@ -647,48 +647,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/div&gt;
             &lt;/div&gt;
             &lt;dvi class="row p-3"&gt;
-              &lt;div class="col-md-12 order-md-2"&gt;
-                &lt;table class="table table-striped"&gt;
-                  &lt;thead&gt;
-                    &lt;th&gt;1&lt;/th&gt;
-                    &lt;th&gt;2&lt;/th&gt;
-                    &lt;th&gt;3&lt;/th&gt;
-                    &lt;th&gt;4&lt;/th&gt;
-                    &lt;th&gt;5&lt;/th&gt;
-                    &lt;th&gt;6&lt;/th&gt;
-                    &lt;th&gt;7&lt;/th&gt;
-                    &lt;th&gt;8&lt;/th&gt;
-                    &lt;th&gt;9&lt;/th&gt;
-                    &lt;th&gt;10&lt;/th&gt;
-                  &lt;/thead&gt;
-                  &lt;tbody&gt;
-                    &lt;tr&gt;
-                      &lt;td&gt;1&lt;/td&gt;
-                      &lt;td&gt;2&lt;/td&gt;
-                      &lt;td&gt;Fizz&lt;/td&gt;
-                      &lt;td&gt;4&lt;/td&gt;
-                      &lt;td&gt;Buzz&lt;/td&gt;
-                      &lt;td&gt;Fizz&lt;/td&gt;
-                      &lt;td&gt;7&lt;/td&gt;
-                      &lt;td&gt;8&lt;/td&gt;
-                      &lt;td&gt;Fizz&lt;/td&gt;
-                      &lt;td&gt;Buzz&lt;/td&gt;
-                    &lt;/tr&gt;
-                    &lt;tr&gt;
-                      &lt;td&gt;11&lt;/td&gt;
-                      &lt;td&gt;Fizz&lt;/td&gt;
-                      &lt;td&gt;13&lt;/td&gt;
-                      &lt;td&gt;14&lt;/td&gt;
-                      &lt;td&gt;FizzBuzz&lt;/td&gt;
-                      &lt;td&gt;16&lt;/td&gt;
-                      &lt;td&gt;17&lt;/td&gt;
-                      &lt;td&gt;18&lt;/td&gt;
-                      &lt;td&gt;19&lt;/td&gt;
-                      &lt;td&gt;Buzz&lt;/td&gt;
-                    &lt;/tr&gt;
-                  &lt;/tbody&gt;
-                &lt;/table&gt;
-              &lt;/div&gt;
+              &lt;div class="col-md-12 order-md-2" id="fizz-buzz-table"&gt;&lt;/div&gt;
             &lt;/dvi&gt;
           &lt;/div&gt;
         &lt;/section&gt;
@@ -777,6 +736,52 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
         return result;
       }
+      function renderTable() {
+        const result = `
+            &lt;table class="table table-striped"&gt;
+              &lt;thead&gt;
+                &lt;th&gt;1&lt;/th&gt;
+                &lt;th&gt;2&lt;/th&gt;
+                &lt;th&gt;3&lt;/th&gt;
+                &lt;th&gt;4&lt;/th&gt;
+                &lt;th&gt;5&lt;/th&gt;
+                &lt;th&gt;6&lt;/th&gt;
+                &lt;th&gt;7&lt;/th&gt;
+                &lt;th&gt;8&lt;/th&gt;
+                &lt;th&gt;9&lt;/th&gt;
+                &lt;th&gt;10&lt;/th&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;1&lt;/td&gt;
+                  &lt;td&gt;2&lt;/td&gt;
+                  &lt;td&gt;Fizz&lt;/td&gt;
+                  &lt;td&gt;4&lt;/td&gt;
+                  &lt;td&gt;Buzz&lt;/td&gt;
+                  &lt;td&gt;Fizz&lt;/td&gt;
+                  &lt;td&gt;7&lt;/td&gt;
+                  &lt;td&gt;8&lt;/td&gt;
+                  &lt;td&gt;Fizz&lt;/td&gt;
+                  &lt;td&gt;Buzz&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;11&lt;/td&gt;
+                  &lt;td&gt;Fizz&lt;/td&gt;
+                  &lt;td&gt;13&lt;/td&gt;
+                  &lt;td&gt;14&lt;/td&gt;
+                  &lt;td&gt;FizzBuzz&lt;/td&gt;
+                  &lt;td&gt;16&lt;/td&gt;
+                  &lt;td&gt;17&lt;/td&gt;
+                  &lt;td&gt;18&lt;/td&gt;
+                    &lt;td&gt;19&lt;/td&gt;
+                    &lt;td&gt;Buzz&lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+        `;
+        return result;
+      }
+      document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -806,7 +811,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 15:55:01 JST
+Last updated 2019-10-26 16:04:12 JST
 </div>
 </div>
 </body>

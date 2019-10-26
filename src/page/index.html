@@ -134,48 +134,7 @@
               </div>
             </div>
             <dvi class="row p-3">
-              <div class="col-md-12 order-md-2">
-                <table class="table table-striped">
-                  <thead>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
-                    <th>7</th>
-                    <th>8</th>
-                    <th>9</th>
-                    <th>10</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>2</td>
-                      <td>Fizz</td>
-                      <td>4</td>
-                      <td>Buzz</td>
-                      <td>Fizz</td>
-                      <td>7</td>
-                      <td>8</td>
-                      <td>Fizz</td>
-                      <td>Buzz</td>
-                    </tr>
-                    <tr>
-                      <td>11</td>
-                      <td>Fizz</td>
-                      <td>13</td>
-                      <td>14</td>
-                      <td>FizzBuzz</td>
-                      <td>16</td>
-                      <td>17</td>
-                      <td>18</td>
-                      <td>19</td>
-                      <td>Buzz</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <div class="col-md-12 order-md-2" id="fizz-buzz-table"></div>
             </dvi>
           </div>
         </section>
@@ -264,6 +223,52 @@
         }
         return result;
       }
+      function renderTable() {
+        const result = `
+            <table class="table table-striped">
+              <thead>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>Fizz</td>
+                  <td>4</td>
+                  <td>Buzz</td>
+                  <td>Fizz</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Fizz</td>
+                  <td>Buzz</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Fizz</td>
+                  <td>13</td>
+                  <td>14</td>
+                  <td>FizzBuzz</td>
+                  <td>16</td>
+                  <td>17</td>
+                  <td>18</td>
+                    <td>19</td>
+                    <td>Buzz</td>
+                  </tr>
+                </tbody>
+              </table>
+        `;
+        return result;
+      }
+      document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
     </script>
     <script>
       mocha.globals(["jQuery"]);
