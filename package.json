@@ -22,7 +22,12 @@
     "docs:asciidocs:local": "gradle livereload",
     "docs:asciidocs:proxy": "browser-sync start --config docs/bs-config.js",
     "docs:asciidocs:build": "gradle asciidoctor",
-    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src"
+    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./docs/src",
+    "docs:slide:start": "nf start -j docs/slides/Procfile",
+    "docs:slide:build": "marp docs/slides/PITCHME.md -o docs/slides/index.html",
+    "docs:slide:proxy": "browser-sync start --config docs/slides/bs-config.js",
+    "docs:slide:watch": "marp -s docs/slides",
+    "docs:slide:preview": "marp -p -w docs/slides"
   },
   "repository": {
     "type": "git",
