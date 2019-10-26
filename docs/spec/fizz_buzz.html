@@ -749,38 +749,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;th&gt;9&lt;/th&gt;
               &lt;th&gt;10&lt;/th&gt;
         `;
+        const body = `
+              &lt;tr&gt;
+                &lt;td&gt;1&lt;/td&gt;
+                &lt;td&gt;2&lt;/td&gt;
+                &lt;td&gt;Fizz&lt;/td&gt;
+                &lt;td&gt;4&lt;/td&gt;
+                &lt;td&gt;Buzz&lt;/td&gt;
+                &lt;td&gt;Fizz&lt;/td&gt;
+                &lt;td&gt;7&lt;/td&gt;
+                &lt;td&gt;8&lt;/td&gt;
+                &lt;td&gt;Fizz&lt;/td&gt;
+                &lt;td&gt;Buzz&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;11&lt;/td&gt;
+                &lt;td&gt;Fizz&lt;/td&gt;
+                &lt;td&gt;13&lt;/td&gt;
+                &lt;td&gt;14&lt;/td&gt;
+                &lt;td&gt;FizzBuzz&lt;/td&gt;
+                &lt;td&gt;16&lt;/td&gt;
+                &lt;td&gt;17&lt;/td&gt;
+                &lt;td&gt;18&lt;/td&gt;
+                &lt;td&gt;19&lt;/td&gt;
+                &lt;td&gt;Buzz&lt;/td&gt;
+              &lt;/tr&gt;
+        `;
         const result = `
             &lt;table class="table table-striped"&gt;
               &lt;thead&gt;
                 ${header}
               &lt;/thead&gt;
+                ${body}
               &lt;tbody&gt;
-                &lt;tr&gt;
-                  &lt;td&gt;1&lt;/td&gt;
-                  &lt;td&gt;2&lt;/td&gt;
-                  &lt;td&gt;Fizz&lt;/td&gt;
-                  &lt;td&gt;4&lt;/td&gt;
-                  &lt;td&gt;Buzz&lt;/td&gt;
-                  &lt;td&gt;Fizz&lt;/td&gt;
-                  &lt;td&gt;7&lt;/td&gt;
-                  &lt;td&gt;8&lt;/td&gt;
-                  &lt;td&gt;Fizz&lt;/td&gt;
-                  &lt;td&gt;Buzz&lt;/td&gt;
-                &lt;/tr&gt;
-                &lt;tr&gt;
-                  &lt;td&gt;11&lt;/td&gt;
-                  &lt;td&gt;Fizz&lt;/td&gt;
-                  &lt;td&gt;13&lt;/td&gt;
-                  &lt;td&gt;14&lt;/td&gt;
-                  &lt;td&gt;FizzBuzz&lt;/td&gt;
-                  &lt;td&gt;16&lt;/td&gt;
-                  &lt;td&gt;17&lt;/td&gt;
-                  &lt;td&gt;18&lt;/td&gt;
-                    &lt;td&gt;19&lt;/td&gt;
-                    &lt;td&gt;Buzz&lt;/td&gt;
-                  &lt;/tr&gt;
-                &lt;/tbody&gt;
-              &lt;/table&gt;
+              &lt;/tbody&gt;
+            &lt;/table&gt;
         `;
         return result;
       }
@@ -814,7 +817,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 16:44:46 JST
+Last updated 2019-10-26 16:45:53 JST
 </div>
 </div>
 </body>
