@@ -51,6 +51,27 @@ npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/register 
 
 ### 開発
 
+#### アプリケーション
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hiroshima-arc/pragmatic_programing)
+
+```bash
+npm install
+npm start
+```
+
+#### ドキュメント
+
+```bash
+npm run docs:start
+```
+
+#### スライド
+
+```bash
+npm run docs:slide:start
+```
+
 **[⬆ back to top](#構成)**
 
 ## 参照
