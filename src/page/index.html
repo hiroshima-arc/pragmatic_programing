@@ -231,38 +231,21 @@
           }
           return result;
         };
-        const body = `
-              <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>Fizz</td>
-                <td>4</td>
-                <td>Buzz</td>
-                <td>Fizz</td>
-                <td>7</td>
-                <td>8</td>
-                <td>Fizz</td>
-                <td>Buzz</td>
-              </tr>
-              <tr>
-                <td>11</td>
-                <td>Fizz</td>
-                <td>13</td>
-                <td>14</td>
-                <td>FizzBuzz</td>
-                <td>16</td>
-                <td>17</td>
-                <td>18</td>
-                <td>19</td>
-                <td>Buzz</td>
-              </tr>
-        `;
+        const body = function() {
+          let result = "<tr>";
+          for (i = 0; i < 100; i++) {
+            result += `<td>${i + 1}</td>`;
+            if ((i + 1) % 10 === 0) result += `</tr><tr>`;
+          }
+          result += "</tr>";
+          return result;
+        };
         const result = `
             <table class="table table-striped">
               <thead>
                 ${header()}
               </thead>
-                ${body}
+                ${body()}
               <tbody>
               </tbody>
             </table>
