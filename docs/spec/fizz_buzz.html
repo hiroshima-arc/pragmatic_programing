@@ -722,11 +722,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
       });
       function generateFizzBuzzList() {
-        let result = [];
-        [...Array(100).keys()].forEach(i =&gt; {
-          result.push(generateFizzBuzz(i + 1));
-        });
-        return result;
+        return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
       }
       function generateFizzBuzz(number) {
         isFizz = number % 3 === 0;
@@ -798,7 +794,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 12:35:52 JST
+Last updated 2019-11-05 12:43:00 JST
 </div>
 </div>
 </body>
