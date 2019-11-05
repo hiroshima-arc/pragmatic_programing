@@ -723,9 +723,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       });
       function generateFizzBuzzList() {
         let result = [];
-        for (let i = 0; i &lt; 100; i++) {
-          result[i] = generateFizzBuzz(i + 1);
-        }
+        [...Array(100).keys()].forEach(i =&gt; {
+          result.push(generateFizzBuzz(i + 1));
+        });
         return result;
       }
       function generateFizzBuzz(number) {
@@ -798,7 +798,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 12:29:32 JST
+Last updated 2019-11-05 12:35:52 JST
 </div>
 </div>
 </body>
