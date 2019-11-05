@@ -721,6 +721,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           assert.equal("FizzBuzz", generateFizzBuzz(15));
         });
       });
+
+      const FIZZ = "Fizz";
+      const BUZZ = "Buzz";
+
       function generateFizzBuzzList() {
         return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
       }
@@ -728,9 +732,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         isFizz = number % 3 === 0;
         isBuzz = number % 5 === 0;
 
-        if (isFizz &amp;&amp; isBuzz) return "FizzBuzz";
-        if (isFizz) return "Fizz";
-        if (isBuzz) return "Buzz";
+        if (isFizz &amp;&amp; isBuzz) return FIZZ + BUZZ;
+        if (isFizz) return FIZZ;
+        if (isBuzz) return BUZZ;
 
         return number;
       }
@@ -794,7 +798,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 12:43:00 JST
+Last updated 2019-11-05 12:48:26 JST
 </div>
 </div>
 </body>

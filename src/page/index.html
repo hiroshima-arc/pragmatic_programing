@@ -208,6 +208,10 @@
           assert.equal("FizzBuzz", generateFizzBuzz(15));
         });
       });
+
+      const FIZZ = "Fizz";
+      const BUZZ = "Buzz";
+
       function generateFizzBuzzList() {
         return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
       }
@@ -215,9 +219,9 @@
         isFizz = number % 3 === 0;
         isBuzz = number % 5 === 0;
 
-        if (isFizz && isBuzz) return "FizzBuzz";
-        if (isFizz) return "Fizz";
-        if (isBuzz) return "Buzz";
+        if (isFizz && isBuzz) return FIZZ + BUZZ;
+        if (isFizz) return FIZZ;
+        if (isBuzz) return BUZZ;
 
         return number;
       }
