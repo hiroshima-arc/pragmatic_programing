@@ -227,24 +227,48 @@
       }
       function renderTable() {
         const header = (() => {
-          return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`).join(" ");
+          return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
         })();
         const body = (() => {
-          let result = "<tr>";
+          let result = [];
+          let row = 0;
+          let col = [];
           generateFizzBuzzList().forEach((v, k) => {
-            result += `<td>${v}</td>`;
-            if ((k + 1) % 10 === 0) result += "</tr><tr>";
+            if ((k + 1) % 10 === 0) {
+              col.push(`<td>${v}</td>`);
+              result[row++] = col;
+              col = [];
+            } else {
+              col.push(`<td>${v}</td>`);
+            }
           });
-          result += "</tr>";
           return result;
         })();
         const result = `
             <table class="table table-striped">
               <thead>
-                ${header}
+                ${header[0]}
+                ${header[1]}
+                ${header[2]}
+                ${header[3]}
+                ${header[4]}
+                ${header[5]}
+                ${header[6]}
+                ${header[7]}
+                ${header[8]}
+                ${header[9]}
               </thead>
-                ${body}
               <tbody>
+                <tr>${body[0].join(" ")}</tr>
+                <tr>${body[1].join(" ")}</tr>
+                <tr>${body[2].join(" ")}</tr>
+                <tr>${body[3].join(" ")}</tr>
+                <tr>${body[4].join(" ")}</tr>
+                <tr>${body[5].join(" ")}</tr>
+                <tr>${body[6].join(" ")}</tr>
+                <tr>${body[7].join(" ")}</tr>
+                <tr>${body[8].join(" ")}</tr>
+                <tr>${body[9].join(" ")}</tr>
               </tbody>
             </table>
         `;

@@ -740,24 +740,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
       function renderTable() {
         const header = (() =&gt; {
-          return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`).join(" ");
+          return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
         })();
         const body = (() =&gt; {
-          let result = "&lt;tr&gt;";
+          let result = [];
+          let row = 0;
+          let col = [];
           generateFizzBuzzList().forEach((v, k) =&gt; {
-            result += `&lt;td&gt;${v}&lt;/td&gt;`;
-            if ((k + 1) % 10 === 0) result += "&lt;/tr&gt;&lt;tr&gt;";
+            if ((k + 1) % 10 === 0) {
+              col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
+              result[row++] = col;
+              col = [];
+            } else {
+              col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
+            }
           });
-          result += "&lt;/tr&gt;";
           return result;
         })();
         const result = `
             &lt;table class="table table-striped"&gt;
               &lt;thead&gt;
-                ${header}
+                ${header[0]}
+                ${header[1]}
+                ${header[2]}
+                ${header[3]}
+                ${header[4]}
+                ${header[5]}
+                ${header[6]}
+                ${header[7]}
+                ${header[8]}
+                ${header[9]}
               &lt;/thead&gt;
-                ${body}
               &lt;tbody&gt;
+                &lt;tr&gt;${body[0].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[1].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[2].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[3].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[4].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[5].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[6].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[7].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[8].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${body[9].join(" ")}&lt;/tr&gt;
               &lt;/tbody&gt;
             &lt;/table&gt;
         `;
@@ -793,7 +817,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 14:39:55 JST
+Last updated 2019-11-05 15:00:55 JST
 </div>
 </div>
 </body>
