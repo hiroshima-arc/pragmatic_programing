@@ -210,6 +210,36 @@
         test("15で割り切れる場合はFizzBuzzをプリントする", () => {
           assert.equal("FizzBuzz", generateFizzBuzz(15));
         });
+
+        test("Fizzの個数は27個", () => {
+          assert.equal(
+            27,
+            generateFizzBuzzList().filter(i => i === "Fizz").length
+          );
+        });
+
+        test("Buzzの個数は14個", () => {
+          assert.equal(
+            14,
+            generateFizzBuzzList().filter(i => i === "Buzz").length
+          );
+        });
+
+        test("FizzBuzzの個数は6個", () => {
+          assert.equal(
+            6,
+            generateFizzBuzzList().filter(i => i === "FizzBuzz").length
+          );
+        });
+
+        test("数字の合計は2632", () => {
+          assert.equal(
+            2632,
+            generateFizzBuzzList()
+              .filter(Number.isInteger)
+              .reduce((acc, value) => acc + value)
+          );
+        });
       });
 
       const FIZZ = "Fizz";

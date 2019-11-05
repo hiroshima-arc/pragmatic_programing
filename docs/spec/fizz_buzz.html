@@ -723,6 +723,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
           assert.equal("FizzBuzz", generateFizzBuzz(15));
         });
+
+        test("Fizzの個数は27個", () =&gt; {
+          assert.equal(
+            27,
+            generateFizzBuzzList().filter(i =&gt; i === "Fizz").length
+          );
+        });
+
+        test("Buzzの個数は14個", () =&gt; {
+          assert.equal(
+            14,
+            generateFizzBuzzList().filter(i =&gt; i === "Buzz").length
+          );
+        });
+
+        test("FizzBuzzの個数は6個", () =&gt; {
+          assert.equal(
+            6,
+            generateFizzBuzzList().filter(i =&gt; i === "FizzBuzz").length
+          );
+        });
+
+        test("数字の合計は2632", () =&gt; {
+          assert.equal(
+            2632,
+            generateFizzBuzzList()
+              .filter(Number.isInteger)
+              .reduce((acc, value) =&gt; acc + value)
+          );
+        });
       });
 
       const FIZZ = "Fizz";
@@ -837,7 +867,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 15:23:09 JST
+Last updated 2019-11-05 15:29:08 JST
 </div>
 </div>
 </body>
