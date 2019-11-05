@@ -711,12 +711,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           assert.equal("FizzBuzz", result[14]);
           assert.equal("Buzz", result[99]);
         });
+
         test("3で割り切れる場合はFizzをプリントする", () =&gt; {
           assert.equal("Fizz", generateFizzBuzz(3));
         });
+
         test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
           assert.equal("Buzz", generateFizzBuzz(5));
         });
+
         test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
           assert.equal("FizzBuzz", generateFizzBuzz(15));
         });
@@ -728,6 +731,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       function generateFizzBuzzList() {
         return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
       }
+
       function generateFizzBuzz(number) {
         isFizz = number % 3 === 0;
         isBuzz = number % 5 === 0;
@@ -738,10 +742,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         return number;
       }
+
       function renderTable() {
         const header = (() =&gt; {
           return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
         })();
+
         const body = (() =&gt; {
           let result = [];
           let row = 0;
@@ -757,7 +763,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
           return result;
         })();
+
         const row = n =&gt; body[n].join(" ");
+
         const result = `
             &lt;table&gt;
               &lt;thead&gt;
@@ -788,6 +796,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         `;
         return result;
       }
+
       document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
       document.querySelector("#fizz-buzz-table &gt; table").classList.add("table");
       document
@@ -822,7 +831,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 15:09:02 JST
+Last updated 2019-11-05 15:12:13 JST
 </div>
 </div>
 </body>
