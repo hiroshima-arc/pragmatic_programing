@@ -757,6 +757,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
           return result;
         })();
+        const row = n =&gt; body[n].join(" ");
         const result = `
             &lt;table class="table table-striped"&gt;
               &lt;thead&gt;
@@ -772,16 +773,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 ${header[9]}
               &lt;/thead&gt;
               &lt;tbody&gt;
-                &lt;tr&gt;${body[0].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[1].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[2].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[3].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[4].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[5].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[6].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[7].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[8].join(" ")}&lt;/tr&gt;
-                &lt;tr&gt;${body[9].join(" ")}&lt;/tr&gt;
+                &lt;tr&gt;${row(0)}&lt;/tr&gt;
+                &lt;tr&gt;${row(1)}&lt;/tr&gt;
+                &lt;tr&gt;${row(2)}&lt;/tr&gt;
+                &lt;tr&gt;${row(3)}&lt;/tr&gt;
+                &lt;tr&gt;${row(4)}&lt;/tr&gt;
+                &lt;tr&gt;${row(5)}&lt;/tr&gt;
+                &lt;tr&gt;${row(6)}&lt;/tr&gt;
+                &lt;tr&gt;${row(7)}&lt;/tr&gt;
+                &lt;tr&gt;${row(8)}&lt;/tr&gt;
+                &lt;tr&gt;${row(9)}&lt;/tr&gt;
               &lt;/tbody&gt;
             &lt;/table&gt;
         `;
@@ -817,7 +818,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 15:00:55 JST
+Last updated 2019-11-05 15:05:02 JST
 </div>
 </div>
 </body>

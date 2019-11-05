@@ -244,6 +244,7 @@
           });
           return result;
         })();
+        const row = n => body[n].join(" ");
         const result = `
             <table class="table table-striped">
               <thead>
@@ -259,16 +260,16 @@
                 ${header[9]}
               </thead>
               <tbody>
-                <tr>${body[0].join(" ")}</tr>
-                <tr>${body[1].join(" ")}</tr>
-                <tr>${body[2].join(" ")}</tr>
-                <tr>${body[3].join(" ")}</tr>
-                <tr>${body[4].join(" ")}</tr>
-                <tr>${body[5].join(" ")}</tr>
-                <tr>${body[6].join(" ")}</tr>
-                <tr>${body[7].join(" ")}</tr>
-                <tr>${body[8].join(" ")}</tr>
-                <tr>${body[9].join(" ")}</tr>
+                <tr>${row(0)}</tr>
+                <tr>${row(1)}</tr>
+                <tr>${row(2)}</tr>
+                <tr>${row(3)}</tr>
+                <tr>${row(4)}</tr>
+                <tr>${row(5)}</tr>
+                <tr>${row(6)}</tr>
+                <tr>${row(7)}</tr>
+                <tr>${row(8)}</tr>
+                <tr>${row(9)}</tr>
               </tbody>
             </table>
         `;
