@@ -226,10 +226,10 @@
         return number;
       }
       function renderTable() {
-        const header = function() {
+        const header = () => {
           return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`).join(" ");
         };
-        const body = function() {
+        const body = () => {
           let result = "<tr>";
           generateFizzBuzzList().forEach((v, k) => {
             result += `<td>${v}</td>`;

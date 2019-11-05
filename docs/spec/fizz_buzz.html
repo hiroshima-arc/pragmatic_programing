@@ -739,10 +739,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         return number;
       }
       function renderTable() {
-        const header = function() {
+        const header = () =&gt; {
           return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`).join(" ");
         };
-        const body = function() {
+        const body = () =&gt; {
           let result = "&lt;tr&gt;";
           generateFizzBuzzList().forEach((v, k) =&gt; {
             result += `&lt;td&gt;${v}&lt;/td&gt;`;
@@ -793,7 +793,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 14:32:10 JST
+Last updated 2019-11-05 14:33:52 JST
 </div>
 </div>
 </body>
