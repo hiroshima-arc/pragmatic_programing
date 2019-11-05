@@ -500,17 +500,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 「FizzBuzz」を出力できるようにする</p>
 </li>
 <li>
-<p>&#10063; タイプ 1 の場合</p>
+<p>&#10003; タイプ 1 の場合</p>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; 3の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。</p>
+<p>&#10003; 3の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。</p>
 </li>
 <li>
-<p>&#10063; 5 の倍数のときは｢Buzz｣とプリントできるようにする。</p>
+<p>&#10003; 5 の倍数のときは｢Buzz｣とプリントできるようにする。</p>
 </li>
 <li>
-<p>&#10063; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
+<p>&#10003; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
 </li>
 </ul>
 </div>
@@ -691,13 +691,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   &lt;li&gt;タイプ 1 の場合&lt;/li&gt;
                   &lt;ul&gt;
                     &lt;li&gt;
-                      3
-                      の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                      &lt;del&gt;
+                        3
+                        の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                      &lt;/del&gt;
                     &lt;/li&gt;
-                    &lt;li&gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/li&gt;
                     &lt;li&gt;
-                      3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      &lt;del
+                        &gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/del
+                      &gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;del&gt;
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      &lt;/del&gt;
                     &lt;/li&gt;
                   &lt;/ul&gt;
                   &lt;li&gt;タイプ 2 の場合&lt;/li&gt;
@@ -780,76 +788,78 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         setup(() =&gt; {
           let fizzBuzz = new FizzBuzz();
         });
-        test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-          const data = {
-            0: 1,
-            1: 2,
-            2: "Fizz",
-            3: 4,
-            4: "Buzz",
-            14: "FizzBuzz",
-            99: "Buzz"
-          };
-          const result = fizzBuzz.generateList();
-          Object.keys(data).forEach(k =&gt; {
-            assert.equal(data[k], result[k]);
-          });
-        });
-
-        suite("3の倍数の場合", () =&gt; {
-          test("3で割り切れる場合はFizzをプリントする", () =&gt; {
-            assert.equal("Fizz", fizzBuzz.generate(3));
-          });
-        });
-
-        suite("5の倍数の場合", () =&gt; {
-          test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
-            assert.equal("Buzz", fizzBuzz.generate(5));
+        suite("タイプ1の場合", () =&gt; {
+          test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
+            const data = {
+              0: 1,
+              1: 2,
+              2: "Fizz",
+              3: 4,
+              4: "Buzz",
+              14: "FizzBuzz",
+              99: "Buzz"
+            };
+            const result = fizzBuzz.generateList();
+            Object.keys(data).forEach(k =&gt; {
+              assert.equal(data[k], result[k]);
+            });
           });
 
-          test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-            assert.equal("FizzBuzz", fizzBuzz.generate(15));
-          });
-        });
-
-        suite("その他の場合", () =&gt; {
-          test("1を渡したら1を返す", () =&gt; {
-            assert.equal(1, fizzBuzz.generate(1));
+          suite("3の倍数の場合", () =&gt; {
+            test("3で割り切れる場合はFizzをプリントする", () =&gt; {
+              assert.equal("Fizz", fizzBuzz.generate(3, 1));
+            });
           });
 
-          test("2を渡したら2を返す", () =&gt; {
-            assert.equal(2, fizzBuzz.generate(2));
+          suite("5の倍数の場合", () =&gt; {
+            test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
+              assert.equal("Buzz", fizzBuzz.generate(5, 1));
+            });
+
+            test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
+              assert.equal("FizzBuzz", fizzBuzz.generate(15, 1));
+            });
           });
 
-          test("Fizzの個数は27個", () =&gt; {
-            assert.equal(
-              27,
-              fizzBuzz.generateList().filter(i =&gt; i === "Fizz").length
-            );
-          });
+          suite("その他の場合", () =&gt; {
+            test("1を渡したら1を返す", () =&gt; {
+              assert.equal(1, fizzBuzz.generate(1, 1));
+            });
 
-          test("Buzzの個数は14個", () =&gt; {
-            assert.equal(
-              14,
-              fizzBuzz.generateList().filter(i =&gt; i === "Buzz").length
-            );
-          });
+            test("2を渡したら2を返す", () =&gt; {
+              assert.equal(2, fizzBuzz.generate(2, 1));
+            });
 
-          test("FizzBuzzの個数は6個", () =&gt; {
-            assert.equal(
-              6,
-              fizzBuzz.generateList().filter(i =&gt; i === "FizzBuzz").length
-            );
-          });
+            test("Fizzの個数は27個", () =&gt; {
+              assert.equal(
+                27,
+                fizzBuzz.generateList().filter(i =&gt; i === "Fizz").length
+              );
+            });
 
-          test("数字の合計は2632", () =&gt; {
-            assert.equal(
-              2632,
-              fizzBuzz
-                .generateList()
-                .filter(Number.isInteger)
-                .reduce((acc, value) =&gt; acc + value)
-            );
+            test("Buzzの個数は14個", () =&gt; {
+              assert.equal(
+                14,
+                fizzBuzz.generateList().filter(i =&gt; i === "Buzz").length
+              );
+            });
+
+            test("FizzBuzzの個数は6個", () =&gt; {
+              assert.equal(
+                6,
+                fizzBuzz.generateList().filter(i =&gt; i === "FizzBuzz").length
+              );
+            });
+
+            test("数字の合計は2632", () =&gt; {
+              assert.equal(
+                2632,
+                fizzBuzz
+                  .generateList()
+                  .filter(Number.isInteger)
+                  .reduce((acc, value) =&gt; acc + value)
+              );
+            });
           });
         });
       });
@@ -861,18 +871,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         generateList() {
-          return [...Array(101).keys()].slice(1).map(this.generate.bind(this));
+          return [...Array(101).keys()]
+            .slice(1)
+            .map(i =&gt; this.generate.bind(this)(i, 1));
         }
 
-        generate(number) {
+        generate(number, type) {
           const isFizz = number % 3 === 0;
           const isBuzz = number % 5 === 0;
 
-          if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
-          if (isFizz) return this.FIZZ;
-          if (isBuzz) return this.BUZZ;
-
-          return number;
+          switch (type) {
+            case 1:
+              if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
+              if (isFizz) return this.FIZZ;
+              if (isBuzz) return this.BUZZ;
+              return number;
+            default:
+              return number;
+          }
         }
 
         renderTable() {
@@ -973,7 +989,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 18:45:01 JST
+Last updated 2019-11-05 18:57:12 JST
 </div>
 </div>
 </body>

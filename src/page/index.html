@@ -120,13 +120,21 @@
                   <li>タイプ 1 の場合</li>
                   <ul>
                     <li>
-                      3
-                      の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                      <del>
+                        3
+                        の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                      </del>
                     </li>
-                    <li>5 の倍数のときは｢Buzz｣とプリントできるようにする。</li>
                     <li>
-                      3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      <del
+                        >5 の倍数のときは｢Buzz｣とプリントできるようにする。</del
+                      >
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      </del>
                     </li>
                   </ul>
                   <li>タイプ 2 の場合</li>
@@ -209,76 +217,78 @@
         setup(() => {
           let fizzBuzz = new FizzBuzz();
         });
-        test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
-          const data = {
-            0: 1,
-            1: 2,
-            2: "Fizz",
-            3: 4,
-            4: "Buzz",
-            14: "FizzBuzz",
-            99: "Buzz"
-          };
-          const result = fizzBuzz.generateList();
-          Object.keys(data).forEach(k => {
-            assert.equal(data[k], result[k]);
-          });
-        });
-
-        suite("3の倍数の場合", () => {
-          test("3で割り切れる場合はFizzをプリントする", () => {
-            assert.equal("Fizz", fizzBuzz.generate(3));
-          });
-        });
-
-        suite("5の倍数の場合", () => {
-          test("5で割り切れる場合はBuzzをプリントする", () => {
-            assert.equal("Buzz", fizzBuzz.generate(5));
+        suite("タイプ1の場合", () => {
+          test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
+            const data = {
+              0: 1,
+              1: 2,
+              2: "Fizz",
+              3: 4,
+              4: "Buzz",
+              14: "FizzBuzz",
+              99: "Buzz"
+            };
+            const result = fizzBuzz.generateList();
+            Object.keys(data).forEach(k => {
+              assert.equal(data[k], result[k]);
+            });
           });
 
-          test("15で割り切れる場合はFizzBuzzをプリントする", () => {
-            assert.equal("FizzBuzz", fizzBuzz.generate(15));
-          });
-        });
-
-        suite("その他の場合", () => {
-          test("1を渡したら1を返す", () => {
-            assert.equal(1, fizzBuzz.generate(1));
+          suite("3の倍数の場合", () => {
+            test("3で割り切れる場合はFizzをプリントする", () => {
+              assert.equal("Fizz", fizzBuzz.generate(3, 1));
+            });
           });
 
-          test("2を渡したら2を返す", () => {
-            assert.equal(2, fizzBuzz.generate(2));
+          suite("5の倍数の場合", () => {
+            test("5で割り切れる場合はBuzzをプリントする", () => {
+              assert.equal("Buzz", fizzBuzz.generate(5, 1));
+            });
+
+            test("15で割り切れる場合はFizzBuzzをプリントする", () => {
+              assert.equal("FizzBuzz", fizzBuzz.generate(15, 1));
+            });
           });
 
-          test("Fizzの個数は27個", () => {
-            assert.equal(
-              27,
-              fizzBuzz.generateList().filter(i => i === "Fizz").length
-            );
-          });
+          suite("その他の場合", () => {
+            test("1を渡したら1を返す", () => {
+              assert.equal(1, fizzBuzz.generate(1, 1));
+            });
 
-          test("Buzzの個数は14個", () => {
-            assert.equal(
-              14,
-              fizzBuzz.generateList().filter(i => i === "Buzz").length
-            );
-          });
+            test("2を渡したら2を返す", () => {
+              assert.equal(2, fizzBuzz.generate(2, 1));
+            });
 
-          test("FizzBuzzの個数は6個", () => {
-            assert.equal(
-              6,
-              fizzBuzz.generateList().filter(i => i === "FizzBuzz").length
-            );
-          });
+            test("Fizzの個数は27個", () => {
+              assert.equal(
+                27,
+                fizzBuzz.generateList().filter(i => i === "Fizz").length
+              );
+            });
 
-          test("数字の合計は2632", () => {
-            assert.equal(
-              2632,
-              fizzBuzz
-                .generateList()
-                .filter(Number.isInteger)
-                .reduce((acc, value) => acc + value)
-            );
+            test("Buzzの個数は14個", () => {
+              assert.equal(
+                14,
+                fizzBuzz.generateList().filter(i => i === "Buzz").length
+              );
+            });
+
+            test("FizzBuzzの個数は6個", () => {
+              assert.equal(
+                6,
+                fizzBuzz.generateList().filter(i => i === "FizzBuzz").length
+              );
+            });
+
+            test("数字の合計は2632", () => {
+              assert.equal(
+                2632,
+                fizzBuzz
+                  .generateList()
+                  .filter(Number.isInteger)
+                  .reduce((acc, value) => acc + value)
+              );
+            });
           });
         });
       });
@@ -290,18 +300,24 @@
         }
 
         generateList() {
-          return [...Array(101).keys()].slice(1).map(this.generate.bind(this));
+          return [...Array(101).keys()]
+            .slice(1)
+            .map(i => this.generate.bind(this)(i, 1));
         }
 
-        generate(number) {
+        generate(number, type) {
           const isFizz = number % 3 === 0;
           const isBuzz = number % 5 === 0;
 
-          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
-          if (isFizz) return this.FIZZ;
-          if (isBuzz) return this.BUZZ;
-
-          return number;
+          switch (type) {
+            case 1:
+              if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
+              if (isFizz) return this.FIZZ;
+              if (isBuzz) return this.BUZZ;
+              return number;
+            default:
+              return number;
+          }
         }
 
         renderTable() {
