@@ -797,11 +797,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         return result;
       }
 
-      document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
-      document.querySelector("#fizz-buzz-table &gt; table").classList.add("table");
-      document
-        .querySelector("#fizz-buzz-table &gt; table")
-        .classList.add("table-striped");
+      function createView() {
+        document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
+        document
+          .querySelector("#fizz-buzz-table &gt; table")
+          .classList.add("table");
+        document
+          .querySelector("#fizz-buzz-table &gt; table")
+          .classList.add("table-striped");
+      }
+
+      createView();
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -831,7 +837,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 15:12:13 JST
+Last updated 2019-11-05 15:23:09 JST
 </div>
 </div>
 </body>

@@ -284,11 +284,17 @@
         return result;
       }
 
-      document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
-      document.querySelector("#fizz-buzz-table > table").classList.add("table");
-      document
-        .querySelector("#fizz-buzz-table > table")
-        .classList.add("table-striped");
+      function createView() {
+        document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
+        document
+          .querySelector("#fizz-buzz-table > table")
+          .classList.add("table");
+        document
+          .querySelector("#fizz-buzz-table > table")
+          .classList.add("table-striped");
+      }
+
+      createView();
     </script>
     <script>
       mocha.globals(["jQuery"]);
