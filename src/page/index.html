@@ -139,10 +139,17 @@
                   </ul>
                   <li>タイプ 2 の場合</li>
                   <ul>
-                    <li>3 の倍数のときは数をプリントできるようにする。</li>
-                    <li>5 の倍数のときは数をプリントできるようにする。</li>
                     <li>
-                      3 と 5 両方の倍数の場合には値をプリントできるようにする。
+                      <del>3 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>5 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には値をプリントできるようにする。
+                      </del>
                     </li>
                   </ul>
                   <li>タイプ 3 の場合</li>
@@ -217,6 +224,7 @@
         setup(() => {
           let fizzBuzz = new FizzBuzz();
         });
+
         suite("タイプ1の場合", () => {
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
             const data = {
@@ -291,6 +299,18 @@
             });
           });
         });
+
+        suite("タイプ2の場合", () => {
+          test("3で割り切れる場合は3をプリントする", () => {
+            assert.equal(3, fizzBuzz.generate(3, 2));
+          });
+          test("5で割り切れる場合は5をプリントする", () => {
+            assert.equal(5, fizzBuzz.generate(5, 2));
+          });
+          test("15で割り切れる場合は15をプリントする", () => {
+            assert.equal(15, fizzBuzz.generate(15, 2));
+          });
+        });
       });
 
       class FizzBuzz {
@@ -314,6 +334,8 @@
               if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
               if (isFizz) return this.FIZZ;
               if (isBuzz) return this.BUZZ;
+              return number;
+            case 2:
               return number;
             default:
               return number;
