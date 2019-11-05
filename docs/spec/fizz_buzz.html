@@ -729,9 +729,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         return result;
       }
       function generateFizzBuzz(number) {
-        if (number % 3 === 0 &amp;&amp; number % 5 === 0) return "FizzBuzz";
-        if (number % 3 === 0) return "Fizz";
-        if (number % 5 === 0) return "Buzz";
+        isFizz = number % 3 === 0;
+        isBuzz = number % 5 === 0;
+
+        if (isFizz &amp;&amp; isBuzz) return "FizzBuzz";
+        if (isFizz) return "Fizz";
+        if (isBuzz) return "Buzz";
+
         return number;
       }
       function renderTable() {
@@ -794,7 +798,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 12:25:26 JST
+Last updated 2019-11-05 12:29:32 JST
 </div>
 </div>
 </body>
