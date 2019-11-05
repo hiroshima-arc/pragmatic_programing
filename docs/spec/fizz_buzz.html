@@ -790,7 +790,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             14: "FizzBuzz",
             99: "Buzz"
           };
-          const result = fizzBuzz.generateFizzBuzzList();
+          const result = fizzBuzz.generateList();
           Object.keys(data).forEach(k =&gt; {
             assert.equal(data[k], result[k]);
           });
@@ -798,48 +798,47 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         suite("3の倍数の場合", () =&gt; {
           test("3で割り切れる場合はFizzをプリントする", () =&gt; {
-            assert.equal("Fizz", fizzBuzz.generateFizzBuzz(3));
+            assert.equal("Fizz", fizzBuzz.generate(3));
           });
         });
 
         suite("5の倍数の場合", () =&gt; {
           test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
-            assert.equal("Buzz", fizzBuzz.generateFizzBuzz(5));
+            assert.equal("Buzz", fizzBuzz.generate(5));
           });
 
           test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-            assert.equal("FizzBuzz", fizzBuzz.generateFizzBuzz(15));
+            assert.equal("FizzBuzz", fizzBuzz.generate(15));
           });
         });
 
         suite("その他の場合", () =&gt; {
           test("1を渡したら1を返す", () =&gt; {
-            assert.equal(1, fizzBuzz.generateFizzBuzz(1));
+            assert.equal(1, fizzBuzz.generate(1));
           });
 
           test("2を渡したら2を返す", () =&gt; {
-            assert.equal(2, fizzBuzz.generateFizzBuzz(2));
+            assert.equal(2, fizzBuzz.generate(2));
           });
 
           test("Fizzの個数は27個", () =&gt; {
             assert.equal(
               27,
-              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "Fizz").length
+              fizzBuzz.generateList().filter(i =&gt; i === "Fizz").length
             );
           });
 
           test("Buzzの個数は14個", () =&gt; {
             assert.equal(
               14,
-              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "Buzz").length
+              fizzBuzz.generateList().filter(i =&gt; i === "Buzz").length
             );
           });
 
           test("FizzBuzzの個数は6個", () =&gt; {
             assert.equal(
               6,
-              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "FizzBuzz")
-                .length
+              fizzBuzz.generateList().filter(i =&gt; i === "FizzBuzz").length
             );
           });
 
@@ -847,7 +846,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             assert.equal(
               2632,
               fizzBuzz
-                .generateFizzBuzzList()
+                .generateList()
                 .filter(Number.isInteger)
                 .reduce((acc, value) =&gt; acc + value)
             );
@@ -861,13 +860,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this.BUZZ = "Buzz";
         }
 
-        generateFizzBuzzList() {
-          return [...Array(101).keys()]
-            .slice(1)
-            .map(this.generateFizzBuzz.bind(this));
+        generateList() {
+          return [...Array(101).keys()].slice(1).map(this.generate.bind(this));
         }
 
-        generateFizzBuzz(number) {
+        generate(number) {
           const isFizz = number % 3 === 0;
           const isBuzz = number % 5 === 0;
 
@@ -887,7 +884,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             let result = [];
             let row = 0;
             let col = [];
-            this.generateFizzBuzzList().forEach((v, k) =&gt; {
+            this.generateList().forEach((v, k) =&gt; {
               if ((k + 1) % 10 === 0) {
                 col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
                 result[row++] = col;
@@ -976,7 +973,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 18:33:20 JST
+Last updated 2019-11-05 18:45:01 JST
 </div>
 </div>
 </body>
