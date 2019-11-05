@@ -154,11 +154,17 @@
                   </ul>
                   <li>タイプ 3 の場合</li>
                   <ul>
-                    <li>3 の倍数のときは数をプリントできるようにする。</li>
-                    <li>5 の倍数のときは数をプリントできるようにする。</li>
                     <li>
-                      3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      <del>3 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>5 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      </del>
                     </li>
                   </ul>
                 </ul>
@@ -311,6 +317,18 @@
             assert.equal(15, fizzBuzz.generate(15, 2));
           });
         });
+
+        suite("タイプ3の場合", () => {
+          test("3で割り切れる場合は3をプリントする", () => {
+            assert.equal(3, fizzBuzz.generate(3, 3));
+          });
+          test("5で割り切れる場合は5をプリントする", () => {
+            assert.equal(5, fizzBuzz.generate(5, 3));
+          });
+          test("15で割り切れる場合はFizzBuzzをプリントする", () => {
+            assert.equal("FizzBuzz", fizzBuzz.generate(15, 3));
+          });
+        });
       });
 
       class FizzBuzz {
@@ -336,6 +354,9 @@
               if (isBuzz) return this.BUZZ;
               return number;
             case 2:
+              return number;
+            case 3:
+              if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
               return number;
             default:
               return number;

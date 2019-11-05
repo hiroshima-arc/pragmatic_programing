@@ -532,17 +532,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p>&#10063; タイプ 3 の場合</p>
+<p>&#10003; タイプ 3 の場合</p>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; 3 の倍数のときは数をプリントできるようにする。</p>
+<p>&#10003; 3 の倍数のときは数をプリントできるようにする。</p>
 </li>
 <li>
-<p>&#10063; 5 の倍数のときは数をプリントできるようにする。</p>
+<p>&#10003; 5 の倍数のときは数をプリントできるようにする。</p>
 </li>
 <li>
-<p>&#10063; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
+<p>&#10003; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
 </li>
 </ul>
 </div>
@@ -725,11 +725,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   &lt;/ul&gt;
                   &lt;li&gt;タイプ 3 の場合&lt;/li&gt;
                   &lt;ul&gt;
-                    &lt;li&gt;3 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
-                    &lt;li&gt;5 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
                     &lt;li&gt;
-                      3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      &lt;del&gt;3 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;del&gt;5 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;del&gt;
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      &lt;/del&gt;
                     &lt;/li&gt;
                   &lt;/ul&gt;
                 &lt;/ul&gt;
@@ -882,6 +888,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             assert.equal(15, fizzBuzz.generate(15, 2));
           });
         });
+
+        suite("タイプ3の場合", () =&gt; {
+          test("3で割り切れる場合は3をプリントする", () =&gt; {
+            assert.equal(3, fizzBuzz.generate(3, 3));
+          });
+          test("5で割り切れる場合は5をプリントする", () =&gt; {
+            assert.equal(5, fizzBuzz.generate(5, 3));
+          });
+          test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
+            assert.equal("FizzBuzz", fizzBuzz.generate(15, 3));
+          });
+        });
       });
 
       class FizzBuzz {
@@ -907,6 +925,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               if (isBuzz) return this.BUZZ;
               return number;
             case 2:
+              return number;
+            case 3:
+              if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
               return number;
             default:
               return number;
@@ -1011,7 +1032,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 19:06:00 JST
+Last updated 2019-11-05 19:11:41 JST
 </div>
 </div>
 </body>
