@@ -759,7 +759,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         })();
         const row = n =&gt; body[n].join(" ");
         const result = `
-            &lt;table class="table table-striped"&gt;
+            &lt;table&gt;
               &lt;thead&gt;
                 ${header[0]}
                 ${header[1]}
@@ -789,6 +789,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         return result;
       }
       document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
+      document.querySelector("#fizz-buzz-table &gt; table").classList.add("table");
+      document
+        .querySelector("#fizz-buzz-table &gt; table")
+        .classList.add("table-striped");
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -818,7 +822,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 15:05:02 JST
+Last updated 2019-11-05 15:09:02 JST
 </div>
 </div>
 </body>

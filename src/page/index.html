@@ -246,7 +246,7 @@
         })();
         const row = n => body[n].join(" ");
         const result = `
-            <table class="table table-striped">
+            <table>
               <thead>
                 ${header[0]}
                 ${header[1]}
@@ -276,6 +276,10 @@
         return result;
       }
       document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
+      document.querySelector("#fizz-buzz-table > table").classList.add("table");
+      document
+        .querySelector("#fizz-buzz-table > table")
+        .classList.add("table-striped");
     </script>
     <script>
       mocha.globals(["jQuery"]);
