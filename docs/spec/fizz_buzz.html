@@ -466,6 +466,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>指定された回数だけ繰り返し実行する。</p>
 </li>
+<li>
+<p>タイプごとに出力を切り替えることができる。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzzの場合のみをプリントする。</p>
+</li>
+</ul>
+</div>
+</li>
 </ul>
 </div>
 </div>
@@ -488,6 +498,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>&#10003; 「FizzBuzz」を出力できるようにする</p>
+</li>
+<li>
+<p>&#10063; タイプ 1 の場合</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; 3の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; 5 の倍数のときは｢Buzz｣とプリントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>&#10063; タイプ 2 の場合</p>
+</li>
+<li>
+<p>&#10063; 3 の倍数のときは数をプリントできるようにする。</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; 5 の倍数のときは数をプリントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; 3 と 5 両方の倍数の場合には値をプリントできるようにする。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>&#10063; タイプ 3 の場合</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; 3 の倍数のときは数をプリントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; 5 の倍数のときは数をプリントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -613,6 +671,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   の倍数のときは｢Buzz｣とプリントし、
                 &lt;/p&gt;
                 &lt;p&gt;3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること&lt;/p&gt;
+                &lt;p&gt;
+                  タイプごとに出力を切り替えることができる。
+                &lt;/p&gt;
+                &lt;p&gt;
+                  タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz
+                  の場合のみをプリントする。
+                &lt;/p&gt;
               &lt;/div&gt;
             &lt;/div&gt;
             &lt;div class="row p-3"&gt;
@@ -623,26 +688,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;!-- 右側カラム（画面幅md以上） --&gt;
               &lt;div class="col-md-10"&gt;
                 &lt;ul&gt;
-                  &lt;li&gt;
-                    &lt;del&gt;1 から 100 まで数をプリントできるようにする。&lt;/del&gt;
-                  &lt;/li&gt;
-                  &lt;li&gt;
-                    &lt;del&gt;
+                  &lt;li&gt;タイプ 1 の場合&lt;/li&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;
                       3
                       の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
-                    &lt;/del&gt;
-                  &lt;/li&gt;
-                  &lt;li&gt;
-                    &lt;del
-                      &gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/del
-                    &gt;
-                  &lt;/li&gt;
-                  &lt;li&gt;
-                    &lt;del&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/li&gt;
+                    &lt;li&gt;
                       3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする
-                    &lt;/del&gt;
-                  &lt;/li&gt;
+                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;li&gt;タイプ 2 の場合&lt;/li&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;3 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
+                    &lt;li&gt;5 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
+                    &lt;li&gt;
+                      3 と 5 両方の倍数の場合には値をプリントできるようにする。
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;li&gt;タイプ 3 の場合&lt;/li&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;3 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
+                    &lt;li&gt;5 の倍数のときは数をプリントできるようにする。&lt;/li&gt;
+                    &lt;li&gt;
+                      3 と 5
+                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
                 &lt;/ul&gt;
               &lt;/div&gt;
             &lt;/div&gt;
@@ -888,7 +962,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-26 16:59:54 JST
+Last updated 2019-11-05 18:06:20 JST
 </div>
 </div>
 </body>
