@@ -777,6 +777,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     &lt;script&gt;
       const assert = chai.assert;
       suite("FizzBuzzTest", () =&gt; {
+        setup(() =&gt; {
+          let fizzBuzz = new FizzBuzz();
+        });
         test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
           const data = {
             0: 1,
@@ -787,7 +790,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             14: "FizzBuzz",
             99: "Buzz"
           };
-          const result = generateFizzBuzzList();
+          const result = fizzBuzz.generateFizzBuzzList();
           Object.keys(data).forEach(k =&gt; {
             assert.equal(data[k], result[k]);
           });
@@ -795,54 +798,56 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         suite("3の倍数の場合", () =&gt; {
           test("3で割り切れる場合はFizzをプリントする", () =&gt; {
-            assert.equal("Fizz", generateFizzBuzz(3));
+            assert.equal("Fizz", fizzBuzz.generateFizzBuzz(3));
           });
         });
 
         suite("5の倍数の場合", () =&gt; {
           test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
-            assert.equal("Buzz", generateFizzBuzz(5));
+            assert.equal("Buzz", fizzBuzz.generateFizzBuzz(5));
           });
 
           test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-            assert.equal("FizzBuzz", generateFizzBuzz(15));
+            assert.equal("FizzBuzz", fizzBuzz.generateFizzBuzz(15));
           });
         });
 
         suite("その他の場合", () =&gt; {
           test("1を渡したら1を返す", () =&gt; {
-            assert.equal(1, generateFizzBuzz(1));
+            assert.equal(1, fizzBuzz.generateFizzBuzz(1));
           });
 
           test("2を渡したら2を返す", () =&gt; {
-            assert.equal(2, generateFizzBuzz(2));
+            assert.equal(2, fizzBuzz.generateFizzBuzz(2));
           });
 
           test("Fizzの個数は27個", () =&gt; {
             assert.equal(
               27,
-              generateFizzBuzzList().filter(i =&gt; i === "Fizz").length
+              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "Fizz").length
             );
           });
 
           test("Buzzの個数は14個", () =&gt; {
             assert.equal(
               14,
-              generateFizzBuzzList().filter(i =&gt; i === "Buzz").length
+              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "Buzz").length
             );
           });
 
           test("FizzBuzzの個数は6個", () =&gt; {
             assert.equal(
               6,
-              generateFizzBuzzList().filter(i =&gt; i === "FizzBuzz").length
+              fizzBuzz.generateFizzBuzzList().filter(i =&gt; i === "FizzBuzz")
+                .length
             );
           });
 
           test("数字の合計は2632", () =&gt; {
             assert.equal(
               2632,
-              generateFizzBuzzList()
+              fizzBuzz
+                .generateFizzBuzzList()
                 .filter(Number.isInteger)
                 .reduce((acc, value) =&gt; acc + value)
             );
@@ -850,48 +855,53 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
       });
 
-      const FIZZ = "Fizz";
-      const BUZZ = "Buzz";
+      class FizzBuzz {
+        constructor() {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+        }
 
-      function generateFizzBuzzList() {
-        return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
-      }
+        generateFizzBuzzList() {
+          return [...Array(101).keys()]
+            .slice(1)
+            .map(this.generateFizzBuzz.bind(this));
+        }
 
-      function generateFizzBuzz(number) {
-        isFizz = number % 3 === 0;
-        isBuzz = number % 5 === 0;
+        generateFizzBuzz(number) {
+          const isFizz = number % 3 === 0;
+          const isBuzz = number % 5 === 0;
 
-        if (isFizz &amp;&amp; isBuzz) return FIZZ + BUZZ;
-        if (isFizz) return FIZZ;
-        if (isBuzz) return BUZZ;
+          if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
+          if (isFizz) return this.FIZZ;
+          if (isBuzz) return this.BUZZ;
 
-        return number;
-      }
+          return number;
+        }
 
-      function renderTable() {
-        const header = (() =&gt; {
-          return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
-        })();
+        renderTable() {
+          const header = (() =&gt; {
+            return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
+          })();
 
-        const body = (() =&gt; {
-          let result = [];
-          let row = 0;
-          let col = [];
-          generateFizzBuzzList().forEach((v, k) =&gt; {
-            if ((k + 1) % 10 === 0) {
-              col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
-              result[row++] = col;
-              col = [];
-            } else {
-              col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
-            }
-          });
-          return result;
-        })();
+          const body = (() =&gt; {
+            let result = [];
+            let row = 0;
+            let col = [];
+            this.generateFizzBuzzList().forEach((v, k) =&gt; {
+              if ((k + 1) % 10 === 0) {
+                col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
+                result[row++] = col;
+                col = [];
+              } else {
+                col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
+              }
+            });
+            return result;
+          })();
 
-        const row = n =&gt; body[n].join(" ");
+          const row = n =&gt; body[n].join(" ");
 
-        const result = `
+          const result = `
             &lt;table&gt;
               &lt;thead&gt;
                 ${header[0]}
@@ -919,20 +929,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/tbody&gt;
             &lt;/table&gt;
         `;
-        return result;
+          return result;
+        }
+
+        createView() {
+          document.querySelector(
+            "#fizz-buzz-table"
+          ).innerHTML = this.renderTable();
+          document
+            .querySelector("#fizz-buzz-table &gt; table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-table &gt; table")
+            .classList.add("table-striped");
+        }
       }
 
-      function createView() {
-        document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
-        document
-          .querySelector("#fizz-buzz-table &gt; table")
-          .classList.add("table");
-        document
-          .querySelector("#fizz-buzz-table &gt; table")
-          .classList.add("table-striped");
-      }
-
-      createView();
+      const fizzBuzz = new FizzBuzz();
+      fizzBuzz.createView();
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -962,7 +976,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 18:06:20 JST
+Last updated 2019-11-05 18:33:20 JST
 </div>
 </div>
 </body>

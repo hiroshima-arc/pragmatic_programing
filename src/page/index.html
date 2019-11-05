@@ -206,6 +206,9 @@
     <script>
       const assert = chai.assert;
       suite("FizzBuzzTest", () => {
+        setup(() => {
+          let fizzBuzz = new FizzBuzz();
+        });
         test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
           const data = {
             0: 1,
@@ -216,7 +219,7 @@
             14: "FizzBuzz",
             99: "Buzz"
           };
-          const result = generateFizzBuzzList();
+          const result = fizzBuzz.generateFizzBuzzList();
           Object.keys(data).forEach(k => {
             assert.equal(data[k], result[k]);
           });
@@ -224,54 +227,56 @@
 
         suite("3の倍数の場合", () => {
           test("3で割り切れる場合はFizzをプリントする", () => {
-            assert.equal("Fizz", generateFizzBuzz(3));
+            assert.equal("Fizz", fizzBuzz.generateFizzBuzz(3));
           });
         });
 
         suite("5の倍数の場合", () => {
           test("5で割り切れる場合はBuzzをプリントする", () => {
-            assert.equal("Buzz", generateFizzBuzz(5));
+            assert.equal("Buzz", fizzBuzz.generateFizzBuzz(5));
           });
 
           test("15で割り切れる場合はFizzBuzzをプリントする", () => {
-            assert.equal("FizzBuzz", generateFizzBuzz(15));
+            assert.equal("FizzBuzz", fizzBuzz.generateFizzBuzz(15));
           });
         });
 
         suite("その他の場合", () => {
           test("1を渡したら1を返す", () => {
-            assert.equal(1, generateFizzBuzz(1));
+            assert.equal(1, fizzBuzz.generateFizzBuzz(1));
           });
 
           test("2を渡したら2を返す", () => {
-            assert.equal(2, generateFizzBuzz(2));
+            assert.equal(2, fizzBuzz.generateFizzBuzz(2));
           });
 
           test("Fizzの個数は27個", () => {
             assert.equal(
               27,
-              generateFizzBuzzList().filter(i => i === "Fizz").length
+              fizzBuzz.generateFizzBuzzList().filter(i => i === "Fizz").length
             );
           });
 
           test("Buzzの個数は14個", () => {
             assert.equal(
               14,
-              generateFizzBuzzList().filter(i => i === "Buzz").length
+              fizzBuzz.generateFizzBuzzList().filter(i => i === "Buzz").length
             );
           });
 
           test("FizzBuzzの個数は6個", () => {
             assert.equal(
               6,
-              generateFizzBuzzList().filter(i => i === "FizzBuzz").length
+              fizzBuzz.generateFizzBuzzList().filter(i => i === "FizzBuzz")
+                .length
             );
           });
 
           test("数字の合計は2632", () => {
             assert.equal(
               2632,
-              generateFizzBuzzList()
+              fizzBuzz
+                .generateFizzBuzzList()
                 .filter(Number.isInteger)
                 .reduce((acc, value) => acc + value)
             );
@@ -279,48 +284,53 @@
         });
       });
 
-      const FIZZ = "Fizz";
-      const BUZZ = "Buzz";
+      class FizzBuzz {
+        constructor() {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+        }
 
-      function generateFizzBuzzList() {
-        return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
-      }
+        generateFizzBuzzList() {
+          return [...Array(101).keys()]
+            .slice(1)
+            .map(this.generateFizzBuzz.bind(this));
+        }
 
-      function generateFizzBuzz(number) {
-        isFizz = number % 3 === 0;
-        isBuzz = number % 5 === 0;
+        generateFizzBuzz(number) {
+          const isFizz = number % 3 === 0;
+          const isBuzz = number % 5 === 0;
 
-        if (isFizz && isBuzz) return FIZZ + BUZZ;
-        if (isFizz) return FIZZ;
-        if (isBuzz) return BUZZ;
+          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
+          if (isFizz) return this.FIZZ;
+          if (isBuzz) return this.BUZZ;
 
-        return number;
-      }
+          return number;
+        }
 
-      function renderTable() {
-        const header = (() => {
-          return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
-        })();
+        renderTable() {
+          const header = (() => {
+            return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
+          })();
 
-        const body = (() => {
-          let result = [];
-          let row = 0;
-          let col = [];
-          generateFizzBuzzList().forEach((v, k) => {
-            if ((k + 1) % 10 === 0) {
-              col.push(`<td>${v}</td>`);
-              result[row++] = col;
-              col = [];
-            } else {
-              col.push(`<td>${v}</td>`);
-            }
-          });
-          return result;
-        })();
+          const body = (() => {
+            let result = [];
+            let row = 0;
+            let col = [];
+            this.generateFizzBuzzList().forEach((v, k) => {
+              if ((k + 1) % 10 === 0) {
+                col.push(`<td>${v}</td>`);
+                result[row++] = col;
+                col = [];
+              } else {
+                col.push(`<td>${v}</td>`);
+              }
+            });
+            return result;
+          })();
 
-        const row = n => body[n].join(" ");
+          const row = n => body[n].join(" ");
 
-        const result = `
+          const result = `
             <table>
               <thead>
                 ${header[0]}
@@ -348,20 +358,24 @@
               </tbody>
             </table>
         `;
-        return result;
+          return result;
+        }
+
+        createView() {
+          document.querySelector(
+            "#fizz-buzz-table"
+          ).innerHTML = this.renderTable();
+          document
+            .querySelector("#fizz-buzz-table > table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-table > table")
+            .classList.add("table-striped");
+        }
       }
 
-      function createView() {
-        document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
-        document
-          .querySelector("#fizz-buzz-table > table")
-          .classList.add("table");
-        document
-          .querySelector("#fizz-buzz-table > table")
-          .classList.add("table-striped");
-      }
-
-      createView();
+      const fizzBuzz = new FizzBuzz();
+      fizzBuzz.createView();
     </script>
     <script>
       mocha.globals(["jQuery"]);
