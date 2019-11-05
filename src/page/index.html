@@ -232,10 +232,10 @@
         const body = function() {
           let result = "<tr>";
           let list = generateFizzBuzzList();
-          for ([k, v] of Object.entries(list)) {
+          list.forEach((v, k) => {
             result += `<td>${v}</td>`;
-            if ((parseInt(k) + 1) % 10 === 0) result += "</tr><tr>";
-          }
+            if ((k + 1) % 10 === 0) result += "</tr><tr>";
+          });
           result += "</tr>";
           return result;
         };
