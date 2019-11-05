@@ -227,11 +227,7 @@
       }
       function renderTable() {
         const header = function() {
-          let result = "";
-          for (i = 1; i <= 10; i++) {
-            result += `<th>${i}</th>`;
-          }
-          return result;
+          return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`).join(" ");
         };
         const body = function() {
           let result = "<tr>";

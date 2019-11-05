@@ -740,11 +740,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
       function renderTable() {
         const header = function() {
-          let result = "";
-          for (i = 1; i &lt;= 10; i++) {
-            result += `&lt;th&gt;${i}&lt;/th&gt;`;
-          }
-          return result;
+          return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`).join(" ");
         };
         const body = function() {
           let result = "&lt;tr&gt;";
@@ -798,7 +794,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 14:02:02 JST
+Last updated 2019-11-05 14:09:06 JST
 </div>
 </div>
 </body>
