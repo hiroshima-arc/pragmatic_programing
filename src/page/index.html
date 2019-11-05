@@ -231,8 +231,7 @@
         };
         const body = function() {
           let result = "<tr>";
-          let list = generateFizzBuzzList();
-          list.forEach((v, k) => {
+          generateFizzBuzzList().forEach((v, k) => {
             result += `<td>${v}</td>`;
             if ((k + 1) % 10 === 0) result += "</tr><tr>";
           });
