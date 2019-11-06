@@ -1012,6 +1012,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzz {
         constructor(type) {
+          this.MAX_COUNT = 100;
           this._list = [];
           this._type = type;
         }
@@ -1025,7 +1026,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         generateList() {
-          this.list = [...Array(101).keys()]
+          // 配列は0から始まるので1を足す
+          this.list = [...Array(this.MAX_COUNT + 1).keys()]
             .slice(1)
             .map(i =&gt; this.generate.bind(this)(i, 1));
         }
@@ -1133,7 +1135,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 15:46:31 JST
+Last updated 2019-11-06 16:03:32 JST
 </div>
 </div>
 </body>
