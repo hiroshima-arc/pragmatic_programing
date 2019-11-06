@@ -231,6 +231,7 @@
           let fizzBuzz1;
           setup(() => {
             fizzBuzz1 = new FizzBuzz();
+            fizzBuzz1.generateList();
           });
 
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
@@ -243,7 +244,6 @@
               14: "FizzBuzz",
               99: "Buzz"
             };
-            fizzBuzz1._list = fizzBuzz1.generateList();
             Object.keys(data).forEach(k => {
               assert.equal(data[k], fizzBuzz1._list[k]);
             });
@@ -277,29 +277,28 @@
             test("Fizzの個数は27個", () => {
               assert.equal(
                 27,
-                fizzBuzz1.generateList().filter(i => i === "Fizz").length
+                fizzBuzz1._list.filter(i => i === "Fizz").length
               );
             });
 
             test("Buzzの個数は14個", () => {
               assert.equal(
                 14,
-                fizzBuzz1.generateList().filter(i => i === "Buzz").length
+                fizzBuzz1._list.filter(i => i === "Buzz").length
               );
             });
 
             test("FizzBuzzの個数は6個", () => {
               assert.equal(
                 6,
-                fizzBuzz1.generateList().filter(i => i === "FizzBuzz").length
+                fizzBuzz1._list.filter(i => i === "FizzBuzz").length
               );
             });
 
             test("数字の合計は2632", () => {
               assert.equal(
                 2632,
-                fizzBuzz1
-                  .generateList()
+                fizzBuzz1._list
                   .filter(Number.isInteger)
                   .reduce((acc, value) => acc + value)
               );
@@ -354,7 +353,7 @@
         }
 
         generateList() {
-          return [...Array(101).keys()]
+          this._list = [...Array(101).keys()]
             .slice(1)
             .map(i => this.generate.bind(this)(i, 1));
         }
@@ -388,7 +387,7 @@
             let result = [];
             let row = 0;
             let col = [];
-            this.generateList().forEach((v, k) => {
+            this._list.forEach((v, k) => {
               if ((k + 1) % 10 === 0) {
                 col.push(`<td>${v}</td>`);
                 result[row++] = col;
@@ -434,6 +433,7 @@
         }
 
         createView() {
+          this.generateList();
           document.querySelector(
             "#fizz-buzz-table"
           ).innerHTML = this.renderTable();
