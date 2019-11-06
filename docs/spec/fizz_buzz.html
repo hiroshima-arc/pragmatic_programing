@@ -814,9 +814,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               14: "FizzBuzz",
               99: "Buzz"
             };
-            const result = fizzBuzz1.generateList();
+            let result = new FizzBuzzData();
+            result._list = fizzBuzz1.generateList();
             Object.keys(data).forEach(k =&gt; {
-              assert.equal(data[k], result[k]);
+              assert.equal(data[k], result._list[k]);
             });
           });
 
@@ -916,6 +917,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
         });
       });
+
+      class FizzBuzzData {
+        constructor() {
+          this._list = [];
+        }
+      }
 
       class FizzBuzz {
         constructor() {
@@ -1047,7 +1054,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 10:54:01 JST
+Last updated 2019-11-06 11:17:20 JST
 </div>
 </div>
 </body>
