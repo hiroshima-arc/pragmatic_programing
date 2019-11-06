@@ -243,10 +243,9 @@
               14: "FizzBuzz",
               99: "Buzz"
             };
-            let result = new FizzBuzzData();
-            result._list = fizzBuzz1.generateList();
+            fizzBuzz1._list = fizzBuzz1.generateList();
             Object.keys(data).forEach(k => {
-              assert.equal(data[k], result._list[k]);
+              assert.equal(data[k], fizzBuzz1._list[k]);
             });
           });
 
@@ -347,16 +346,11 @@
         });
       });
 
-      class FizzBuzzData {
-        constructor() {
-          this._list = [];
-        }
-      }
-
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
           this.BUZZ = "Buzz";
+          this._list = [];
         }
 
         generateList() {
