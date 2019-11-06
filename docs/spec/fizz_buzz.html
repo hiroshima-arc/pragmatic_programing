@@ -910,11 +910,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
       });
 
-      class FizzBuzzType01 {
+      class FizzBuzzType {
+        constructor() {}
+        getTypeCode() {}
+
+        static newType(code, number) {
+          switch (code) {
+            case FizzBuzz.TYPE01:
+              return new FizzBuzzType01(number);
+            case FizzBuzz.TYPE02:
+              return new FizzBuzzType02(number);
+            case FizzBuzz.TYPE03:
+              return new FizzBuzzType03(number);
+            default:
+              return number;
+          }
+        }
+      }
+
+      class FizzBuzzType01 extends FizzBuzzType {
         constructor(number) {
+          super();
           this.FIZZ = "Fizz";
           this.BUZZ = "Buzz";
           this._number = number;
+        }
+
+        getTypeCode() {
+          return FizzBuzz.TYPE01;
         }
 
         generate() {
@@ -928,9 +951,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class FizzBuzzType02 {
+      class FizzBuzzType02 extends FizzBuzzType {
         constructor(number) {
+          super();
           this._number = number;
+        }
+
+        getTypeCode() {
+          return FizzBuzz.TYPE02;
         }
 
         generate() {
@@ -938,11 +966,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class FizzBuzzType03 {
+      class FizzBuzzType03 extends FizzBuzzType {
         constructor(number) {
+          super();
           this.FIZZ = "Fizz";
           this.BUZZ = "Buzz";
           this._number = number;
+        }
+
+        getTypeCode() {
+          return FizzBuzz.TYPE03;
         }
 
         generate() {
@@ -987,23 +1020,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .map(i =&gt; this.generate.bind(this)(i, 1));
         }
 
-        generate(number, type) {
-          const isFizz = number % 3 === 0;
-          const isBuzz = number % 5 === 0;
-
-          switch (type) {
-            case FizzBuzz.TYPE01:
-              const type01 = new FizzBuzzType01(number);
-              return type01.generate();
-            case FizzBuzz.TYPE02:
-              const type02 = new FizzBuzzType02(number);
-              return type02.generate();
-            case FizzBuzz.TYPE03:
-              const type03 = new FizzBuzzType03(number);
-              return type03.generate();
-            default:
-              return number;
-          }
+        generate(number, code) {
+          const type = FizzBuzzType.newType(code, number);
+          return type.generate();
         }
 
         renderTable() {
@@ -1105,7 +1124,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 14:02:16 JST
+Last updated 2019-11-06 14:29:51 JST
 </div>
 </div>
 </body>
