@@ -800,9 +800,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       suite("FizzBuzzTest", () =&gt; {
         suite("タイプ1の場合", () =&gt; {
           let fizzBuzz1;
+          let command1;
           setup(() =&gt; {
             fizzBuzz1 = new FizzBuzz(FizzBuzzTypeEnum.Type01);
             fizzBuzz1.generateList();
+            command1 = new FizzBuzzValueCommand(FizzBuzzTypeEnum.Type01);
           });
 
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
@@ -822,27 +824,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
           suite("3の倍数の場合", () =&gt; {
             test("3で割り切れる場合はFizzをプリントする", () =&gt; {
-              assert.equal("Fizz", fizzBuzz1.generate(3, 1));
+              assert.equal("Fizz", command1.execute(3));
             });
           });
 
           suite("5の倍数の場合", () =&gt; {
             test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
-              assert.equal("Buzz", fizzBuzz1.generate(5, 1));
+              assert.equal("Buzz", command1.execute(5));
             });
 
             test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-              assert.equal("FizzBuzz", fizzBuzz1.generate(15, 1));
+              assert.equal("FizzBuzz", command1.execute(15));
             });
           });
 
           suite("その他の場合", () =&gt; {
             test("1を渡したら1を返す", () =&gt; {
-              assert.equal(1, fizzBuzz1.generate(1, 1));
+              assert.equal(1, command1.execute(1));
             });
 
             test("2を渡したら2を返す", () =&gt; {
-              assert.equal(2, fizzBuzz1.generate(2, 1));
+              assert.equal(2, command1.execute(2));
             });
 
             test("Fizzの個数は27個", () =&gt; {
@@ -878,40 +880,40 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
 
         suite("タイプ2の場合", () =&gt; {
-          let fizzBuzz2;
+          let command2;
           setup(() =&gt; {
-            fizzBuzz2 = new FizzBuzz(FizzBuzzTypeEnum.Type02);
+            command2 = new FizzBuzzValueCommand(FizzBuzzTypeEnum.Type02);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
-            assert.equal(3, fizzBuzz2.generate(3, 2));
+            assert.equal(3, command2.execute(3));
           });
 
           test("5で割り切れる場合は5をプリントする", () =&gt; {
-            assert.equal(5, fizzBuzz2.generate(5, 2));
+            assert.equal(5, command2.execute(5));
           });
 
           test("15で割り切れる場合は15をプリントする", () =&gt; {
-            assert.equal(15, fizzBuzz2.generate(15, 2));
+            assert.equal(15, command2.execute(15));
           });
         });
 
         suite("タイプ3の場合", () =&gt; {
-          let fizzBuzz3;
+          let command3;
           setup(() =&gt; {
-            fizzBuzz3 = new FizzBuzz(FizzBuzzTypeEnum.Type03);
+            command3 = new FizzBuzzValueCommand(FizzBuzzTypeEnum.Type03);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
-            assert.equal(3, fizzBuzz3.generate(3, 3));
+            assert.equal(3, command3.execute(3));
           });
 
           test("5で割り切れる場合は5をプリントする", () =&gt; {
-            assert.equal(5, fizzBuzz3.generate(5, 3));
+            assert.equal(5, command3.execute(5));
           });
 
           test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-            assert.equal("FizzBuzz", fizzBuzz3.generate(15, 3));
+            assert.equal("FizzBuzz", command3.execute(15));
           });
         });
       });
@@ -1027,6 +1029,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           let result = this._value;
           result.push(value);
           return new FizzBuzzList(result);
+        }
+      }
+
+      class FizzBuzzCommand {
+        constructor() {}
+        execute() {}
+      }
+
+      class FizzBuzzValueCommand extends FizzBuzzCommand {
+        constructor(type) {
+          super();
+          this._type = type;
+        }
+
+        execute(number) {
+          return this._type.generate(number);
         }
       }
 
@@ -1153,7 +1171,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 16:24:31 JST
+Last updated 2019-11-06 16:45:46 JST
 </div>
 </div>
 </body>
