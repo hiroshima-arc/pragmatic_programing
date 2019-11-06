@@ -301,6 +301,15 @@
               );
             });
           });
+
+          suite("例外ケース", () => {
+            test("値は正の値のみ許可する", () => {
+              chai.expect(() => command1.execute(-1)).to.throw();
+            });
+            test("100より多い数を許可しない", () => {
+              chai.expect(() => listCommand1.execute(101)).to.throw();
+            });
+          });
         });
 
         suite("タイプ2の場合", () => {
@@ -415,6 +424,8 @@
 
       class FizzBuzzValue {
         constructor(number, value) {
+          assert(number >= 0);
+
           this._number = number;
           this._value = value;
         }
@@ -438,6 +449,8 @@
 
       class FizzBuzzList {
         constructor(list) {
+          assert(list.length <= 100);
+
           this._value = list;
         }
 
@@ -492,7 +505,7 @@
 
       class FizzBuzz {
         constructor(type) {
-          this.MAX_COUNT = 100;
+          this.MAX_COUNT = 101;
           this._list = new FizzBuzzListCommand(type).execute(this.MAX_COUNT);
         }
 

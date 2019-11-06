@@ -872,6 +872,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               );
             });
           });
+
+          suite("例外ケース", () =&gt; {
+            test("値は正の値のみ許可する", () =&gt; {
+              chai.expect(() =&gt; command1.execute(-1)).to.throw();
+            });
+            test("100より多い数を許可しない", () =&gt; {
+              chai.expect(() =&gt; listCommand1.execute(101)).to.throw();
+            });
+          });
         });
 
         suite("タイプ2の場合", () =&gt; {
@@ -986,6 +995,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzValue {
         constructor(number, value) {
+          assert(number &gt;= 0);
+
           this._number = number;
           this._value = value;
         }
@@ -1009,6 +1020,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzList {
         constructor(list) {
+          assert(list.length &lt;= 100);
+
           this._value = list;
         }
 
@@ -1063,7 +1076,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzz {
         constructor(type) {
-          this.MAX_COUNT = 100;
+          this.MAX_COUNT = 101;
           this._list = new FizzBuzzListCommand(type).execute(this.MAX_COUNT);
         }
 
@@ -1169,7 +1182,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 17:06:58 JST
+Last updated 2019-11-06 17:40:44 JST
 </div>
 </div>
 </body>
