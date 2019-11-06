@@ -228,12 +228,13 @@
       const assert = chai.assert;
       suite("FizzBuzzTest", () => {
         suite("タイプ1の場合", () => {
-          let fizzBuzz1;
           let command1;
+          let listCommand1;
+          let list100;
           setup(() => {
-            fizzBuzz1 = new FizzBuzz(FizzBuzzTypeEnum.Type01);
-            fizzBuzz1.generateList();
             command1 = new FizzBuzzValueCommand(FizzBuzzTypeEnum.Type01);
+            listCommand1 = new FizzBuzzListCommand(FizzBuzzTypeEnum.Type01);
+            list100 = listCommand1.execute(100);
           });
 
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
@@ -247,7 +248,7 @@
               99: "Buzz"
             };
             Object.keys(data).forEach(k => {
-              assert.equal(data[k], fizzBuzz1.list[k]);
+              assert.equal(data[k], list100[k]);
             });
           });
 
@@ -277,30 +278,24 @@
             });
 
             test("Fizzの個数は27個", () => {
-              assert.equal(
-                27,
-                fizzBuzz1.list.filter(i => i.value === "Fizz").length
-              );
+              assert.equal(27, list100.filter(i => i.value === "Fizz").length);
             });
 
             test("Buzzの個数は14個", () => {
-              assert.equal(
-                14,
-                fizzBuzz1.list.filter(i => i.value === "Buzz").length
-              );
+              assert.equal(14, list100.filter(i => i.value === "Buzz").length);
             });
 
             test("FizzBuzzの個数は6個", () => {
               assert.equal(
                 6,
-                fizzBuzz1.list.filter(i => i.value === "FizzBuzz").length
+                list100.filter(i => i.value === "FizzBuzz").length
               );
             });
 
             test("数字の合計は2632", () => {
               assert.equal(
                 2632,
-                fizzBuzz1.list
+                list100
                   .filter(i => Number.isInteger(i.value))
                   .reduce((acc, value) => acc + value)
               );
@@ -474,6 +469,24 @@
 
         execute(number) {
           return this._type.generate(number);
+        }
+      }
+
+      class FizzBuzzListCommand extends FizzBuzzCommand {
+        constructor(type) {
+          super();
+          this._type = type;
+          this._list = new FizzBuzzList([]);
+        }
+
+        execute(number) {
+          // 配列は0から始まるので1を足す
+          [...Array(number + 1).keys()]
+            .slice(1)
+            .forEach(
+              i => (this._list = this._list.add(this._type.generate(i)))
+            );
+          return this._list.value;
         }
       }
 

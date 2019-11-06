@@ -799,12 +799,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       const assert = chai.assert;
       suite("FizzBuzzTest", () =&gt; {
         suite("タイプ1の場合", () =&gt; {
-          let fizzBuzz1;
           let command1;
+          let listCommand1;
+          let list100;
           setup(() =&gt; {
-            fizzBuzz1 = new FizzBuzz(FizzBuzzTypeEnum.Type01);
-            fizzBuzz1.generateList();
             command1 = new FizzBuzzValueCommand(FizzBuzzTypeEnum.Type01);
+            listCommand1 = new FizzBuzzListCommand(FizzBuzzTypeEnum.Type01);
+            list100 = listCommand1.execute(100);
           });
 
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
@@ -818,7 +819,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               99: "Buzz"
             };
             Object.keys(data).forEach(k =&gt; {
-              assert.equal(data[k], fizzBuzz1.list[k]);
+              assert.equal(data[k], list100[k]);
             });
           });
 
@@ -848,30 +849,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             });
 
             test("Fizzの個数は27個", () =&gt; {
-              assert.equal(
-                27,
-                fizzBuzz1.list.filter(i =&gt; i.value === "Fizz").length
-              );
+              assert.equal(27, list100.filter(i =&gt; i.value === "Fizz").length);
             });
 
             test("Buzzの個数は14個", () =&gt; {
-              assert.equal(
-                14,
-                fizzBuzz1.list.filter(i =&gt; i.value === "Buzz").length
-              );
+              assert.equal(14, list100.filter(i =&gt; i.value === "Buzz").length);
             });
 
             test("FizzBuzzの個数は6個", () =&gt; {
               assert.equal(
                 6,
-                fizzBuzz1.list.filter(i =&gt; i.value === "FizzBuzz").length
+                list100.filter(i =&gt; i.value === "FizzBuzz").length
               );
             });
 
             test("数字の合計は2632", () =&gt; {
               assert.equal(
                 2632,
-                fizzBuzz1.list
+                list100
                   .filter(i =&gt; Number.isInteger(i.value))
                   .reduce((acc, value) =&gt; acc + value)
               );
@@ -1048,6 +1043,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
+      class FizzBuzzListCommand extends FizzBuzzCommand {
+        constructor(type) {
+          super();
+          this._type = type;
+          this._list = new FizzBuzzList([]);
+        }
+
+        execute(number) {
+          // 配列は0から始まるので1を足す
+          [...Array(number + 1).keys()]
+            .slice(1)
+            .forEach(
+              i =&gt; (this._list = this._list.add(this._type.generate(i)))
+            );
+          return this._list.value;
+        }
+      }
+
       class FizzBuzz {
         constructor(type) {
           this.MAX_COUNT = 100;
@@ -1171,7 +1184,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 16:45:46 JST
+Last updated 2019-11-06 16:59:46 JST
 </div>
 </div>
 </body>
