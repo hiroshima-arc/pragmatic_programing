@@ -801,7 +801,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ1の場合", () =&gt; {
           let fizzBuzz1;
           setup(() =&gt; {
-            fizzBuzz1 = new FizzBuzz();
+            fizzBuzz1 = new FizzBuzz(FizzBuzz.TYPE01);
             fizzBuzz1.generateList();
           });
 
@@ -874,7 +874,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ2の場合", () =&gt; {
           let fizzBuzz2;
           setup(() =&gt; {
-            fizzBuzz2 = new FizzBuzz();
+            fizzBuzz2 = new FizzBuzz(FizzBuzz.TYPE02);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
@@ -893,7 +893,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ3の場合", () =&gt; {
           let fizzBuzz3;
           setup(() =&gt; {
-            fizzBuzz3 = new FizzBuzz();
+            fizzBuzz3 = new FizzBuzz(FizzBuzz.TYPE03);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
@@ -941,63 +941,61 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
 
       class FizzBuzzType01 extends FizzBuzzType {
-        constructor(number) {
+        constructor() {
           super();
-          this._number = number;
         }
 
         getTypeCode() {
           return FizzBuzz.TYPE01;
         }
 
-        generate() {
-          const isFizz = this.isFizz(this._number);
-          const isBuzz = this.isBuzz(this._number);
+        generate(number) {
+          const isFizz = this.isFizz(number);
+          const isBuzz = this.isBuzz(number);
 
           if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
           if (isFizz) return this.FIZZ;
           if (isBuzz) return this.BUZZ;
-          return this._number;
+          return number;
         }
       }
 
       class FizzBuzzType02 extends FizzBuzzType {
-        constructor(number) {
+        constructor() {
           super();
-          this._number = number;
         }
 
         getTypeCode() {
           return FizzBuzz.TYPE02;
         }
 
-        generate() {
-          return this._number;
+        generate(number) {
+          return number;
         }
       }
 
       class FizzBuzzType03 extends FizzBuzzType {
-        constructor(number) {
+        constructor() {
           super();
-          this._number = number;
         }
 
         getTypeCode() {
           return FizzBuzz.TYPE03;
         }
 
-        generate() {
-          const isFizz = this.isFizz(this._number);
-          const isBuzz = this.isBuzz(this._number);
+        generate(number) {
+          const isFizz = this.isFizz(number);
+          const isBuzz = this.isBuzz(number);
 
           if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
-          return this._number;
+          return number;
         }
       }
 
       class FizzBuzz {
-        constructor() {
+        constructor(type) {
           this._list = [];
+          this._type = FizzBuzzType.newType(type);
         }
 
         get list() {
@@ -1026,9 +1024,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .map(i =&gt; this.generate.bind(this)(i, 1));
         }
 
-        generate(number, code) {
-          const type = FizzBuzzType.newType(code, number);
-          return type.generate();
+        generate(number) {
+          return this._type.generate(number);
         }
 
         renderTable() {
@@ -1099,7 +1096,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      const fizzBuzz = new FizzBuzz();
+      const fizzBuzz = new FizzBuzz(FizzBuzz.TYPE01);
       fizzBuzz.createView();
     &lt;/script&gt;
     &lt;script&gt;
@@ -1130,7 +1127,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 14:43:45 JST
+Last updated 2019-11-06 14:56:49 JST
 </div>
 </div>
 </body>
