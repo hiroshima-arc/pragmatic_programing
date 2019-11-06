@@ -357,6 +357,16 @@
         }
       }
 
+      class FizzBuzzType02 {
+        constructor(number) {
+          this._number = number;
+        }
+
+        generate() {
+          return this._number;
+        }
+      }
+
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
@@ -387,7 +397,8 @@
               const type01 = new FizzBuzzType01(number);
               return type01.generate();
             case 2:
-              return number;
+              const type02 = new FizzBuzzType02(number);
+              return type02.generate();
             case 3:
               if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
               return number;

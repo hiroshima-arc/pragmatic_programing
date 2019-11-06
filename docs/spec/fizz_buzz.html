@@ -928,6 +928,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
+      class FizzBuzzType02 {
+        constructor(number) {
+          this._number = number;
+        }
+
+        generate() {
+          return this._number;
+        }
+      }
+
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
@@ -958,7 +968,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               const type01 = new FizzBuzzType01(number);
               return type01.generate();
             case 2:
-              return number;
+              const type02 = new FizzBuzzType02(number);
+              return type02.generate();
             case 3:
               if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
               return number;
@@ -1066,7 +1077,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 12:30:31 JST
+Last updated 2019-11-06 12:48:40 JST
 </div>
 </div>
 </body>
