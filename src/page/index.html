@@ -513,11 +513,25 @@
         }
       }
 
+      class FizzBuzzService {
+        constructor(type) {
+          this._valueCommand = new FizzBuzzCommand(type);
+          this._listCommand = new FizzBuzzListCommand(type);
+        }
+
+        generate(number) {
+          return this._valueCommand.execute(number);
+        }
+
+        generateList(number) {
+          return this._listCommand.execute(number);
+        }
+      }
+
       class FizzBuzz {
         constructor(type) {
-          this._list = new FizzBuzzListCommand(type).execute(
-            FizzBuzzList.MAX_COUNT
-          );
+          this._service = new FizzBuzzService(type);
+          this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
 
         get list() {
