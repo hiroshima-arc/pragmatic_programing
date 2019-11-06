@@ -493,25 +493,11 @@
       class FizzBuzz {
         constructor(type) {
           this.MAX_COUNT = 100;
-          this._list = new FizzBuzzList([]);
-          this._type = type;
+          this._list = new FizzBuzzListCommand(type).execute(this.MAX_COUNT);
         }
 
         get list() {
-          return this._list.value;
-        }
-
-        generateList() {
-          // 配列は0から始まるので1を足す
-          [...Array(this.MAX_COUNT + 1).keys()]
-            .slice(1)
-            .forEach(
-              i => (this._list = this._list.add(this.generate.bind(this)(i, 1)))
-            );
-        }
-
-        generate(number) {
-          return this._type.generate(number);
+          return this._list;
         }
 
         renderTable() {
@@ -569,7 +555,6 @@
         }
 
         createView() {
-          this.generateList();
           document.querySelector(
             "#fizz-buzz-table"
           ).innerHTML = this.renderTable();
