@@ -918,6 +918,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         getTypeCode() {}
 
+        isFizz(number) {
+          return number % 3 === 0;
+        }
+
+        isBuzz(number) {
+          return number % 5 === 0;
+        }
+
         static newType(code, number) {
           switch (code) {
             case FizzBuzz.TYPE01:
@@ -943,8 +951,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         generate() {
-          const isFizz = this._number % 3 === 0;
-          const isBuzz = this._number % 5 === 0;
+          const isFizz = this.isFizz(this._number);
+          const isBuzz = this.isBuzz(this._number);
 
           if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
           if (isFizz) return this.FIZZ;
@@ -979,8 +987,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         generate() {
-          const isFizz = this._number % 3 === 0;
-          const isBuzz = this._number % 5 === 0;
+          const isFizz = this.isFizz(this._number);
+          const isBuzz = this.isBuzz(this._number);
 
           if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
           return this._number;
@@ -1122,7 +1130,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 14:34:35 JST
+Last updated 2019-11-06 14:43:45 JST
 </div>
 </div>
 </body>

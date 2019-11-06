@@ -347,6 +347,14 @@
 
         getTypeCode() {}
 
+        isFizz(number) {
+          return number % 3 === 0;
+        }
+
+        isBuzz(number) {
+          return number % 5 === 0;
+        }
+
         static newType(code, number) {
           switch (code) {
             case FizzBuzz.TYPE01:
@@ -372,8 +380,8 @@
         }
 
         generate() {
-          const isFizz = this._number % 3 === 0;
-          const isBuzz = this._number % 5 === 0;
+          const isFizz = this.isFizz(this._number);
+          const isBuzz = this.isBuzz(this._number);
 
           if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
           if (isFizz) return this.FIZZ;
@@ -408,8 +416,8 @@
         }
 
         generate() {
-          const isFizz = this._number % 3 === 0;
-          const isBuzz = this._number % 5 === 0;
+          const isFizz = this.isFizz(this._number);
+          const isBuzz = this.isBuzz(this._number);
 
           if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
           return this._number;
