@@ -548,7 +548,7 @@
         }
       }
 
-      class FizzBuzz {
+      class FizzBuzzView {
         constructor(type) {
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
@@ -612,7 +612,7 @@
           return result;
         }
 
-        createView() {
+        create() {
           document.querySelector(
             "#fizz-buzz-table"
           ).innerHTML = this.renderTable();
@@ -625,8 +625,8 @@
         }
       }
 
-      const fizzBuzz = new FizzBuzz(FizzBuzzTypeEnum.Type01);
-      fizzBuzz.createView();
+      const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+      view.create();
     </script>
     <script>
       mocha.globals(["jQuery"]);
