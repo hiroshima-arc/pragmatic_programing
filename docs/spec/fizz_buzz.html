@@ -798,11 +798,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     &lt;script&gt;
       const assert = chai.assert;
       suite("FizzBuzzTest", () =&gt; {
-        setup(() =&gt; {
-          let fizzBuzz = new FizzBuzz();
-        });
-
         suite("タイプ1の場合", () =&gt; {
+          let fizzBuzz1;
+          setup(() =&gt; {
+            fizzBuzz1 = new FizzBuzz();
+          });
+
           test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
             const data = {
               0: 1,
@@ -813,7 +814,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               14: "FizzBuzz",
               99: "Buzz"
             };
-            const result = fizzBuzz.generateList();
+            const result = fizzBuzz1.generateList();
             Object.keys(data).forEach(k =&gt; {
               assert.equal(data[k], result[k]);
             });
@@ -821,54 +822,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
           suite("3の倍数の場合", () =&gt; {
             test("3で割り切れる場合はFizzをプリントする", () =&gt; {
-              assert.equal("Fizz", fizzBuzz.generate(3, 1));
+              assert.equal("Fizz", fizzBuzz1.generate(3, 1));
             });
           });
 
           suite("5の倍数の場合", () =&gt; {
             test("5で割り切れる場合はBuzzをプリントする", () =&gt; {
-              assert.equal("Buzz", fizzBuzz.generate(5, 1));
+              assert.equal("Buzz", fizzBuzz1.generate(5, 1));
             });
 
             test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-              assert.equal("FizzBuzz", fizzBuzz.generate(15, 1));
+              assert.equal("FizzBuzz", fizzBuzz1.generate(15, 1));
             });
           });
 
           suite("その他の場合", () =&gt; {
             test("1を渡したら1を返す", () =&gt; {
-              assert.equal(1, fizzBuzz.generate(1, 1));
+              assert.equal(1, fizzBuzz1.generate(1, 1));
             });
 
             test("2を渡したら2を返す", () =&gt; {
-              assert.equal(2, fizzBuzz.generate(2, 1));
+              assert.equal(2, fizzBuzz1.generate(2, 1));
             });
 
             test("Fizzの個数は27個", () =&gt; {
               assert.equal(
                 27,
-                fizzBuzz.generateList().filter(i =&gt; i === "Fizz").length
+                fizzBuzz1.generateList().filter(i =&gt; i === "Fizz").length
               );
             });
 
             test("Buzzの個数は14個", () =&gt; {
               assert.equal(
                 14,
-                fizzBuzz.generateList().filter(i =&gt; i === "Buzz").length
+                fizzBuzz1.generateList().filter(i =&gt; i === "Buzz").length
               );
             });
 
             test("FizzBuzzの個数は6個", () =&gt; {
               assert.equal(
                 6,
-                fizzBuzz.generateList().filter(i =&gt; i === "FizzBuzz").length
+                fizzBuzz1.generateList().filter(i =&gt; i === "FizzBuzz").length
               );
             });
 
             test("数字の合計は2632", () =&gt; {
               assert.equal(
                 2632,
-                fizzBuzz
+                fizzBuzz1
                   .generateList()
                   .filter(Number.isInteger)
                   .reduce((acc, value) =&gt; acc + value)
@@ -878,30 +879,40 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
 
         suite("タイプ2の場合", () =&gt; {
+          let fizzBuzz2;
+          setup(() =&gt; {
+            fizzBuzz2 = new FizzBuzz();
+          });
+
           test("3で割り切れる場合は3をプリントする", () =&gt; {
-            assert.equal(3, fizzBuzz.generate(3, 2));
+            assert.equal(3, fizzBuzz2.generate(3, 2));
           });
 
           test("5で割り切れる場合は5をプリントする", () =&gt; {
-            assert.equal(5, fizzBuzz.generate(5, 2));
+            assert.equal(5, fizzBuzz2.generate(5, 2));
           });
 
           test("15で割り切れる場合は15をプリントする", () =&gt; {
-            assert.equal(15, fizzBuzz.generate(15, 2));
+            assert.equal(15, fizzBuzz2.generate(15, 2));
           });
         });
 
         suite("タイプ3の場合", () =&gt; {
+          let fizzBuzz3;
+          setup(() =&gt; {
+            fizzBuzz3 = new FizzBuzz();
+          });
+
           test("3で割り切れる場合は3をプリントする", () =&gt; {
-            assert.equal(3, fizzBuzz.generate(3, 3));
+            assert.equal(3, fizzBuzz3.generate(3, 3));
           });
 
           test("5で割り切れる場合は5をプリントする", () =&gt; {
-            assert.equal(5, fizzBuzz.generate(5, 3));
+            assert.equal(5, fizzBuzz3.generate(5, 3));
           });
 
           test("15で割り切れる場合はFizzBuzzをプリントする", () =&gt; {
-            assert.equal("FizzBuzz", fizzBuzz.generate(15, 3));
+            assert.equal("FizzBuzz", fizzBuzz3.generate(15, 3));
           });
         });
       });
@@ -1036,7 +1047,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-05 19:15:17 JST
+Last updated 2019-11-06 10:54:01 JST
 </div>
 </div>
 </body>
