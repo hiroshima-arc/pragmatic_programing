@@ -911,7 +911,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       });
 
       class FizzBuzzType {
-        constructor() {}
+        constructor() {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+        }
+
         getTypeCode() {}
 
         static newType(code, number) {
@@ -931,8 +935,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class FizzBuzzType01 extends FizzBuzzType {
         constructor(number) {
           super();
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._number = number;
         }
 
@@ -969,8 +971,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class FizzBuzzType03 extends FizzBuzzType {
         constructor(number) {
           super();
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._number = number;
         }
 
@@ -989,8 +989,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzz {
         constructor() {
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._list = [];
         }
 
@@ -1124,7 +1122,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 14:29:51 JST
+Last updated 2019-11-06 14:34:35 JST
 </div>
 </div>
 </body>

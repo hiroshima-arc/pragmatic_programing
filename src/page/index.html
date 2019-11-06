@@ -340,7 +340,11 @@
       });
 
       class FizzBuzzType {
-        constructor() {}
+        constructor() {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+        }
+
         getTypeCode() {}
 
         static newType(code, number) {
@@ -360,8 +364,6 @@
       class FizzBuzzType01 extends FizzBuzzType {
         constructor(number) {
           super();
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._number = number;
         }
 
@@ -398,8 +400,6 @@
       class FizzBuzzType03 extends FizzBuzzType {
         constructor(number) {
           super();
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._number = number;
         }
 
@@ -418,8 +418,6 @@
 
       class FizzBuzz {
         constructor() {
-          this.FIZZ = "Fizz";
-          this.BUZZ = "Buzz";
           this._list = [];
         }
 
