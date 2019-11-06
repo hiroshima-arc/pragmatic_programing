@@ -339,6 +339,24 @@
         });
       });
 
+      class FizzBuzzType01 {
+        constructor(number) {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+          this._number = number;
+        }
+
+        generate() {
+          const isFizz = this._number % 3 === 0;
+          const isBuzz = this._number % 5 === 0;
+
+          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
+          if (isFizz) return this.FIZZ;
+          if (isBuzz) return this.BUZZ;
+          return this._number;
+        }
+      }
+
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
@@ -366,10 +384,8 @@
 
           switch (type) {
             case 1:
-              if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
-              if (isFizz) return this.FIZZ;
-              if (isBuzz) return this.BUZZ;
-              return number;
+              const type01 = new FizzBuzzType01(number);
+              return type01.generate();
             case 2:
               return number;
             case 3:
