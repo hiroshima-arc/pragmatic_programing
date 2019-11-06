@@ -938,6 +938,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
+      class FizzBuzzType03 {
+        constructor(number) {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+          this._number = number;
+        }
+
+        generate() {
+          const isFizz = this._number % 3 === 0;
+          const isBuzz = this._number % 5 === 0;
+
+          if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
+          return this._number;
+        }
+      }
+
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
@@ -971,8 +987,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               const type02 = new FizzBuzzType02(number);
               return type02.generate();
             case 3:
-              if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
-              return number;
+              const type03 = new FizzBuzzType03(number);
+              return type03.generate();
             default:
               return number;
           }
@@ -1077,7 +1093,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 12:48:40 JST
+Last updated 2019-11-06 13:05:42 JST
 </div>
 </div>
 </body>

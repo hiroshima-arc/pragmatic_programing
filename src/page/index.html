@@ -367,6 +367,22 @@
         }
       }
 
+      class FizzBuzzType03 {
+        constructor(number) {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+          this._number = number;
+        }
+
+        generate() {
+          const isFizz = this._number % 3 === 0;
+          const isBuzz = this._number % 5 === 0;
+
+          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
+          return this._number;
+        }
+      }
+
       class FizzBuzz {
         constructor() {
           this.FIZZ = "Fizz";
@@ -400,8 +416,8 @@
               const type02 = new FizzBuzzType02(number);
               return type02.generate();
             case 3:
-              if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
-              return number;
+              const type03 = new FizzBuzzType03(number);
+              return type03.generate();
             default:
               return number;
           }
