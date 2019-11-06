@@ -230,7 +230,7 @@
         suite("タイプ1の場合", () => {
           let fizzBuzz1;
           setup(() => {
-            fizzBuzz1 = new FizzBuzz(FizzBuzz.TYPE01);
+            fizzBuzz1 = new FizzBuzz(FizzBuzzTypeEnum.Type01);
             fizzBuzz1.generateList();
           });
 
@@ -303,7 +303,7 @@
         suite("タイプ2の場合", () => {
           let fizzBuzz2;
           setup(() => {
-            fizzBuzz2 = new FizzBuzz(FizzBuzz.TYPE02);
+            fizzBuzz2 = new FizzBuzz(FizzBuzzTypeEnum.Type02);
           });
 
           test("3で割り切れる場合は3をプリントする", () => {
@@ -322,7 +322,7 @@
         suite("タイプ3の場合", () => {
           let fizzBuzz3;
           setup(() => {
-            fizzBuzz3 = new FizzBuzz(FizzBuzz.TYPE03);
+            fizzBuzz3 = new FizzBuzz(FizzBuzzTypeEnum.Type03);
           });
 
           test("3で割り切れる場合は3をプリントする", () => {
@@ -339,13 +339,25 @@
         });
       });
 
+      class FizzBuzzTypeEnum {
+        static get Type01() {
+          return new FizzBuzzType01();
+        }
+        static get Type02() {
+          return new FizzBuzzType02();
+        }
+        static get Type03() {
+          return new FizzBuzzType03();
+        }
+      }
+
       class FizzBuzzType {
         constructor() {
           this.FIZZ = "Fizz";
           this.BUZZ = "Buzz";
         }
 
-        getTypeCode() {}
+        generate(number) {}
 
         isFizz(number) {
           return number % 3 === 0;
@@ -354,28 +366,11 @@
         isBuzz(number) {
           return number % 5 === 0;
         }
-
-        static newType(code, number) {
-          switch (code) {
-            case FizzBuzz.TYPE01:
-              return new FizzBuzzType01(number);
-            case FizzBuzz.TYPE02:
-              return new FizzBuzzType02(number);
-            case FizzBuzz.TYPE03:
-              return new FizzBuzzType03(number);
-            default:
-              return number;
-          }
-        }
       }
 
       class FizzBuzzType01 extends FizzBuzzType {
         constructor() {
           super();
-        }
-
-        getTypeCode() {
-          return FizzBuzz.TYPE01;
         }
 
         generate(number) {
@@ -394,10 +389,6 @@
           super();
         }
 
-        getTypeCode() {
-          return FizzBuzz.TYPE02;
-        }
-
         generate(number) {
           return number;
         }
@@ -406,10 +397,6 @@
       class FizzBuzzType03 extends FizzBuzzType {
         constructor() {
           super();
-        }
-
-        getTypeCode() {
-          return FizzBuzz.TYPE03;
         }
 
         generate(number) {
@@ -424,7 +411,7 @@
       class FizzBuzz {
         constructor(type) {
           this._list = [];
-          this._type = FizzBuzzType.newType(type);
+          this._type = type;
         }
 
         get list() {
@@ -433,18 +420,6 @@
 
         set list(aList) {
           this._list = aList;
-        }
-
-        static get TYPE01() {
-          return 1;
-        }
-
-        static get TYPE02() {
-          return 2;
-        }
-
-        static get TYPE03() {
-          return 3;
         }
 
         generateList() {
@@ -525,7 +500,7 @@
         }
       }
 
-      const fizzBuzz = new FizzBuzz(FizzBuzz.TYPE01);
+      const fizzBuzz = new FizzBuzz(FizzBuzzTypeEnum.Type01);
       fizzBuzz.createView();
     </script>
     <script>

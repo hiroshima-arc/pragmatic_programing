@@ -801,7 +801,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ1の場合", () =&gt; {
           let fizzBuzz1;
           setup(() =&gt; {
-            fizzBuzz1 = new FizzBuzz(FizzBuzz.TYPE01);
+            fizzBuzz1 = new FizzBuzz(FizzBuzzTypeEnum.Type01);
             fizzBuzz1.generateList();
           });
 
@@ -874,7 +874,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ2の場合", () =&gt; {
           let fizzBuzz2;
           setup(() =&gt; {
-            fizzBuzz2 = new FizzBuzz(FizzBuzz.TYPE02);
+            fizzBuzz2 = new FizzBuzz(FizzBuzzTypeEnum.Type02);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
@@ -893,7 +893,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         suite("タイプ3の場合", () =&gt; {
           let fizzBuzz3;
           setup(() =&gt; {
-            fizzBuzz3 = new FizzBuzz(FizzBuzz.TYPE03);
+            fizzBuzz3 = new FizzBuzz(FizzBuzzTypeEnum.Type03);
           });
 
           test("3で割り切れる場合は3をプリントする", () =&gt; {
@@ -910,13 +910,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
       });
 
+      class FizzBuzzTypeEnum {
+        static get Type01() {
+          return new FizzBuzzType01();
+        }
+        static get Type02() {
+          return new FizzBuzzType02();
+        }
+        static get Type03() {
+          return new FizzBuzzType03();
+        }
+      }
+
       class FizzBuzzType {
         constructor() {
           this.FIZZ = "Fizz";
           this.BUZZ = "Buzz";
         }
 
-        getTypeCode() {}
+        generate(number) {}
 
         isFizz(number) {
           return number % 3 === 0;
@@ -925,28 +937,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         isBuzz(number) {
           return number % 5 === 0;
         }
-
-        static newType(code, number) {
-          switch (code) {
-            case FizzBuzz.TYPE01:
-              return new FizzBuzzType01(number);
-            case FizzBuzz.TYPE02:
-              return new FizzBuzzType02(number);
-            case FizzBuzz.TYPE03:
-              return new FizzBuzzType03(number);
-            default:
-              return number;
-          }
-        }
       }
 
       class FizzBuzzType01 extends FizzBuzzType {
         constructor() {
           super();
-        }
-
-        getTypeCode() {
-          return FizzBuzz.TYPE01;
         }
 
         generate(number) {
@@ -965,10 +960,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           super();
         }
 
-        getTypeCode() {
-          return FizzBuzz.TYPE02;
-        }
-
         generate(number) {
           return number;
         }
@@ -977,10 +968,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class FizzBuzzType03 extends FizzBuzzType {
         constructor() {
           super();
-        }
-
-        getTypeCode() {
-          return FizzBuzz.TYPE03;
         }
 
         generate(number) {
@@ -995,7 +982,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class FizzBuzz {
         constructor(type) {
           this._list = [];
-          this._type = FizzBuzzType.newType(type);
+          this._type = type;
         }
 
         get list() {
@@ -1004,18 +991,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         set list(aList) {
           this._list = aList;
-        }
-
-        static get TYPE01() {
-          return 1;
-        }
-
-        static get TYPE02() {
-          return 2;
-        }
-
-        static get TYPE03() {
-          return 3;
         }
 
         generateList() {
@@ -1096,7 +1071,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      const fizzBuzz = new FizzBuzz(FizzBuzz.TYPE01);
+      const fizzBuzz = new FizzBuzz(FizzBuzzTypeEnum.Type01);
       fizzBuzz.createView();
     &lt;/script&gt;
     &lt;script&gt;
@@ -1127,7 +1102,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 14:56:49 JST
+Last updated 2019-11-06 15:33:21 JST
 </div>
 </div>
 </body>
