@@ -275,17 +275,23 @@
             });
 
             test("Fizzの個数は27個", () => {
-              assert.equal(27, fizzBuzz1.list.filter(i => i === "Fizz").length);
+              assert.equal(
+                27,
+                fizzBuzz1.list.filter(i => i.value === "Fizz").length
+              );
             });
 
             test("Buzzの個数は14個", () => {
-              assert.equal(14, fizzBuzz1.list.filter(i => i === "Buzz").length);
+              assert.equal(
+                14,
+                fizzBuzz1.list.filter(i => i.value === "Buzz").length
+              );
             });
 
             test("FizzBuzzの個数は6個", () => {
               assert.equal(
                 6,
-                fizzBuzz1.list.filter(i => i === "FizzBuzz").length
+                fizzBuzz1.list.filter(i => i.value === "FizzBuzz").length
               );
             });
 
@@ -293,7 +299,7 @@
               assert.equal(
                 2632,
                 fizzBuzz1.list
-                  .filter(Number.isInteger)
+                  .filter(i => Number.isInteger(i.value))
                   .reduce((acc, value) => acc + value)
               );
             });
@@ -377,10 +383,11 @@
           const isFizz = this.isFizz(number);
           const isBuzz = this.isBuzz(number);
 
-          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
-          if (isFizz) return this.FIZZ;
-          if (isBuzz) return this.BUZZ;
-          return number;
+          if (isFizz && isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          if (isFizz) return new FizzBuzzValue(number, this.FIZZ);
+          if (isBuzz) return new FizzBuzzValue(number, this.BUZZ);
+          return new FizzBuzzValue(number, number);
         }
       }
 
@@ -390,7 +397,7 @@
         }
 
         generate(number) {
-          return number;
+          return new FizzBuzzValue(number, number);
         }
       }
 
@@ -403,8 +410,32 @@
           const isFizz = this.isFizz(number);
           const isBuzz = this.isBuzz(number);
 
-          if (isFizz && isBuzz) return this.FIZZ + this.BUZZ;
-          return number;
+          if (isFizz && isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          return new FizzBuzzValue(number, number);
+        }
+      }
+
+      class FizzBuzzValue {
+        constructor(number, value) {
+          this._number = number;
+          this._value = value;
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        get number() {
+          return this._number;
+        }
+
+        toString() {
+          return this._value;
+        }
+
+        equals(other) {
+          return this._number === other._number && this._value === other._value;
         }
       }
 

@@ -846,17 +846,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             });
 
             test("Fizzの個数は27個", () =&gt; {
-              assert.equal(27, fizzBuzz1.list.filter(i =&gt; i === "Fizz").length);
+              assert.equal(
+                27,
+                fizzBuzz1.list.filter(i =&gt; i.value === "Fizz").length
+              );
             });
 
             test("Buzzの個数は14個", () =&gt; {
-              assert.equal(14, fizzBuzz1.list.filter(i =&gt; i === "Buzz").length);
+              assert.equal(
+                14,
+                fizzBuzz1.list.filter(i =&gt; i.value === "Buzz").length
+              );
             });
 
             test("FizzBuzzの個数は6個", () =&gt; {
               assert.equal(
                 6,
-                fizzBuzz1.list.filter(i =&gt; i === "FizzBuzz").length
+                fizzBuzz1.list.filter(i =&gt; i.value === "FizzBuzz").length
               );
             });
 
@@ -864,7 +870,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               assert.equal(
                 2632,
                 fizzBuzz1.list
-                  .filter(Number.isInteger)
+                  .filter(i =&gt; Number.isInteger(i.value))
                   .reduce((acc, value) =&gt; acc + value)
               );
             });
@@ -948,10 +954,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           const isFizz = this.isFizz(number);
           const isBuzz = this.isBuzz(number);
 
-          if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
-          if (isFizz) return this.FIZZ;
-          if (isBuzz) return this.BUZZ;
-          return number;
+          if (isFizz &amp;&amp; isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          if (isFizz) return new FizzBuzzValue(number, this.FIZZ);
+          if (isBuzz) return new FizzBuzzValue(number, this.BUZZ);
+          return new FizzBuzzValue(number, number);
         }
       }
 
@@ -961,7 +968,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         generate(number) {
-          return number;
+          return new FizzBuzzValue(number, number);
         }
       }
 
@@ -974,8 +981,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           const isFizz = this.isFizz(number);
           const isBuzz = this.isBuzz(number);
 
-          if (isFizz &amp;&amp; isBuzz) return this.FIZZ + this.BUZZ;
-          return number;
+          if (isFizz &amp;&amp; isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          return new FizzBuzzValue(number, number);
+        }
+      }
+
+      class FizzBuzzValue {
+        constructor(number, value) {
+          this._number = number;
+          this._value = value;
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        get number() {
+          return this._number;
+        }
+
+        toString() {
+          return this._value;
+        }
+
+        equals(other) {
+          return this._number === other._number &amp;&amp; this._value === other._value;
         }
       }
 
@@ -1102,7 +1133,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 15:33:21 JST
+Last updated 2019-11-06 15:46:31 JST
 </div>
 </div>
 </body>
