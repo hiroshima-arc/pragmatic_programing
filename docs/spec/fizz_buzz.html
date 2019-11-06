@@ -1010,26 +1010,44 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
+      class FizzBuzzList {
+        constructor(list) {
+          this._value = list;
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        toString() {
+          return this._value;
+        }
+
+        add(value) {
+          let result = this._value;
+          result.push(value);
+          return new FizzBuzzList(result);
+        }
+      }
+
       class FizzBuzz {
         constructor(type) {
           this.MAX_COUNT = 100;
-          this._list = [];
+          this._list = new FizzBuzzList([]);
           this._type = type;
         }
 
         get list() {
-          return this._list;
-        }
-
-        set list(aList) {
-          this._list = aList;
+          return this._list.value;
         }
 
         generateList() {
           // 配列は0から始まるので1を足す
-          this.list = [...Array(this.MAX_COUNT + 1).keys()]
+          [...Array(this.MAX_COUNT + 1).keys()]
             .slice(1)
-            .map(i =&gt; this.generate.bind(this)(i, 1));
+            .forEach(
+              i =&gt; (this._list = this._list.add(this.generate.bind(this)(i, 1)))
+            );
         }
 
         generate(number) {
@@ -1135,7 +1153,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 16:03:32 JST
+Last updated 2019-11-06 16:24:31 JST
 </div>
 </div>
 </body>
