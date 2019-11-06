@@ -424,7 +424,10 @@
 
       class FizzBuzzValue {
         constructor(number, value) {
-          assert(number >= 0);
+          if (number < 0)
+            throw new Error(
+              `FizzBuzzValue can't generate by minus nnumber ${number}`
+            );
 
           this._number = number;
           this._value = value;
@@ -449,9 +452,16 @@
 
       class FizzBuzzList {
         constructor(list) {
-          assert(list.length <= 100);
+          if (list.length > FizzBuzzList.MAX_COUNT)
+            throw new Error(
+              `FizzBuzzList can't generate over ${FizzBuzzList.MAX_COUNT} items`
+            );
 
           this._value = list;
+        }
+
+        static get MAX_COUNT() {
+          return 100;
         }
 
         get value() {
@@ -505,8 +515,9 @@
 
       class FizzBuzz {
         constructor(type) {
-          this.MAX_COUNT = 101;
-          this._list = new FizzBuzzListCommand(type).execute(this.MAX_COUNT);
+          this._list = new FizzBuzzListCommand(type).execute(
+            FizzBuzzList.MAX_COUNT
+          );
         }
 
         get list() {

@@ -995,7 +995,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzValue {
         constructor(number, value) {
-          assert(number &gt;= 0);
+          if (number &lt; 0)
+            throw new Error(
+              `FizzBuzzValue can't generate by minus nnumber ${number}`
+            );
 
           this._number = number;
           this._value = value;
@@ -1020,9 +1023,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzList {
         constructor(list) {
-          assert(list.length &lt;= 100);
+          if (list.length &gt; FizzBuzzList.MAX_COUNT)
+            throw new Error(
+              `FizzBuzzList can't generate over ${FizzBuzzList.MAX_COUNT} items`
+            );
 
           this._value = list;
+        }
+
+        static get MAX_COUNT() {
+          return 100;
         }
 
         get value() {
@@ -1076,8 +1086,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzz {
         constructor(type) {
-          this.MAX_COUNT = 101;
-          this._list = new FizzBuzzListCommand(type).execute(this.MAX_COUNT);
+          this._list = new FizzBuzzListCommand(type).execute(
+            FizzBuzzList.MAX_COUNT
+          );
         }
 
         get list() {
@@ -1182,7 +1193,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 17:40:44 JST
+Last updated 2019-11-06 17:48:17 JST
 </div>
 </div>
 </body>
