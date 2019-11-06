@@ -171,7 +171,7 @@
               </div>
             </div>
             <dvi class="row p-3">
-              <div class="col-md-12 order-md-2" id="fizz-buzz-table"></div>
+              <div class="col-md-12 order-md-2" id="fizz-buzz-app"></div>
             </dvi>
           </div>
         </section>
@@ -558,7 +558,33 @@
           return this._list;
         }
 
-        renderTable() {
+        changeEvent(e) {
+          switch (e.target.value) {
+            case "one":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              break;
+            case "two":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type02).renderTable();
+              break;
+            case "three":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type03).renderTable();
+              break;
+            default:
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+          }
+        }
+
+        createSelect(id) {
+          return `
+            <select name="type" id="${id}">
+              <option value="one">タイプ1</option>
+              <option value="two">タイプ2</option>
+              <option value="three">タイプ3</option>
+            </select>
+            `;
+        }
+
+        createTable() {
           const header = (() => {
             return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
           })();
@@ -612,16 +638,40 @@
           return result;
         }
 
-        create() {
+        renderSelect() {
+          const id = "fizz-buzz-app-select-type";
+
           document.querySelector(
-            "#fizz-buzz-table"
-          ).innerHTML = this.renderTable();
+            "#fizz-buzz-app-select"
+          ).innerHTML = this.createSelect(id);
           document
-            .querySelector("#fizz-buzz-table > table")
+            .querySelector(`#${id}`)
+            .addEventListener("change", this.changeEvent);
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
+        }
+
+        renderTable() {
+          document.querySelector(
+            "#fizz-buzz-app-table"
+          ).innerHTML = this.createTable();
+          document
+            .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table");
           document
-            .querySelector("#fizz-buzz-table > table")
+            .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table-striped");
+        }
+
+        create() {
+          document.querySelector("#fizz-buzz-app").innerHTML = `
+            <div id="fizz-buzz-app-select"></div>
+            <div id="fizz-buzz-app-table"></div>
+          `;
+
+          this.renderSelect();
+          this.renderTable();
         }
       }
 

@@ -742,7 +742,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/div&gt;
             &lt;/div&gt;
             &lt;dvi class="row p-3"&gt;
-              &lt;div class="col-md-12 order-md-2" id="fizz-buzz-table"&gt;&lt;/div&gt;
+              &lt;div class="col-md-12 order-md-2" id="fizz-buzz-app"&gt;&lt;/div&gt;
             &lt;/dvi&gt;
           &lt;/div&gt;
         &lt;/section&gt;
@@ -1129,7 +1129,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return this._list;
         }
 
-        renderTable() {
+        changeEvent(e) {
+          switch (e.target.value) {
+            case "one":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              break;
+            case "two":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type02).renderTable();
+              break;
+            case "three":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type03).renderTable();
+              break;
+            default:
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+          }
+        }
+
+        createSelect() {
+          return `
+            &lt;select name="type" id="app__select--type"&gt;
+              &lt;option value="one"&gt;タイプ1&lt;/option&gt;
+              &lt;option value="two"&gt;タイプ2&lt;/option&gt;
+              &lt;option value="three"&gt;タイプ3&lt;/option&gt;
+            &lt;/select&gt;
+            `;
+        }
+
+        createTable() {
           const header = (() =&gt; {
             return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
           })();
@@ -1183,16 +1209,44 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return result;
         }
 
-        create() {
+        renderSelect() {
           document.querySelector(
-            "#fizz-buzz-table"
-          ).innerHTML = this.renderTable();
+            "#fizz-buzz-app-select"
+          ).innerHTML = this.createSelect();
           document
-            .querySelector("#fizz-buzz-table &gt; table")
+            .querySelector("#fizz-buzz-app-select&gt; select")
+            .setAttribute("id", "app__select--type");
+          document
+            .querySelector("#app__select--type")
+            .addEventListener("change", this.changeEvent);
+          document
+            .querySelector("#app__select--type")
+            .classList.add("browser-default");
+          document
+            .querySelector("#app__select--type")
+            .classList.add("custom-select");
+        }
+
+        renderTable() {
+          document.querySelector(
+            "#fizz-buzz-app-table"
+          ).innerHTML = this.createTable();
+          document
+            .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table");
           document
-            .querySelector("#fizz-buzz-table &gt; table")
+            .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table-striped");
+        }
+
+        create() {
+          document.querySelector("#fizz-buzz-app").innerHTML = `
+            &lt;div id="fizz-buzz-app-select"&gt;&lt;/div&gt;
+            &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
+          `;
+
+          this.renderSelect();
+          this.renderTable();
         }
       }
 
@@ -1227,7 +1281,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 18:18:46 JST
+Last updated 2019-11-06 18:44:19 JST
 </div>
 </div>
 </body>
