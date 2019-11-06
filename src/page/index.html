@@ -398,6 +398,18 @@
           this._list = aList;
         }
 
+        static get TYPE01() {
+          return 1;
+        }
+
+        static get TYPE02() {
+          return 2;
+        }
+
+        static get TYPE03() {
+          return 3;
+        }
+
         generateList() {
           this.list = [...Array(101).keys()]
             .slice(1)
@@ -409,13 +421,13 @@
           const isBuzz = number % 5 === 0;
 
           switch (type) {
-            case 1:
+            case FizzBuzz.TYPE01:
               const type01 = new FizzBuzzType01(number);
               return type01.generate();
-            case 2:
+            case FizzBuzz.TYPE02:
               const type02 = new FizzBuzzType02(number);
               return type02.generate();
-            case 3:
+            case FizzBuzz.TYPE03:
               const type03 = new FizzBuzzType03(number);
               return type03.generate();
             default:
