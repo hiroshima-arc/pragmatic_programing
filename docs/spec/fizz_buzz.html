@@ -1026,6 +1026,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
       });
 
+      suite("FizzBuzzRepositoryTest", () =&gt; {
+        test("値を保存する", () =&gt; {
+          const repository = new FizzBuzzRepository();
+          const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
+          assert(repository.save(data));
+        });
+      });
+
+      class FizzBuzzRepository {
+        save() {
+          return true;
+        }
+      }
+
       class FizzBuzzTypeEnum {
         static get Type01() {
           return new FizzBuzzType01();
@@ -1202,8 +1216,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return this._listCommand.execute(number);
         }
 
-        save(table) {
-          console.log(table);
+        save(list) {
+          console.log(list);
         }
       }
 
@@ -1523,7 +1537,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 18:40:17 JST
+Last updated 2019-11-08 18:54:03 JST
 </div>
 </div>
 </body>

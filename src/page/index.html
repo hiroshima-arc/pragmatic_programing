@@ -403,6 +403,20 @@
         });
       });
 
+      suite("FizzBuzzRepositoryTest", () => {
+        test("値を保存する", () => {
+          const repository = new FizzBuzzRepository();
+          const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
+          assert(repository.save(data));
+        });
+      });
+
+      class FizzBuzzRepository {
+        save() {
+          return true;
+        }
+      }
+
       class FizzBuzzTypeEnum {
         static get Type01() {
           return new FizzBuzzType01();
@@ -579,8 +593,8 @@
           return this._listCommand.execute(number);
         }
 
-        save(table) {
-          console.log(table);
+        save(list) {
+          console.log(list);
         }
       }
 
