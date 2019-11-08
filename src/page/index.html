@@ -664,7 +664,7 @@
             .classList.add("table-striped");
         }
 
-        create() {
+        render() {
           document.querySelector("#fizz-buzz-app").innerHTML = `
             <div id="fizz-buzz-app-select"></div>
             <div id="fizz-buzz-app-table"></div>
@@ -676,7 +676,7 @@
       }
 
       const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-      view.create();
+      view.render();
     </script>
     <script>
       mocha.globals(["jQuery"]);
