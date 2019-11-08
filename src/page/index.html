@@ -624,6 +624,10 @@
           }
         }
 
+        saveTable() {
+          alert("Called");
+        }
+
         createCounter(incrementId, decrementId) {
           return `
             <div class="col-md-1">
@@ -763,10 +767,10 @@
           }
         }
 
-        createButton() {
+        createButton(id) {
           return `
             <button
-              id="app__button--save"
+              id="${id}"
               type="button"
               class="btn btn-primary btn-rounded btn-sm my-0"
             >
@@ -818,9 +822,14 @@
         }
 
         renderButton() {
+          const id = "fizz-buzz-app-table-button";
+
           document.querySelector(
             "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton();
+          ).innerHTML = this.createButton(id);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("click", this.saveTable);
         }
 
         render() {
