@@ -1201,6 +1201,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         generateList(number) {
           return this._listCommand.execute(number);
         }
+
+        save(table) {
+          console.log(table);
+        }
       }
 
       class FizzBuzzView {
@@ -1217,6 +1221,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         get Counter() {
           return this._counter;
+        }
+
+        get Service() {
+          return this._service;
         }
 
         increment() {
@@ -1247,8 +1255,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
-        saveTable() {
-          alert("Called");
+        saveTable(e) {
+          const createListFromTable = table =&gt; {
+            let list = [];
+            for (let i = 1; i &lt;= 10; i++) {
+              for (let j = 0; j &lt; 10; j++) {
+                list.push(table.rows[i].cells[j].innerText);
+              }
+            }
+            return list;
+          };
+          const table = document.querySelector(
+            `#${e.target.dataset.tableid} &gt; table`
+          );
+          let result = createListFromTable(table);
+          this.Service.save(result);
         }
 
         createCounter(incrementId, decrementId) {
@@ -1390,12 +1411,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
-        createButton(id) {
+        createButton(id, tableId) {
           return `
             &lt;button
               id="${id}"
               type="button"
               class="btn btn-primary btn-rounded btn-sm my-0"
+              data-tableid="${tableId}"
             &gt;
               保存
             &lt;/button&gt;
@@ -1445,14 +1467,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderButton() {
-          const id = "fizz-buzz-app-table-button";
+          const id = "fizz-buzz-app-table-button-save";
+          const tableId = "fizz-buzz-app-table";
 
           document.querySelector(
             "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton(id);
+          ).innerHTML = this.createButton(id, tableId);
           document
             .querySelector(`#${id}`)
-            .addEventListener("click", this.saveTable);
+            .addEventListener("click", this.saveTable.bind(this));
         }
 
         render() {
@@ -1500,7 +1523,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 17:59:08 JST
+Last updated 2019-11-08 18:40:17 JST
 </div>
 </div>
 </body>

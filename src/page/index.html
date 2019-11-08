@@ -578,6 +578,10 @@
         generateList(number) {
           return this._listCommand.execute(number);
         }
+
+        save(table) {
+          console.log(table);
+        }
       }
 
       class FizzBuzzView {
@@ -594,6 +598,10 @@
 
         get Counter() {
           return this._counter;
+        }
+
+        get Service() {
+          return this._service;
         }
 
         increment() {
@@ -624,8 +632,21 @@
           }
         }
 
-        saveTable() {
-          alert("Called");
+        saveTable(e) {
+          const createListFromTable = table => {
+            let list = [];
+            for (let i = 1; i <= 10; i++) {
+              for (let j = 0; j < 10; j++) {
+                list.push(table.rows[i].cells[j].innerText);
+              }
+            }
+            return list;
+          };
+          const table = document.querySelector(
+            `#${e.target.dataset.tableid} > table`
+          );
+          let result = createListFromTable(table);
+          this.Service.save(result);
         }
 
         createCounter(incrementId, decrementId) {
@@ -767,12 +788,13 @@
           }
         }
 
-        createButton(id) {
+        createButton(id, tableId) {
           return `
             <button
               id="${id}"
               type="button"
               class="btn btn-primary btn-rounded btn-sm my-0"
+              data-tableid="${tableId}"
             >
               保存
             </button>
@@ -822,14 +844,15 @@
         }
 
         renderButton() {
-          const id = "fizz-buzz-app-table-button";
+          const id = "fizz-buzz-app-table-button-save";
+          const tableId = "fizz-buzz-app-table";
 
           document.querySelector(
             "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton(id);
+          ).innerHTML = this.createButton(id, tableId);
           document
             .querySelector(`#${id}`)
-            .addEventListener("click", this.saveTable);
+            .addEventListener("click", this.saveTable.bind(this));
         }
 
         render() {
