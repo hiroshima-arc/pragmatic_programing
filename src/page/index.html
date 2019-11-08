@@ -100,6 +100,13 @@
                   の倍数のときは｢Buzz｣とプリントし、
                 </p>
                 <p>3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること</p>
+                <p>
+                  タイプごとに出力を切り替えることができる。
+                </p>
+                <p>
+                  タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz
+                  の場合のみをプリントする。
+                </p>
               </div>
             </div>
             <div class="row p-3">
@@ -110,31 +117,61 @@
               <!-- 右側カラム（画面幅md以上） -->
               <div class="col-md-10">
                 <ul>
-                  <li>
-                    <del>1 から 100 まで数をプリントできるようにする。</del>
-                  </li>
-                  <li>
-                    <del>
-                      3
-                      の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
-                    </del>
-                  </li>
-                  <li>
-                    <del
-                      >5 の倍数のときは｢Buzz｣とプリントできるようにする。</del
-                    >
-                  </li>
-                  <li>
-                    <del>
-                      3 と 5
-                      両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする
-                    </del>
-                  </li>
+                  <li>タイプ 1 の場合</li>
+                  <ul>
+                    <li>
+                      <del>
+                        3
+                        の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+                      </del>
+                    </li>
+                    <li>
+                      <del
+                        >5 の倍数のときは｢Buzz｣とプリントできるようにする。</del
+                      >
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      </del>
+                    </li>
+                  </ul>
+                  <li>タイプ 2 の場合</li>
+                  <ul>
+                    <li>
+                      <del>3 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>5 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には値をプリントできるようにする。
+                      </del>
+                    </li>
+                  </ul>
+                  <li>タイプ 3 の場合</li>
+                  <ul>
+                    <li>
+                      <del>3 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>5 の倍数のときは数をプリントできるようにする。</del>
+                    </li>
+                    <li>
+                      <del>
+                        3 と 5
+                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+                      </del>
+                    </li>
+                  </ul>
                 </ul>
               </div>
             </div>
             <dvi class="row p-3">
-              <div class="col-md-12 order-md-2" id="fizz-buzz-table"></div>
+              <div class="col-md-12 order-md-2" id="fizz-buzz-app"></div>
             </dvi>
           </div>
         </section>
@@ -190,100 +227,387 @@
     <script>
       const assert = chai.assert;
       suite("FizzBuzzTest", () => {
-        test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
-          const result = generateFizzBuzzList();
-          assert.equal(1, result[0]);
-          assert.equal("Fizz", result[2]);
-          assert.equal("Buzz", result[4]);
-          assert.equal("FizzBuzz", result[14]);
-          assert.equal("Buzz", result[99]);
+        suite("タイプ1の場合", () => {
+          let list100;
+          let service1;
+          setup(() => {
+            service1 = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+            list100 = service1.generateList(100);
+          });
+
+          test("1から100までをプリントする、ただし3で割り切れる場合はFizz5で割り切れる場合はBuzz3と5で割り切れる場合はFizzBuzzをプリントする", () => {
+            const data = {
+              0: 1,
+              1: 2,
+              2: "Fizz",
+              3: 4,
+              4: "Buzz",
+              14: "FizzBuzz",
+              99: "Buzz"
+            };
+            Object.keys(data).forEach(k => {
+              assert.equal(data[k], list100[k]);
+            });
+          });
+
+          suite("3の倍数の場合", () => {
+            test("3で割り切れる場合はFizzをプリントする", () => {
+              assert.equal("Fizz", service1.generate(3));
+            });
+          });
+
+          suite("5の倍数の場合", () => {
+            test("5で割り切れる場合はBuzzをプリントする", () => {
+              assert.equal("Buzz", service1.generate(5));
+            });
+
+            test("15で割り切れる場合はFizzBuzzをプリントする", () => {
+              assert.equal("FizzBuzz", service1.generate(15));
+            });
+          });
+
+          suite("その他の場合", () => {
+            test("1を渡したら1を返す", () => {
+              assert.equal(1, service1.generate(1));
+            });
+
+            test("2を渡したら2を返す", () => {
+              assert.equal(2, service1.generate(2));
+            });
+
+            test("Fizzの個数は27個", () => {
+              assert.equal(27, list100.filter(i => i.value === "Fizz").length);
+            });
+
+            test("Buzzの個数は14個", () => {
+              assert.equal(14, list100.filter(i => i.value === "Buzz").length);
+            });
+
+            test("FizzBuzzの個数は6個", () => {
+              assert.equal(
+                6,
+                list100.filter(i => i.value === "FizzBuzz").length
+              );
+            });
+
+            test("数字の合計は2632", () => {
+              assert.equal(
+                2632,
+                list100
+                  .filter(i => Number.isInteger(i.value))
+                  .reduce((acc, value) => acc + value)
+              );
+            });
+          });
+
+          suite("例外ケース", () => {
+            test("値は正の値のみ許可する", () => {
+              chai.expect(() => command1.execute(-1)).to.throw();
+            });
+            test("100より多い数を許可しない", () => {
+              chai.expect(() => listCommand1.execute(101)).to.throw();
+            });
+          });
         });
 
-        test("3で割り切れる場合はFizzをプリントする", () => {
-          assert.equal("Fizz", generateFizzBuzz(3));
+        suite("タイプ2の場合", () => {
+          let service2;
+          setup(() => {
+            service2 = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
+          });
+
+          test("3で割り切れる場合は3をプリントする", () => {
+            assert.equal(3, service2.generate(3));
+          });
+
+          test("5で割り切れる場合は5をプリントする", () => {
+            assert.equal(5, service2.generate(5));
+          });
+
+          test("15で割り切れる場合は15をプリントする", () => {
+            assert.equal(15, service2.generate(15));
+          });
+
+          test("リストは数字のみ", () => {
+            const data = {
+              2: 3,
+              4: 5,
+              14: 15
+            };
+            Object.keys(data).forEach(k => {
+              assert.equal(data[k], service2.generateList(15)[k]);
+            });
+          });
         });
 
-        test("5で割り切れる場合はBuzzをプリントする", () => {
-          assert.equal("Buzz", generateFizzBuzz(5));
-        });
+        suite("タイプ3の場合", () => {
+          let service3;
+          setup(() => {
+            service3 = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
+          });
 
-        test("15で割り切れる場合はFizzBuzzをプリントする", () => {
-          assert.equal("FizzBuzz", generateFizzBuzz(15));
-        });
+          test("3で割り切れる場合は3をプリントする", () => {
+            assert.equal(3, service3.generate(3));
+          });
 
-        test("Fizzの個数は27個", () => {
-          assert.equal(
-            27,
-            generateFizzBuzzList().filter(i => i === "Fizz").length
-          );
-        });
+          test("5で割り切れる場合は5をプリントする", () => {
+            assert.equal(5, service3.generate(5));
+          });
 
-        test("Buzzの個数は14個", () => {
-          assert.equal(
-            14,
-            generateFizzBuzzList().filter(i => i === "Buzz").length
-          );
-        });
+          test("15で割り切れる場合はFizzBuzzをプリントする", () => {
+            assert.equal("FizzBuzz", service3.generate(15));
+          });
 
-        test("FizzBuzzの個数は6個", () => {
-          assert.equal(
-            6,
-            generateFizzBuzzList().filter(i => i === "FizzBuzz").length
-          );
-        });
-
-        test("数字の合計は2632", () => {
-          assert.equal(
-            2632,
-            generateFizzBuzzList()
-              .filter(Number.isInteger)
-              .reduce((acc, value) => acc + value)
-          );
+          test("リストはFizzBuzzのケースのみ", () => {
+            const data = {
+              2: 3,
+              4: 5,
+              14: "FizzBuzz"
+            };
+            Object.keys(data).forEach(k => {
+              assert.equal(data[k], service3.generateList(15)[k]);
+            });
+          });
         });
       });
 
-      const FIZZ = "Fizz";
-      const BUZZ = "Buzz";
-
-      function generateFizzBuzzList() {
-        return [...Array(101).keys()].slice(1).map(generateFizzBuzz);
+      class FizzBuzzTypeEnum {
+        static get Type01() {
+          return new FizzBuzzType01();
+        }
+        static get Type02() {
+          return new FizzBuzzType02();
+        }
+        static get Type03() {
+          return new FizzBuzzType03();
+        }
       }
 
-      function generateFizzBuzz(number) {
-        isFizz = number % 3 === 0;
-        isBuzz = number % 5 === 0;
+      class FizzBuzzType {
+        constructor() {
+          this.FIZZ = "Fizz";
+          this.BUZZ = "Buzz";
+        }
 
-        if (isFizz && isBuzz) return FIZZ + BUZZ;
-        if (isFizz) return FIZZ;
-        if (isBuzz) return BUZZ;
+        generate(number) {}
 
-        return number;
+        isFizz(number) {
+          return number % 3 === 0;
+        }
+
+        isBuzz(number) {
+          return number % 5 === 0;
+        }
       }
 
-      function renderTable() {
-        const header = (() => {
-          return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
-        })();
+      class FizzBuzzType01 extends FizzBuzzType {
+        constructor() {
+          super();
+        }
 
-        const body = (() => {
-          let result = [];
-          let row = 0;
-          let col = [];
-          generateFizzBuzzList().forEach((v, k) => {
-            if ((k + 1) % 10 === 0) {
-              col.push(`<td>${v}</td>`);
-              result[row++] = col;
-              col = [];
-            } else {
-              col.push(`<td>${v}</td>`);
-            }
-          });
-          return result;
-        })();
+        generate(number) {
+          const isFizz = this.isFizz(number);
+          const isBuzz = this.isBuzz(number);
 
-        const row = n => body[n].join(" ");
+          if (isFizz && isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          if (isFizz) return new FizzBuzzValue(number, this.FIZZ);
+          if (isBuzz) return new FizzBuzzValue(number, this.BUZZ);
+          return new FizzBuzzValue(number, number);
+        }
+      }
 
-        const result = `
+      class FizzBuzzType02 extends FizzBuzzType {
+        constructor() {
+          super();
+        }
+
+        generate(number) {
+          return new FizzBuzzValue(number, number);
+        }
+      }
+
+      class FizzBuzzType03 extends FizzBuzzType {
+        constructor() {
+          super();
+        }
+
+        generate(number) {
+          const isFizz = this.isFizz(number);
+          const isBuzz = this.isBuzz(number);
+
+          if (isFizz && isBuzz)
+            return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+          return new FizzBuzzValue(number, number);
+        }
+      }
+
+      class FizzBuzzValue {
+        constructor(number, value) {
+          if (number < 0)
+            throw new Error(
+              `FizzBuzzValue can't generate by minus nnumber ${number}`
+            );
+
+          this._number = number;
+          this._value = value;
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        get number() {
+          return this._number;
+        }
+
+        toString() {
+          return this._value;
+        }
+
+        equals(other) {
+          return this._number === other._number && this._value === other._value;
+        }
+      }
+
+      class FizzBuzzList {
+        constructor(list) {
+          if (list.length > FizzBuzzList.MAX_COUNT)
+            throw new Error(
+              `FizzBuzzList can't generate over ${FizzBuzzList.MAX_COUNT} items`
+            );
+
+          this._value = list;
+        }
+
+        static get MAX_COUNT() {
+          return 100;
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        toString() {
+          return this._value;
+        }
+
+        add(value) {
+          let result = this._value;
+          result.push(value);
+          return new FizzBuzzList(result);
+        }
+      }
+
+      class FizzBuzzCommand {
+        constructor() {}
+        execute() {}
+      }
+
+      class FizzBuzzValueCommand extends FizzBuzzCommand {
+        constructor(type) {
+          super();
+          this._type = type;
+        }
+
+        execute(number) {
+          return this._type.generate(number);
+        }
+      }
+
+      class FizzBuzzListCommand extends FizzBuzzCommand {
+        constructor(type) {
+          super();
+          this._type = type;
+          this._list = new FizzBuzzList([]);
+        }
+
+        execute(number) {
+          // 配列は0から始まるので1を足す
+          [...Array(number + 1).keys()]
+            .slice(1)
+            .forEach(
+              i => (this._list = this._list.add(this._type.generate(i)))
+            );
+          return this._list.value;
+        }
+      }
+
+      class FizzBuzzService {
+        constructor(type) {
+          this._valueCommand = new FizzBuzzValueCommand(type);
+          this._listCommand = new FizzBuzzListCommand(type);
+        }
+
+        generate(number) {
+          return this._valueCommand.execute(number);
+        }
+
+        generateList(number) {
+          return this._listCommand.execute(number);
+        }
+      }
+
+      class FizzBuzzView {
+        constructor(type) {
+          this._service = new FizzBuzzService(type);
+          this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+        }
+
+        get list() {
+          return this._list;
+        }
+
+        changeEvent(e) {
+          switch (e.target.value) {
+            case "one":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              break;
+            case "two":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type02).renderTable();
+              break;
+            case "three":
+              new FizzBuzzView(FizzBuzzTypeEnum.Type03).renderTable();
+              break;
+            default:
+              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+          }
+        }
+
+        createSelect(id) {
+          return `
+            <select name="type" id="${id}">
+              <option value="one">タイプ1</option>
+              <option value="two">タイプ2</option>
+              <option value="three">タイプ3</option>
+            </select>
+            `;
+        }
+
+        createTable() {
+          const header = (() => {
+            return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
+          })();
+
+          const body = (() => {
+            let result = [];
+            let row = 0;
+            let col = [];
+            this.list.forEach((v, k) => {
+              if ((k + 1) % 10 === 0) {
+                col.push(`<td>${v}</td>`);
+                result[row++] = col;
+                col = [];
+              } else {
+                col.push(`<td>${v}</td>`);
+              }
+            });
+            return result;
+          })();
+
+          const row = n => body[n].join(" ");
+
+          const result = `
             <table>
               <thead>
                 ${header[0]}
@@ -311,20 +635,48 @@
               </tbody>
             </table>
         `;
-        return result;
+          return result;
+        }
+
+        renderSelect() {
+          const id = "fizz-buzz-app-select-type";
+
+          document.querySelector(
+            "#fizz-buzz-app-select"
+          ).innerHTML = this.createSelect(id);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("change", this.changeEvent);
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
+        }
+
+        renderTable() {
+          document.querySelector(
+            "#fizz-buzz-app-table"
+          ).innerHTML = this.createTable();
+          document
+            .querySelector("#fizz-buzz-app-table > table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-app-table > table")
+            .classList.add("table-striped");
+        }
+
+        render() {
+          document.querySelector("#fizz-buzz-app").innerHTML = `
+            <div id="fizz-buzz-app-select"></div>
+            <div id="fizz-buzz-app-table"></div>
+          `;
+
+          this.renderSelect();
+          this.renderTable();
+        }
       }
 
-      function createView() {
-        document.querySelector("#fizz-buzz-table").innerHTML = renderTable();
-        document
-          .querySelector("#fizz-buzz-table > table")
-          .classList.add("table");
-        document
-          .querySelector("#fizz-buzz-table > table")
-          .classList.add("table-striped");
-      }
-
-      createView();
+      const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+      view.render();
     </script>
     <script>
       mocha.globals(["jQuery"]);
