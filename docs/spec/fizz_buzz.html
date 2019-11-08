@@ -568,11 +568,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p>&#10003; カウンター画面</p>
+<p>&#10063; カウンター画面</p>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; 画面を作る。</p>
+<p>&#10003; 画面を作る。</p>
 </li>
 <li>
 <p>&#10063; インクリメントできるようにする。</p>
@@ -584,11 +584,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p>&#10003; 一覧編集画面</p>
+<p>&#10063; 一覧編集画面</p>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; 画面を作る。</p>
+<p>&#10003; 画面を作る。</p>
 </li>
 <li>
 <p>&#10063; 編集できるようにする。</p>
@@ -749,7 +749,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   &lt;li&gt;カウンター画面&lt;/li&gt;
                   &lt;ul&gt;
                     &lt;li&gt;
-                      画面を作る。
+                      &lt;del&gt;画面を作る。&lt;/del&gt;
                     &lt;/li&gt;
                     &lt;li&gt;
                       インクリメントできるようにする。
@@ -761,7 +761,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   &lt;li&gt;一覧編集画面&lt;/li&gt;
                   &lt;ul&gt;
                     &lt;li&gt;
-                      画面を作る。
+                      &lt;del&gt;画面を作る。&lt;/del&gt;
                     &lt;/li&gt;
                     &lt;li&gt;
                       編集できるようにする。
@@ -812,21 +812,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                       &lt;div
                         id="app__counter"
                         class="row d-flex align-items-center"
-                      &gt;
-                        &lt;div class="col-md-1"&gt;
-                          &lt;button class="btn btn-primary" id="decrement"&gt;
-                            -
-                          &lt;/button&gt;
-                        &lt;/div&gt;
-                        &lt;div class="col-md-10"&gt;
-                          &lt;h1 class="display-1 text-center"&gt;FizzBuzz&lt;/h1&gt;
-                        &lt;/div&gt;
-                        &lt;div class="col-md-1"&gt;
-                          &lt;button class="btn btn-primary" id="increment"&gt;
-                            +
-                          &lt;/button&gt;
-                        &lt;/div&gt;
-                      &lt;/div&gt;
+                      &gt;&lt;/div&gt;
                     &lt;/div&gt;
                     &lt;div
                       aria-labelledby="tab-menu02"
@@ -1419,6 +1405,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
+        createCounter() {
+          return `
+            &lt;div class="col-md-1"&gt;
+              &lt;button class="btn btn-primary" id="decrement"&gt;
+                -
+              &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class="col-md-10"&gt;
+              &lt;h1 class="display-1 text-center"&gt;FizzBuzz&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="col-md-1"&gt;
+              &lt;button class="btn btn-primary" id="increment"&gt;
+                +
+              &lt;/button&gt;
+            &lt;/div&gt;
+          `;
+        }
+
         createSelect(id) {
           return `
             &lt;select name="type" id="${id}"&gt;
@@ -1483,6 +1487,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return result;
         }
 
+        renderCounter() {
+          document.querySelector(
+            "#app__counter"
+          ).innerHTML = this.createCounter();
+        }
+
         renderSelect() {
           const id = "fizz-buzz-app-select-type";
 
@@ -1518,6 +1528,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
           this.renderSelect();
           this.renderTable(); */
+          this.renderCounter();
         }
       }
 
@@ -1552,7 +1563,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 15:55:57 JST
+Last updated 2019-11-08 16:04:43 JST
 </div>
 </div>
 </body>

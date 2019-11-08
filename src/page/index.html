@@ -189,21 +189,7 @@
                       <div
                         id="app__counter"
                         class="row d-flex align-items-center"
-                      >
-                        <div class="col-md-1">
-                          <button class="btn btn-primary" id="decrement">
-                            -
-                          </button>
-                        </div>
-                        <div class="col-md-10">
-                          <h1 class="display-1 text-center">FizzBuzz</h1>
-                        </div>
-                        <div class="col-md-1">
-                          <button class="btn btn-primary" id="increment">
-                            +
-                          </button>
-                        </div>
-                      </div>
+                      ></div>
                     </div>
                     <div
                       aria-labelledby="tab-menu02"
@@ -796,6 +782,24 @@
           }
         }
 
+        createCounter() {
+          return `
+            <div class="col-md-1">
+              <button class="btn btn-primary" id="decrement">
+                -
+              </button>
+            </div>
+            <div class="col-md-10">
+              <h1 class="display-1 text-center">FizzBuzz</h1>
+            </div>
+            <div class="col-md-1">
+              <button class="btn btn-primary" id="increment">
+                +
+              </button>
+            </div>
+          `;
+        }
+
         createSelect(id) {
           return `
             <select name="type" id="${id}">
@@ -860,6 +864,12 @@
           return result;
         }
 
+        renderCounter() {
+          document.querySelector(
+            "#app__counter"
+          ).innerHTML = this.createCounter();
+        }
+
         renderSelect() {
           const id = "fizz-buzz-app-select-type";
 
@@ -895,6 +905,7 @@
 
           this.renderSelect();
           this.renderTable(); */
+          this.renderCounter();
         }
       }
 
