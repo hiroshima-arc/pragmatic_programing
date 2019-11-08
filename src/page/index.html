@@ -760,10 +760,19 @@
         constructor(type) {
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+          this._counter = 0;
         }
 
         get list() {
           return this._list;
+        }
+
+        get Couner() {
+          return this._counter;
+        }
+
+        increment() {
+          this._counter += 1;
         }
 
         changeEvent(e) {
@@ -790,7 +799,7 @@
               </button>
             </div>
             <div class="col-md-10">
-              <h1 class="display-1 text-center">FizzBuzz</h1>
+              <h1 class="display-1 text-center">${this._counter}</h1>
             </div>
             <div class="col-md-1">
               <button class="btn btn-primary" id="increment">
