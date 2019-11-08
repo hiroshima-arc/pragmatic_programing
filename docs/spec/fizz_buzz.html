@@ -1396,6 +1396,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         increment() {
           this._counter += 1;
+          this.renderCounter();
         }
 
         changeEvent(e) {
@@ -1414,7 +1415,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
-        createCounter() {
+        createCounter(incrementId) {
           return `
             &lt;div class="col-md-1"&gt;
               &lt;button class="btn btn-primary" id="decrement"&gt;
@@ -1425,7 +1426,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;h1 class="display-1 text-center"&gt;${this._counter}&lt;/h1&gt;
             &lt;/div&gt;
             &lt;div class="col-md-1"&gt;
-              &lt;button class="btn btn-primary" id="increment"&gt;
+              &lt;button class="btn btn-primary" id="${incrementId}"&gt;
                 +
               &lt;/button&gt;
             &lt;/div&gt;
@@ -1497,9 +1498,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderCounter() {
+          const incrementId = "fizz-buzz-app-counter-increment";
+
           document.querySelector(
             "#app__counter"
-          ).innerHTML = this.createCounter();
+          ).innerHTML = this.createCounter(incrementId);
+          document
+            .querySelector(`#${incrementId}`)
+            .addEventListener("click", this.increment.bind(this));
         }
 
         renderSelect() {
@@ -1572,7 +1578,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 16:09:54 JST
+Last updated 2019-11-08 16:17:48 JST
 </div>
 </div>
 </body>

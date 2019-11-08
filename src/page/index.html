@@ -773,6 +773,7 @@
 
         increment() {
           this._counter += 1;
+          this.renderCounter();
         }
 
         changeEvent(e) {
@@ -791,7 +792,7 @@
           }
         }
 
-        createCounter() {
+        createCounter(incrementId) {
           return `
             <div class="col-md-1">
               <button class="btn btn-primary" id="decrement">
@@ -802,7 +803,7 @@
               <h1 class="display-1 text-center">${this._counter}</h1>
             </div>
             <div class="col-md-1">
-              <button class="btn btn-primary" id="increment">
+              <button class="btn btn-primary" id="${incrementId}">
                 +
               </button>
             </div>
@@ -874,9 +875,14 @@
         }
 
         renderCounter() {
+          const incrementId = "fizz-buzz-app-counter-increment";
+
           document.querySelector(
             "#app__counter"
-          ).innerHTML = this.createCounter();
+          ).innerHTML = this.createCounter(incrementId);
+          document
+            .querySelector(`#${incrementId}`)
+            .addEventListener("click", this.increment.bind(this));
         }
 
         renderSelect() {
