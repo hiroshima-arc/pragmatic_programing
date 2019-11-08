@@ -132,7 +132,7 @@
                       <del>インクリメントできるようにする。</del>
                     </li>
                     <li>
-                      デクリメントできるようにする。
+                      <del>デクリメントできるようにする。</del>
                     </li>
                   </ul>
                   <li>一覧編集画面</li>
@@ -778,6 +778,12 @@
           this.renderCounter();
         }
 
+        decrement() {
+          this.Counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._value = this._service.generate(this.Counter);
+          this.renderCounter();
+        }
+
         changeEvent(e) {
           switch (e.target.value) {
             case "one":
@@ -794,10 +800,10 @@
           }
         }
 
-        createCounter(incrementId) {
+        createCounter(incrementId, decrementId) {
           return `
             <div class="col-md-1">
-              <button class="btn btn-primary" id="decrement">
+              <button class="btn btn-primary" id="${decrementId}">
                 -
               </button>
             </div>
@@ -878,13 +884,17 @@
 
         renderCounter() {
           const incrementId = "fizz-buzz-app-counter-increment";
+          const decrementId = "fizz-buzz-app-counter-decrement";
 
           document.querySelector(
             "#app__counter"
-          ).innerHTML = this.createCounter(incrementId);
+          ).innerHTML = this.createCounter(incrementId, decrementId);
           document
             .querySelector(`#${incrementId}`)
             .addEventListener("click", this.increment.bind(this));
+          document
+            .querySelector(`#${decrementId}`)
+            .addEventListener("click", this.decrement.bind(this));
         }
 
         renderSelect() {
