@@ -167,3 +167,6 @@ dist
 .DS_Store
 .project
 /.settings/org.eclipse.buildship.core.prefs
+
+cypress/videos
+cypress/screenshots
