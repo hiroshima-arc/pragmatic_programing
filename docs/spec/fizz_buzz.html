@@ -452,6 +452,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
+<p>機能仕様</p>
+<div class="ulist">
+<ul>
+<li>
 <p>３で割り切れる場合は「Fizz」を出力する。</p>
 </li>
 <li>
@@ -472,6 +476,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul>
 <li>
 <p>タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzzの場合のみをプリントする。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>画面仕様</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1から100までを１件ずつ画面に表示できる。</p>
+</li>
+<li>
+<p>1から100まで表示された内容を編集して保存できる。</p>
 </li>
 </ul>
 </div>
@@ -543,6 +563,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>&#10003; 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>&#10063; カウンター画面</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; 画面を作る。</p>
+</li>
+<li>
+<p>&#10063; インクリメントできるようにする。</p>
+</li>
+<li>
+<p>&#10063; デクリメントできるようにする。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>&#10063; 一覧編集画面</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; 画面を作る。</p>
+</li>
+<li>
+<p>&#10063; 編集できるようにする。</p>
+</li>
+<li>
+<p>&#10063; 保存できるようにする。</p>
 </li>
 </ul>
 </div>
@@ -678,6 +730,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzz
                   の場合のみをプリントする。
                 &lt;/p&gt;
+                &lt;p&gt;
+                  1から100までを1件ずつ画面に表示できる。
+                &lt;/p&gt;
+                &lt;p&gt;
+                  1から100まで表示された内容を編集して保存できる。
+                &lt;/p&gt;
               &lt;/div&gt;
             &lt;/div&gt;
             &lt;div class="row p-3"&gt;
@@ -688,54 +746,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;!-- 右側カラム（画面幅md以上） --&gt;
               &lt;div class="col-md-10"&gt;
                 &lt;ul&gt;
-                  &lt;li&gt;タイプ 1 の場合&lt;/li&gt;
+                  &lt;li&gt;カウンター画面&lt;/li&gt;
                   &lt;ul&gt;
                     &lt;li&gt;
-                      &lt;del&gt;
-                        3
-                        の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
-                      &lt;/del&gt;
+                      画面を作る。
                     &lt;/li&gt;
                     &lt;li&gt;
-                      &lt;del
-                        &gt;5 の倍数のときは｢Buzz｣とプリントできるようにする。&lt;/del
-                      &gt;
+                      インクリメントできるようにする。
                     &lt;/li&gt;
                     &lt;li&gt;
-                      &lt;del&gt;
-                        3 と 5
-                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
-                      &lt;/del&gt;
+                      デクリメントできるようにする。
                     &lt;/li&gt;
                   &lt;/ul&gt;
-                  &lt;li&gt;タイプ 2 の場合&lt;/li&gt;
+                  &lt;li&gt;一覧編集画面&lt;/li&gt;
                   &lt;ul&gt;
                     &lt;li&gt;
-                      &lt;del&gt;3 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
+                      画面を作る。
                     &lt;/li&gt;
                     &lt;li&gt;
-                      &lt;del&gt;5 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
+                      編集できるようにする。
                     &lt;/li&gt;
                     &lt;li&gt;
-                      &lt;del&gt;
-                        3 と 5
-                        両方の倍数の場合には値をプリントできるようにする。
-                      &lt;/del&gt;
-                    &lt;/li&gt;
-                  &lt;/ul&gt;
-                  &lt;li&gt;タイプ 3 の場合&lt;/li&gt;
-                  &lt;ul&gt;
-                    &lt;li&gt;
-                      &lt;del&gt;3 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
-                    &lt;/li&gt;
-                    &lt;li&gt;
-                      &lt;del&gt;5 の倍数のときは数をプリントできるようにする。&lt;/del&gt;
-                    &lt;/li&gt;
-                    &lt;li&gt;
-                      &lt;del&gt;
-                        3 と 5
-                        両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
-                      &lt;/del&gt;
+                      保存できるようにする。
                     &lt;/li&gt;
                   &lt;/ul&gt;
                 &lt;/ul&gt;
@@ -1145,9 +1177,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
-        createSelect() {
+        createSelect(id) {
           return `
-            &lt;select name="type" id="app__select--type"&gt;
+            &lt;select name="type" id="${id}"&gt;
               &lt;option value="one"&gt;タイプ1&lt;/option&gt;
               &lt;option value="two"&gt;タイプ2&lt;/option&gt;
               &lt;option value="three"&gt;タイプ3&lt;/option&gt;
@@ -1210,21 +1242,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderSelect() {
+          const id = "fizz-buzz-app-select-type";
+
           document.querySelector(
             "#fizz-buzz-app-select"
-          ).innerHTML = this.createSelect();
+          ).innerHTML = this.createSelect(id);
           document
-            .querySelector("#fizz-buzz-app-select&gt; select")
-            .setAttribute("id", "app__select--type");
-          document
-            .querySelector("#app__select--type")
+            .querySelector(`#${id}`)
             .addEventListener("change", this.changeEvent);
-          document
-            .querySelector("#app__select--type")
-            .classList.add("browser-default");
-          document
-            .querySelector("#app__select--type")
-            .classList.add("custom-select");
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
         renderTable() {
@@ -1239,7 +1267,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .classList.add("table-striped");
         }
 
-        create() {
+        render() {
           document.querySelector("#fizz-buzz-app").innerHTML = `
             &lt;div id="fizz-buzz-app-select"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
@@ -1251,7 +1279,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
 
       const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-      view.create();
+      view.render();
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -1281,7 +1309,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-06 18:44:19 JST
+Last updated 2019-11-08 14:49:42 JST
 </div>
 </div>
 </body>
