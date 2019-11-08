@@ -764,7 +764,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                       &lt;del&gt;画面を作る。&lt;/del&gt;
                     &lt;/li&gt;
                     &lt;li&gt;
-                      編集できるようにする。
+                      &lt;del&gt;編集できるようにする。&lt;/del&gt;
                     &lt;/li&gt;
                     &lt;li&gt;
                       保存できるようにする。
@@ -1166,7 +1166,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         execute(number) {
-          return this._type.generate(number);
+          return this._type.generate(number).value;
         }
       }
 
@@ -1329,6 +1329,63 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return result;
         }
 
+        editTable() {
+          $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
+            "click",
+            edit_toggle(this._service)
+          );
+
+          function save(value) {
+            document.querySelector(
+              "#app__message"
+            ).innerHTML = `${value}に編集しました。`;
+          }
+
+          function edit_toggle(service) {
+            let edit_flag = false;
+            return function() {
+              if (edit_flag) return;
+
+              let $input = $("&lt;input&gt;")
+                .attr("type", "text")
+                .val($(this).text());
+
+              $(this).html($input);
+
+              $("input", this)
+                .focus()
+                .keypress(function(e) {
+                  if (e.which == 13) {
+                    const number = $(this).val();
+                    try {
+                      const value = service.generate(number);
+                      save(value);
+                      $(this)
+                        .after(value)
+                        .unbind()
+                        .remove();
+                      edit_flag = false;
+                    } catch (e) {
+                      document.querySelector("#app__message").innerHTML =
+                        e.message;
+                    }
+                  }
+                });
+
+              $("input", this)
+                .focus()
+                .blur(function(e) {
+                  $(this)
+                    .after($(this).val())
+                    .unbind()
+                    .remove();
+                  edit_flag = false;
+                });
+              edit_flag = true;
+            };
+          }
+        }
+
         createButton() {
           return `
             &lt;button
@@ -1380,6 +1437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           document
             .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table-striped");
+          this.editTable();
         }
 
         renderButton() {
@@ -1433,7 +1491,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 17:08:10 JST
+Last updated 2019-11-08 17:49:17 JST
 </div>
 </div>
 </body>

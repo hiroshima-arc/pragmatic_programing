@@ -141,7 +141,7 @@
                       <del>画面を作る。</del>
                     </li>
                     <li>
-                      編集できるようにする。
+                      <del>編集できるようにする。</del>
                     </li>
                     <li>
                       保存できるようにする。
@@ -543,7 +543,7 @@
         }
 
         execute(number) {
-          return this._type.generate(number);
+          return this._type.generate(number).value;
         }
       }
 
@@ -706,6 +706,63 @@
           return result;
         }
 
+        editTable() {
+          $("#fizz-buzz-app-table > table > tbody > tr > td").on(
+            "click",
+            edit_toggle(this._service)
+          );
+
+          function save(value) {
+            document.querySelector(
+              "#app__message"
+            ).innerHTML = `${value}に編集しました。`;
+          }
+
+          function edit_toggle(service) {
+            let edit_flag = false;
+            return function() {
+              if (edit_flag) return;
+
+              let $input = $("<input>")
+                .attr("type", "text")
+                .val($(this).text());
+
+              $(this).html($input);
+
+              $("input", this)
+                .focus()
+                .keypress(function(e) {
+                  if (e.which == 13) {
+                    const number = $(this).val();
+                    try {
+                      const value = service.generate(number);
+                      save(value);
+                      $(this)
+                        .after(value)
+                        .unbind()
+                        .remove();
+                      edit_flag = false;
+                    } catch (e) {
+                      document.querySelector("#app__message").innerHTML =
+                        e.message;
+                    }
+                  }
+                });
+
+              $("input", this)
+                .focus()
+                .blur(function(e) {
+                  $(this)
+                    .after($(this).val())
+                    .unbind()
+                    .remove();
+                  edit_flag = false;
+                });
+              edit_flag = true;
+            };
+          }
+        }
+
         createButton() {
           return `
             <button
@@ -757,6 +814,7 @@
           document
             .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table-striped");
+          this.editTable();
         }
 
         renderButton() {
