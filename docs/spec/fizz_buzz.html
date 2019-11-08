@@ -1384,18 +1384,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._counter = 0;
+          this._value = this._service.generate(this.Counter);
         }
 
         get list() {
           return this._list;
         }
 
-        get Couner() {
+        get Counter() {
           return this._counter;
         }
 
         increment() {
           this._counter += 1;
+          this._value = this._service.generate(this.Counter);
           this.renderCounter();
         }
 
@@ -1423,7 +1425,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/button&gt;
             &lt;/div&gt;
             &lt;div class="col-md-10"&gt;
-              &lt;h1 class="display-1 text-center"&gt;${this._counter}&lt;/h1&gt;
+              &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
             &lt;/div&gt;
             &lt;div class="col-md-1"&gt;
               &lt;button class="btn btn-primary" id="${incrementId}"&gt;
@@ -1578,7 +1580,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 16:17:48 JST
+Last updated 2019-11-08 16:21:39 JST
 </div>
 </div>
 </body>

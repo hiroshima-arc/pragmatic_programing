@@ -761,18 +761,20 @@
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._counter = 0;
+          this._value = this._service.generate(this.Counter);
         }
 
         get list() {
           return this._list;
         }
 
-        get Couner() {
+        get Counter() {
           return this._counter;
         }
 
         increment() {
           this._counter += 1;
+          this._value = this._service.generate(this.Counter);
           this.renderCounter();
         }
 
@@ -800,7 +802,7 @@
               </button>
             </div>
             <div class="col-md-10">
-              <h1 class="display-1 text-center">${this._counter}</h1>
+              <h1 class="display-1 text-center">${this._value}</h1>
             </div>
             <div class="col-md-1">
               <button class="btn btn-primary" id="${incrementId}">
