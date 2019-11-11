@@ -1119,6 +1119,20 @@
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
+        renderSelectRead() {
+          const id = "fizz-buzz-app-select-read";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-select-read"
+          ).innerHTML = this.createSelect(id);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("change", this.changeEvent);
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
+        }
+
         renderTable() {
           document.querySelector(
             "#fizz-buzz-app-table"
@@ -1128,6 +1142,19 @@
             .classList.add("table");
           document
             .querySelector("#fizz-buzz-app-table > table")
+            .classList.add("table-striped");
+          this.editTable();
+        }
+
+        renderTableRead() {
+          document.querySelector(
+            "#fizz-buzz-app-table-read"
+          ).innerHTML = this.createTable();
+          document
+            .querySelector("#fizz-buzz-app-table-read > table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-app-table-read > table")
             .classList.add("table-striped");
           this.editTable();
         }
@@ -1144,17 +1171,38 @@
             .addEventListener("click", this.saveTable.bind(this));
         }
 
+        renderButtonDelete() {
+          const id = "fizz-buzz-app-table-button-delete";
+          const tableId = "fizz-buzz-app-table-read";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-button-delete"
+          ).innerHTML = this.createButton(id, tableId);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("click", this.saveTable.bind(this));
+        }
+
         render() {
           this.renderCounter();
+
           document.querySelector("#app__table--create-update").innerHTML = `
             <div id="fizz-buzz-app-table-select"></div>
             <div id="fizz-buzz-app-table"></div>
             <div id="fizz-buzz-app-table-button"></div>
           `;
-
           this.renderSelect();
           this.renderTable();
           this.renderButton();
+
+          document.querySelector("#app__table--read-delete").innerHTML = `
+            <div id="fizz-buzz-app-table-select-read"></div>
+            <div id="fizz-buzz-app-table-read"></div>
+            <div id="fizz-buzz-app-table-button-delete"></div>
+          `;
+          this.renderSelectRead();
+          this.renderTableRead();
+          this.renderButtonDelete();
         }
       }
 

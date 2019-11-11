@@ -1751,6 +1751,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
+        renderSelectRead() {
+          const id = "fizz-buzz-app-select-read";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-select-read"
+          ).innerHTML = this.createSelect(id);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("change", this.changeEvent);
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
+        }
+
         renderTable() {
           document.querySelector(
             "#fizz-buzz-app-table"
@@ -1760,6 +1774,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .classList.add("table");
           document
             .querySelector("#fizz-buzz-app-table &gt; table")
+            .classList.add("table-striped");
+          this.editTable();
+        }
+
+        renderTableRead() {
+          document.querySelector(
+            "#fizz-buzz-app-table-read"
+          ).innerHTML = this.createTable();
+          document
+            .querySelector("#fizz-buzz-app-table-read &gt; table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-app-table-read &gt; table")
             .classList.add("table-striped");
           this.editTable();
         }
@@ -1776,17 +1803,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .addEventListener("click", this.saveTable.bind(this));
         }
 
+        renderButtonDelete() {
+          const id = "fizz-buzz-app-table-button-delete";
+          const tableId = "fizz-buzz-app-table-read";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-button-delete"
+          ).innerHTML = this.createButton(id, tableId);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("click", this.saveTable.bind(this));
+        }
+
         render() {
           this.renderCounter();
+
           document.querySelector("#app__table--create-update").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
           `;
-
           this.renderSelect();
           this.renderTable();
           this.renderButton();
+
+          document.querySelector("#app__table--read-delete").innerHTML = `
+            &lt;div id="fizz-buzz-app-table-select-read"&gt;&lt;/div&gt;
+            &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
+            &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
+          `;
+          this.renderSelectRead();
+          this.renderTableRead();
+          this.renderButtonDelete();
         }
       }
 
@@ -1821,7 +1869,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 17:17:03 JST
+Last updated 2019-11-11 17:46:04 JST
 </div>
 </div>
 </body>
