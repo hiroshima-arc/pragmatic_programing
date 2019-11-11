@@ -465,6 +465,18 @@
           });
         });
 
+        test("値を削除する", () => {
+          const data = { id: 6, list: [1, 2, "Fizz", 4, "Buzz"] };
+          return repository.save(data).then(() => {
+            const keyValue = 6;
+            return repository.delete(keyValue).then(() => {
+              return repository.find(keyValue).then(data => {
+                assert.deepEqual({}, data);
+              });
+            });
+          });
+        });
+
         test("すべての値を削除する", () => {
           return repository.destroy().then(() => {
             return repository.selectAll().then(data => {
@@ -570,6 +582,7 @@
 
                 getReq.onsuccess = event => {
                   const result = event.target.result;
+                  if (result === undefined) resolve({});
                   console.log(result);
                   resolve(result);
                 };
@@ -600,6 +613,33 @@
                 };
                 getReq.onerror = event => {
                   console.log(`selectAll fails ${event.target.error}`);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
+          });
+        }
+
+        delete(keyValue) {
+          return new Promise((resolve, reject) => {
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event => {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const deleteReq = store.delete(keyValue);
+
+                deleteReq.onsuccess = event => {
+                  console.log("delete success");
+                  resolve();
+                };
+
+                deleteReq.onerror = event => {
+                  console.log(`delete fails ${event.target.error}`);
                 };
               } catch (error) {
                 console.log(error);

@@ -1097,6 +1097,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
         });
 
+        test("値を削除する", () =&gt; {
+          const data = { id: 6, list: [1, 2, "Fizz", 4, "Buzz"] };
+          return repository.save(data).then(() =&gt; {
+            const keyValue = 6;
+            return repository.delete(keyValue).then(() =&gt; {
+              return repository.find(keyValue).then(data =&gt; {
+                assert.deepEqual({}, data);
+              });
+            });
+          });
+        });
+
         test("すべての値を削除する", () =&gt; {
           return repository.destroy().then(() =&gt; {
             return repository.selectAll().then(data =&gt; {
@@ -1202,6 +1214,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                 getReq.onsuccess = event =&gt; {
                   const result = event.target.result;
+                  if (result === undefined) resolve({});
                   console.log(result);
                   resolve(result);
                 };
@@ -1232,6 +1245,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 };
                 getReq.onerror = event =&gt; {
                   console.log(`selectAll fails ${event.target.error}`);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
+          });
+        }
+
+        delete(keyValue) {
+          return new Promise((resolve, reject) =&gt; {
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event =&gt; {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const deleteReq = store.delete(keyValue);
+
+                deleteReq.onsuccess = event =&gt; {
+                  console.log("delete success");
+                  resolve();
+                };
+
+                deleteReq.onerror = event =&gt; {
+                  console.log(`delete fails ${event.target.error}`);
                 };
               } catch (error) {
                 console.log(error);
@@ -1781,7 +1821,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 16:45:38 JST
+Last updated 2019-11-11 17:17:03 JST
 </div>
 </div>
 </body>
