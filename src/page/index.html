@@ -177,7 +177,17 @@
                       href="#panel-menu02"
                       id="tab-menu02"
                       role="tab"
-                      >Table</a
+                      >Table(Create&Update)</a
+                    >
+                    <a
+                      aria-controls="panel-menu03"
+                      aria-selected="false"
+                      class="nav-item nav-link"
+                      data-toggle="tab"
+                      href="#panel-menu03"
+                      id="tab-menu03"
+                      role="tab"
+                      >Table(Read&Delete)</a
                     >
                   </div>
 
@@ -200,7 +210,23 @@
                       role="tabpanel"
                     >
                       <dvi class="row p-3">
-                        <div id="app__table" class="col-md-12 order-md-2"></div>
+                        <div
+                          id="app__table--create-update"
+                          class="col-md-12 order-md-2"
+                        ></div>
+                      </dvi>
+                    </div>
+                    <div
+                      aria-labelledby="tab-menu03"
+                      class="tab-pane fade border border-top-0"
+                      id="panel-menu03"
+                      role="tabpanel"
+                    >
+                      <dvi class="row p-3">
+                        <div
+                          id="app__table--read-delete"
+                          class="col-md-12 order-md-2"
+                        ></div>
                       </dvi>
                     </div>
                   </div>
@@ -985,7 +1011,7 @@
 
         render() {
           this.renderCounter();
-          document.querySelector("#app__table").innerHTML = `
+          document.querySelector("#app__table--create-update").innerHTML = `
             <div id="fizz-buzz-app-table-select"></div>
             <div id="fizz-buzz-app-table"></div>
             <div id="fizz-buzz-app-table-button"></div>

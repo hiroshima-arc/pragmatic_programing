@@ -809,7 +809,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                       href="#panel-menu02"
                       id="tab-menu02"
                       role="tab"
-                      &gt;Table&lt;/a
+                      &gt;Table(Create&amp;Update)&lt;/a
+                    &gt;
+                    &lt;a
+                      aria-controls="panel-menu03"
+                      aria-selected="false"
+                      class="nav-item nav-link"
+                      data-toggle="tab"
+                      href="#panel-menu03"
+                      id="tab-menu03"
+                      role="tab"
+                      &gt;Table(Read&amp;Delete)&lt;/a
                     &gt;
                   &lt;/div&gt;
 
@@ -832,7 +842,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                       role="tabpanel"
                     &gt;
                       &lt;dvi class="row p-3"&gt;
-                        &lt;div id="app__table" class="col-md-12 order-md-2"&gt;&lt;/div&gt;
+                        &lt;div
+                          id="app__table--create-update"
+                          class="col-md-12 order-md-2"
+                        &gt;&lt;/div&gt;
+                      &lt;/dvi&gt;
+                    &lt;/div&gt;
+                    &lt;div
+                      aria-labelledby="tab-menu03"
+                      class="tab-pane fade border border-top-0"
+                      id="panel-menu03"
+                      role="tabpanel"
+                    &gt;
+                      &lt;dvi class="row p-3"&gt;
+                        &lt;div
+                          id="app__table--read-delete"
+                          class="col-md-12 order-md-2"
+                        &gt;&lt;/div&gt;
                       &lt;/dvi&gt;
                     &lt;/div&gt;
                   &lt;/div&gt;
@@ -1617,7 +1643,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         render() {
           this.renderCounter();
-          document.querySelector("#app__table").innerHTML = `
+          document.querySelector("#app__table--create-update").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
@@ -1660,7 +1686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 15:29:53 JST
+Last updated 2019-11-11 15:38:46 JST
 </div>
 </div>
 </body>
