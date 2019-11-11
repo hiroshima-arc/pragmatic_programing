@@ -405,15 +405,51 @@
 
       suite("FizzBuzzRepositoryTest", () => {
         test("値を保存する", () => {
-          const repository = new FizzBuzzRepository();
+          const repository = new FizzBuzzRepository(
+            "fizzbuzz.test.db",
+            "items"
+          );
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
           assert(repository.save(data));
         });
       });
 
       class FizzBuzzRepository {
-        save() {
-          return true;
+        constructor(dbName, storeName) {
+          this._dbName = dbName;
+          this._storeName = storeName;
+        }
+
+        createRequest(dbName, storeName) {
+          const openReq = indexedDB.open(dbName);
+
+          openReq.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            const os = db.createObjectStore(storeName, { keyPath: "id" });
+          };
+
+          return openReq;
+        }
+
+        save(data) {
+          return new Promise((resolve, reject) => {
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event => {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+              const putReq = store.put(data);
+
+              putReq.onsuccess = () => {
+                console.log("put data success");
+                resolve();
+              };
+
+              trans.oncomplete = () => {
+                console.log("transactoin complete");
+              };
+            };
+          });
         }
       }
 
