@@ -1092,12 +1092,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             "fizzbuzz.test.db",
             "items"
           );
-          const data = [
-            { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] },
-            { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] },
-            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] }
+          const aList = [
+            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 5, list: [1, 2, "Fizz", 4, "Buzz"] }
           ];
-          return repository.saveBatch(data).then(() =&gt; {
+          return repository.saveBatch(aList).then(() =&gt; {
             return repository.selectAll().then(data =&gt; {
               assert.equal(3, data.length);
             });
@@ -1155,7 +1155,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         saveBatch(aList) {
           return new Promise((resolve, reject) =&gt; {
-            resolve();
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event =&gt; {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              trans.oncomplete = () =&gt; {
+                console.log("transaction complete");
+                resolve();
+              };
+
+              trans.onerror = event =&gt; {
+                console.log(event);
+                reject();
+              };
+
+              const store = trans.objectStore(this._storeName);
+              aList.forEach(data =&gt; {
+                try {
+                  let addReq = store.add(data);
+                  addReq.onsuccess = () =&gt; {
+                    console.log("add data success");
+                  };
+                  addReq.onerror = event =&gt; {
+                    console.log(`add data fails ${event.target.error}`);
+                  };
+                } catch (error) {
+                  console.log(error);
+                  reject(error.message);
+                }
+              });
+            };
           });
         }
 
@@ -1715,7 +1744,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 15:54:02 JST
+Last updated 2019-11-11 16:18:29 JST
 </div>
 </div>
 </body>

@@ -460,12 +460,12 @@
             "fizzbuzz.test.db",
             "items"
           );
-          const data = [
-            { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] },
-            { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] },
-            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] }
+          const aList = [
+            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 5, list: [1, 2, "Fizz", 4, "Buzz"] }
           ];
-          return repository.saveBatch(data).then(() => {
+          return repository.saveBatch(aList).then(() => {
             return repository.selectAll().then(data => {
               assert.equal(3, data.length);
             });
@@ -523,7 +523,36 @@
 
         saveBatch(aList) {
           return new Promise((resolve, reject) => {
-            resolve();
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event => {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              trans.oncomplete = () => {
+                console.log("transaction complete");
+                resolve();
+              };
+
+              trans.onerror = event => {
+                console.log(event);
+                reject();
+              };
+
+              const store = trans.objectStore(this._storeName);
+              aList.forEach(data => {
+                try {
+                  let addReq = store.add(data);
+                  addReq.onsuccess = () => {
+                    console.log("add data success");
+                  };
+                  addReq.onerror = event => {
+                    console.log(`add data fails ${event.target.error}`);
+                  };
+                } catch (error) {
+                  console.log(error);
+                  reject(error.message);
+                }
+              });
+            };
           });
         }
 
