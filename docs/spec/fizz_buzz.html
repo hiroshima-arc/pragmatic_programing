@@ -1064,20 +1064,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       });
 
       suite("FizzBuzzRepositoryTest", () =&gt; {
+        let repository;
+        setup(() =&gt; {
+          repository = new FizzBuzzRepository("fizzbuzz.test.db", "items");
+        });
+
         test("値を保存する", () =&gt; {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
           assert(repository.save(data));
         });
 
         test("値を取得する", () =&gt; {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const data = { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] };
           return repository.save(data).then(() =&gt; {
             const keyValue = 2;
@@ -1088,10 +1085,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         });
 
         test("すべての値を取得する", () =&gt; {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const aList = [
             { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] },
             { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
@@ -1100,6 +1093,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return repository.saveBatch(aList).then(() =&gt; {
             return repository.selectAll().then(data =&gt; {
               assert.equal(3, data.length);
+            });
+          });
+        });
+
+        test("すべての値を削除する", () =&gt; {
+          return repository.destroy().then(() =&gt; {
+            return repository.selectAll().then(data =&gt; {
+              assert.equal(0, data.length);
             });
           });
         });
@@ -1215,6 +1216,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         selectAll() {
           return new Promise((resolve, reject) =&gt; {
             resolve([1, 2, 3]);
+          });
+        }
+
+        destroy() {
+          return new Promise((resolve, reject) =&gt; {
+            const deleteReq = indexedDB.deleteDatabase(this._dbName);
+            deleteReq.onsuccess = () =&gt; {
+              console.log("db destroy success");
+              resolve();
+            };
+
+            deleteReq.onerror = event =&gt; {
+              console.log(`db delete fail ${event.target.error}`);
+            };
           });
         }
       }
@@ -1744,7 +1759,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 16:18:29 JST
+Last updated 2019-11-11 16:31:16 JST
 </div>
 </div>
 </body>

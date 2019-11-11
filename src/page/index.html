@@ -464,6 +464,14 @@
             });
           });
         });
+
+        test("すべての値を削除する", () => {
+          return repository.destroy().then(() => {
+            return repository.selectAll().then(data => {
+              assert.equal(0, data.length);
+            });
+          });
+        });
       });
 
       class FizzBuzzRepository {
@@ -576,6 +584,20 @@
         selectAll() {
           return new Promise((resolve, reject) => {
             resolve([1, 2, 3]);
+          });
+        }
+
+        destroy() {
+          return new Promise((resolve, reject) => {
+            const deleteReq = indexedDB.deleteDatabase(this._dbName);
+            deleteReq.onsuccess = () => {
+              console.log("db destroy success");
+              resolve();
+            };
+
+            deleteReq.onerror = event => {
+              console.log(`db delete fail ${event.target.error}`);
+            };
           });
         }
       }
