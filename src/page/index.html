@@ -868,6 +868,11 @@
           const repository = new FizzBuzzRepository("fizzubzz.db", "items");
           return repository.selectAll();
         }
+
+        delete(id) {
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          return repository.delete(id);
+        }
       }
 
       class FizzBuzzView {
@@ -880,6 +885,10 @@
 
         get list() {
           return this._list;
+        }
+
+        get Record() {
+          return this._record;
         }
 
         get Counter() {
@@ -923,6 +932,11 @@
           }
         }
 
+        changeReadEvent(e) {
+          const record = this.Record.filter(data => data.id === e.target.value);
+          if (record[0] !== undefined) this.renderTableRead(record[0].list);
+        }
+
         saveTable(e) {
           const createListFromTable = table => {
             let list = [];
@@ -946,6 +960,13 @@
             .catch(error => {
               document.querySelector("#app__message").innerHTML = error;
             });
+        }
+
+        deleteTable(e) {
+          const id = document.querySelector("#fizz-buzz-app-select-read").value;
+          this.Service.delete(id).then(() => {
+            document.querySelector("#fizz-buzz-app-table-read").innerHTML = "";
+          });
         }
 
         createCounter(incrementId, decrementId) {
@@ -1099,7 +1120,7 @@
           }
         }
 
-        createButton(id, tableId) {
+        createButton(id, tableId, label) {
           return `
             <button
               id="${id}"
@@ -1107,7 +1128,7 @@
               class="btn btn-primary btn-rounded btn-sm my-0"
               data-tableid="${tableId}"
             >
-              保存
+              ${label}
             </button>
           `;
         }
@@ -1149,7 +1170,7 @@
           ).innerHTML = this.createSelectRead(id, data);
           document
             .querySelector(`#${id}`)
-            .addEventListener("change", this.changeReadEvent);
+            .addEventListener("change", this.changeReadEvent.bind(this));
 
           document.querySelector(`#${id}`).classList.add("browser-default");
           document.querySelector(`#${id}`).classList.add("custom-select");
@@ -1181,13 +1202,13 @@
           this.editTable();
         }
 
-        renderButton() {
+        renderButtonSave() {
           const id = "fizz-buzz-app-table-button-save";
           const tableId = "fizz-buzz-app-table";
 
           document.querySelector(
             "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton(id, tableId);
+          ).innerHTML = this.createButton(id, tableId, "保存");
           document
             .querySelector(`#${id}`)
             .addEventListener("click", this.saveTable.bind(this));
@@ -1199,10 +1220,10 @@
 
           document.querySelector(
             "#fizz-buzz-app-table-button-delete"
-          ).innerHTML = this.createButton(id, tableId);
+          ).innerHTML = this.createButton(id, tableId, "削除");
           document
             .querySelector(`#${id}`)
-            .addEventListener("click", this.saveTable.bind(this));
+            .addEventListener("click", this.deleteTable.bind(this));
         }
 
         render() {
@@ -1215,7 +1236,7 @@
           `;
           this.renderSelect();
           this.renderTable(this.list);
-          this.renderButton();
+          this.renderButtonSave();
 
           document.querySelector("#app__table--read-delete").innerHTML = `
             <div id="fizz-buzz-app-table-select-read"></div>
@@ -1226,6 +1247,7 @@
             this.renderSelectRead(data);
             if (data[0] !== undefined) this.renderTableRead(data[0].list);
             this.renderButtonDelete();
+            this._record = data;
           });
         }
       }
