@@ -460,7 +460,7 @@
           ];
           return repository.saveBatch(aList).then(() => {
             return repository.selectAll().then(data => {
-              assert.equal(3, data.length);
+              assert.equal(5, data.length);
             });
           });
         });
@@ -583,7 +583,29 @@
 
         selectAll() {
           return new Promise((resolve, reject) => {
-            resolve([1, 2, 3]);
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event => {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const getReq = store.openCursor();
+                let result = [];
+                getReq.onsuccess = event => {
+                  let cur = event.target.result;
+                  if (!cur) return resolve(result);
+                  result.push(cur.value);
+                  cur.continue();
+                };
+                getReq.onerror = event => {
+                  console.log(`selectAll fails ${event.target.error}`);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
           });
         }
 

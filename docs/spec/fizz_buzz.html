@@ -1092,7 +1092,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           ];
           return repository.saveBatch(aList).then(() =&gt; {
             return repository.selectAll().then(data =&gt; {
-              assert.equal(3, data.length);
+              assert.equal(5, data.length);
             });
           });
         });
@@ -1215,7 +1215,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         selectAll() {
           return new Promise((resolve, reject) =&gt; {
-            resolve([1, 2, 3]);
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event =&gt; {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const getReq = store.openCursor();
+                let result = [];
+                getReq.onsuccess = event =&gt; {
+                  let cur = event.target.result;
+                  if (!cur) return resolve(result);
+                  result.push(cur.value);
+                  cur.continue();
+                };
+                getReq.onerror = event =&gt; {
+                  console.log(`selectAll fails ${event.target.error}`);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
           });
         }
 
@@ -1759,7 +1781,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 16:31:16 JST
+Last updated 2019-11-11 16:45:38 JST
 </div>
 </div>
 </body>
