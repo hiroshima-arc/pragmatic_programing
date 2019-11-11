@@ -1495,6 +1495,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           const record = { id: uuid, list: list };
           return repository.save(record);
         }
+
+        selectAll() {
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          return repository.selectAll();
+        }
       }
 
       class FizzBuzzView {
@@ -1530,18 +1535,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         changeEvent(e) {
+          let view;
           switch (e.target.value) {
             case "one":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+              view.renderTable(view.list);
               break;
             case "two":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type02).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type02);
+              view.renderTable(view.list);
               break;
             case "three":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type03).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type03);
+              view.renderTable(view.list);
               break;
             default:
-              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+              view.renderTable(view.list);
           }
         }
 
@@ -1598,7 +1608,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             `;
         }
 
-        createTable() {
+        createSelectRead(id, aList) {
+          let options = [];
+          aList.forEach(data =&gt; {
+            options.push(`&lt;option&gt;${data.id}&lt;/option&gt;`);
+          });
+          return `
+            &lt;select name="type" id="${id}"&gt;
+              ${options.join(" ")}
+            &lt;/select&gt;
+            `;
+        }
+
+        createTable(aList) {
           const header = (() =&gt; {
             return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
           })();
@@ -1607,7 +1629,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             let result = [];
             let row = 0;
             let col = [];
-            this.list.forEach((v, k) =&gt; {
+            aList.forEach((v, k) =&gt; {
               if ((k + 1) % 10 === 0) {
                 col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
                 result[row++] = col;
@@ -1745,30 +1767,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           ).innerHTML = this.createSelect(id);
           document
             .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent);
+            .addEventListener("change", this.changeEvent.bind(this));
 
           document.querySelector(`#${id}`).classList.add("browser-default");
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
-        renderSelectRead() {
+        renderSelectRead(data) {
           const id = "fizz-buzz-app-select-read";
 
           document.querySelector(
             "#fizz-buzz-app-table-select-read"
-          ).innerHTML = this.createSelect(id);
+          ).innerHTML = this.createSelectRead(id, data);
           document
             .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent);
+            .addEventListener("change", this.changeReadEvent);
 
           document.querySelector(`#${id}`).classList.add("browser-default");
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
-        renderTable() {
+        renderTable(aList) {
           document.querySelector(
             "#fizz-buzz-app-table"
-          ).innerHTML = this.createTable();
+          ).innerHTML = this.createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table");
@@ -1778,10 +1800,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this.editTable();
         }
 
-        renderTableRead() {
+        renderTableRead(aList) {
           document.querySelector(
             "#fizz-buzz-app-table-read"
-          ).innerHTML = this.createTable();
+          ).innerHTML = this.createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table-read &gt; table")
             .classList.add("table");
@@ -1824,7 +1846,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
           `;
           this.renderSelect();
-          this.renderTable();
+          this.renderTable(this.list);
           this.renderButton();
 
           document.querySelector("#app__table--read-delete").innerHTML = `
@@ -1832,9 +1854,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
-          this.renderSelectRead();
-          this.renderTableRead();
-          this.renderButtonDelete();
+          this.Service.selectAll().then(data =&gt; {
+            this.renderSelectRead(data);
+            if (data[0] !== undefined) this.renderTableRead(data[0].list);
+            this.renderButtonDelete();
+          });
         }
       }
 
@@ -1869,7 +1893,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 17:46:04 JST
+Last updated 2019-11-11 18:24:54 JST
 </div>
 </div>
 </body>

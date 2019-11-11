@@ -863,6 +863,11 @@
           const record = { id: uuid, list: list };
           return repository.save(record);
         }
+
+        selectAll() {
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          return repository.selectAll();
+        }
       }
 
       class FizzBuzzView {
@@ -898,18 +903,23 @@
         }
 
         changeEvent(e) {
+          let view;
           switch (e.target.value) {
             case "one":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+              view.renderTable(view.list);
               break;
             case "two":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type02).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type02);
+              view.renderTable(view.list);
               break;
             case "three":
-              new FizzBuzzView(FizzBuzzTypeEnum.Type03).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type03);
+              view.renderTable(view.list);
               break;
             default:
-              new FizzBuzzView(FizzBuzzTypeEnum.Type01).renderTable();
+              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+              view.renderTable(view.list);
           }
         }
 
@@ -966,7 +976,19 @@
             `;
         }
 
-        createTable() {
+        createSelectRead(id, aList) {
+          let options = [];
+          aList.forEach(data => {
+            options.push(`<option>${data.id}</option>`);
+          });
+          return `
+            <select name="type" id="${id}">
+              ${options.join(" ")}
+            </select>
+            `;
+        }
+
+        createTable(aList) {
           const header = (() => {
             return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
           })();
@@ -975,7 +997,7 @@
             let result = [];
             let row = 0;
             let col = [];
-            this.list.forEach((v, k) => {
+            aList.forEach((v, k) => {
               if ((k + 1) % 10 === 0) {
                 col.push(`<td>${v}</td>`);
                 result[row++] = col;
@@ -1113,30 +1135,30 @@
           ).innerHTML = this.createSelect(id);
           document
             .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent);
+            .addEventListener("change", this.changeEvent.bind(this));
 
           document.querySelector(`#${id}`).classList.add("browser-default");
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
-        renderSelectRead() {
+        renderSelectRead(data) {
           const id = "fizz-buzz-app-select-read";
 
           document.querySelector(
             "#fizz-buzz-app-table-select-read"
-          ).innerHTML = this.createSelect(id);
+          ).innerHTML = this.createSelectRead(id, data);
           document
             .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent);
+            .addEventListener("change", this.changeReadEvent);
 
           document.querySelector(`#${id}`).classList.add("browser-default");
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
-        renderTable() {
+        renderTable(aList) {
           document.querySelector(
             "#fizz-buzz-app-table"
-          ).innerHTML = this.createTable();
+          ).innerHTML = this.createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table");
@@ -1146,10 +1168,10 @@
           this.editTable();
         }
 
-        renderTableRead() {
+        renderTableRead(aList) {
           document.querySelector(
             "#fizz-buzz-app-table-read"
-          ).innerHTML = this.createTable();
+          ).innerHTML = this.createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table-read > table")
             .classList.add("table");
@@ -1192,7 +1214,7 @@
             <div id="fizz-buzz-app-table-button"></div>
           `;
           this.renderSelect();
-          this.renderTable();
+          this.renderTable(this.list);
           this.renderButton();
 
           document.querySelector("#app__table--read-delete").innerHTML = `
@@ -1200,9 +1222,11 @@
             <div id="fizz-buzz-app-table-read"></div>
             <div id="fizz-buzz-app-table-button-delete"></div>
           `;
-          this.renderSelectRead();
-          this.renderTableRead();
-          this.renderButtonDelete();
+          this.Service.selectAll().then(data => {
+            this.renderSelectRead(data);
+            if (data[0] !== undefined) this.renderTableRead(data[0].list);
+            this.renderButtonDelete();
+          });
         }
       }
 
