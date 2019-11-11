@@ -432,20 +432,17 @@
       });
 
       suite("FizzBuzzRepositoryTest", () => {
+        let repository;
+        setup(() => {
+          repository = new FizzBuzzRepository("fizzbuzz.test.db", "items");
+        });
+
         test("値を保存する", () => {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
           assert(repository.save(data));
         });
 
         test("値を取得する", () => {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const data = { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] };
           return repository.save(data).then(() => {
             const keyValue = 2;
@@ -456,10 +453,6 @@
         });
 
         test("すべての値を取得する", () => {
-          const repository = new FizzBuzzRepository(
-            "fizzbuzz.test.db",
-            "items"
-          );
           const aList = [
             { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] },
             { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
