@@ -144,7 +144,7 @@
                       <del>編集できるようにする。</del>
                     </li>
                     <li>
-                      保存できるようにする。
+                      <del>保存できるようにする。</del>
                     </li>
                   </ul>
                 </ul>
@@ -452,16 +452,26 @@
               const db = event.target.result;
               const trans = db.transaction(this._storeName, "readwrite");
               const store = trans.objectStore(this._storeName);
-              const putReq = store.put(data);
 
-              putReq.onsuccess = () => {
-                console.log("put data success");
-                resolve();
-              };
+              try {
+                const putReq = store.put(data);
 
-              trans.oncomplete = () => {
-                console.log("transactoin complete");
-              };
+                putReq.onsuccess = () => {
+                  console.log("put data success");
+                  resolve();
+                };
+
+                req.onerror = event => {
+                  console.log("put data fails");
+                };
+
+                trans.oncomplete = () => {
+                  console.log("transactoin complete");
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
             };
           });
         }
@@ -473,13 +483,19 @@
               const db = event.target.result;
               const trans = db.transaction(this._storeName, "readwrite");
               const store = trans.objectStore(this._storeName);
-              const getReq = store.get(keyValue);
 
-              getReq.onsuccess = event => {
-                const result = event.target.result;
-                console.log(result);
-                resolve(result);
-              };
+              try {
+                const getReq = store.get(keyValue);
+
+                getReq.onsuccess = event => {
+                  const result = event.target.result;
+                  console.log(result);
+                  resolve(result);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
             };
           });
         }
@@ -662,7 +678,27 @@
         }
 
         save(list) {
-          console.log(list);
+          const uuid = (() => {
+            let uuid = "";
+            for (let i = 0; i < 32; i++) {
+              let random = (Math.random() * 16) | 0;
+
+              if (i === 8 || i === 12 || i === 16 || i === 20) {
+                uuid += "-";
+              }
+              uuid += (i === 12
+                ? 4
+                : i === 16
+                ? (random & 3) | 8
+                : random
+              ).toString(16);
+            }
+            return uuid;
+          })();
+
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          const record = { id: uuid, list: list };
+          return repository.save(record);
         }
       }
 
@@ -728,7 +764,15 @@
             `#${e.target.dataset.tableid} > table`
           );
           let result = createListFromTable(table);
-          this.Service.save(result);
+          this.Service.save(result)
+            .then(() => {
+              document.querySelector(
+                "#app__message"
+              ).innerHTML = `保存しました。`;
+            })
+            .catch(error => {
+              document.querySelector("#app__message").innerHTML = error;
+            });
         }
 
         createCounter(incrementId, decrementId) {

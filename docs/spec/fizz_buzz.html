@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 編集できるようにする。</p>
 </li>
 <li>
-<p>&#10063; 保存できるようにする。</p>
+<p>&#10003; 保存できるようにする。</p>
 </li>
 </ul>
 </div>
@@ -767,7 +767,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                       &lt;del&gt;編集できるようにする。&lt;/del&gt;
                     &lt;/li&gt;
                     &lt;li&gt;
-                      保存できるようにする。
+                      &lt;del&gt;保存できるようにする。&lt;/del&gt;
                     &lt;/li&gt;
                   &lt;/ul&gt;
                 &lt;/ul&gt;
@@ -1028,15 +1028,99 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       suite("FizzBuzzRepositoryTest", () =&gt; {
         test("値を保存する", () =&gt; {
-          const repository = new FizzBuzzRepository();
+          const repository = new FizzBuzzRepository(
+            "fizzbuzz.test.db",
+            "items"
+          );
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
           assert(repository.save(data));
+        });
+
+        test("値を取得する", () =&gt; {
+          const repository = new FizzBuzzRepository(
+            "fizzbuzz.test.db",
+            "items"
+          );
+          const data = { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] };
+          return repository.save(data).then(() =&gt; {
+            const keyValue = 2;
+            return repository.find(keyValue).then(data =&gt; {
+              assert.equal("Fizz", data.list[2]);
+            });
+          });
         });
       });
 
       class FizzBuzzRepository {
-        save() {
-          return true;
+        constructor(dbName, storeName) {
+          this._dbName = dbName;
+          this._storeName = storeName;
+        }
+
+        createRequest(dbName, storeName) {
+          const openReq = indexedDB.open(dbName);
+
+          openReq.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            const os = db.createObjectStore(storeName, { keyPath: "id" });
+          };
+
+          return openReq;
+        }
+
+        save(data) {
+          return new Promise((resolve, reject) =&gt; {
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event =&gt; {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const putReq = store.put(data);
+
+                putReq.onsuccess = () =&gt; {
+                  console.log("put data success");
+                  resolve();
+                };
+
+                req.onerror = event =&gt; {
+                  console.log("put data fails");
+                };
+
+                trans.oncomplete = () =&gt; {
+                  console.log("transactoin complete");
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
+          });
+        }
+
+        find(keyValue) {
+          return new Promise((resolve, reject) =&gt; {
+            const req = this.createRequest(this._dbName, this._storeName);
+            req.onsuccess = event =&gt; {
+              const db = event.target.result;
+              const trans = db.transaction(this._storeName, "readwrite");
+              const store = trans.objectStore(this._storeName);
+
+              try {
+                const getReq = store.get(keyValue);
+
+                getReq.onsuccess = event =&gt; {
+                  const result = event.target.result;
+                  console.log(result);
+                  resolve(result);
+                };
+              } catch (error) {
+                console.log(error);
+                reject(error.message);
+              }
+            };
+          });
         }
       }
 
@@ -1217,7 +1301,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         save(list) {
-          console.log(list);
+          const uuid = (() =&gt; {
+            let uuid = "";
+            for (let i = 0; i &lt; 32; i++) {
+              let random = (Math.random() * 16) | 0;
+
+              if (i === 8 || i === 12 || i === 16 || i === 20) {
+                uuid += "-";
+              }
+              uuid += (i === 12
+                ? 4
+                : i === 16
+                ? (random &amp; 3) | 8
+                : random
+              ).toString(16);
+            }
+            return uuid;
+          })();
+
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          const record = { id: uuid, list: list };
+          return repository.save(record);
         }
       }
 
@@ -1283,7 +1387,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             `#${e.target.dataset.tableid} &gt; table`
           );
           let result = createListFromTable(table);
-          this.Service.save(result);
+          this.Service.save(result)
+            .then(() =&gt; {
+              document.querySelector(
+                "#app__message"
+              ).innerHTML = `保存しました。`;
+            })
+            .catch(error =&gt; {
+              document.querySelector("#app__message").innerHTML = error;
+            });
         }
 
         createCounter(incrementId, decrementId) {
@@ -1537,7 +1649,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-08 18:54:03 JST
+Last updated 2019-11-11 15:16:24 JST
 </div>
 </div>
 </body>
