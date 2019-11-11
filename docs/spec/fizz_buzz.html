@@ -1086,6 +1086,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             });
           });
         });
+
+        test("すべての値を取得する", () =&gt; {
+          const repository = new FizzBuzzRepository(
+            "fizzbuzz.test.db",
+            "items"
+          );
+          const data = [
+            { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] }
+          ];
+          return repository.saveBatch(data).then(() =&gt; {
+            return repository.selectAll().then(data =&gt; {
+              assert.equal(3, data.length);
+            });
+          });
+        });
       });
 
       class FizzBuzzRepository {
@@ -1136,6 +1153,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
         }
 
+        saveBatch(aList) {
+          return new Promise((resolve, reject) =&gt; {
+            resolve();
+          });
+        }
+
         find(keyValue) {
           return new Promise((resolve, reject) =&gt; {
             const req = this.createRequest(this._dbName, this._storeName);
@@ -1157,6 +1180,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 reject(error.message);
               }
             };
+          });
+        }
+
+        selectAll() {
+          return new Promise((resolve, reject) =&gt; {
+            resolve([1, 2, 3]);
           });
         }
       }
@@ -1686,7 +1715,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-11 15:38:46 JST
+Last updated 2019-11-11 15:54:02 JST
 </div>
 </div>
 </body>

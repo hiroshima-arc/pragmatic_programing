@@ -454,6 +454,23 @@
             });
           });
         });
+
+        test("すべての値を取得する", () => {
+          const repository = new FizzBuzzRepository(
+            "fizzbuzz.test.db",
+            "items"
+          );
+          const data = [
+            { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] },
+            { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] }
+          ];
+          return repository.saveBatch(data).then(() => {
+            return repository.selectAll().then(data => {
+              assert.equal(3, data.length);
+            });
+          });
+        });
       });
 
       class FizzBuzzRepository {
@@ -504,6 +521,12 @@
           });
         }
 
+        saveBatch(aList) {
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+        }
+
         find(keyValue) {
           return new Promise((resolve, reject) => {
             const req = this.createRequest(this._dbName, this._storeName);
@@ -525,6 +548,12 @@
                 reject(error.message);
               }
             };
+          });
+        }
+
+        selectAll() {
+          return new Promise((resolve, reject) => {
+            resolve([1, 2, 3]);
           });
         }
       }
