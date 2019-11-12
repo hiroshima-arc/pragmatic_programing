@@ -68,7 +68,7 @@ describe("FizzBuzz Page", () => {
       describe("保存する", () => {
         beforeEach(() => {
           cy.get("#tab-menu03").click();
-          cy.get("#fizz-buzz-app-table-button-delete-all").click();
+          cy.get("#fizz-buzz-app-table-button-delete-select").click();
           cy.get("#tab-menu02").click();
         });
 
@@ -103,6 +103,25 @@ describe("FizzBuzz Page", () => {
               "#fizz-buzz-app-table-read > .table > tbody > :nth-child(2) > :nth-child(5)"
             ).should("contain", "FizzBuzz");
           });
+        });
+      });
+
+      describe("削除する", () => {
+        it("保存した全てのレコードが削除される", () => {
+          cy.get("#tab-menu02").click();
+          cy.get("#fizz-buzz-app-select-type").select("タイプ1");
+          cy.get("#fizz-buzz-app-table-button-save").click();
+          cy.get("#fizz-buzz-app-select-type").select("タイプ2");
+          cy.get("#fizz-buzz-app-table-button-save").click();
+          cy.get("#fizz-buzz-app-select-type").select("タイプ3");
+          cy.get("#fizz-buzz-app-table-button-save").click();
+
+          cy.get("#tab-menu03").click();
+          cy.get("#fizz-buzz-app-table-button-delete-all").click();
+          cy.get("#app__message").should(
+            "contain",
+            "全てのレコードを削除しました。"
+          );
         });
       });
     });
