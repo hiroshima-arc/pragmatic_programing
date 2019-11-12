@@ -670,7 +670,7 @@
         }
 
         save(data) {
-          return super.put(data);
+          return super.put({ id: data.id, list: data.list });
         }
 
         saveBatch(aList) {
@@ -856,6 +856,21 @@
         }
       }
 
+      class FizzBuzzEntity {
+        constructor(id, list) {
+          this._id = id;
+          this._list = list;
+        }
+
+        get id() {
+          return this._id;
+        }
+
+        get list() {
+          return this._list;
+        }
+      }
+
       class FizzBuzzService {
         constructor(type) {
           this._valueCommand = new FizzBuzzValueCommand(type);
@@ -890,7 +905,7 @@
             return uuid;
           })();
 
-          const record = { id: uuid, list: list };
+          const record = new FizzBuzzEntity(uuid, list);
           return this._repository.save(record);
         }
 
