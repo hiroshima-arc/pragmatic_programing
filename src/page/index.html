@@ -951,34 +951,34 @@
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._counter = 0;
-          this._value = this._service.generate(this.Counter);
+          this._value = this._service.generate(this.counter);
         }
 
         get list() {
           return this._list;
         }
 
-        get Record() {
+        get record() {
           return this._record;
         }
 
-        get Counter() {
+        get counter() {
           return this._counter;
         }
 
-        get Service() {
+        get service() {
           return this._service;
         }
 
         increment() {
           this._counter += 1;
-          this._value = this._service.generate(this.Counter);
+          this._value = this._service.generate(this.counter);
           this.renderCounter();
         }
 
         decrement() {
-          this.Counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-          this._value = this._service.generate(this.Counter);
+          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._value = this._service.generate(this.counter);
           this.renderCounter();
         }
 
@@ -1004,7 +1004,7 @@
         }
 
         changeReadEvent(e) {
-          const record = this.Record.filter(data => data.id === e.target.value);
+          const record = this.record.filter(data => data.id === e.target.value);
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
@@ -1022,7 +1022,8 @@
             `#${e.target.dataset.tableid} > table`
           );
           let result = createListFromTable(table);
-          this.Service.save(result)
+          this.service
+            .save(result)
             .then(() => {
               document.querySelector(
                 "#app__message"
@@ -1036,7 +1037,7 @@
 
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
-          this.Service.delete(id).then(() => {
+          this.service.delete(id).then(() => {
             document.querySelector(
               "#app__message"
             ).innerHTML = `${id}を削除しました。`;
@@ -1045,7 +1046,7 @@
         }
 
         deleteAll(e) {
-          this.Service.deleteAll().then(() => {
+          this.service.deleteAll().then(() => {
             document.querySelector(
               "#app__message"
             ).innerHTML = `全てのレコードを削除しました。`;
@@ -1333,7 +1334,7 @@
             <div id="fizz-buzz-app-table-read"></div>
             <div id="fizz-buzz-app-table-button-delete"></div>
           `;
-          this.Service.selectAll().then(data => {
+          this.service.selectAll().then(data => {
             this.renderSelectRead(data);
             if (data[0] !== undefined) this.renderTableRead(data[0].list);
             this.renderButtonDelete();

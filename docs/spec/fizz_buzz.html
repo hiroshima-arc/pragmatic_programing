@@ -1583,34 +1583,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._counter = 0;
-          this._value = this._service.generate(this.Counter);
+          this._value = this._service.generate(this.counter);
         }
 
         get list() {
           return this._list;
         }
 
-        get Record() {
+        get record() {
           return this._record;
         }
 
-        get Counter() {
+        get counter() {
           return this._counter;
         }
 
-        get Service() {
+        get service() {
           return this._service;
         }
 
         increment() {
           this._counter += 1;
-          this._value = this._service.generate(this.Counter);
+          this._value = this._service.generate(this.counter);
           this.renderCounter();
         }
 
         decrement() {
-          this.Counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-          this._value = this._service.generate(this.Counter);
+          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._value = this._service.generate(this.counter);
           this.renderCounter();
         }
 
@@ -1636,7 +1636,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         changeReadEvent(e) {
-          const record = this.Record.filter(data =&gt; data.id === e.target.value);
+          const record = this.record.filter(data =&gt; data.id === e.target.value);
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
@@ -1654,7 +1654,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             `#${e.target.dataset.tableid} &gt; table`
           );
           let result = createListFromTable(table);
-          this.Service.save(result)
+          this.service
+            .save(result)
             .then(() =&gt; {
               document.querySelector(
                 "#app__message"
@@ -1668,7 +1669,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
-          this.Service.delete(id).then(() =&gt; {
+          this.service.delete(id).then(() =&gt; {
             document.querySelector(
               "#app__message"
             ).innerHTML = `${id}を削除しました。`;
@@ -1677,7 +1678,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         deleteAll(e) {
-          this.Service.deleteAll().then(() =&gt; {
+          this.service.deleteAll().then(() =&gt; {
             document.querySelector(
               "#app__message"
             ).innerHTML = `全てのレコードを削除しました。`;
@@ -1965,7 +1966,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
-          this.Service.selectAll().then(data =&gt; {
+          this.service.selectAll().then(data =&gt; {
             this.renderSelectRead(data);
             if (data[0] !== undefined) this.renderTableRead(data[0].list);
             this.renderButtonDelete();
@@ -2005,7 +2006,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 17:27:33 JST
+Last updated 2019-11-12 17:44:55 JST
 </div>
 </div>
 </body>
