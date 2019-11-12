@@ -1492,6 +1492,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         constructor(type) {
           this._valueCommand = new FizzBuzzValueCommand(type);
           this._listCommand = new FizzBuzzListCommand(type);
+          this._repository = new FizzBuzzRepository("fizzbuzz.db", "items");
         }
 
         generate(number) {
@@ -1521,24 +1522,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             return uuid;
           })();
 
-          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
           const record = { id: uuid, list: list };
-          return repository.save(record);
+          return this._repository.save(record);
         }
 
         selectAll() {
-          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
-          return repository.selectAll();
+          return this._repository.selectAll();
         }
 
         delete(id) {
-          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
-          return repository.delete(id);
+          return this._repository.delete(id);
         }
 
         deleteAll() {
-          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
-          return repository.destroy();
+          return this._repository.destroy();
         }
       }
 
@@ -1969,7 +1966,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 15:54:11 JST
+Last updated 2019-11-12 16:09:14 JST
 </div>
 </div>
 </body>
