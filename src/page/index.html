@@ -486,11 +486,8 @@
         });
       });
 
-      class IndexedDbRepository {}
-
-      class FizzBuzzRepository extends IndexedDbRepository {
+      class IndexedDbRepository {
         constructor(dbName, storeName) {
-          super();
           this._dbName = dbName;
           this._storeName = storeName;
         }
@@ -506,7 +503,7 @@
           return openReq;
         }
 
-        save(data) {
+        put(data) {
           return new Promise((resolve, reject) => {
             const req = this.createRequest(this._dbName, this._storeName);
             req.onsuccess = event => {
@@ -537,7 +534,7 @@
           });
         }
 
-        saveBatch(aList) {
+        add(aList) {
           return new Promise((resolve, reject) => {
             const req = this.createRequest(this._dbName, this._storeName);
             req.onsuccess = event => {
@@ -572,7 +569,7 @@
           });
         }
 
-        find(keyValue) {
+        get(keyValue) {
           return new Promise((resolve, reject) => {
             const req = this.createRequest(this._dbName, this._storeName);
             req.onsuccess = event => {
@@ -597,7 +594,7 @@
           });
         }
 
-        selectAll() {
+        openCursor() {
           return new Promise((resolve, reject) => {
             const req = this.createRequest(this._dbName, this._storeName);
             req.onsuccess = event => {
@@ -652,7 +649,7 @@
           });
         }
 
-        destroy() {
+        deleteDatabase() {
           return new Promise((resolve, reject) => {
             const deleteReq = indexedDB.deleteDatabase(this._dbName);
             deleteReq.onsuccess = () => {
@@ -664,6 +661,36 @@
               console.log(`db delete fail ${event.target.error}`);
             };
           });
+        }
+      }
+
+      class FizzBuzzRepository extends IndexedDbRepository {
+        constructor(dbName, storeName) {
+          super();
+        }
+
+        save(data) {
+          return super.put(data);
+        }
+
+        saveBatch(aList) {
+          return super.add(aList);
+        }
+
+        find(keyValue) {
+          return super.get(keyValue);
+        }
+
+        selectAll() {
+          return super.openCursor();
+        }
+
+        delete(keyValue) {
+          return super.delete(keyValue);
+        }
+
+        destroy() {
+          return super.deleteDatabase();
         }
       }
 
