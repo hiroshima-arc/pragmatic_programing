@@ -486,8 +486,11 @@
         });
       });
 
-      class FizzBuzzRepository {
+      class IndexedDbRepository {}
+
+      class FizzBuzzRepository extends IndexedDbRepository {
         constructor(dbName, storeName) {
+          super();
           this._dbName = dbName;
           this._storeName = storeName;
         }
