@@ -4,9 +4,32 @@ describe("FizzBuzz Page", () => {
     cy.get("h2").should("contain", "FizzBuzz");
   });
 
+  describe("カウンター画面", () => {
+    beforeEach(() => {
+      cy.get("#tab-menu01").click();
+    });
+
+    it("初期値が表示される", () => {
+      cy.get(".display-1").should("contain", "FizzBuzz");
+    });
+
+    it("インクリメントすると値が変わる", () => {
+      cy.get("#fizz-buzz-app-counter-increment").click();
+      cy.get("#fizz-buzz-app-counter-increment").click();
+      cy.get("#fizz-buzz-app-counter-increment").click();
+      cy.get(".display-1").should("contain", "Fizz");
+    });
+
+    it("デクリメントすると値が変わる", () => {
+      cy.get("#fizz-buzz-app-counter-decrement").click();
+      cy.get("#fizz-buzz-app-counter-decrement").click();
+      cy.get(".display-1").should("contain", "1");
+    });
+  });
+
   describe("一覧編集画面", () => {
     beforeEach(() => {
-      cy.get('#tab-menu02').click();
+      cy.get("#tab-menu02").click();
     });
 
     describe("タイプ1を選択した場合", () => {
