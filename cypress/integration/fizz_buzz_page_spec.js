@@ -32,29 +32,78 @@ describe("FizzBuzz Page", () => {
       cy.get("#tab-menu02").click();
     });
 
-    describe("タイプ1を選択した場合", () => {
-      it("通常パターンが表示される", () => {
-        cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
-          "contain",
-          "Fizz"
-        );
-      });
-    });
+    describe("Create&Update", () => {
+      describe("表示する", () => {
+        describe("タイプ1を選択した場合", () => {
+          it("通常パターンが表示される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ1");
+            cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
+              "contain",
+              "Fizz"
+            );
+          });
+        });
 
-    describe("タイプ2を選択した場合", () => {
-      it("数字のみのパターンが表示される", () => {
-        cy.get("#fizz-buzz-app-select-type").select("タイプ2");
-        cy.get("tbody > :nth-child(1) > :nth-child(3)").should("contain", "3");
-      });
-    });
+        describe("タイプ2を選択した場合", () => {
+          it("数字のみのパターンが表示される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ2");
+            cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
+              "contain",
+              "3"
+            );
+          });
+        });
 
-    describe("タイプ3を選択した場合", () => {
-      it("FizzBuzzのみのパターンが表示される", () => {
-        cy.get("#fizz-buzz-app-select-type").select("タイプ3");
-        cy.get("tbody > :nth-child(2) > :nth-child(5)").should(
-          "contain",
-          "FizzBuzz"
-        );
+        describe("タイプ3を選択した場合", () => {
+          it("FizzBuzzのみのパターンが表示される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ3");
+            cy.get("tbody > :nth-child(2) > :nth-child(5)").should(
+              "contain",
+              "FizzBuzz"
+            );
+          });
+        });
+      });
+
+      describe("保存する", () => {
+        beforeEach(() => {
+          cy.get("#tab-menu03").click();
+          cy.get("#fizz-buzz-app-table-button-delete-all").click();
+          cy.get("#tab-menu02").click();
+        });
+
+        describe("タイプ1を選択した場合", () => {
+          it("通常パターンが保存される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ1");
+            cy.get("#fizz-buzz-app-table-button-save").click();
+            cy.get("#tab-menu03").click();
+            cy.get(
+              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(1)"
+            ).should("contain", "1");
+          });
+        });
+
+        describe("タイプ2を選択した場合", () => {
+          it("数字のみのパターンが保存される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ2");
+            cy.get("#fizz-buzz-app-table-button-save").click();
+            cy.get("#tab-menu03").click();
+            cy.get(
+              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(3)"
+            ).should("contain", "3");
+          });
+        });
+
+        describe("タイプ3を選択した場合", () => {
+          it("FizzBuzzのみのパターンが保存される", () => {
+            cy.get("#fizz-buzz-app-select-type").select("タイプ3");
+            cy.get("#fizz-buzz-app-table-button-save").click();
+            cy.get("#tab-menu03").click();
+            cy.get(
+              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(2) > :nth-child(5)"
+            ).should("contain", "FizzBuzz");
+          });
+        });
       });
     });
   });
