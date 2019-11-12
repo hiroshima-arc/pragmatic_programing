@@ -1489,9 +1489,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
 
       class FizzBuzzEntity {
-        constructor(id, list) {
-          this._id = id;
+        constructor(list, id) {
           this._list = list;
+          this._id = id || FizzBuzzEntity.generateUuid();
+        }
+
+        static generateUuid() {
+          let uuid = "";
+          for (let i = 0; i &lt; 32; i++) {
+            let random = (Math.random() * 16) | 0;
+
+            if (i === 8 || i === 12 || i === 16 || i === 20) {
+              uuid += "-";
+            }
+            uuid += (i === 12
+              ? 4
+              : i === 16
+              ? (random &amp; 3) | 8
+              : random
+            ).toString(16);
+          }
+          return uuid;
         }
 
         get id() {
@@ -1519,25 +1537,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         save(list) {
-          const uuid = (() =&gt; {
-            let uuid = "";
-            for (let i = 0; i &lt; 32; i++) {
-              let random = (Math.random() * 16) | 0;
-
-              if (i === 8 || i === 12 || i === 16 || i === 20) {
-                uuid += "-";
-              }
-              uuid += (i === 12
-                ? 4
-                : i === 16
-                ? (random &amp; 3) | 8
-                : random
-              ).toString(16);
-            }
-            return uuid;
-          })();
-
-          const record = new FizzBuzzEntity(uuid, list);
+          const record = new FizzBuzzEntity(list);
           return this._repository.save(record);
         }
 
@@ -1981,7 +1981,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 16:23:29 JST
+Last updated 2019-11-12 16:39:23 JST
 </div>
 </div>
 </body>
