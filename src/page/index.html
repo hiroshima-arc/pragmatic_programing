@@ -439,12 +439,14 @@
 
         test("値を保存する", () => {
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
-          assert(repository.save(data));
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          assert(repository.save(entity));
         });
 
         test("値を取得する", () => {
           const data = { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] };
-          return repository.save(data).then(() => {
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          return repository.save(entity).then(() => {
             const keyValue = 2;
             return repository.find(keyValue).then(data => {
               assert.equal("Fizz", data.list[2]);
@@ -458,7 +460,10 @@
             { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
             { id: 5, list: [1, 2, "Fizz", 4, "Buzz"] }
           ];
-          return repository.saveBatch(aList).then(() => {
+          const entities = aList.map(
+            data => new FizzBuzzEntity(data.list, data.id)
+          );
+          return repository.saveBatch(entities).then(() => {
             return repository.selectAll().then(data => {
               assert.equal(5, data.length);
             });
@@ -467,11 +472,12 @@
 
         test("値を削除する", () => {
           const data = { id: 6, list: [1, 2, "Fizz", 4, "Buzz"] };
-          return repository.save(data).then(() => {
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          return repository.save(entity).then(() => {
             const keyValue = 6;
             return repository.delete(keyValue).then(() => {
-              return repository.find(keyValue).then(data => {
-                assert.deepEqual({}, data);
+              return repository.find(keyValue).catch(error => {
+                assert.equal("id:6 not found", error);
               });
             });
           });
@@ -582,9 +588,12 @@
 
                 getReq.onsuccess = event => {
                   const result = event.target.result;
-                  if (result === undefined) resolve({});
                   console.log(result);
-                  resolve(result);
+                  if (result === undefined) {
+                    reject(`id:${keyValue} not found`);
+                  } else {
+                    resolve(result);
+                  }
                 };
               } catch (error) {
                 console.log(error);
@@ -673,16 +682,31 @@
           return super.put({ id: data.id, list: data.list });
         }
 
-        saveBatch(aList) {
+        saveBatch(entities) {
+          const aList = entities.map(entity => {
+            return { id: entity.id, list: entity.list };
+          });
           return super.add(aList);
         }
 
         find(keyValue) {
-          return super.get(keyValue);
+          return super.get(keyValue).then(data => {
+            return new Promise((resolve, reject) => {
+              const entity = new FizzBuzzEntity(data.list, data.id);
+              resolve(entity);
+            });
+          });
         }
 
         selectAll() {
-          return super.openCursor();
+          return super.openCursor().then(aList => {
+            return new Promise((resolve, reject) => {
+              const entities = aList.map(
+                data => new FizzBuzzEntity(data.list, data.id)
+              );
+              resolve(entities);
+            });
+          });
         }
 
         delete(keyValue) {
