@@ -675,7 +675,7 @@
 
       class FizzBuzzRepository extends IndexedDbRepository {
         constructor(dbName, storeName) {
-          super();
+          super(dbName, storeName);
         }
 
         save(data) {

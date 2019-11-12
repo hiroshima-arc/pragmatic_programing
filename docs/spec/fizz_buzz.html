@@ -1071,12 +1071,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         test("値を保存する", () =&gt; {
           const data = { id: 1, list: [1, 2, "Fizz", 4, "Buzz"] };
-          assert(repository.save(data));
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          assert(repository.save(entity));
         });
 
         test("値を取得する", () =&gt; {
           const data = { id: 2, list: [1, 2, "Fizz", 4, "Buzz"] };
-          return repository.save(data).then(() =&gt; {
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          return repository.save(entity).then(() =&gt; {
             const keyValue = 2;
             return repository.find(keyValue).then(data =&gt; {
               assert.equal("Fizz", data.list[2]);
@@ -1090,7 +1092,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
             { id: 5, list: [1, 2, "Fizz", 4, "Buzz"] }
           ];
-          return repository.saveBatch(aList).then(() =&gt; {
+          const entities = aList.map(
+            data =&gt; new FizzBuzzEntity(data.list, data.id)
+          );
+          return repository.saveBatch(entities).then(() =&gt; {
             return repository.selectAll().then(data =&gt; {
               assert.equal(5, data.length);
             });
@@ -1099,11 +1104,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         test("値を削除する", () =&gt; {
           const data = { id: 6, list: [1, 2, "Fizz", 4, "Buzz"] };
-          return repository.save(data).then(() =&gt; {
+          const entity = new FizzBuzzEntity(data.list, data.id);
+          return repository.save(entity).then(() =&gt; {
             const keyValue = 6;
             return repository.delete(keyValue).then(() =&gt; {
-              return repository.find(keyValue).then(data =&gt; {
-                assert.deepEqual({}, data);
+              return repository.find(keyValue).catch(error =&gt; {
+                assert.equal("id:6 not found", error);
               });
             });
           });
@@ -1214,9 +1220,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                 getReq.onsuccess = event =&gt; {
                   const result = event.target.result;
-                  if (result === undefined) resolve({});
                   console.log(result);
-                  resolve(result);
+                  if (result === undefined) {
+                    reject(`id:${keyValue} not found`);
+                  } else {
+                    resolve(result);
+                  }
                 };
               } catch (error) {
                 console.log(error);
@@ -1298,23 +1307,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzRepository extends IndexedDbRepository {
         constructor(dbName, storeName) {
-          super();
+          super(dbName, storeName);
         }
 
         save(data) {
           return super.put({ id: data.id, list: data.list });
         }
 
-        saveBatch(aList) {
+        saveBatch(entities) {
+          const aList = entities.map(entity =&gt; {
+            return { id: entity.id, list: entity.list };
+          });
           return super.add(aList);
         }
 
         find(keyValue) {
-          return super.get(keyValue);
+          return super.get(keyValue).then(data =&gt; {
+            return new Promise((resolve, reject) =&gt; {
+              const entity = new FizzBuzzEntity(data.list, data.id);
+              resolve(entity);
+            });
+          });
         }
 
         selectAll() {
-          return super.openCursor();
+          return super.openCursor().then(aList =&gt; {
+            return new Promise((resolve, reject) =&gt; {
+              const entities = aList.map(
+                data =&gt; new FizzBuzzEntity(data.list, data.id)
+              );
+              resolve(entities);
+            });
+          });
         }
 
         delete(keyValue) {
@@ -1981,7 +2005,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 16:39:23 JST
+Last updated 2019-11-12 17:27:33 JST
 </div>
 </div>
 </body>
