@@ -147,7 +147,7 @@
                       <del>保存できるようにする。</del>
                     </li>
                     <li><del>保存した内容を表示できるようにする。</del></li>
-                    <li>保存した内容を削除できるようにする。</li>
+                    <li><del>保存した内容を削除できるようにする。</del></li>
                   </ul>
                 </ul>
               </div>
@@ -873,6 +873,11 @@
           const repository = new FizzBuzzRepository("fizzubzz.db", "items");
           return repository.delete(id);
         }
+
+        deleteAll() {
+          const repository = new FizzBuzzRepository("fizzubzz.db", "items");
+          return repository.destroy();
+        }
       }
 
       class FizzBuzzView {
@@ -969,7 +974,15 @@
             document.querySelector(
               "#app__message"
             ).innerHTML = `${id}を削除しました。`;
-            document.querySelector("#fizz-buzz-app-table-read").innerHTML = "";
+            this.render();
+          });
+        }
+
+        deleteAll(e) {
+          this.Service.deleteAll().then(() => {
+            document.querySelector(
+              "#app__message"
+            ).innerHTML = `全てのレコードを削除しました。`;
             this.render();
           });
         }
@@ -1220,15 +1233,21 @@
         }
 
         renderButtonDelete() {
-          const id = "fizz-buzz-app-table-button-delete";
+          const id_delete = "fizz-buzz-app-table-button-delete-select";
+          const id_delete_all = "fizz-buzz-app-table-button-delete-all";
           const tableId = "fizz-buzz-app-table-read";
+          let button = this.createButton(id_delete, tableId, "削除");
+          button += this.createButton(id_delete_all, tableId, "全削除");
 
           document.querySelector(
             "#fizz-buzz-app-table-button-delete"
-          ).innerHTML = this.createButton(id, tableId, "削除");
+          ).innerHTML = button;
           document
-            .querySelector(`#${id}`)
+            .querySelector(`#${id_delete}`)
             .addEventListener("click", this.deleteTable.bind(this));
+          document
+            .querySelector(`#${id_delete_all}`)
+            .addEventListener("click", this.deleteAll.bind(this));
         }
 
         render() {
