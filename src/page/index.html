@@ -950,8 +950,7 @@
         constructor(type) {
           this._service = new FizzBuzzService(type);
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
-          this._counter = 0;
-          this._value = this._service.generate(this.counter);
+          this._counterComponent = new Counter(this.service);
         }
 
         get list() {
@@ -962,24 +961,8 @@
           return this._record;
         }
 
-        get counter() {
-          return this._counter;
-        }
-
         get service() {
           return this._service;
-        }
-
-        increment() {
-          this._counter += 1;
-          this._value = this._service.generate(this.counter);
-          this.renderCounter();
-        }
-
-        decrement() {
-          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-          this._value = this._service.generate(this.counter);
-          this.renderCounter();
         }
 
         changeEvent(e) {
@@ -1052,24 +1035,6 @@
             ).innerHTML = `全てのレコードを削除しました。`;
             this.render();
           });
-        }
-
-        createCounter(incrementId, decrementId) {
-          return `
-            <div class="col-md-1">
-              <button class="btn btn-primary" id="${decrementId}">
-                -
-              </button>
-            </div>
-            <div class="col-md-10">
-              <h1 class="display-1 text-center">${this._value}</h1>
-            </div>
-            <div class="col-md-1">
-              <button class="btn btn-primary" id="${incrementId}">
-                +
-              </button>
-            </div>
-          `;
         }
 
         createSelect(id) {
@@ -1218,21 +1183,6 @@
           `;
         }
 
-        renderCounter() {
-          const incrementId = "fizz-buzz-app-counter-increment";
-          const decrementId = "fizz-buzz-app-counter-decrement";
-
-          document.querySelector(
-            "#app__counter"
-          ).innerHTML = this.createCounter(incrementId, decrementId);
-          document
-            .querySelector(`#${incrementId}`)
-            .addEventListener("click", this.increment.bind(this));
-          document
-            .querySelector(`#${decrementId}`)
-            .addEventListener("click", this.decrement.bind(this));
-        }
-
         renderSelect() {
           const id = "fizz-buzz-app-select-type";
 
@@ -1317,10 +1267,6 @@
             .addEventListener("click", this.deleteAll.bind(this));
         }
 
-        renderCounterComponent() {
-          this.renderCounter();
-        }
-
         renderTableComponent() {
           const createUpdate = () => {
             document.querySelector("#app__table--create-update").innerHTML = `
@@ -1352,8 +1298,73 @@
         }
 
         render() {
-          this.renderCounterComponent();
+          this._counterComponent.render();
           this.renderTableComponent();
+        }
+      }
+
+      class Counter {
+        constructor(service) {
+          this._counter = 0;
+          this._service = service;
+          this._value = this._service.generate(this.counter);
+        }
+
+        get counter() {
+          return this._counter;
+        }
+
+        increment() {
+          this._counter += 1;
+          this._value = this._service.generate(this._counter);
+          this.renderCounter();
+        }
+
+        decrement() {
+          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._value = this._service.generate(this._counter);
+          this.renderCounter();
+        }
+
+        createCounter(incrementId, decrementId) {
+          return `
+            <div class="col-md-1">
+              <button class="btn btn-primary" id="${decrementId}">
+                -
+              </button>
+            </div>
+            <div class="col-md-10">
+              <h1 class="display-1 text-center">${this._value}</h1>
+            </div>
+            <div class="col-md-1">
+              <button class="btn btn-primary" id="${incrementId}">
+                +
+              </button>
+            </div>
+          `;
+        }
+
+        renderCounter() {
+          const incrementId = "fizz-buzz-app-counter-increment";
+          const decrementId = "fizz-buzz-app-counter-decrement";
+
+          document.querySelector(
+            "#app__counter"
+          ).innerHTML = this.createCounter(incrementId, decrementId);
+          document
+            .querySelector(`#${incrementId}`)
+            .addEventListener("click", this.increment.bind(this));
+          document
+            .querySelector(`#${decrementId}`)
+            .addEventListener("click", this.decrement.bind(this));
+        }
+
+        renderCounterComponent() {
+          this.renderCounter();
+        }
+
+        render() {
+          this.renderCounterComponent();
         }
       }
 
