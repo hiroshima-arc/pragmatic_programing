@@ -146,7 +146,7 @@
                     <li>
                       <del>保存できるようにする。</del>
                     </li>
-                    <li>保存した内容を表示できるようにする。</li>
+                    <li><del>保存した内容を表示できるようにする。</del></li>
                     <li>保存した内容を削除できるようにする。</li>
                   </ul>
                 </ul>
@@ -956,6 +956,7 @@
               document.querySelector(
                 "#app__message"
               ).innerHTML = `保存しました。`;
+              this.render();
             })
             .catch(error => {
               document.querySelector("#app__message").innerHTML = error;
@@ -965,7 +966,11 @@
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this.Service.delete(id).then(() => {
+            document.querySelector(
+              "#app__message"
+            ).innerHTML = `${id}を削除しました。`;
             document.querySelector("#fizz-buzz-app-table-read").innerHTML = "";
+            this.render();
           });
         }
 
