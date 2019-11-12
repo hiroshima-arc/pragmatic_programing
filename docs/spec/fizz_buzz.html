@@ -1949,29 +1949,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .addEventListener("click", this.deleteAll.bind(this));
         }
 
-        render() {
+        renderCounterComponent() {
           this.renderCounter();
+        }
 
-          document.querySelector("#app__table--create-update").innerHTML = `
+        renderTableComponent() {
+          const createUpdate = () =&gt; {
+            document.querySelector("#app__table--create-update").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
           `;
-          this.renderSelect();
-          this.renderTable(this.list);
-          this.renderButtonSave();
+            this.renderSelect();
+            this.renderTable(this.list);
+            this.renderButtonSave();
+          };
 
-          document.querySelector("#app__table--read-delete").innerHTML = `
+          const readDelete = () =&gt; {
+            document.querySelector("#app__table--read-delete").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
-          this.service.selectAll().then(data =&gt; {
-            this.renderSelectRead(data);
-            if (data[0] !== undefined) this.renderTableRead(data[0].list);
-            this.renderButtonDelete();
-            this._record = data;
-          });
+            this.service.selectAll().then(data =&gt; {
+              this.renderSelectRead(data);
+              if (data[0] !== undefined) this.renderTableRead(data[0].list);
+              this.renderButtonDelete();
+              this._record = data;
+            });
+          };
+
+          createUpdate();
+          readDelete();
+        }
+
+        render() {
+          this.renderCounterComponent();
+          this.renderTableComponent();
         }
       }
 
@@ -2006,7 +2020,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 17:44:55 JST
+Last updated 2019-11-12 17:52:31 JST
 </div>
 </div>
 </body>
