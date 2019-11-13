@@ -1011,11 +1011,10 @@
         }
       }
 
-      class FizzBuzzView {
-        constructor(type) {
-          this._service = new FizzBuzzService(type);
+      class Table {
+        constructor(service) {
+          this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
-          this._counterComponent = new Counter(this.service);
         }
 
         get list() {
@@ -1031,23 +1030,32 @@
         }
 
         changeEvent(e) {
-          let view;
+          let service;
+          let list;
           switch (e.target.value) {
             case "one":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             case "two":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type02);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             case "three":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type03);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             default:
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
           }
         }
 
@@ -1363,8 +1371,20 @@
         }
 
         render() {
-          this._counterComponent.render();
           this.renderTableComponent();
+        }
+      }
+
+      class FizzBuzzView {
+        constructor(type) {
+          this._service = new FizzBuzzService(type);
+          this._counterComponent = new Counter(this._service);
+          this._tableComponent = new Table(this._service);
+        }
+
+        render() {
+          this._counterComponent.render();
+          this._tableComponent.render();
         }
       }
 

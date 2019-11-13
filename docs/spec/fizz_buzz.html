@@ -1643,11 +1643,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class FizzBuzzView {
-        constructor(type) {
-          this._service = new FizzBuzzService(type);
+      class Table {
+        constructor(service) {
+          this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
-          this._counterComponent = new Counter(this.service);
         }
 
         get list() {
@@ -1663,23 +1662,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         changeEvent(e) {
-          let view;
+          let service;
+          let list;
           switch (e.target.value) {
             case "one":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             case "two":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type02);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             case "three":
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type03);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
               break;
             default:
-              view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-              view.renderTable(view.list);
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
           }
         }
 
@@ -1995,8 +2003,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         render() {
-          this._counterComponent.render();
           this.renderTableComponent();
+        }
+      }
+
+      class FizzBuzzView {
+        constructor(type) {
+          this._service = new FizzBuzzService(type);
+          this._counterComponent = new Counter(this._service);
+          this._tableComponent = new Table(this._service);
+        }
+
+        render() {
+          this._counterComponent.render();
+          this._tableComponent.render();
         }
       }
 
@@ -2031,7 +2051,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-12 18:22:20 JST
+Last updated 2019-11-13 13:24:44 JST
 </div>
 </div>
 </body>
