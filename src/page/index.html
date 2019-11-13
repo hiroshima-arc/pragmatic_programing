@@ -1321,7 +1321,7 @@
 
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
-          this.service.delete(id).then(() => {
+          this._service.delete(id).then(() => {
             document.querySelector(
               "#app__message"
             ).innerHTML = `${id}を削除しました。`;
@@ -1330,7 +1330,7 @@
         }
 
         deleteAll(e) {
-          this.service.deleteAll().then(() => {
+          this._service.deleteAll().then(() => {
             document.querySelector(
               "#app__message"
             ).innerHTML = `全てのレコードを削除しました。`;
@@ -1415,10 +1415,36 @@
           this._tableReadDeleteComponent = new TableReadDelete(this._service);
         }
 
-        render() {
+        counterEvent(e) {
+          this._counterComponent.render();
+        }
+
+        createUpdateEvent(e) {
+          this._tableCreateUpdateComponent.render();
+        }
+
+        readDeleteEvent(e) {
+          this._tableReadDeleteComponent.render();
+        }
+
+        renderComponent() {
+          document
+            .querySelector("#tab-menu01")
+            .addEventListener("click", this.counterEvent.bind(this));
+          document
+            .querySelector("#tab-menu02")
+            .addEventListener("click", this.createUpdateEvent.bind(this));
+          document
+            .querySelector("#tab-menu03")
+            .addEventListener("click", this.readDeleteEvent.bind(this));
+
           this._counterComponent.render();
           this._tableCreateUpdateComponent.render();
           this._tableReadDeleteComponent.render();
+        }
+
+        render() {
+          this.renderComponent();
         }
       }
 
