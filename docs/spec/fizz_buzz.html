@@ -1747,9 +1747,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class TableCreateUpdate extends Table {
+      class TableCreateUpdate {
         constructor(service) {
-          super();
+          this._table = new Table(service);
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1784,11 +1784,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           }
         }
 
-        changeReadEvent(e) {
-          const record = this.record.filter(data =&gt; data.id === e.target.value);
-          if (record[0] !== undefined) this.renderTableRead(record[0].list);
-        }
-
         createSelect(id) {
           return `
             &lt;select name="type" id="${id}"&gt;
@@ -1800,70 +1795,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         createTable(aList) {
-          const header = (() =&gt; {
-            return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
-          })();
-
-          const body = (() =&gt; {
-            let result = [];
-            let row = 0;
-            let col = [];
-            aList.forEach((v, k) =&gt; {
-              if ((k + 1) % 10 === 0) {
-                col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
-                result[row++] = col;
-                col = [];
-              } else {
-                col.push(`&lt;td&gt;${v}&lt;/td&gt;`);
-              }
-            });
-            return result;
-          })();
-
-          const row = n =&gt; body[n].join(" ");
-
-          const result = `
-            &lt;table&gt;
-              &lt;thead&gt;
-                ${header[0]}
-                ${header[1]}
-                ${header[2]}
-                ${header[3]}
-                ${header[4]}
-                ${header[5]}
-                ${header[6]}
-                ${header[7]}
-                ${header[8]}
-                ${header[9]}
-              &lt;/thead&gt;
-              &lt;tbody&gt;
-                &lt;tr&gt;${row(0)}&lt;/tr&gt;
-                &lt;tr&gt;${row(1)}&lt;/tr&gt;
-                &lt;tr&gt;${row(2)}&lt;/tr&gt;
-                &lt;tr&gt;${row(3)}&lt;/tr&gt;
-                &lt;tr&gt;${row(4)}&lt;/tr&gt;
-                &lt;tr&gt;${row(5)}&lt;/tr&gt;
-                &lt;tr&gt;${row(6)}&lt;/tr&gt;
-                &lt;tr&gt;${row(7)}&lt;/tr&gt;
-                &lt;tr&gt;${row(8)}&lt;/tr&gt;
-                &lt;tr&gt;${row(9)}&lt;/tr&gt;
-              &lt;/tbody&gt;
-            &lt;/table&gt;
-        `;
-          return result;
+          return this._table.createTable(aList);
         }
 
         createButton(id, tableId, label) {
-          return `
-            &lt;button
-              id="${id}"
-              type="button"
-              class="btn btn-primary btn-rounded btn-sm my-0"
-              data-tableid="${tableId}"
-            &gt;
-              ${label}
-            &lt;/button&gt;
-          `;
+          return this._table.createButton(id, tableId, label);
         }
 
         editTable() {
@@ -1997,7 +1933,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
           `;
             this.renderSelect();
-            this.renderTable(this.list);
+            this.renderTable(this._list);
             this.renderButtonSave();
           };
 
@@ -2009,14 +1945,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class TableReadDelete extends Table {
+      class TableReadDelete {
         constructor(service) {
-          super();
+          this._table = new Table(service);
           this._service = service;
         }
 
         changeReadEvent(e) {
-          const record = this.record.filter(data =&gt; data.id === e.target.value);
+          const record = this._record.filter(
+            data =&gt; data.id === e.target.value
+          );
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
@@ -2030,6 +1968,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               ${options.join(" ")}
             &lt;/select&gt;
             `;
+        }
+
+        createTable(aList) {
+          return this._table.createTable(aList);
+        }
+
+        createButton(id, tableId, label) {
+          return this._table.createButton(id, tableId, label);
         }
 
         deleteTable(e) {
@@ -2102,7 +2048,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
-            this.service.selectAll().then(data =&gt; {
+            this._service.selectAll().then(data =&gt; {
               this.renderSelectRead(data);
               if (data[0] !== undefined) this.renderTableRead(data[0].list);
               this.renderButtonDelete();
@@ -2122,12 +2068,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         constructor(type) {
           this._service = new FizzBuzzService(type);
           this._counterComponent = new Counter(this._service);
-          this._tableComponent = new Table(this._service);
+          this._tableCreateUpdateComponent = new TableCreateUpdate(
+            this._service
+          );
+          this._tableReadDeleteComponent = new TableReadDelete(this._service);
         }
 
         render() {
           this._counterComponent.render();
-          this._tableComponent.render();
+          this._tableCreateUpdateComponent.render();
+          this._tableReadDeleteComponent.render();
         }
       }
 
@@ -2162,7 +2112,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 15:30:01 JST
+Last updated 2019-11-13 15:55:02 JST
 </div>
 </div>
 </body>
