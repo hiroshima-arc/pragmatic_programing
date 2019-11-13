@@ -1014,7 +1014,6 @@
       class Table {
         constructor(service) {
           this._service = service;
-          this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
 
         get list() {
@@ -1029,66 +1028,9 @@
           return this._service;
         }
 
-        changeEvent(e) {
-          let service;
-          let list;
-          switch (e.target.value) {
-            case "one":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            case "two":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            case "three":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            default:
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-          }
-        }
-
         changeReadEvent(e) {
           const record = this.record.filter(data => data.id === e.target.value);
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
-        }
-
-        saveTable(e) {
-          const createListFromTable = table => {
-            let list = [];
-            for (let i = 1; i <= 10; i++) {
-              for (let j = 0; j < 10; j++) {
-                list.push(table.rows[i].cells[j].innerText);
-              }
-            }
-            return list;
-          };
-          const table = document.querySelector(
-            `#${e.target.dataset.tableid} > table`
-          );
-          let result = createListFromTable(table);
-          this.service
-            .save(result)
-            .then(() => {
-              document.querySelector(
-                "#app__message"
-              ).innerHTML = `保存しました。`;
-              this.render();
-            })
-            .catch(error => {
-              document.querySelector("#app__message").innerHTML = error;
-            });
         }
 
         deleteTable(e) {
@@ -1108,16 +1050,6 @@
             ).innerHTML = `全てのレコードを削除しました。`;
             this.render();
           });
-        }
-
-        createSelect(id) {
-          return `
-            <select name="type" id="${id}">
-              <option value="one">タイプ1</option>
-              <option value="two">タイプ2</option>
-              <option value="three">タイプ3</option>
-            </select>
-            `;
         }
 
         createSelectRead(id, aList) {
@@ -1256,20 +1188,6 @@
           `;
         }
 
-        renderSelect() {
-          const id = "fizz-buzz-app-select-type";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-select"
-          ).innerHTML = this.createSelect(id);
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent.bind(this));
-
-          document.querySelector(`#${id}`).classList.add("browser-default");
-          document.querySelector(`#${id}`).classList.add("custom-select");
-        }
-
         renderSelectRead(data) {
           const id = "fizz-buzz-app-select-read";
 
@@ -1284,19 +1202,6 @@
           document.querySelector(`#${id}`).classList.add("custom-select");
         }
 
-        renderTable(aList) {
-          document.querySelector(
-            "#fizz-buzz-app-table"
-          ).innerHTML = this.createTable(aList);
-          document
-            .querySelector("#fizz-buzz-app-table > table")
-            .classList.add("table");
-          document
-            .querySelector("#fizz-buzz-app-table > table")
-            .classList.add("table-striped");
-          this.editTable();
-        }
-
         renderTableRead(aList) {
           document.querySelector(
             "#fizz-buzz-app-table-read"
@@ -1308,18 +1213,6 @@
             .querySelector("#fizz-buzz-app-table-read > table")
             .classList.add("table-striped");
           this.editTable();
-        }
-
-        renderButtonSave() {
-          const id = "fizz-buzz-app-table-button-save";
-          const tableId = "fizz-buzz-app-table";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton(id, tableId, "保存");
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("click", this.saveTable.bind(this));
         }
 
         renderButtonDelete() {
@@ -1342,14 +1235,8 @@
 
         renderTableComponent() {
           const createUpdate = () => {
-            document.querySelector("#app__table--create-update").innerHTML = `
-            <div id="fizz-buzz-app-table-select"></div>
-            <div id="fizz-buzz-app-table"></div>
-            <div id="fizz-buzz-app-table-button"></div>
-          `;
-            this.renderSelect();
-            this.renderTable(this.list);
-            this.renderButtonSave();
+            const tableCreateUpate = new TableCreateUpdate(this._service);
+            tableCreateUpate.render();
           };
 
           const readDelete = () => {
@@ -1368,6 +1255,268 @@
 
           createUpdate();
           readDelete();
+        }
+
+        render() {
+          this.renderTableComponent();
+        }
+      }
+
+      class TableCreateUpdate extends Table {
+        constructor(service) {
+          super();
+          this._service = service;
+          this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+        }
+
+        changeEvent(e) {
+          let service;
+          let list;
+          switch (e.target.value) {
+            case "one":
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
+              break;
+            case "two":
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
+              break;
+            case "three":
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
+              break;
+            default:
+              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
+              list = service.generateList(FizzBuzzList.MAX_COUNT);
+              this.renderTable(list);
+              this._service = service;
+          }
+        }
+
+        changeReadEvent(e) {
+          const record = this.record.filter(data => data.id === e.target.value);
+          if (record[0] !== undefined) this.renderTableRead(record[0].list);
+        }
+
+        createSelect(id) {
+          return `
+            <select name="type" id="${id}">
+              <option value="one">タイプ1</option>
+              <option value="two">タイプ2</option>
+              <option value="three">タイプ3</option>
+            </select>
+            `;
+        }
+
+        createTable(aList) {
+          const header = (() => {
+            return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
+          })();
+
+          const body = (() => {
+            let result = [];
+            let row = 0;
+            let col = [];
+            aList.forEach((v, k) => {
+              if ((k + 1) % 10 === 0) {
+                col.push(`<td>${v}</td>`);
+                result[row++] = col;
+                col = [];
+              } else {
+                col.push(`<td>${v}</td>`);
+              }
+            });
+            return result;
+          })();
+
+          const row = n => body[n].join(" ");
+
+          const result = `
+            <table>
+              <thead>
+                ${header[0]}
+                ${header[1]}
+                ${header[2]}
+                ${header[3]}
+                ${header[4]}
+                ${header[5]}
+                ${header[6]}
+                ${header[7]}
+                ${header[8]}
+                ${header[9]}
+              </thead>
+              <tbody>
+                <tr>${row(0)}</tr>
+                <tr>${row(1)}</tr>
+                <tr>${row(2)}</tr>
+                <tr>${row(3)}</tr>
+                <tr>${row(4)}</tr>
+                <tr>${row(5)}</tr>
+                <tr>${row(6)}</tr>
+                <tr>${row(7)}</tr>
+                <tr>${row(8)}</tr>
+                <tr>${row(9)}</tr>
+              </tbody>
+            </table>
+        `;
+          return result;
+        }
+
+        createButton(id, tableId, label) {
+          return `
+            <button
+              id="${id}"
+              type="button"
+              class="btn btn-primary btn-rounded btn-sm my-0"
+              data-tableid="${tableId}"
+            >
+              ${label}
+            </button>
+          `;
+        }
+
+        editTable() {
+          $("#fizz-buzz-app-table > table > tbody > tr > td").on(
+            "click",
+            edit_toggle(this._service)
+          );
+
+          function save(value) {
+            document.querySelector(
+              "#app__message"
+            ).innerHTML = `${value}に編集しました。`;
+          }
+
+          function edit_toggle(service) {
+            let edit_flag = false;
+            return function() {
+              if (edit_flag) return;
+
+              let $input = $("<input>")
+                .attr("type", "text")
+                .val($(this).text());
+
+              $(this).html($input);
+
+              $("input", this)
+                .focus()
+                .keypress(function(e) {
+                  if (e.which == 13) {
+                    const number = $(this).val();
+                    try {
+                      const value = service.generate(number);
+                      save(value);
+                      $(this)
+                        .after(value)
+                        .unbind()
+                        .remove();
+                      edit_flag = false;
+                    } catch (e) {
+                      document.querySelector("#app__message").innerHTML =
+                        e.message;
+                    }
+                  }
+                });
+
+              $("input", this)
+                .focus()
+                .blur(function(e) {
+                  $(this)
+                    .after($(this).val())
+                    .unbind()
+                    .remove();
+                  edit_flag = false;
+                });
+              edit_flag = true;
+            };
+          }
+        }
+
+        saveTable(e) {
+          const createListFromTable = table => {
+            let list = [];
+            for (let i = 1; i <= 10; i++) {
+              for (let j = 0; j < 10; j++) {
+                list.push(table.rows[i].cells[j].innerText);
+              }
+            }
+            return list;
+          };
+          const table = document.querySelector(
+            `#${e.target.dataset.tableid} > table`
+          );
+          let result = createListFromTable(table);
+          this.service
+            .save(result)
+            .then(() => {
+              document.querySelector(
+                "#app__message"
+              ).innerHTML = `保存しました。`;
+              this.render();
+            })
+            .catch(error => {
+              document.querySelector("#app__message").innerHTML = error;
+            });
+        }
+
+        renderSelect() {
+          const id = "fizz-buzz-app-select-type";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-select"
+          ).innerHTML = this.createSelect(id);
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("change", this.changeEvent.bind(this));
+
+          document.querySelector(`#${id}`).classList.add("browser-default");
+          document.querySelector(`#${id}`).classList.add("custom-select");
+        }
+
+        renderTable(aList) {
+          document.querySelector(
+            "#fizz-buzz-app-table"
+          ).innerHTML = this.createTable(aList);
+          document
+            .querySelector("#fizz-buzz-app-table > table")
+            .classList.add("table");
+          document
+            .querySelector("#fizz-buzz-app-table > table")
+            .classList.add("table-striped");
+          this.editTable();
+        }
+
+        renderButtonSave() {
+          const id = "fizz-buzz-app-table-button-save";
+          const tableId = "fizz-buzz-app-table";
+
+          document.querySelector(
+            "#fizz-buzz-app-table-button"
+          ).innerHTML = this.createButton(id, tableId, "保存");
+          document
+            .querySelector(`#${id}`)
+            .addEventListener("click", this.saveTable.bind(this));
+        }
+
+        renderTableComponent() {
+          const createUpdate = () => {
+            document.querySelector("#app__table--create-update").innerHTML = `
+            <div id="fizz-buzz-app-table-select"></div>
+            <div id="fizz-buzz-app-table"></div>
+            <div id="fizz-buzz-app-table-button"></div>
+          `;
+            this.renderSelect();
+            this.renderTable(this.list);
+            this.renderButtonSave();
+          };
+
+          createUpdate();
         }
 
         render() {
