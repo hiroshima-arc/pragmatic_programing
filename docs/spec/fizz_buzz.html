@@ -1718,10 +1718,77 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
+      class Message {
+        constructor() {}
+
+        static get WARNING() {
+          return 1;
+        }
+        static get SUCCESS() {
+          return 2;
+        }
+        static get DANGER() {
+          return 3;
+        }
+
+        static create(message, type) {
+          switch (type) {
+            case 1:
+              return `
+                    &lt;div class="alert alert-warning alert-dismissible fade show" role="alert"&gt;
+                        ${message}
+                        &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                            &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+              `;
+            case 2:
+              return `
+                    &lt;div class="alert alert-success alert-dismissible fade show" role="alert"&gt;
+                        ${message}
+                        &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                            &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+              `;
+            case 3:
+              return `
+                    &lt;div class="alert alert-danger alert-dismissible fade show" role="alert"&gt;
+                        ${message}
+                        &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                            &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+              `;
+            default:
+              return `
+                    &lt;div class="alert alert-primary alert-dismissible fade show" role="alert"&gt;
+                        ${message}
+                        &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                            &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+              `;
+          }
+        }
+
+        clear() {
+          document.querySelector("#app__message").innerHTML = "";
+        }
+
+        render(message, type) {
+          document.querySelector("#app__message").innerHTML = Message.create(
+            message,
+            type
+          );
+        }
+      }
+
       class TableCreateUpdate {
         constructor(service) {
           this._table = new Table();
           this._button = new Button();
+          this._message = new Message();
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1781,9 +1848,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           );
 
           function save(value) {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `${value}に編集しました。`;
+            document.querySelector("#app__message").innerHTML = Message.create(
+              `${value}に編集しました。`
+            );
           }
 
           function edit_toggle(service) {
@@ -1811,8 +1878,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                         .remove();
                       edit_flag = false;
                     } catch (e) {
-                      document.querySelector("#app__message").innerHTML =
-                        e.message;
+                      document.querySelector(
+                        "#app__message"
+                      ).innerHTML = Message.create(e.message, Message.DANGER);
                     }
                   }
                 });
@@ -1848,13 +1916,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this._service
             .save(result)
             .then(() =&gt; {
-              document.querySelector(
-                "#app__message"
-              ).innerHTML = `保存しました。`;
+              this._message.render(`保存しました`, Message.SUCCESS);
               this.render();
             })
             .catch(error =&gt; {
-              document.querySelector("#app__message").innerHTML = error;
+              this._message.render(error, Message.DANGER);
             });
         }
 
@@ -1921,6 +1987,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         constructor(service) {
           this._table = new Table();
           this._button = new Button();
+          this._message = new Message();
           this._service = service;
         }
 
@@ -1954,18 +2021,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() =&gt; {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `${id}を削除しました。`;
+            this._message.render(`${id}を削除しました。`, Message.SUCCESS);
             this.render();
           });
         }
 
         deleteAll(e) {
           this._service.deleteAll().then(() =&gt; {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `全てのレコードを削除しました。`;
+            this._message.render(
+              `全てのレコードを削除しました。`,
+              Message.SUCCESS
+            );
             this.render();
           });
         }
@@ -2039,6 +2105,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzView {
         constructor(type) {
+          this._message = new Message();
           this._service = new FizzBuzzService(type);
           this._counterComponent = new Counter(this._service);
           this._tableCreateUpdateComponent = new TableCreateUpdate(
@@ -2049,14 +2116,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         counterEvent(e) {
           this._counterComponent.render();
+          then._message.clear();
         }
 
         createUpdateEvent(e) {
           this._tableCreateUpdateComponent.render();
+          this._message.clear();
         }
 
         readDeleteEvent(e) {
           this._tableReadDeleteComponent.render();
+          this._message.clear();
         }
 
         renderComponent() {
@@ -2111,7 +2181,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 18:00:53 JST
+Last updated 2019-11-13 18:32:11 JST
 </div>
 </div>
 </body>

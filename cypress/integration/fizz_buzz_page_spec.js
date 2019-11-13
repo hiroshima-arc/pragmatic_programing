@@ -118,10 +118,6 @@ describe("FizzBuzz Page", () => {
 
           cy.get("#tab-menu03").click();
           cy.get("#fizz-buzz-app-table-button-delete-all").click();
-          cy.get("#app__message").should(
-            "contain",
-            "全てのレコードを削除しました。"
-          );
         });
       });
     });

@@ -1086,10 +1086,77 @@
         }
       }
 
+      class Message {
+        constructor() {}
+
+        static get WARNING() {
+          return 1;
+        }
+        static get SUCCESS() {
+          return 2;
+        }
+        static get DANGER() {
+          return 3;
+        }
+
+        static create(message, type) {
+          switch (type) {
+            case 1:
+              return `
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+            case 2:
+              return `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+            case 3:
+              return `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+            default:
+              return `
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+          }
+        }
+
+        clear() {
+          document.querySelector("#app__message").innerHTML = "";
+        }
+
+        render(message, type) {
+          document.querySelector("#app__message").innerHTML = Message.create(
+            message,
+            type
+          );
+        }
+      }
+
       class TableCreateUpdate {
         constructor(service) {
           this._table = new Table();
           this._button = new Button();
+          this._message = new Message();
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1149,9 +1216,9 @@
           );
 
           function save(value) {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `${value}に編集しました。`;
+            document.querySelector("#app__message").innerHTML = Message.create(
+              `${value}に編集しました。`
+            );
           }
 
           function edit_toggle(service) {
@@ -1179,8 +1246,9 @@
                         .remove();
                       edit_flag = false;
                     } catch (e) {
-                      document.querySelector("#app__message").innerHTML =
-                        e.message;
+                      document.querySelector(
+                        "#app__message"
+                      ).innerHTML = Message.create(e.message, Message.DANGER);
                     }
                   }
                 });
@@ -1216,13 +1284,11 @@
           this._service
             .save(result)
             .then(() => {
-              document.querySelector(
-                "#app__message"
-              ).innerHTML = `保存しました。`;
+              this._message.render(`保存しました`, Message.SUCCESS);
               this.render();
             })
             .catch(error => {
-              document.querySelector("#app__message").innerHTML = error;
+              this._message.render(error, Message.DANGER);
             });
         }
 
@@ -1289,6 +1355,7 @@
         constructor(service) {
           this._table = new Table();
           this._button = new Button();
+          this._message = new Message();
           this._service = service;
         }
 
@@ -1322,18 +1389,17 @@
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() => {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `${id}を削除しました。`;
+            this._message.render(`${id}を削除しました。`, Message.SUCCESS);
             this.render();
           });
         }
 
         deleteAll(e) {
           this._service.deleteAll().then(() => {
-            document.querySelector(
-              "#app__message"
-            ).innerHTML = `全てのレコードを削除しました。`;
+            this._message.render(
+              `全てのレコードを削除しました。`,
+              Message.SUCCESS
+            );
             this.render();
           });
         }
@@ -1407,6 +1473,7 @@
 
       class FizzBuzzView {
         constructor(type) {
+          this._message = new Message();
           this._service = new FizzBuzzService(type);
           this._counterComponent = new Counter(this._service);
           this._tableCreateUpdateComponent = new TableCreateUpdate(
@@ -1417,14 +1484,17 @@
 
         counterEvent(e) {
           this._counterComponent.render();
+          then._message.clear();
         }
 
         createUpdateEvent(e) {
           this._tableCreateUpdateComponent.render();
+          this._message.clear();
         }
 
         readDeleteEvent(e) {
           this._tableReadDeleteComponent.render();
+          this._message.clear();
         }
 
         renderComponent() {
