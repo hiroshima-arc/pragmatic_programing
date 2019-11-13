@@ -1646,7 +1646,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class Table {
         constructor() {}
 
-        createTable(aList) {
+        create(aList) {
           const header = (() =&gt; {
             return [...Array(10).keys()].map(i =&gt; `&lt;th&gt;${i + 1}&lt;/th&gt;`);
           })();
@@ -1704,7 +1704,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class Button {
         constructor() {}
 
-        createButton(id, tableId, label) {
+        create(id, tableId, label) {
           return `
             &lt;button
               id="${id}"
@@ -1767,11 +1767,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         createTable(aList) {
-          return this._table.createTable(aList);
+          return this._table.create(aList);
         }
 
         createButton(id, tableId, label) {
-          return this._button.createButton(id, tableId, label);
+          return this._button.create(id, tableId, label);
         }
 
         editTable() {
@@ -1944,11 +1944,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         createTable(aList) {
-          return this._table.createTable(aList);
+          return this._table.create(aList);
         }
 
         createButton(id, tableId, label) {
-          return this._button.createButton(id, tableId, label);
+          return this._button.create(id, tableId, label);
         }
 
         deleteTable(e) {
@@ -2085,7 +2085,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 16:07:21 JST
+Last updated 2019-11-13 16:11:05 JST
 </div>
 </div>
 </body>

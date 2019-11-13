@@ -1014,7 +1014,7 @@
       class Table {
         constructor() {}
 
-        createTable(aList) {
+        create(aList) {
           const header = (() => {
             return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
           })();
@@ -1072,7 +1072,7 @@
       class Button {
         constructor() {}
 
-        createButton(id, tableId, label) {
+        create(id, tableId, label) {
           return `
             <button
               id="${id}"
@@ -1135,11 +1135,11 @@
         }
 
         createTable(aList) {
-          return this._table.createTable(aList);
+          return this._table.create(aList);
         }
 
         createButton(id, tableId, label) {
-          return this._button.createButton(id, tableId, label);
+          return this._button.create(id, tableId, label);
         }
 
         editTable() {
@@ -1312,11 +1312,11 @@
         }
 
         createTable(aList) {
-          return this._table.createTable(aList);
+          return this._table.create(aList);
         }
 
         createButton(id, tableId, label) {
-          return this._button.createButton(id, tableId, label);
+          return this._button.create(id, tableId, label);
         }
 
         deleteTable(e) {
