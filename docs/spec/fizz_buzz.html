@@ -1644,21 +1644,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
 
       class Table {
-        constructor(service) {
-          this._service = service;
-        }
-
-        get list() {
-          return this._list;
-        }
-
-        get record() {
-          return this._record;
-        }
-
-        get service() {
-          return this._service;
-        }
+        constructor() {}
 
         createTable(aList) {
           const header = (() =&gt; {
@@ -1726,30 +1712,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;/button&gt;
           `;
         }
-
-        renderTableComponent() {
-          const createUpdate = () =&gt; {
-            const tableCreateUpate = new TableCreateUpdate(this._service);
-            tableCreateUpate.render();
-          };
-
-          const readDelete = () =&gt; {
-            const tableReadDelete = new TableReadDelete(this._service);
-            tableReadDelete.render();
-          };
-
-          createUpdate();
-          readDelete();
-        }
-
-        render() {
-          this.renderTableComponent();
-        }
       }
 
       class TableCreateUpdate {
         constructor(service) {
-          this._table = new Table(service);
+          this._table = new Table();
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1873,7 +1840,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             `#${e.target.dataset.tableid} &gt; table`
           );
           let result = createListFromTable(table);
-          this.service
+          this._service
             .save(result)
             .then(() =&gt; {
               document.querySelector(
@@ -1947,7 +1914,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class TableReadDelete {
         constructor(service) {
-          this._table = new Table(service);
+          this._table = new Table();
           this._service = service;
         }
 
@@ -2112,7 +2079,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 15:55:02 JST
+Last updated 2019-11-13 16:01:49 JST
 </div>
 </div>
 </body>

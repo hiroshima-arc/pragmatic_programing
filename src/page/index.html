@@ -1012,21 +1012,7 @@
       }
 
       class Table {
-        constructor(service) {
-          this._service = service;
-        }
-
-        get list() {
-          return this._list;
-        }
-
-        get record() {
-          return this._record;
-        }
-
-        get service() {
-          return this._service;
-        }
+        constructor() {}
 
         createTable(aList) {
           const header = (() => {
@@ -1094,30 +1080,11 @@
             </button>
           `;
         }
-
-        renderTableComponent() {
-          const createUpdate = () => {
-            const tableCreateUpate = new TableCreateUpdate(this._service);
-            tableCreateUpate.render();
-          };
-
-          const readDelete = () => {
-            const tableReadDelete = new TableReadDelete(this._service);
-            tableReadDelete.render();
-          };
-
-          createUpdate();
-          readDelete();
-        }
-
-        render() {
-          this.renderTableComponent();
-        }
       }
 
       class TableCreateUpdate {
         constructor(service) {
-          this._table = new Table(service);
+          this._table = new Table();
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1241,7 +1208,7 @@
             `#${e.target.dataset.tableid} > table`
           );
           let result = createListFromTable(table);
-          this.service
+          this._service
             .save(result)
             .then(() => {
               document.querySelector(
@@ -1315,7 +1282,7 @@
 
       class TableReadDelete {
         constructor(service) {
-          this._table = new Table(service);
+          this._table = new Table();
           this._service = service;
         }
 
