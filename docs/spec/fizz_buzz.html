@@ -1699,6 +1699,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         `;
           return result;
         }
+      }
+
+      class Button {
+        constructor() {}
 
         createButton(id, tableId, label) {
           return `
@@ -1717,6 +1721,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class TableCreateUpdate {
         constructor(service) {
           this._table = new Table();
+          this._button = new Button();
           this._service = service;
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
         }
@@ -1766,7 +1771,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         createButton(id, tableId, label) {
-          return this._table.createButton(id, tableId, label);
+          return this._button.createButton(id, tableId, label);
         }
 
         editTable() {
@@ -1915,6 +1920,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       class TableReadDelete {
         constructor(service) {
           this._table = new Table();
+          this._button = new Button();
           this._service = service;
         }
 
@@ -1942,7 +1948,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         createButton(id, tableId, label) {
-          return this._table.createButton(id, tableId, label);
+          return this._button.createButton(id, tableId, label);
         }
 
         deleteTable(e) {
@@ -2079,7 +2085,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 16:01:49 JST
+Last updated 2019-11-13 16:07:21 JST
 </div>
 </div>
 </body>
