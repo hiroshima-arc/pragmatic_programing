@@ -785,87 +785,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/div&gt;
             &lt;/div&gt;
           &lt;/div&gt;
-          &lt;section id="fizz-buzz-app"&gt;
-            &lt;div class="py-3"&gt;
-              &lt;section id="menu"&gt;
-                &lt;div class="container"&gt;
-                  &lt;div id="app__message"&gt;&lt;/div&gt;
-                  &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
-                    &lt;a
-                      aria-controls="panel-menu01"
-                      aria-selected="true"
-                      class="nav-item nav-link active"
-                      data-toggle="tab"
-                      href="#panel-menu01"
-                      id="tab-menu01"
-                      role="tab"
-                      &gt;Counter&lt;/a
-                    &gt;
-                    &lt;a
-                      aria-controls="panel-menu02"
-                      aria-selected="false"
-                      class="nav-item nav-link"
-                      data-toggle="tab"
-                      href="#panel-menu02"
-                      id="tab-menu02"
-                      role="tab"
-                      &gt;Table(Create&amp;Update)&lt;/a
-                    &gt;
-                    &lt;a
-                      aria-controls="panel-menu03"
-                      aria-selected="false"
-                      class="nav-item nav-link"
-                      data-toggle="tab"
-                      href="#panel-menu03"
-                      id="tab-menu03"
-                      role="tab"
-                      &gt;Table(Read&amp;Delete)&lt;/a
-                    &gt;
-                  &lt;/div&gt;
-
-                  &lt;div class="tab-content" id="panel-menus"&gt;
-                    &lt;div
-                      aria-labelledby="tab-menu01"
-                      class="tab-pane fade show active border border-top-0 jumbotron"
-                      id="panel-menu01"
-                      role="tabpanel"
-                    &gt;
-                      &lt;div
-                        id="app__counter"
-                        class="row d-flex align-items-center"
-                      &gt;&lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div
-                      aria-labelledby="tab-menu02"
-                      class="tab-pane fade border border-top-0"
-                      id="panel-menu02"
-                      role="tabpanel"
-                    &gt;
-                      &lt;dvi class="row p-3"&gt;
-                        &lt;div
-                          id="app__table--create-update"
-                          class="col-md-12 order-md-2"
-                        &gt;&lt;/div&gt;
-                      &lt;/dvi&gt;
-                    &lt;/div&gt;
-                    &lt;div
-                      aria-labelledby="tab-menu03"
-                      class="tab-pane fade border border-top-0"
-                      id="panel-menu03"
-                      role="tabpanel"
-                    &gt;
-                      &lt;dvi class="row p-3"&gt;
-                        &lt;div
-                          id="app__table--read-delete"
-                          class="col-md-12 order-md-2"
-                        &gt;&lt;/div&gt;
-                      &lt;/dvi&gt;
-                    &lt;/div&gt;
-                  &lt;/div&gt;
-                &lt;/div&gt;
-              &lt;/section&gt;
-            &lt;/div&gt;
-          &lt;/section&gt;
+          &lt;section id="fizz-buzz-app"&gt;&lt;/section&gt;
         &lt;/section&gt;
         &lt;section id="mocha"&gt;&lt;/section&gt;
       &lt;/div&gt;
@@ -2116,7 +2036,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         counterEvent(e) {
           this._counterComponent.render();
-          then._message.clear();
+          this._message.clear();
         }
 
         createUpdateEvent(e) {
@@ -2130,19 +2050,112 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderComponent() {
-          document
-            .querySelector("#tab-menu01")
-            .addEventListener("click", this.counterEvent.bind(this));
-          document
-            .querySelector("#tab-menu02")
-            .addEventListener("click", this.createUpdateEvent.bind(this));
-          document
-            .querySelector("#tab-menu03")
-            .addEventListener("click", this.readDeleteEvent.bind(this));
+          const application = () =&gt; {
+            const app = `
+            &lt;div class="py-3"&gt;
+              &lt;section id="menu"&gt;
+                &lt;div class="container"&gt;
+                  &lt;div id="app__message"&gt;&lt;/div&gt;
+                  &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
+                    &lt;a
+                      aria-controls="panel-menu01"
+                      aria-selected="true"
+                      class="nav-item nav-link active"
+                      data-toggle="tab"
+                      href="#panel-menu01"
+                      id="tab-menu01"
+                      role="tab"
+                      &gt;Counter&lt;/a
+                    &gt;
+                    &lt;a
+                      aria-controls="panel-menu02"
+                      aria-selected="false"
+                      class="nav-item nav-link"
+                      data-toggle="tab"
+                      href="#panel-menu02"
+                      id="tab-menu02"
+                      role="tab"
+                      &gt;Table(Create&amp;Update)&lt;/a
+                    &gt;
+                    &lt;a
+                      aria-controls="panel-menu03"
+                      aria-selected="false"
+                      class="nav-item nav-link"
+                      data-toggle="tab"
+                      href="#panel-menu03"
+                      id="tab-menu03"
+                      role="tab"
+                      &gt;Table(Read&amp;Delete)&lt;/a
+                    &gt;
+                  &lt;/div&gt;
 
-          this._counterComponent.render();
-          this._tableCreateUpdateComponent.render();
-          this._tableReadDeleteComponent.render();
+                  &lt;div class="tab-content" id="panel-menus"&gt;
+                    &lt;div
+                      aria-labelledby="tab-menu01"
+                      class="tab-pane fade show active border border-top-0 jumbotron"
+                      id="panel-menu01"
+                      role="tabpanel"
+                    &gt;
+                      &lt;div
+                        id="app__counter"
+                        class="row d-flex align-items-center"
+                      &gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div
+                      aria-labelledby="tab-menu02"
+                      class="tab-pane fade border border-top-0"
+                      id="panel-menu02"
+                      role="tabpanel"
+                    &gt;
+                      &lt;dvi class="row p-3"&gt;
+                        &lt;div
+                          id="app__table--create-update"
+                          class="col-md-12 order-md-2"
+                        &gt;&lt;/div&gt;
+                      &lt;/dvi&gt;
+                    &lt;/div&gt;
+                    &lt;div
+                      aria-labelledby="tab-menu03"
+                      class="tab-pane fade border border-top-0"
+                      id="panel-menu03"
+                      role="tabpanel"
+                    &gt;
+                      &lt;dvi class="row p-3"&gt;
+                        &lt;div
+                          id="app__table--read-delete"
+                          class="col-md-12 order-md-2"
+                        &gt;&lt;/div&gt;
+                      &lt;/dvi&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/section&gt;
+            &lt;/div&gt;
+            `;
+            document.querySelector("#fizz-buzz-app").innerHTML = app;
+          };
+
+          const event = () =&gt; {
+            document
+              .querySelector("#tab-menu01")
+              .addEventListener("click", this.counterEvent.bind(this));
+            document
+              .querySelector("#tab-menu02")
+              .addEventListener("click", this.createUpdateEvent.bind(this));
+            document
+              .querySelector("#tab-menu03")
+              .addEventListener("click", this.readDeleteEvent.bind(this));
+          };
+
+          const components = () =&gt; {
+            this._counterComponent.render();
+            this._tableCreateUpdateComponent.render();
+            this._tableReadDeleteComponent.render();
+          };
+
+          application();
+          event();
+          components();
         }
 
         render() {
@@ -2181,7 +2194,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 18:32:11 JST
+Last updated 2019-11-13 18:58:57 JST
 </div>
 </div>
 </body>
