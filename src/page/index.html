@@ -1359,7 +1359,7 @@
         }
 
         renderComponent() {
-          const readDelete = () => {
+          const renderMainComponent = () => {
             document.querySelector("#app__table--read-delete").innerHTML = `
             <div id="fizz-buzz-app-table-select-read"></div>
             <div id="fizz-buzz-app-table-read"></div>
@@ -1373,7 +1373,7 @@
             });
           };
 
-          readDelete();
+          renderMainComponent();
         }
 
         render() {
