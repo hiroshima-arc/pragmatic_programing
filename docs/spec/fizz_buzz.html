@@ -2041,8 +2041,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderComponent() {
-          const application = () =&gt; {
-            const event = () =&gt; {
+          const renderMainComponent = () =&gt; {
+            const dispatchEvent = () =&gt; {
               document
                 .querySelector("#tab-menu01")
                 .addEventListener("click", this.counterEvent.bind(this));
@@ -2137,17 +2137,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             `;
 
             document.querySelector("#fizz-buzz-app").innerHTML = app;
-            event();
+            dispatchEvent();
           };
 
-          const components = () =&gt; {
-            application();
+          const render = () =&gt; {
+            renderMainComponent();
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          components();
+          render();
         }
 
         render() {
@@ -2188,7 +2188,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 10:02:17 JST
+Last updated 2019-11-14 10:10:40 JST
 </div>
 </div>
 </body>

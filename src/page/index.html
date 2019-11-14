@@ -1409,8 +1409,8 @@
         }
 
         renderComponent() {
-          const application = () => {
-            const event = () => {
+          const renderMainComponent = () => {
+            const dispatchEvent = () => {
               document
                 .querySelector("#tab-menu01")
                 .addEventListener("click", this.counterEvent.bind(this));
@@ -1505,17 +1505,17 @@
             `;
 
             document.querySelector("#fizz-buzz-app").innerHTML = app;
-            event();
+            dispatchEvent();
           };
 
-          const components = () => {
-            application();
+          const render = () => {
+            renderMainComponent();
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          components();
+          render();
         }
 
         render() {
