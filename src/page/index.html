@@ -1113,7 +1113,7 @@
           );
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._selected = e.target.value;
-          this.render();
+          this.render(this._selector);
         }
 
         saveTableEvent(e) {
@@ -1134,7 +1134,7 @@
             .save(result)
             .then(() => {
               this._message.render(`保存しました`, Message.SUCCESS);
-              this.render();
+              this.render(this._selector);
             })
             .catch(error => {
               this._message.render(error, Message.DANGER);
@@ -1143,16 +1143,18 @@
 
         renderComponent() {
           const renderMainComponent = () => {
-            const id = "fizz-buzz-app-select-type";
-            const saveButtonId = "fizz-buzz-app-table-button-save";
-            const tableId = "fizz-buzz-app-table";
+            const renderSelectId = "fizz-buzz-app-table-select";
+            const renderSelectTypeId = "fizz-buzz-app-select-type";
+            const renderTableId = "fizz-buzz-app-table";
+            const renderButtonTableId = "fizz-buzz-app-table-button";
+            const renderButtonTableSaveId = "fizz-buzz-app-table-button-save";
 
             const dispatchEvent = () => {
               document
-                .querySelector(`#${id}`)
+                .querySelector(`#${renderSelectTypeId}`)
                 .addEventListener("change", this.changeEvent.bind(this));
               document
-                .querySelector(`#${saveButtonId}`)
+                .querySelector(`#${renderButtonTableSaveId}`)
                 .addEventListener("click", this.saveTableEvent.bind(this));
             };
 
@@ -1187,11 +1189,15 @@
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table-select"
-              ).innerHTML = createSelect(id);
+                `#${renderSelectId}`
+              ).innerHTML = createSelect(renderSelectTypeId);
 
-              document.querySelector(`#${id}`).classList.add("browser-default");
-              document.querySelector(`#${id}`).classList.add("custom-select");
+              document
+                .querySelector(`#${renderSelectTypeId}`)
+                .classList.add("browser-default");
+              document
+                .querySelector(`#${renderSelectTypeId}`)
+                .classList.add("custom-select");
             };
 
             const renderTable = aList => {
@@ -1200,14 +1206,14 @@
               };
 
               const editTable = () => {
-                $("#fizz-buzz-app-table > table > tbody > tr > td").on(
+                $(`#${renderTableId} > table > tbody > tr > td`).on(
                   "click",
                   edit_toggle(this._service)
                 );
 
                 function save(value) {
                   document.querySelector(
-                    "#app__message"
+                    `#${Message.selectorId}`
                   ).innerHTML = Message.create(`${value}に編集しました。`);
                 }
 
@@ -1237,7 +1243,7 @@
                             edit_flag = false;
                           } catch (e) {
                             document.querySelector(
-                              "#app__message"
+                              `#${Message.selectorId}`
                             ).innerHTML = Message.create(
                               e.message,
                               Message.DANGER
@@ -1261,32 +1267,38 @@
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table"
+                `#${renderTableId}`
               ).innerHTML = createTable(aList);
               document
-                .querySelector("#fizz-buzz-app-table > table")
+                .querySelector(`#${renderTableId} > table`)
                 .classList.add("table");
               document
-                .querySelector("#fizz-buzz-app-table > table")
+                .querySelector(`#${renderTableId} > table`)
                 .classList.add("table-striped");
               editTable();
             };
 
             const renderButtonSave = () => {
-              const createButton = (id, tableId, label) => {
-                return this._button.create(id, tableId, label);
+              const createButton = (id, renderTableId, label) => {
+                return this._button.create(id, renderTableId, label);
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table-button"
-              ).innerHTML = createButton(saveButtonId, tableId, "保存");
+                `#${renderButtonTableId}`
+              ).innerHTML = createButton(
+                renderButtonTableSaveId,
+                renderTableId,
+                "保存"
+              );
             };
 
             const createMainComponent = (events => {
-              document.querySelector("#app__table--create-update").innerHTML = `
-                <div id="fizz-buzz-app-table-select"></div>
-                <div id="fizz-buzz-app-table"></div>
-                <div id="fizz-buzz-app-table-button"></div>
+              document.querySelector(
+                `#${this._selector.appCreateUpdateId}`
+              ).innerHTML = `
+                <div id="${renderSelectId}"></div>
+                <div id="${renderTableId}"></div>
+                <div id="${renderButtonTableId}"></div>
               `;
 
               renderSelect(this._selected);
@@ -1302,7 +1314,8 @@
           })();
         }
 
-        render() {
+        render(selector) {
+          this._selector = selector;
           this.renderComponent();
         }
       }

@@ -1665,19 +1665,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         incrementEvent() {
           this._counter += 1;
           this._value = this._service.generate(this._counter);
-          this.render();
+          this.render(this._selector);
         }
 
         decrementEvent() {
           this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
-          this.render();
+          this.render(this._selector);
         }
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
-            const incrementId = "fizz-buzz-app-counter-increment";
-            const decrementId = "fizz-buzz-app-counter-decrement";
+            const incrementId = `${this._selector.appCounterId}__increment`;
+            const decrementId = `${this._selector.appCounterId}__decrement`;
 
             const dispatchEvent = () =&gt; {
               document
@@ -1707,10 +1707,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 `;
               };
 
-              document.querySelector("#app__counter").innerHTML = createCounter(
-                incrementId,
-                decrementId
-              );
+              document.querySelector(
+                `#${this._selector.appCounterId}`
+              ).innerHTML = createCounter(incrementId, decrementId);
             };
 
             const createMainComponent = (events =&gt; {
@@ -1725,7 +1724,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           })();
         }
 
-        render() {
+        render(selector) {
+          this._selector = selector;
           this.renderComponent();
         }
       }
@@ -1745,7 +1745,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           );
           this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
           this._selected = e.target.value;
-          this.render();
+          this.render(this._selector);
         }
 
         saveTableEvent(e) {
@@ -1766,7 +1766,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .save(result)
             .then(() =&gt; {
               this._message.render(`保存しました`, Message.SUCCESS);
-              this.render();
+              this.render(this._selector);
             })
             .catch(error =&gt; {
               this._message.render(error, Message.DANGER);
@@ -1775,16 +1775,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
-            const id = "fizz-buzz-app-select-type";
-            const saveButtonId = "fizz-buzz-app-table-button-save";
-            const tableId = "fizz-buzz-app-table";
+            const renderSelectId = "fizz-buzz-app-table-select";
+            const renderSelectTypeId = "fizz-buzz-app-select-type";
+            const renderTableId = "fizz-buzz-app-table";
+            const renderButtonTableId = "fizz-buzz-app-table-button";
+            const renderButtonTableSaveId = "fizz-buzz-app-table-button-save";
 
             const dispatchEvent = () =&gt; {
               document
-                .querySelector(`#${id}`)
+                .querySelector(`#${renderSelectTypeId}`)
                 .addEventListener("change", this.changeEvent.bind(this));
               document
-                .querySelector(`#${saveButtonId}`)
+                .querySelector(`#${renderButtonTableSaveId}`)
                 .addEventListener("click", this.saveTableEvent.bind(this));
             };
 
@@ -1819,11 +1821,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table-select"
-              ).innerHTML = createSelect(id);
+                `#${renderSelectId}`
+              ).innerHTML = createSelect(renderSelectTypeId);
 
-              document.querySelector(`#${id}`).classList.add("browser-default");
-              document.querySelector(`#${id}`).classList.add("custom-select");
+              document
+                .querySelector(`#${renderSelectTypeId}`)
+                .classList.add("browser-default");
+              document
+                .querySelector(`#${renderSelectTypeId}`)
+                .classList.add("custom-select");
             };
 
             const renderTable = aList =&gt; {
@@ -1832,14 +1838,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               };
 
               const editTable = () =&gt; {
-                $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
+                $(`#${renderTableId} &gt; table &gt; tbody &gt; tr &gt; td`).on(
                   "click",
                   edit_toggle(this._service)
                 );
 
                 function save(value) {
                   document.querySelector(
-                    "#app__message"
+                    `#${Message.selectorId}`
                   ).innerHTML = Message.create(`${value}に編集しました。`);
                 }
 
@@ -1893,32 +1899,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table"
+                `#${renderTableId}`
               ).innerHTML = createTable(aList);
               document
-                .querySelector("#fizz-buzz-app-table &gt; table")
+                .querySelector(`#${renderTableId} &gt; table`)
                 .classList.add("table");
               document
-                .querySelector("#fizz-buzz-app-table &gt; table")
+                .querySelector(`#${renderTableId} &gt; table`)
                 .classList.add("table-striped");
               editTable();
             };
 
             const renderButtonSave = () =&gt; {
-              const createButton = (id, tableId, label) =&gt; {
-                return this._button.create(id, tableId, label);
+              const createButton = (id, renderTableId, label) =&gt; {
+                return this._button.create(id, renderTableId, label);
               };
 
               document.querySelector(
-                "#fizz-buzz-app-table-button"
-              ).innerHTML = createButton(saveButtonId, tableId, "保存");
+                `#${renderButtonTableId}`
+              ).innerHTML = createButton(
+                renderButtonTableSaveId,
+                renderTableId,
+                "保存"
+              );
             };
 
             const createMainComponent = (events =&gt; {
-              document.querySelector("#app__table--create-update").innerHTML = `
-                &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
-                &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
-                &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
+              document.querySelector(
+                `#${this._selector.appCreateUpdateId}`
+              ).innerHTML = `
+                &lt;div id="${renderSelectId}"&gt;&lt;/div&gt;
+                &lt;div id="${renderTableId}"&gt;&lt;/div&gt;
+                &lt;div id="${renderButtonTableId}"&gt;&lt;/div&gt;
               `;
 
               renderSelect(this._selected);
@@ -1934,7 +1946,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           })();
         }
 
-        render() {
+        render(selector) {
+          this._selector = selector;
           this.renderComponent();
         }
       }
@@ -2084,17 +2097,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         counterEvent(e) {
-          this._counterComponent.render();
+          this._counterComponent.render(this._selector);
           this._message.clear();
         }
 
         createUpdateEvent(e) {
-          this._tableCreateUpdateComponent.render();
+          this._tableCreateUpdateComponent.render(this._selector);
           this._message.clear();
         }
 
         readDeleteEvent(e) {
-          this._tableReadDeleteComponent.render();
+          this._tableReadDeleteComponent.render(this._selector);
           this._message.clear();
         }
 
@@ -2214,9 +2227,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           };
 
           const renderSubComponent = () =&gt; {
-            this._counterComponent.render();
-            this._tableCreateUpdateComponent.render();
-            this._tableReadDeleteComponent.render();
+            this._counterComponent.render(selector);
+            this._tableCreateUpdateComponent.render(selector);
+            this._tableReadDeleteComponent.render(selector);
+            this._selector = selector;
           };
 
           const render = (() =&gt; {
@@ -2263,7 +2277,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 15:06:40 JST
+Last updated 2019-11-14 16:10:05 JST
 </div>
 </div>
 </body>
