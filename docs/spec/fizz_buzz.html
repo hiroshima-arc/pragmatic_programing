@@ -1511,71 +1511,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      class Counter {
-        constructor(service) {
-          this._counter = 0;
-          this._service = service;
-          this._value = this._service.generate(this.counter);
-        }
-
-        get counter() {
-          return this._counter;
-        }
-
-        increment() {
-          this._counter += 1;
-          this._value = this._service.generate(this._counter);
-          this.renderCounter();
-        }
-
-        decrement() {
-          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-          this._value = this._service.generate(this._counter);
-          this.renderCounter();
-        }
-
-        createCounter(incrementId, decrementId) {
-          return `
-            &lt;div class="col-md-1"&gt;
-              &lt;button class="btn btn-primary" id="${decrementId}"&gt;
-                -
-              &lt;/button&gt;
-            &lt;/div&gt;
-            &lt;div class="col-md-10"&gt;
-              &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
-            &lt;/div&gt;
-            &lt;div class="col-md-1"&gt;
-              &lt;button class="btn btn-primary" id="${incrementId}"&gt;
-                +
-              &lt;/button&gt;
-            &lt;/div&gt;
-          `;
-        }
-
-        renderCounter() {
-          const incrementId = "fizz-buzz-app-counter-increment";
-          const decrementId = "fizz-buzz-app-counter-decrement";
-
-          document.querySelector(
-            "#app__counter"
-          ).innerHTML = this.createCounter(incrementId, decrementId);
-          document
-            .querySelector(`#${incrementId}`)
-            .addEventListener("click", this.increment.bind(this));
-          document
-            .querySelector(`#${decrementId}`)
-            .addEventListener("click", this.decrement.bind(this));
-        }
-
-        renderCounterComponent() {
-          this.renderCounter();
-        }
-
-        render() {
-          this.renderCounterComponent();
-        }
-      }
-
       class Table {
         constructor() {}
 
@@ -1714,6 +1649,71 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             message,
             type
           );
+        }
+      }
+
+      class Counter {
+        constructor(service) {
+          this._counter = 0;
+          this._service = service;
+          this._value = this._service.generate(this.counter);
+        }
+
+        get counter() {
+          return this._counter;
+        }
+
+        increment() {
+          this._counter += 1;
+          this._value = this._service.generate(this._counter);
+          this.renderCounter();
+        }
+
+        decrement() {
+          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._value = this._service.generate(this._counter);
+          this.renderCounter();
+        }
+
+        createCounter(incrementId, decrementId) {
+          return `
+            &lt;div class="col-md-1"&gt;
+              &lt;button class="btn btn-primary" id="${decrementId}"&gt;
+                -
+              &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class="col-md-10"&gt;
+              &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="col-md-1"&gt;
+              &lt;button class="btn btn-primary" id="${incrementId}"&gt;
+                +
+              &lt;/button&gt;
+            &lt;/div&gt;
+          `;
+        }
+
+        renderCounter() {
+          const incrementId = "fizz-buzz-app-counter-increment";
+          const decrementId = "fizz-buzz-app-counter-decrement";
+
+          document.querySelector(
+            "#app__counter"
+          ).innerHTML = this.createCounter(incrementId, decrementId);
+          document
+            .querySelector(`#${incrementId}`)
+            .addEventListener("click", this.increment.bind(this));
+          document
+            .querySelector(`#${decrementId}`)
+            .addEventListener("click", this.decrement.bind(this));
+        }
+
+        renderCounterComponent() {
+          this.renderCounter();
+        }
+
+        render() {
+          this.renderCounterComponent();
         }
       }
 
@@ -2235,7 +2235,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:36:28 JST
+Last updated 2019-11-14 13:40:41 JST
 </div>
 </div>
 </body>
