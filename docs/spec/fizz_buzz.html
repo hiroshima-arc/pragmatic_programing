@@ -1964,7 +1964,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           const record = this._record.filter(
             data =&gt; data.id === e.target.value
           );
-          if (record[0] !== undefined) this.renderTableRead(record[0].list);
+          this._selected = e.target.value;
+          if (record[0] !== undefined) this.render(this._selector);
         }
 
         deleteTableEvent(e) {
@@ -2014,7 +2015,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               const createSelectRead = (id, aList) =&gt; {
                 let options = [];
                 aList.forEach(data =&gt; {
-                  options.push(`&lt;option&gt;${data.id}&lt;/option&gt;`);
+                  if (this._selected === data.id) {
+                    options.push(`&lt;option selected&gt;${data.id}&lt;/option&gt;`);
+                  } else {
+                    options.push(`&lt;option&gt;${data.id}&lt;/option&gt;`);
+                  }
                 });
                 return `
                   &lt;select name="type" id="${id}"&gt;
@@ -2083,7 +2088,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
               this._service.selectAll().then(data =&gt; {
                 renderSelectRead(data);
-                if (data[0] !== undefined) renderTableRead(data[0].list);
+                if (data[0] !== undefined) {
+                  if (this._selected !== undefined) {
+                    renderTableRead(
+                      data.filter(v =&gt; v.id === this._selected)[0].list
+                    );
+                  } else {
+                    renderTableRead(data[0].list);
+                  }
+                }
                 renderButtonDelete();
                 this._record = data;
 
@@ -2296,7 +2309,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 17:43:57 JST
+Last updated 2019-11-14 18:14:32 JST
 </div>
 </div>
 </body>

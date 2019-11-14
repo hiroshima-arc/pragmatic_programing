@@ -1332,7 +1332,8 @@
           const record = this._record.filter(
             data => data.id === e.target.value
           );
-          if (record[0] !== undefined) this.renderTableRead(record[0].list);
+          this._selected = e.target.value;
+          if (record[0] !== undefined) this.render(this._selector);
         }
 
         deleteTableEvent(e) {
@@ -1382,7 +1383,11 @@
               const createSelectRead = (id, aList) => {
                 let options = [];
                 aList.forEach(data => {
-                  options.push(`<option>${data.id}</option>`);
+                  if (this._selected === data.id) {
+                    options.push(`<option selected>${data.id}</option>`);
+                  } else {
+                    options.push(`<option>${data.id}</option>`);
+                  }
                 });
                 return `
                   <select name="type" id="${id}">
@@ -1451,7 +1456,15 @@
 
               this._service.selectAll().then(data => {
                 renderSelectRead(data);
-                if (data[0] !== undefined) renderTableRead(data[0].list);
+                if (data[0] !== undefined) {
+                  if (this._selected !== undefined) {
+                    renderTableRead(
+                      data.filter(v => v.id === this._selected)[0].list
+                    );
+                  } else {
+                    renderTableRead(data[0].list);
+                  }
+                }
                 renderButtonDelete();
                 this._record = data;
 
