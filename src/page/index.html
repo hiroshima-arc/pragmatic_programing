@@ -1024,11 +1024,7 @@
         constructor(service) {
           this._counter = 0;
           this._service = service;
-          this._value = this._service.generate(this.counter);
-        }
-
-        get counter() {
-          return this._counter;
+          this._value = this._service.generate(this._counter);
         }
 
         incrementEvent() {
@@ -1038,7 +1034,7 @@
         }
 
         decrementEvent() {
-          this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
+          this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
           this.render();
         }
