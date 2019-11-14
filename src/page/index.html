@@ -1095,14 +1095,10 @@
         }
 
         changeEvent(e) {
-          let service;
-          let list;
-          service = new FizzBuzzService(
+          this._service = new FizzBuzzService(
             FizzBuzzTypeEnum.valuOf(e.target.value)
           );
-          list = service.generateList(FizzBuzzList.MAX_COUNT);
-          this.renderTable(list);
-          this._service = service;
+          this.renderTable(this._service.generateList(FizzBuzzList.MAX_COUNT));
         }
 
         createSelect(id) {

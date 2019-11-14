@@ -1727,14 +1727,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         changeEvent(e) {
-          let service;
-          let list;
-          service = new FizzBuzzService(
+          this._service = new FizzBuzzService(
             FizzBuzzTypeEnum.valuOf(e.target.value)
           );
-          list = service.generateList(FizzBuzzList.MAX_COUNT);
-          this.renderTable(list);
-          this._service = service;
+          this.renderTable(this._service.generateList(FizzBuzzList.MAX_COUNT));
         }
 
         createSelect(id) {
@@ -2188,7 +2184,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 09:30:56 JST
+Last updated 2019-11-14 09:36:33 JST
 </div>
 </div>
 </body>
