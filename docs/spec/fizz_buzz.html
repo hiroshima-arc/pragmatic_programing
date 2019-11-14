@@ -2042,6 +2042,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const application = () =&gt; {
+            const event = () =&gt; {
+              document
+                .querySelector("#tab-menu01")
+                .addEventListener("click", this.counterEvent.bind(this));
+              document
+                .querySelector("#tab-menu02")
+                .addEventListener("click", this.createUpdateEvent.bind(this));
+              document
+                .querySelector("#tab-menu03")
+                .addEventListener("click", this.readDeleteEvent.bind(this));
+            };
+
             const app = `
             &lt;div class="py-3"&gt;
               &lt;section id="menu"&gt;
@@ -2123,29 +2135,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               &lt;/section&gt;
             &lt;/div&gt;
             `;
-            document.querySelector("#fizz-buzz-app").innerHTML = app;
-          };
 
-          const event = () =&gt; {
-            document
-              .querySelector("#tab-menu01")
-              .addEventListener("click", this.counterEvent.bind(this));
-            document
-              .querySelector("#tab-menu02")
-              .addEventListener("click", this.createUpdateEvent.bind(this));
-            document
-              .querySelector("#tab-menu03")
-              .addEventListener("click", this.readDeleteEvent.bind(this));
+            document.querySelector("#fizz-buzz-app").innerHTML = app;
+            event();
           };
 
           const components = () =&gt; {
+            application();
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          application();
-          event();
           components();
         }
 
@@ -2187,7 +2188,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 09:47:33 JST
+Last updated 2019-11-14 10:02:17 JST
 </div>
 </div>
 </body>

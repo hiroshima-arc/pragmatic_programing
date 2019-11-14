@@ -1410,6 +1410,18 @@
 
         renderComponent() {
           const application = () => {
+            const event = () => {
+              document
+                .querySelector("#tab-menu01")
+                .addEventListener("click", this.counterEvent.bind(this));
+              document
+                .querySelector("#tab-menu02")
+                .addEventListener("click", this.createUpdateEvent.bind(this));
+              document
+                .querySelector("#tab-menu03")
+                .addEventListener("click", this.readDeleteEvent.bind(this));
+            };
+
             const app = `
             <div class="py-3">
               <section id="menu">
@@ -1491,29 +1503,18 @@
               </section>
             </div>
             `;
-            document.querySelector("#fizz-buzz-app").innerHTML = app;
-          };
 
-          const event = () => {
-            document
-              .querySelector("#tab-menu01")
-              .addEventListener("click", this.counterEvent.bind(this));
-            document
-              .querySelector("#tab-menu02")
-              .addEventListener("click", this.createUpdateEvent.bind(this));
-            document
-              .querySelector("#tab-menu03")
-              .addEventListener("click", this.readDeleteEvent.bind(this));
+            document.querySelector("#fizz-buzz-app").innerHTML = app;
+            event();
           };
 
           const components = () => {
+            application();
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          application();
-          event();
           components();
         }
 
