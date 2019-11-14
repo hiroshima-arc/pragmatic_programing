@@ -1849,10 +1849,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
+            const id = "fizz-buzz-app-select-type";
+            const saveButtonId = "fizz-buzz-app-table-button-save";
+            const tableId = "fizz-buzz-app-table";
+
             const createMainComponent = (events =&gt; {
               const renderSelect = () =&gt; {
-                const id = "fizz-buzz-app-select-type";
-
                 document.querySelector(
                   "#fizz-buzz-app-table-select"
                 ).innerHTML = this.createSelect(id);
@@ -1867,14 +1869,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               };
 
               const renderButtonSave = () =&gt; {
-                const id = "fizz-buzz-app-table-button-save";
-                const tableId = "fizz-buzz-app-table";
-
                 document.querySelector(
                   "#fizz-buzz-app-table-button"
-                ).innerHTML = this.createButton(id, tableId, "保存");
+                ).innerHTML = this.createButton(saveButtonId, tableId, "保存");
                 document
-                  .querySelector(`#${id}`)
+                  .querySelector(`#${saveButtonId}`)
                   .addEventListener("click", this.saveTable.bind(this));
               };
 
@@ -2209,7 +2208,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 12:45:22 JST
+Last updated 2019-11-14 12:49:50 JST
 </div>
 </div>
 </body>

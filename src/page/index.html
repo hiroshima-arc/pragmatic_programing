@@ -1217,10 +1217,12 @@
 
         renderComponent() {
           const renderMainComponent = () => {
+            const id = "fizz-buzz-app-select-type";
+            const saveButtonId = "fizz-buzz-app-table-button-save";
+            const tableId = "fizz-buzz-app-table";
+
             const createMainComponent = (events => {
               const renderSelect = () => {
-                const id = "fizz-buzz-app-select-type";
-
                 document.querySelector(
                   "#fizz-buzz-app-table-select"
                 ).innerHTML = this.createSelect(id);
@@ -1235,14 +1237,11 @@
               };
 
               const renderButtonSave = () => {
-                const id = "fizz-buzz-app-table-button-save";
-                const tableId = "fizz-buzz-app-table";
-
                 document.querySelector(
                   "#fizz-buzz-app-table-button"
-                ).innerHTML = this.createButton(id, tableId, "保存");
+                ).innerHTML = this.createButton(saveButtonId, tableId, "保存");
                 document
-                  .querySelector(`#${id}`)
+                  .querySelector(`#${saveButtonId}`)
                   .addEventListener("click", this.saveTable.bind(this));
               };
 
