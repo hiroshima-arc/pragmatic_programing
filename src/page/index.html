@@ -1521,8 +1521,10 @@
         }
       }
 
-      const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-      view.render();
+      document.addEventListener("DOMContentLoaded", e => {
+        const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+        view.render();
+      });
     </script>
     <script>
       mocha.globals(["jQuery"]);

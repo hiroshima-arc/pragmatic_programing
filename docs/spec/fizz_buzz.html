@@ -2153,8 +2153,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
       }
 
-      const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
-      view.render();
+      document.addEventListener("DOMContentLoaded", e =&gt; {
+        const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+        view.render();
+      });
     &lt;/script&gt;
     &lt;script&gt;
       mocha.globals(["jQuery"]);
@@ -2184,7 +2186,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 09:36:33 JST
+Last updated 2019-11-14 09:42:48 JST
 </div>
 </div>
 </body>
