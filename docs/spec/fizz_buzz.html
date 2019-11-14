@@ -1874,18 +1874,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderComponent() {
-          const createUpdate = () =&gt; {
-            document.querySelector("#app__table--create-update").innerHTML = `
-            &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
-            &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
-            &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
-          `;
-            this.renderSelect();
-            this.renderTable(this._list);
-            this.renderButtonSave();
+          const renderMainComponent = () =&gt; {
+            const createMainComponent = (events =&gt; {
+              document.querySelector("#app__table--create-update").innerHTML = `
+                &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
+                &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
+                &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
+              `;
+              this.renderSelect();
+              this.renderTable(this._list);
+              this.renderButtonSave();
+            })();
           };
 
-          createUpdate();
+          const render = (() =&gt; {
+            renderMainComponent();
+          })();
         }
 
         render() {
@@ -2202,7 +2206,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 12:31:25 JST
+Last updated 2019-11-14 12:35:41 JST
 </div>
 </div>
 </body>

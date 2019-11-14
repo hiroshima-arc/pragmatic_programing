@@ -1242,18 +1242,22 @@
         }
 
         renderComponent() {
-          const createUpdate = () => {
-            document.querySelector("#app__table--create-update").innerHTML = `
-            <div id="fizz-buzz-app-table-select"></div>
-            <div id="fizz-buzz-app-table"></div>
-            <div id="fizz-buzz-app-table-button"></div>
-          `;
-            this.renderSelect();
-            this.renderTable(this._list);
-            this.renderButtonSave();
+          const renderMainComponent = () => {
+            const createMainComponent = (events => {
+              document.querySelector("#app__table--create-update").innerHTML = `
+                <div id="fizz-buzz-app-table-select"></div>
+                <div id="fizz-buzz-app-table"></div>
+                <div id="fizz-buzz-app-table-button"></div>
+              `;
+              this.renderSelect();
+              this.renderTable(this._list);
+              this.renderButtonSave();
+            })();
           };
 
-          createUpdate();
+          const render = (() => {
+            renderMainComponent();
+          })();
         }
 
         render() {
