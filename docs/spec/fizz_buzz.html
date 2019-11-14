@@ -1946,62 +1946,63 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
         }
 
-        renderSelectRead(data) {
-          const id = "fizz-buzz-app-select-read";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-select-read"
-          ).innerHTML = this.createSelectRead(id, data);
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("change", this.changeReadEvent.bind(this));
-
-          document.querySelector(`#${id}`).classList.add("browser-default");
-          document.querySelector(`#${id}`).classList.add("custom-select");
-        }
-
-        renderTableRead(aList) {
-          document.querySelector(
-            "#fizz-buzz-app-table-read"
-          ).innerHTML = this.createTable(aList);
-          document
-            .querySelector("#fizz-buzz-app-table-read &gt; table")
-            .classList.add("table");
-          document
-            .querySelector("#fizz-buzz-app-table-read &gt; table")
-            .classList.add("table-striped");
-        }
-
-        renderButtonDelete() {
-          const id_delete = "fizz-buzz-app-table-button-delete-select";
-          const id_delete_all = "fizz-buzz-app-table-button-delete-all";
-          const tableId = "fizz-buzz-app-table-read";
-          let button = this.createButton(id_delete, tableId, "削除");
-          button += this.createButton(id_delete_all, tableId, "全削除");
-
-          document.querySelector(
-            "#fizz-buzz-app-table-button-delete"
-          ).innerHTML = button;
-          document
-            .querySelector(`#${id_delete}`)
-            .addEventListener("click", this.deleteTable.bind(this));
-          document
-            .querySelector(`#${id_delete_all}`)
-            .addEventListener("click", this.deleteAll.bind(this));
-        }
-
         renderComponent() {
           const renderMainComponent = () =&gt; {
+            const renderSelectRead = data =&gt; {
+              const id = "fizz-buzz-app-select-read";
+
+              document.querySelector(
+                "#fizz-buzz-app-table-select-read"
+              ).innerHTML = this.createSelectRead(id, data);
+              document
+                .querySelector(`#${id}`)
+                .addEventListener("change", this.changeReadEvent.bind(this));
+
+              document.querySelector(`#${id}`).classList.add("browser-default");
+              document.querySelector(`#${id}`).classList.add("custom-select");
+            };
+
+            const renderTableRead = aList =&gt; {
+              document.querySelector(
+                "#fizz-buzz-app-table-read"
+              ).innerHTML = this.createTable(aList);
+              document
+                .querySelector("#fizz-buzz-app-table-read &gt; table")
+                .classList.add("table");
+              document
+                .querySelector("#fizz-buzz-app-table-read &gt; table")
+                .classList.add("table-striped");
+            };
+
+            const renderButtonDelete = () =&gt; {
+              const id_delete = "fizz-buzz-app-table-button-delete-select";
+              const id_delete_all = "fizz-buzz-app-table-button-delete-all";
+              const tableId = "fizz-buzz-app-table-read";
+              let button = this.createButton(id_delete, tableId, "削除");
+              button += this.createButton(id_delete_all, tableId, "全削除");
+
+              document.querySelector(
+                "#fizz-buzz-app-table-button-delete"
+              ).innerHTML = button;
+              document
+                .querySelector(`#${id_delete}`)
+                .addEventListener("click", this.deleteTable.bind(this));
+              document
+                .querySelector(`#${id_delete_all}`)
+                .addEventListener("click", this.deleteAll.bind(this));
+            };
+
             const createMainComponent = (event =&gt; {
               document.querySelector("#app__table--read-delete").innerHTML = `
-            &lt;div id="fizz-buzz-app-table-select-read"&gt;&lt;/div&gt;
-            &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
-            &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
+                &lt;div id="fizz-buzz-app-table-select-read"&gt;&lt;/div&gt;
+                &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
+                &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
+
               this._service.selectAll().then(data =&gt; {
-                this.renderSelectRead(data);
-                if (data[0] !== undefined) this.renderTableRead(data[0].list);
-                this.renderButtonDelete();
+                renderSelectRead(data);
+                if (data[0] !== undefined) renderTableRead(data[0].list);
+                renderButtonDelete();
                 this._record = data;
               });
             })();
@@ -2194,7 +2195,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 11:31:12 JST
+Last updated 2019-11-14 11:41:22 JST
 </div>
 </div>
 </body>

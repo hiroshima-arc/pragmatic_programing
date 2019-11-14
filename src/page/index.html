@@ -1314,62 +1314,63 @@
           });
         }
 
-        renderSelectRead(data) {
-          const id = "fizz-buzz-app-select-read";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-select-read"
-          ).innerHTML = this.createSelectRead(id, data);
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("change", this.changeReadEvent.bind(this));
-
-          document.querySelector(`#${id}`).classList.add("browser-default");
-          document.querySelector(`#${id}`).classList.add("custom-select");
-        }
-
-        renderTableRead(aList) {
-          document.querySelector(
-            "#fizz-buzz-app-table-read"
-          ).innerHTML = this.createTable(aList);
-          document
-            .querySelector("#fizz-buzz-app-table-read > table")
-            .classList.add("table");
-          document
-            .querySelector("#fizz-buzz-app-table-read > table")
-            .classList.add("table-striped");
-        }
-
-        renderButtonDelete() {
-          const id_delete = "fizz-buzz-app-table-button-delete-select";
-          const id_delete_all = "fizz-buzz-app-table-button-delete-all";
-          const tableId = "fizz-buzz-app-table-read";
-          let button = this.createButton(id_delete, tableId, "削除");
-          button += this.createButton(id_delete_all, tableId, "全削除");
-
-          document.querySelector(
-            "#fizz-buzz-app-table-button-delete"
-          ).innerHTML = button;
-          document
-            .querySelector(`#${id_delete}`)
-            .addEventListener("click", this.deleteTable.bind(this));
-          document
-            .querySelector(`#${id_delete_all}`)
-            .addEventListener("click", this.deleteAll.bind(this));
-        }
-
         renderComponent() {
           const renderMainComponent = () => {
+            const renderSelectRead = data => {
+              const id = "fizz-buzz-app-select-read";
+
+              document.querySelector(
+                "#fizz-buzz-app-table-select-read"
+              ).innerHTML = this.createSelectRead(id, data);
+              document
+                .querySelector(`#${id}`)
+                .addEventListener("change", this.changeReadEvent.bind(this));
+
+              document.querySelector(`#${id}`).classList.add("browser-default");
+              document.querySelector(`#${id}`).classList.add("custom-select");
+            };
+
+            const renderTableRead = aList => {
+              document.querySelector(
+                "#fizz-buzz-app-table-read"
+              ).innerHTML = this.createTable(aList);
+              document
+                .querySelector("#fizz-buzz-app-table-read > table")
+                .classList.add("table");
+              document
+                .querySelector("#fizz-buzz-app-table-read > table")
+                .classList.add("table-striped");
+            };
+
+            const renderButtonDelete = () => {
+              const id_delete = "fizz-buzz-app-table-button-delete-select";
+              const id_delete_all = "fizz-buzz-app-table-button-delete-all";
+              const tableId = "fizz-buzz-app-table-read";
+              let button = this.createButton(id_delete, tableId, "削除");
+              button += this.createButton(id_delete_all, tableId, "全削除");
+
+              document.querySelector(
+                "#fizz-buzz-app-table-button-delete"
+              ).innerHTML = button;
+              document
+                .querySelector(`#${id_delete}`)
+                .addEventListener("click", this.deleteTable.bind(this));
+              document
+                .querySelector(`#${id_delete_all}`)
+                .addEventListener("click", this.deleteAll.bind(this));
+            };
+
             const createMainComponent = (event => {
               document.querySelector("#app__table--read-delete").innerHTML = `
-            <div id="fizz-buzz-app-table-select-read"></div>
-            <div id="fizz-buzz-app-table-read"></div>
-            <div id="fizz-buzz-app-table-button-delete"></div>
+                <div id="fizz-buzz-app-table-select-read"></div>
+                <div id="fizz-buzz-app-table-read"></div>
+                <div id="fizz-buzz-app-table-button-delete"></div>
           `;
+
               this._service.selectAll().then(data => {
-                this.renderSelectRead(data);
-                if (data[0] !== undefined) this.renderTableRead(data[0].list);
-                this.renderButtonDelete();
+                renderSelectRead(data);
+                if (data[0] !== undefined) renderTableRead(data[0].list);
+                renderButtonDelete();
                 this._record = data;
               });
             })();
