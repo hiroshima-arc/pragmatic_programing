@@ -1336,7 +1336,9 @@
         }
 
         deleteTableEvent(e) {
-          const id = document.querySelector("#fizz-buzz-app-select-read").value;
+          const id = document.querySelector(
+            `#${this._selector.appReadDeleteId}__select__select-read`
+          ).value;
           this._service.delete(id).then(() => {
             this._message.render(`${id}を削除しました。`, Message.SUCCESS);
             this.render(this._selector);
@@ -1355,14 +1357,12 @@
 
         renderComponent() {
           const renderMainComponent = () => {
-            const renderSelectReadId = "fizz-buzz-app-table-select-read";
-            const renderSelectReadSelectId = "fizz-buzz-app-select-read";
-            const renderTableReadId = "fizz-buzz-app-table-read";
-            const renderButtonDeleteId = "fizz-buzz-app-table-button-delete";
-            const renderButtonDeleteSelectId =
-              "fizz-buzz-app-table-button-delete-select";
-            const renderButtonDeleteAllId =
-              "fizz-buzz-app-table-button-delete-all";
+            const renderSelectReadId = `${this._selector.appReadDeleteId}__select`;
+            const renderSelectReadSelectId = `${renderSelectReadId}__select-read`;
+            const renderTableReadId = `${this._selector.appReadDeleteId}__table`;
+            const renderButtonDeleteId = `${this._selector.appReadDeleteId}__button`;
+            const renderButtonDeleteSelectId = `${renderButtonDeleteId}--delete-select`;
+            const renderButtonDeleteAllId = `${renderButtonDeleteId}--delete-all`;
 
             const dispatchEvent = () => {
               document
@@ -1504,7 +1504,7 @@
             msgId: Message.selectorId,
             appCounterId: "fizz-buzz-app-counter",
             appCreateUpdateId: "fizz-buzz-app-create-update",
-            appReadDeleteId: "app__table--read-delete",
+            appReadDeleteId: "fizz-buzz-app-read-delete",
             counterTabId: "tab-menu01",
             createUpdateTabId: "tab-menu02",
             readDeleteTabId: "tab-menu03",

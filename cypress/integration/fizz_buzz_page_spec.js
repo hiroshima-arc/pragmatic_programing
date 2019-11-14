@@ -35,6 +35,7 @@ describe("FizzBuzz Page", () => {
     });
     
     const createUpdateId = "fizz-buzz-app-create-update"
+    const readDeletId = "fizz-buzz-app-read-delete"
     const select = (type) => {
             cy.get(`#${createUpdateId}__select--type`).select(type);
     }
@@ -78,7 +79,7 @@ describe("FizzBuzz Page", () => {
       describe("保存する", () => {
         beforeEach(() => {
           cy.get("#tab-menu03").click();
-          cy.get("#fizz-buzz-app-table-button-delete-select").click();
+          cy.get(`#${readDeletId}__button--delete-select`).click();
           cy.get("#tab-menu02").click();
         });
 
@@ -88,7 +89,7 @@ describe("FizzBuzz Page", () => {
             save();
             cy.get("#tab-menu03").click();
             cy.get(
-              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(1)"
+              `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(1)`
             ).should("contain", "1");
           });
         });
@@ -99,7 +100,7 @@ describe("FizzBuzz Page", () => {
             save();
             cy.get("#tab-menu03").click();
             cy.get(
-              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(3)"
+              `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(3)`
             ).should("contain", "3");
           });
         });
@@ -110,7 +111,7 @@ describe("FizzBuzz Page", () => {
             save();
             cy.get("#tab-menu03").click();
             cy.get(
-              "#fizz-buzz-app-table-read > .table > tbody > :nth-child(2) > :nth-child(5)"
+              `#${readDeletId}__table > .table > tbody > :nth-child(2) > :nth-child(5)`
             ).should("contain", "FizzBuzz");
           });
         });
@@ -127,7 +128,7 @@ describe("FizzBuzz Page", () => {
           save();
 
           cy.get("#tab-menu03").click();
-          cy.get("#fizz-buzz-app-table-button-delete-all").click();
+          cy.get(`#${readDeletId}__button--delete-all`).click();
         });
       });
     });
