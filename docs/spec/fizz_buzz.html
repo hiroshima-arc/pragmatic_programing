@@ -1709,7 +1709,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderComponent() {
-          this.renderCounter();
+          const renderMainComponent = () =&gt; {
+            const dispatchEvent = () =&gt; {};
+            const createMainComponent = (events =&gt; {
+              this.renderCounter();
+
+              events;
+            })(dispatchEvent);
+          };
+          const render = (() =&gt; {
+            renderMainComponent();
+          })();
         }
 
         render() {
@@ -2235,7 +2245,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:41:53 JST
+Last updated 2019-11-14 13:51:35 JST
 </div>
 </div>
 </body>

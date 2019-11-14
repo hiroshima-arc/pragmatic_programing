@@ -1077,7 +1077,17 @@
         }
 
         renderComponent() {
-          this.renderCounter();
+          const renderMainComponent = () => {
+            const dispatchEvent = () => {};
+            const createMainComponent = (events => {
+              this.renderCounter();
+
+              events;
+            })(dispatchEvent);
+          };
+          const render = (() => {
+            renderMainComponent();
+          })();
         }
 
         render() {
