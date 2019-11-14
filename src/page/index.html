@@ -1241,7 +1241,7 @@
             .addEventListener("click", this.saveTable.bind(this));
         }
 
-        renderTableComponent() {
+        renderComponent() {
           const createUpdate = () => {
             document.querySelector("#app__table--create-update").innerHTML = `
             <div id="fizz-buzz-app-table-select"></div>
@@ -1257,7 +1257,7 @@
         }
 
         render() {
-          this.renderTableComponent();
+          this.renderComponent();
         }
       }
 

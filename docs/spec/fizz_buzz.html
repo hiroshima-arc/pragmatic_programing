@@ -1873,7 +1873,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .addEventListener("click", this.saveTable.bind(this));
         }
 
-        renderTableComponent() {
+        renderComponent() {
           const createUpdate = () =&gt; {
             document.querySelector("#app__table--create-update").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
@@ -1889,7 +1889,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         render() {
-          this.renderTableComponent();
+          this.renderComponent();
         }
       }
 
@@ -2202,7 +2202,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 12:20:37 JST
+Last updated 2019-11-14 12:31:25 JST
 </div>
 </div>
 </body>
