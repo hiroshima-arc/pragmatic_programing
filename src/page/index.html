@@ -1033,19 +1033,19 @@
         incrementEvent() {
           this._counter += 1;
           this._value = this._service.generate(this._counter);
-          this.render();
+          this.render(this._selector);
         }
 
         decrementEvent() {
           this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
-          this.render();
+          this.render(this._selector);
         }
 
         renderComponent() {
           const renderMainComponent = () => {
-            const incrementId = "fizz-buzz-app-counter-increment";
-            const decrementId = "fizz-buzz-app-counter-decrement";
+            const incrementId = `${this._selector.appCounterId}__increment`;
+            const decrementId = `${this._selector.appCounterId}__decrement`;
 
             const dispatchEvent = () => {
               document
@@ -1075,10 +1075,9 @@
                 `;
               };
 
-              document.querySelector("#app__counter").innerHTML = createCounter(
-                incrementId,
-                decrementId
-              );
+              document.querySelector(
+                `#${this._selector.appCounterId}`
+              ).innerHTML = createCounter(incrementId, decrementId);
             };
 
             const createMainComponent = (events => {
@@ -1093,7 +1092,8 @@
           })();
         }
 
-        render() {
+        render(selector) {
+          this._selector = selector;
           this.renderComponent();
         }
       }
@@ -1452,17 +1452,17 @@
         }
 
         counterEvent(e) {
-          this._counterComponent.render();
+          this._counterComponent.render(this._selector);
           this._message.clear();
         }
 
         createUpdateEvent(e) {
-          this._tableCreateUpdateComponent.render();
+          this._tableCreateUpdateComponent.render(this._selector);
           this._message.clear();
         }
 
         readDeleteEvent(e) {
-          this._tableReadDeleteComponent.render();
+          this._tableReadDeleteComponent.render(this._selector);
           this._message.clear();
         }
 
@@ -1582,9 +1582,10 @@
           };
 
           const renderSubComponent = () => {
-            this._counterComponent.render();
-            this._tableCreateUpdateComponent.render();
-            this._tableReadDeleteComponent.render();
+            this._counterComponent.render(selector);
+            this._tableCreateUpdateComponent.render(selector);
+            this._tableReadDeleteComponent.render(selector);
+            this._selector = selector;
           };
 
           const render = (() => {

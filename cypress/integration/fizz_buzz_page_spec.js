@@ -5,6 +5,8 @@ describe("FizzBuzz Page", () => {
   });
 
   describe("カウンター画面", () => {
+    const counterAppId = "app__counter"
+
     beforeEach(() => {
       cy.get("#tab-menu01").click();
     });
@@ -14,15 +16,15 @@ describe("FizzBuzz Page", () => {
     });
 
     it("インクリメントすると値が変わる", () => {
-      cy.get("#fizz-buzz-app-counter-increment").click();
-      cy.get("#fizz-buzz-app-counter-increment").click();
-      cy.get("#fizz-buzz-app-counter-increment").click();
+      cy.get(`#${counterAppId}__increment`).click();
+      cy.get(`#${counterAppId}__increment`).click();
+      cy.get(`#${counterAppId}__increment`).click();
       cy.get(".display-1").should("contain", "Fizz");
     });
 
     it("デクリメントすると値が変わる", () => {
-      cy.get("#fizz-buzz-app-counter-decrement").click();
-      cy.get("#fizz-buzz-app-counter-decrement").click();
+      cy.get(`#${counterAppId}__decrement`).click();
+      cy.get(`#${counterAppId}__decrement`).click();
       cy.get(".display-1").should("contain", "1");
     });
   });
