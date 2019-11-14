@@ -1276,26 +1276,6 @@
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
-        createSelectRead(id, aList) {
-          let options = [];
-          aList.forEach(data => {
-            options.push(`<option>${data.id}</option>`);
-          });
-          return `
-            <select name="type" id="${id}">
-              ${options.join(" ")}
-            </select>
-            `;
-        }
-
-        createTable(aList) {
-          return this._table.create(aList);
-        }
-
-        createButton(id, tableId, label) {
-          return this._button.create(id, tableId, label);
-        }
-
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() => {
@@ -1317,11 +1297,23 @@
         renderComponent() {
           const renderMainComponent = () => {
             const renderSelectRead = data => {
+              const createSelectRead = (id, aList) => {
+                let options = [];
+                aList.forEach(data => {
+                  options.push(`<option>${data.id}</option>`);
+                });
+                return `
+                  <select name="type" id="${id}">
+                    ${options.join(" ")}
+                  </select>
+            `;
+              };
+
               const id = "fizz-buzz-app-select-read";
 
               document.querySelector(
                 "#fizz-buzz-app-table-select-read"
-              ).innerHTML = this.createSelectRead(id, data);
+              ).innerHTML = createSelectRead(id, data);
               document
                 .querySelector(`#${id}`)
                 .addEventListener("change", this.changeReadEvent.bind(this));
@@ -1331,9 +1323,13 @@
             };
 
             const renderTableRead = aList => {
+              const createTable = aList => {
+                return this._table.create(aList);
+              };
+
               document.querySelector(
                 "#fizz-buzz-app-table-read"
-              ).innerHTML = this.createTable(aList);
+              ).innerHTML = createTable(aList);
               document
                 .querySelector("#fizz-buzz-app-table-read > table")
                 .classList.add("table");
@@ -1343,11 +1339,15 @@
             };
 
             const renderButtonDelete = () => {
+              const createButton = (id, tableId, label) => {
+                return this._button.create(id, tableId, label);
+              };
+
               const id_delete = "fizz-buzz-app-table-button-delete-select";
               const id_delete_all = "fizz-buzz-app-table-button-delete-all";
               const tableId = "fizz-buzz-app-table-read";
-              let button = this.createButton(id_delete, tableId, "削除");
-              button += this.createButton(id_delete_all, tableId, "全削除");
+              let button = createButton(id_delete, tableId, "削除");
+              button += createButton(id_delete_all, tableId, "全削除");
 
               document.querySelector(
                 "#fizz-buzz-app-table-button-delete"

@@ -1908,26 +1908,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
-        createSelectRead(id, aList) {
-          let options = [];
-          aList.forEach(data =&gt; {
-            options.push(`&lt;option&gt;${data.id}&lt;/option&gt;`);
-          });
-          return `
-            &lt;select name="type" id="${id}"&gt;
-              ${options.join(" ")}
-            &lt;/select&gt;
-            `;
-        }
-
-        createTable(aList) {
-          return this._table.create(aList);
-        }
-
-        createButton(id, tableId, label) {
-          return this._button.create(id, tableId, label);
-        }
-
         deleteTable(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() =&gt; {
@@ -1949,11 +1929,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         renderComponent() {
           const renderMainComponent = () =&gt; {
             const renderSelectRead = data =&gt; {
+              const createSelectRead = (id, aList) =&gt; {
+                let options = [];
+                aList.forEach(data =&gt; {
+                  options.push(`&lt;option&gt;${data.id}&lt;/option&gt;`);
+                });
+                return `
+                  &lt;select name="type" id="${id}"&gt;
+                    ${options.join(" ")}
+                  &lt;/select&gt;
+            `;
+              };
+
               const id = "fizz-buzz-app-select-read";
 
               document.querySelector(
                 "#fizz-buzz-app-table-select-read"
-              ).innerHTML = this.createSelectRead(id, data);
+              ).innerHTML = createSelectRead(id, data);
               document
                 .querySelector(`#${id}`)
                 .addEventListener("change", this.changeReadEvent.bind(this));
@@ -1963,9 +1955,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             };
 
             const renderTableRead = aList =&gt; {
+              const createTable = aList =&gt; {
+                return this._table.create(aList);
+              };
+
               document.querySelector(
                 "#fizz-buzz-app-table-read"
-              ).innerHTML = this.createTable(aList);
+              ).innerHTML = createTable(aList);
               document
                 .querySelector("#fizz-buzz-app-table-read &gt; table")
                 .classList.add("table");
@@ -1975,11 +1971,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             };
 
             const renderButtonDelete = () =&gt; {
+              const createButton = (id, tableId, label) =&gt; {
+                return this._button.create(id, tableId, label);
+              };
+
               const id_delete = "fizz-buzz-app-table-button-delete-select";
               const id_delete_all = "fizz-buzz-app-table-button-delete-all";
               const tableId = "fizz-buzz-app-table-read";
-              let button = this.createButton(id_delete, tableId, "削除");
-              button += this.createButton(id_delete_all, tableId, "全削除");
+              let button = createButton(id_delete, tableId, "削除");
+              button += createButton(id_delete_all, tableId, "全削除");
 
               document.querySelector(
                 "#fizz-buzz-app-table-button-delete"
@@ -2195,7 +2195,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 11:41:22 JST
+Last updated 2019-11-14 11:47:12 JST
 </div>
 </div>
 </body>
