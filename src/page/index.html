@@ -1422,7 +1422,7 @@
                 .addEventListener("click", this.readDeleteEvent.bind(this));
             };
 
-            const createMainComponent = (() => {
+            const createMainComponent = (events => {
               document.querySelector("#fizz-buzz-app").innerHTML = `
                 <div class="py-3">
                   <section id="menu">
@@ -1504,9 +1504,8 @@
                   </section>
                 </div>
             `;
-            })();
-
-            dispatchEvent();
+              events();
+            })(dispatchEvent);
           };
 
           const render = () => {
