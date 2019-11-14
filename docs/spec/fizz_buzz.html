@@ -1908,7 +1908,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
-        deleteTable(e) {
+        deleteTableEvent(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() =&gt; {
             this._message.render(`${id}を削除しました。`, Message.SUCCESS);
@@ -1916,7 +1916,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           });
         }
 
-        deleteAll(e) {
+        deleteAllEvent(e) {
           this._service.deleteAll().then(() =&gt; {
             this._message.render(
               `全てのレコードを削除しました。`,
@@ -1940,11 +1940,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
               document
                 .querySelector(`#${id_delete}`)
-                .addEventListener("click", this.deleteTable.bind(this));
+                .addEventListener("click", this.deleteTableEvent.bind(this));
 
               document
                 .querySelector(`#${id_delete_all}`)
-                .addEventListener("click", this.deleteAll.bind(this));
+                .addEventListener("click", this.deleteAllEvent.bind(this));
             };
 
             const renderSelectRead = data =&gt; {
@@ -2202,7 +2202,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 12:14:31 JST
+Last updated 2019-11-14 12:20:37 JST
 </div>
 </div>
 </body>

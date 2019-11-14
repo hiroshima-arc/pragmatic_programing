@@ -1276,7 +1276,7 @@
           if (record[0] !== undefined) this.renderTableRead(record[0].list);
         }
 
-        deleteTable(e) {
+        deleteTableEvent(e) {
           const id = document.querySelector("#fizz-buzz-app-select-read").value;
           this._service.delete(id).then(() => {
             this._message.render(`${id}を削除しました。`, Message.SUCCESS);
@@ -1284,7 +1284,7 @@
           });
         }
 
-        deleteAll(e) {
+        deleteAllEvent(e) {
           this._service.deleteAll().then(() => {
             this._message.render(
               `全てのレコードを削除しました。`,
@@ -1308,11 +1308,11 @@
 
               document
                 .querySelector(`#${id_delete}`)
-                .addEventListener("click", this.deleteTable.bind(this));
+                .addEventListener("click", this.deleteTableEvent.bind(this));
 
               document
                 .querySelector(`#${id_delete_all}`)
-                .addEventListener("click", this.deleteAll.bind(this));
+                .addEventListener("click", this.deleteAllEvent.bind(this));
             };
 
             const renderSelectRead = data => {
