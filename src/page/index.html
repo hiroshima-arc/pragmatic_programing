@@ -1045,11 +1045,19 @@
 
         renderComponent() {
           const renderMainComponent = () => {
-            const dispatchEvent = () => {};
-            const renderCounter = () => {
-              const incrementId = "fizz-buzz-app-counter-increment";
-              const decrementId = "fizz-buzz-app-counter-decrement";
+            const incrementId = "fizz-buzz-app-counter-increment";
+            const decrementId = "fizz-buzz-app-counter-decrement";
 
+            const dispatchEvent = () => {
+              document
+                .querySelector(`#${incrementId}`)
+                .addEventListener("click", this.increment.bind(this));
+              document
+                .querySelector(`#${decrementId}`)
+                .addEventListener("click", this.decrement.bind(this));
+            };
+
+            const renderCounter = () => {
               const createCounter = (incrementId, decrementId) => {
                 return `
                   <div class="col-md-1">
@@ -1072,18 +1080,12 @@
                 incrementId,
                 decrementId
               );
-              document
-                .querySelector(`#${incrementId}`)
-                .addEventListener("click", this.increment.bind(this));
-              document
-                .querySelector(`#${decrementId}`)
-                .addEventListener("click", this.decrement.bind(this));
             };
 
             const createMainComponent = (events => {
               renderCounter();
 
-              events;
+              events();
             })(dispatchEvent);
           };
           const render = (() => {

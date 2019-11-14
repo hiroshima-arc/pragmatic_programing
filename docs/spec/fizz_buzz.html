@@ -1677,11 +1677,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
-            const dispatchEvent = () =&gt; {};
-            const renderCounter = () =&gt; {
-              const incrementId = "fizz-buzz-app-counter-increment";
-              const decrementId = "fizz-buzz-app-counter-decrement";
+            const incrementId = "fizz-buzz-app-counter-increment";
+            const decrementId = "fizz-buzz-app-counter-decrement";
 
+            const dispatchEvent = () =&gt; {
+              document
+                .querySelector(`#${incrementId}`)
+                .addEventListener("click", this.increment.bind(this));
+              document
+                .querySelector(`#${decrementId}`)
+                .addEventListener("click", this.decrement.bind(this));
+            };
+
+            const renderCounter = () =&gt; {
               const createCounter = (incrementId, decrementId) =&gt; {
                 return `
                   &lt;div class="col-md-1"&gt;
@@ -1704,18 +1712,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 incrementId,
                 decrementId
               );
-              document
-                .querySelector(`#${incrementId}`)
-                .addEventListener("click", this.increment.bind(this));
-              document
-                .querySelector(`#${decrementId}`)
-                .addEventListener("click", this.decrement.bind(this));
             };
 
             const createMainComponent = (events =&gt; {
               renderCounter();
 
-              events;
+              events();
             })(dispatchEvent);
           };
           const render = (() =&gt; {
@@ -2246,7 +2248,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:58:42 JST
+Last updated 2019-11-14 14:03:41 JST
 </div>
 </div>
 </body>
