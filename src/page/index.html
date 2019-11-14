@@ -1202,20 +1202,6 @@
             });
         }
 
-        renderSelect() {
-          const id = "fizz-buzz-app-select-type";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-select"
-          ).innerHTML = this.createSelect(id);
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("change", this.changeEvent.bind(this));
-
-          document.querySelector(`#${id}`).classList.add("browser-default");
-          document.querySelector(`#${id}`).classList.add("custom-select");
-        }
-
         renderTable(aList) {
           document.querySelector(
             "#fizz-buzz-app-table"
@@ -1229,29 +1215,46 @@
           this.editTable();
         }
 
-        renderButtonSave() {
-          const id = "fizz-buzz-app-table-button-save";
-          const tableId = "fizz-buzz-app-table";
-
-          document.querySelector(
-            "#fizz-buzz-app-table-button"
-          ).innerHTML = this.createButton(id, tableId, "保存");
-          document
-            .querySelector(`#${id}`)
-            .addEventListener("click", this.saveTable.bind(this));
-        }
-
         renderComponent() {
           const renderMainComponent = () => {
             const createMainComponent = (events => {
+              const renderSelect = () => {
+                const id = "fizz-buzz-app-select-type";
+
+                document.querySelector(
+                  "#fizz-buzz-app-table-select"
+                ).innerHTML = this.createSelect(id);
+                document
+                  .querySelector(`#${id}`)
+                  .addEventListener("change", this.changeEvent.bind(this));
+
+                document
+                  .querySelector(`#${id}`)
+                  .classList.add("browser-default");
+                document.querySelector(`#${id}`).classList.add("custom-select");
+              };
+
+              const renderButtonSave = () => {
+                const id = "fizz-buzz-app-table-button-save";
+                const tableId = "fizz-buzz-app-table";
+
+                document.querySelector(
+                  "#fizz-buzz-app-table-button"
+                ).innerHTML = this.createButton(id, tableId, "保存");
+                document
+                  .querySelector(`#${id}`)
+                  .addEventListener("click", this.saveTable.bind(this));
+              };
+
               document.querySelector("#app__table--create-update").innerHTML = `
                 <div id="fizz-buzz-app-table-select"></div>
                 <div id="fizz-buzz-app-table"></div>
                 <div id="fizz-buzz-app-table-button"></div>
               `;
-              this.renderSelect();
+
+              renderSelect();
               this.renderTable(this._list);
-              this.renderButtonSave();
+              renderButtonSave();
             })();
           };
 
