@@ -1990,26 +1990,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             .addEventListener("click", this.deleteAll.bind(this));
         }
 
-        renderTableComponent() {
-          const readDelete = () =&gt; {
-            document.querySelector("#app__table--read-delete").innerHTML = `
+        renderComponent() {
+          const renderMainComponent = () =&gt; {
+            const createMainComponent = (event =&gt; {
+              document.querySelector("#app__table--read-delete").innerHTML = `
             &lt;div id="fizz-buzz-app-table-select-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-read"&gt;&lt;/div&gt;
             &lt;div id="fizz-buzz-app-table-button-delete"&gt;&lt;/div&gt;
           `;
-            this._service.selectAll().then(data =&gt; {
-              this.renderSelectRead(data);
-              if (data[0] !== undefined) this.renderTableRead(data[0].list);
-              this.renderButtonDelete();
-              this._record = data;
-            });
+              this._service.selectAll().then(data =&gt; {
+                this.renderSelectRead(data);
+                if (data[0] !== undefined) this.renderTableRead(data[0].list);
+                this.renderButtonDelete();
+                this._record = data;
+              });
+            })();
           };
 
-          readDelete();
+          const render = (() =&gt; {
+            renderMainComponent();
+          })();
         }
 
         render() {
-          this.renderTableComponent();
+          this.renderComponent();
         }
       }
 
@@ -2190,7 +2194,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 10:35:58 JST
+Last updated 2019-11-14 11:31:12 JST
 </div>
 </div>
 </body>

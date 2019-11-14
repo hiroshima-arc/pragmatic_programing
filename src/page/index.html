@@ -1360,20 +1360,24 @@
 
         renderComponent() {
           const renderMainComponent = () => {
-            document.querySelector("#app__table--read-delete").innerHTML = `
+            const createMainComponent = (event => {
+              document.querySelector("#app__table--read-delete").innerHTML = `
             <div id="fizz-buzz-app-table-select-read"></div>
             <div id="fizz-buzz-app-table-read"></div>
             <div id="fizz-buzz-app-table-button-delete"></div>
           `;
-            this._service.selectAll().then(data => {
-              this.renderSelectRead(data);
-              if (data[0] !== undefined) this.renderTableRead(data[0].list);
-              this.renderButtonDelete();
-              this._record = data;
-            });
+              this._service.selectAll().then(data => {
+                this.renderSelectRead(data);
+                if (data[0] !== undefined) this.renderTableRead(data[0].list);
+                this.renderButtonDelete();
+                this._record = data;
+              });
+            })();
           };
 
-          renderMainComponent();
+          const render = (() => {
+            renderMainComponent();
+          })();
         }
 
         render() {
