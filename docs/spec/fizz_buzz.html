@@ -2054,8 +2054,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 .addEventListener("click", this.readDeleteEvent.bind(this));
             };
 
-            document.querySelector("#fizz-buzz-app").innerHTML = (() =&gt; {
-              return `
+            const createMainComponent = (() =&gt; {
+              document.querySelector("#fizz-buzz-app").innerHTML = `
                 &lt;div class="py-3"&gt;
                   &lt;section id="menu"&gt;
                     &lt;div class="container"&gt;
@@ -2189,7 +2189,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 10:19:26 JST
+Last updated 2019-11-14 10:24:42 JST
 </div>
 </div>
 </body>

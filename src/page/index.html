@@ -1422,8 +1422,8 @@
                 .addEventListener("click", this.readDeleteEvent.bind(this));
             };
 
-            document.querySelector("#fizz-buzz-app").innerHTML = (() => {
-              return `
+            const createMainComponent = (() => {
+              document.querySelector("#fizz-buzz-app").innerHTML = `
                 <div class="py-3">
                   <section id="menu">
                     <div class="container">
