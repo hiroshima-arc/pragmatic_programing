@@ -1103,7 +1103,7 @@
           this.render();
         }
 
-        saveTable(e) {
+        saveTableEvent(e) {
           const createListFromTable = table => {
             let list = [];
             for (let i = 1; i <= 10; i++) {
@@ -1140,7 +1140,7 @@
                 .addEventListener("change", this.changeEvent.bind(this));
               document
                 .querySelector(`#${saveButtonId}`)
-                .addEventListener("click", this.saveTable.bind(this));
+                .addEventListener("click", this.saveTableEvent.bind(this));
             };
 
             const createMainComponent = (events => {

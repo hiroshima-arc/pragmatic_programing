@@ -1735,7 +1735,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this.render();
         }
 
-        saveTable(e) {
+        saveTableEvent(e) {
           const createListFromTable = table =&gt; {
             let list = [];
             for (let i = 1; i &lt;= 10; i++) {
@@ -1772,7 +1772,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 .addEventListener("change", this.changeEvent.bind(this));
               document
                 .querySelector(`#${saveButtonId}`)
-                .addEventListener("click", this.saveTable.bind(this));
+                .addEventListener("click", this.saveTableEvent.bind(this));
             };
 
             const createMainComponent = (events =&gt; {
@@ -2237,7 +2237,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:29:18 JST
+Last updated 2019-11-14 13:35:07 JST
 </div>
 </div>
 </body>
