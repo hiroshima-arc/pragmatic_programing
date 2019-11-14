@@ -5,7 +5,7 @@ describe("FizzBuzz Page", () => {
   });
 
   describe("カウンター画面", () => {
-    const counterAppId = "fizz-buzz-app-counter"
+    const counterAppId = "fizz-buzz-app-counter";
 
     beforeEach(() => {
       cy.get("#tab-menu01").click();
@@ -30,106 +30,104 @@ describe("FizzBuzz Page", () => {
   });
 
   describe("一覧編集画面", () => {
+    const createUpdateId = "fizz-buzz-app-create-update";
+    const readDeletId = "fizz-buzz-app-read-delete";
+    const select = type => {
+      cy.get(`#${createUpdateId}__select--type`).select(type);
+    };
+    const save = () => {
+      cy.get(`#${createUpdateId}__table__button--save`).click();
+    };
+
     beforeEach(() => {
       cy.get("#tab-menu02").click();
     });
-    
-    const createUpdateId = "fizz-buzz-app-create-update"
-    const readDeletId = "fizz-buzz-app-read-delete"
-    const select = (type) => {
-            cy.get(`#${createUpdateId}__select--type`).select(type);
-    }
-    const save = (() => {
-            cy.get(`#${createUpdateId}__table__button--save`).click();
-    })
 
-    describe("Create&Update", () => {
-      describe("表示する", () => {
-        describe("タイプ1を選択した場合", () => {
-          it("通常パターンが表示される", () => {
-            select("タイプ1");
-            cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
-              "contain",
-              "Fizz"
-            );
-          });
-        });
-
-        describe("タイプ2を選択した場合", () => {
-          it("数字のみのパターンが表示される", () => {
-            select("タイプ2");
-            cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
-              "contain",
-              "3"
-            );
-          });
-        });
-
-        describe("タイプ3を選択した場合", () => {
-          it("FizzBuzzのみのパターンが表示される", () => {
-            select("タイプ3");
-            cy.get("tbody > :nth-child(2) > :nth-child(5)").should(
-              "contain",
-              "FizzBuzz"
-            );
-          });
+    describe("表示する", () => {
+      describe("タイプ1を選択した場合", () => {
+        it("通常パターンが表示される", () => {
+          select("タイプ1");
+          cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
+            "contain",
+            "Fizz"
+          );
         });
       });
 
-      describe("保存する", () => {
-        beforeEach(() => {
-          cy.get("#tab-menu03").click();
-          cy.get(`#${readDeletId}__button--delete-select`).click();
-          cy.get("#tab-menu02").click();
-        });
-
-        describe("タイプ1を選択した場合", () => {
-          it("通常パターンが保存される", () => {
-            select("タイプ1");
-            save();
-            cy.get("#tab-menu03").click();
-            cy.get(
-              `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(1)`
-            ).should("contain", "1");
-          });
-        });
-
-        describe("タイプ2を選択した場合", () => {
-          it("数字のみのパターンが保存される", () => {
-            select("タイプ2");
-            save();
-            cy.get("#tab-menu03").click();
-            cy.get(
-              `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(3)`
-            ).should("contain", "3");
-          });
-        });
-
-        describe("タイプ3を選択した場合", () => {
-          it("FizzBuzzのみのパターンが保存される", () => {
-            select("タイプ3");
-            save();
-            cy.get("#tab-menu03").click();
-            cy.get(
-              `#${readDeletId}__table > .table > tbody > :nth-child(2) > :nth-child(5)`
-            ).should("contain", "FizzBuzz");
-          });
+      describe("タイプ2を選択した場合", () => {
+        it("数字のみのパターンが表示される", () => {
+          select("タイプ2");
+          cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
+            "contain",
+            "3"
+          );
         });
       });
 
-      describe("削除する", () => {
-        it("保存した全てのレコードが削除される", () => {
-          cy.get("#tab-menu02").click();
+      describe("タイプ3を選択した場合", () => {
+        it("FizzBuzzのみのパターンが表示される", () => {
+          select("タイプ3");
+          cy.get("tbody > :nth-child(2) > :nth-child(5)").should(
+            "contain",
+            "FizzBuzz"
+          );
+        });
+      });
+    });
+
+    describe("保存する", () => {
+      beforeEach(() => {
+        cy.get("#tab-menu03").click();
+        cy.get(`#${readDeletId}__button--delete-select`).click();
+        cy.get("#tab-menu02").click();
+      });
+
+      describe("タイプ1を選択した場合", () => {
+        it("通常パターンが保存される", () => {
           select("タイプ1");
           save();
+          cy.get("#tab-menu03").click();
+          cy.get(
+            `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(1)`
+          ).should("contain", "1");
+        });
+      });
+
+      describe("タイプ2を選択した場合", () => {
+        it("数字のみのパターンが保存される", () => {
           select("タイプ2");
           save();
+          cy.get("#tab-menu03").click();
+          cy.get(
+            `#${readDeletId}__table > .table > tbody > :nth-child(1) > :nth-child(3)`
+          ).should("contain", "3");
+        });
+      });
+
+      describe("タイプ3を選択した場合", () => {
+        it("FizzBuzzのみのパターンが保存される", () => {
           select("タイプ3");
           save();
-
           cy.get("#tab-menu03").click();
-          cy.get(`#${readDeletId}__button--delete-all`).click();
+          cy.get(
+            `#${readDeletId}__table > .table > tbody > :nth-child(2) > :nth-child(5)`
+          ).should("contain", "FizzBuzz");
         });
+      });
+    });
+
+    describe("削除する", () => {
+      it("保存した全てのレコードが削除される", () => {
+        cy.get("#tab-menu02").click();
+        select("タイプ1");
+        save();
+        select("タイプ2");
+        save();
+        select("タイプ3");
+        save();
+
+        cy.get("#tab-menu03").click();
+        cy.get(`#${readDeletId}__button--delete-all`).click();
       });
     });
   });
