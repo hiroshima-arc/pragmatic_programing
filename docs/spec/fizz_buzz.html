@@ -1730,7 +1730,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this._service = new FizzBuzzService(
             FizzBuzzTypeEnum.valuOf(e.target.value)
           );
-          this.renderTable(this._service.generateList(FizzBuzzList.MAX_COUNT));
+          this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+          this._selected = e.target.value;
+          this.render();
         }
 
         saveTable(e) {
@@ -1758,81 +1760,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             });
         }
 
-        renderTable(aList) {
-          const createTable = aList =&gt; {
-            return this._table.create(aList);
-          };
-
-          const editTable = () =&gt; {
-            $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
-              "click",
-              edit_toggle(this._service)
-            );
-
-            function save(value) {
-              document.querySelector(
-                "#app__message"
-              ).innerHTML = Message.create(`${value}に編集しました。`);
-            }
-
-            function edit_toggle(service) {
-              let edit_flag = false;
-              return function() {
-                if (edit_flag) return;
-
-                let $input = $("&lt;input&gt;")
-                  .attr("type", "text")
-                  .val($(this).text());
-
-                $(this).html($input);
-
-                $("input", this)
-                  .focus()
-                  .keypress(function(e) {
-                    if (e.which == 13) {
-                      const number = $(this).val();
-                      try {
-                        const value = service.generate(number);
-                        save(value);
-                        $(this)
-                          .after(value)
-                          .unbind()
-                          .remove();
-                        edit_flag = false;
-                      } catch (e) {
-                        document.querySelector(
-                          "#app__message"
-                        ).innerHTML = Message.create(e.message, Message.DANGER);
-                      }
-                    }
-                  });
-
-                $("input", this)
-                  .focus()
-                  .blur(function(e) {
-                    $(this)
-                      .after($(this).val())
-                      .unbind()
-                      .remove();
-                    edit_flag = false;
-                  });
-                edit_flag = true;
-              };
-            }
-          };
-
-          document.querySelector(
-            "#fizz-buzz-app-table"
-          ).innerHTML = createTable(aList);
-          document
-            .querySelector("#fizz-buzz-app-table &gt; table")
-            .classList.add("table");
-          document
-            .querySelector("#fizz-buzz-app-table &gt; table")
-            .classList.add("table-striped");
-          editTable();
-        }
-
         renderComponent() {
           const renderMainComponent = () =&gt; {
             const id = "fizz-buzz-app-select-type";
@@ -1840,15 +1767,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             const tableId = "fizz-buzz-app-table";
 
             const createMainComponent = (events =&gt; {
-              const renderSelect = () =&gt; {
+              const renderSelect = selected =&gt; {
                 const createSelect = id =&gt; {
-                  return `
-                    &lt;select name="type" id="${id}"&gt;
-                      &lt;option value="one"&gt;タイプ1&lt;/option&gt;
-                      &lt;option value="two"&gt;タイプ2&lt;/option&gt;
-                      &lt;option value="three"&gt;タイプ3&lt;/option&gt;
-                    &lt;/select&gt;
-                    `;
+                  switch (selected) {
+                    case "two":
+                      return `
+                        &lt;select name="type" id="${id}"&gt;
+                          &lt;option value="one"&gt;タイプ1&lt;/option&gt;
+                          &lt;option selected value="two"&gt;タイプ2&lt;/option&gt;
+                          &lt;option value="three"&gt;タイプ3&lt;/option&gt;
+                        &lt;/select&gt;
+                        `;
+                    case "three":
+                      return `
+                        &lt;select name="type" id="${id}"&gt;
+                          &lt;option value="one"&gt;タイプ1&lt;/option&gt;
+                          &lt;option value="two"&gt;タイプ2&lt;/option&gt;
+                          &lt;option selected value="three"&gt;タイプ3&lt;/option&gt;
+                        &lt;/select&gt;
+                        `;
+                    default:
+                      return `
+                        &lt;select name="type" id="${id}"&gt;
+                          &lt;option value="one"&gt;タイプ1&lt;/option&gt;
+                          &lt;option value="two"&gt;タイプ2&lt;/option&gt;
+                          &lt;option value="three"&gt;タイプ3&lt;/option&gt;
+                        &lt;/select&gt;
+                        `;
+                  }
                 };
 
                 document.querySelector(
@@ -1862,6 +1808,84 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   .querySelector(`#${id}`)
                   .classList.add("browser-default");
                 document.querySelector(`#${id}`).classList.add("custom-select");
+              };
+
+              const renderTable = aList =&gt; {
+                const createTable = aList =&gt; {
+                  return this._table.create(aList);
+                };
+
+                const editTable = () =&gt; {
+                  $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
+                    "click",
+                    edit_toggle(this._service)
+                  );
+
+                  function save(value) {
+                    document.querySelector(
+                      "#app__message"
+                    ).innerHTML = Message.create(`${value}に編集しました。`);
+                  }
+
+                  function edit_toggle(service) {
+                    let edit_flag = false;
+                    return function() {
+                      if (edit_flag) return;
+
+                      let $input = $("&lt;input&gt;")
+                        .attr("type", "text")
+                        .val($(this).text());
+
+                      $(this).html($input);
+
+                      $("input", this)
+                        .focus()
+                        .keypress(function(e) {
+                          if (e.which == 13) {
+                            const number = $(this).val();
+                            try {
+                              const value = service.generate(number);
+                              save(value);
+                              $(this)
+                                .after(value)
+                                .unbind()
+                                .remove();
+                              edit_flag = false;
+                            } catch (e) {
+                              document.querySelector(
+                                "#app__message"
+                              ).innerHTML = Message.create(
+                                e.message,
+                                Message.DANGER
+                              );
+                            }
+                          }
+                        });
+
+                      $("input", this)
+                        .focus()
+                        .blur(function(e) {
+                          $(this)
+                            .after($(this).val())
+                            .unbind()
+                            .remove();
+                          edit_flag = false;
+                        });
+                      edit_flag = true;
+                    };
+                  }
+                };
+
+                document.querySelector(
+                  "#fizz-buzz-app-table"
+                ).innerHTML = createTable(aList);
+                document
+                  .querySelector("#fizz-buzz-app-table &gt; table")
+                  .classList.add("table");
+                document
+                  .querySelector("#fizz-buzz-app-table &gt; table")
+                  .classList.add("table-striped");
+                editTable();
               };
 
               const renderButtonSave = () =&gt; {
@@ -1883,8 +1907,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;div id="fizz-buzz-app-table-button"&gt;&lt;/div&gt;
               `;
 
-              renderSelect();
-              this.renderTable(this._list);
+              renderSelect(this._selected);
+              renderTable(this._list);
               renderButtonSave();
             })();
           };
@@ -2208,7 +2232,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:04:50 JST
+Last updated 2019-11-14 13:21:31 JST
 </div>
 </div>
 </body>
