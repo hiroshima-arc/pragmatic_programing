@@ -1775,11 +1775,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
-            const renderSelectId = "fizz-buzz-app-table-select";
-            const renderSelectTypeId = "fizz-buzz-app-select-type";
-            const renderTableId = "fizz-buzz-app-table";
-            const renderButtonTableId = "fizz-buzz-app-table-button";
-            const renderButtonTableSaveId = "fizz-buzz-app-table-button-save";
+            const renderSelectId = `${this._selector.appCreateUpdateId}__select`;
+            const renderSelectTypeId = `${renderSelectId}--type`;
+            const renderTableId = `${this._selector.appCreateUpdateId}__table`;
+            const renderButtonTableId = `${renderTableId}__button`;
+            const renderButtonTableSaveId = `${renderButtonTableId}--save`;
 
             const dispatchEvent = () =&gt; {
               document
@@ -2068,7 +2068,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 "全削除"
               );
               document.querySelector(
-                "#fizz-buzz-app-table-button-delete"
+                `#${renderButtonDeleteId}`
               ).innerHTML = button;
             };
 
@@ -2134,8 +2134,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           const selector = {
             appId: "fizz-buzz-app",
             msgId: Message.selectorId,
-            appCounterId: "app__counter",
-            appCreateUpdateId: "app__table--create-update",
+            appCounterId: "fizz-buzz-app-counter",
+            appCreateUpdateId: "fizz-buzz-app-create-update",
             appReadDeleteId: "app__table--read-delete",
             counterTabId: "tab-menu01",
             createUpdateTabId: "tab-menu02",
@@ -2296,7 +2296,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 16:39:39 JST
+Last updated 2019-11-14 17:08:01 JST
 </div>
 </div>
 </body>

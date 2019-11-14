@@ -5,7 +5,7 @@ describe("FizzBuzz Page", () => {
   });
 
   describe("カウンター画面", () => {
-    const counterAppId = "app__counter"
+    const counterAppId = "fizz-buzz-app-counter"
 
     beforeEach(() => {
       cy.get("#tab-menu01").click();
@@ -33,12 +33,20 @@ describe("FizzBuzz Page", () => {
     beforeEach(() => {
       cy.get("#tab-menu02").click();
     });
+    
+    const createUpdateId = "fizz-buzz-app-create-update"
+    const select = (type) => {
+            cy.get(`#${createUpdateId}__select--type`).select(type);
+    }
+    const save = (() => {
+            cy.get(`#${createUpdateId}__table__button--save`).click();
+    })
 
     describe("Create&Update", () => {
       describe("表示する", () => {
         describe("タイプ1を選択した場合", () => {
           it("通常パターンが表示される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ1");
+            select("タイプ1");
             cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
               "contain",
               "Fizz"
@@ -48,7 +56,7 @@ describe("FizzBuzz Page", () => {
 
         describe("タイプ2を選択した場合", () => {
           it("数字のみのパターンが表示される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ2");
+            select("タイプ2");
             cy.get("tbody > :nth-child(1) > :nth-child(3)").should(
               "contain",
               "3"
@@ -58,7 +66,7 @@ describe("FizzBuzz Page", () => {
 
         describe("タイプ3を選択した場合", () => {
           it("FizzBuzzのみのパターンが表示される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ3");
+            select("タイプ3");
             cy.get("tbody > :nth-child(2) > :nth-child(5)").should(
               "contain",
               "FizzBuzz"
@@ -76,8 +84,8 @@ describe("FizzBuzz Page", () => {
 
         describe("タイプ1を選択した場合", () => {
           it("通常パターンが保存される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ1");
-            cy.get("#fizz-buzz-app-table-button-save").click();
+            select("タイプ1");
+            save();
             cy.get("#tab-menu03").click();
             cy.get(
               "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(1)"
@@ -87,8 +95,8 @@ describe("FizzBuzz Page", () => {
 
         describe("タイプ2を選択した場合", () => {
           it("数字のみのパターンが保存される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ2");
-            cy.get("#fizz-buzz-app-table-button-save").click();
+            select("タイプ2");
+            save();
             cy.get("#tab-menu03").click();
             cy.get(
               "#fizz-buzz-app-table-read > .table > tbody > :nth-child(1) > :nth-child(3)"
@@ -98,8 +106,8 @@ describe("FizzBuzz Page", () => {
 
         describe("タイプ3を選択した場合", () => {
           it("FizzBuzzのみのパターンが保存される", () => {
-            cy.get("#fizz-buzz-app-select-type").select("タイプ3");
-            cy.get("#fizz-buzz-app-table-button-save").click();
+            select("タイプ3");
+            save();
             cy.get("#tab-menu03").click();
             cy.get(
               "#fizz-buzz-app-table-read > .table > tbody > :nth-child(2) > :nth-child(5)"
@@ -111,12 +119,12 @@ describe("FizzBuzz Page", () => {
       describe("削除する", () => {
         it("保存した全てのレコードが削除される", () => {
           cy.get("#tab-menu02").click();
-          cy.get("#fizz-buzz-app-select-type").select("タイプ1");
-          cy.get("#fizz-buzz-app-table-button-save").click();
-          cy.get("#fizz-buzz-app-select-type").select("タイプ2");
-          cy.get("#fizz-buzz-app-table-button-save").click();
-          cy.get("#fizz-buzz-app-select-type").select("タイプ3");
-          cy.get("#fizz-buzz-app-table-button-save").click();
+          select("タイプ1");
+          save();
+          select("タイプ2");
+          save();
+          select("タイプ3");
+          save();
 
           cy.get("#tab-menu03").click();
           cy.get("#fizz-buzz-app-table-button-delete-all").click();

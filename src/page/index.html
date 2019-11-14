@@ -1143,11 +1143,11 @@
 
         renderComponent() {
           const renderMainComponent = () => {
-            const renderSelectId = "fizz-buzz-app-table-select";
-            const renderSelectTypeId = "fizz-buzz-app-select-type";
-            const renderTableId = "fizz-buzz-app-table";
-            const renderButtonTableId = "fizz-buzz-app-table-button";
-            const renderButtonTableSaveId = "fizz-buzz-app-table-button-save";
+            const renderSelectId = `${this._selector.appCreateUpdateId}__select`;
+            const renderSelectTypeId = `${renderSelectId}--type`;
+            const renderTableId = `${this._selector.appCreateUpdateId}__table`;
+            const renderButtonTableId = `${renderTableId}__button`;
+            const renderButtonTableSaveId = `${renderButtonTableId}--save`;
 
             const dispatchEvent = () => {
               document
@@ -1502,8 +1502,8 @@
           const selector = {
             appId: "fizz-buzz-app",
             msgId: Message.selectorId,
-            appCounterId: "app__counter",
-            appCreateUpdateId: "app__table--create-update",
+            appCounterId: "fizz-buzz-app-counter",
+            appCreateUpdateId: "fizz-buzz-app-create-update",
             appReadDeleteId: "app__table--read-delete",
             counterTabId: "tab-menu01",
             createUpdateTabId: "tab-menu02",
