@@ -1031,13 +1031,13 @@
           return this._counter;
         }
 
-        increment() {
+        incrementEvent() {
           this._counter += 1;
           this._value = this._service.generate(this._counter);
           this.render();
         }
 
-        decrement() {
+        decrementEvent() {
           this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
           this.render();
@@ -1051,10 +1051,10 @@
             const dispatchEvent = () => {
               document
                 .querySelector(`#${incrementId}`)
-                .addEventListener("click", this.increment.bind(this));
+                .addEventListener("click", this.incrementEvent.bind(this));
               document
                 .querySelector(`#${decrementId}`)
-                .addEventListener("click", this.decrement.bind(this));
+                .addEventListener("click", this.decrementEvent.bind(this));
             };
 
             const renderCounter = () => {
@@ -1088,6 +1088,7 @@
               events();
             })(dispatchEvent);
           };
+
           const render = (() => {
             renderMainComponent();
           })();
