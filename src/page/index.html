@@ -1508,14 +1508,16 @@
             })(dispatchEvent);
           };
 
-          const render = () => {
-            renderMainComponent();
+          const renderSubComponent = () => {
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          render();
+          const render = (() => {
+            renderMainComponent();
+            renderSubComponent();
+          })();
         }
 
         render() {

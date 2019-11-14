@@ -2140,14 +2140,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             })(dispatchEvent);
           };
 
-          const render = () =&gt; {
-            renderMainComponent();
+          const renderSubComponent = () =&gt; {
             this._counterComponent.render();
             this._tableCreateUpdateComponent.render();
             this._tableReadDeleteComponent.render();
           };
 
-          render();
+          const render = (() =&gt; {
+            renderMainComponent();
+            renderSubComponent();
+          })();
         }
 
         render() {
@@ -2188,7 +2190,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 10:29:43 JST
+Last updated 2019-11-14 10:35:58 JST
 </div>
 </div>
 </body>
