@@ -1422,89 +1422,90 @@
                 .addEventListener("click", this.readDeleteEvent.bind(this));
             };
 
-            const app = `
-            <div class="py-3">
-              <section id="menu">
-                <div class="container">
-                  <div id="app__message"></div>
-                  <div class="nav nav-tabs" id="tab-menus" role="tablist">
-                    <a
-                      aria-controls="panel-menu01"
-                      aria-selected="true"
-                      class="nav-item nav-link active"
-                      data-toggle="tab"
-                      href="#panel-menu01"
-                      id="tab-menu01"
-                      role="tab"
-                      >Counter</a
-                    >
-                    <a
-                      aria-controls="panel-menu02"
-                      aria-selected="false"
-                      class="nav-item nav-link"
-                      data-toggle="tab"
-                      href="#panel-menu02"
-                      id="tab-menu02"
-                      role="tab"
-                      >Table(Create&Update)</a
-                    >
-                    <a
-                      aria-controls="panel-menu03"
-                      aria-selected="false"
-                      class="nav-item nav-link"
-                      data-toggle="tab"
-                      href="#panel-menu03"
-                      id="tab-menu03"
-                      role="tab"
-                      >Table(Read&Delete)</a
-                    >
-                  </div>
+            document.querySelector("#fizz-buzz-app").innerHTML = (() => {
+              return `
+                <div class="py-3">
+                  <section id="menu">
+                    <div class="container">
+                      <div id="app__message"></div>
+                      <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                        <a
+                          aria-controls="panel-menu01"
+                          aria-selected="true"
+                          class="nav-item nav-link active"
+                          data-toggle="tab"
+                          href="#panel-menu01"
+                          id="tab-menu01"
+                          role="tab"
+                          >Counter</a
+                        >
+                        <a
+                          aria-controls="panel-menu02"
+                          aria-selected="false"
+                          class="nav-item nav-link"
+                          data-toggle="tab"
+                          href="#panel-menu02"
+                          id="tab-menu02"
+                          role="tab"
+                          >Table(Create&Update)</a
+                        >
+                        <a
+                          aria-controls="panel-menu03"
+                          aria-selected="false"
+                          class="nav-item nav-link"
+                          data-toggle="tab"
+                          href="#panel-menu03"
+                          id="tab-menu03"
+                          role="tab"
+                          >Table(Read&Delete)</a
+                        >
+                      </div>
 
-                  <div class="tab-content" id="panel-menus">
-                    <div
-                      aria-labelledby="tab-menu01"
-                      class="tab-pane fade show active border border-top-0 jumbotron"
-                      id="panel-menu01"
-                      role="tabpanel"
-                    >
-                      <div
-                        id="app__counter"
-                        class="row d-flex align-items-center"
-                      ></div>
-                    </div>
-                    <div
-                      aria-labelledby="tab-menu02"
-                      class="tab-pane fade border border-top-0"
-                      id="panel-menu02"
-                      role="tabpanel"
-                    >
-                      <dvi class="row p-3">
+                      <div class="tab-content" id="panel-menus">
                         <div
-                          id="app__table--create-update"
-                          class="col-md-12 order-md-2"
-                        ></div>
-                      </dvi>
-                    </div>
-                    <div
-                      aria-labelledby="tab-menu03"
-                      class="tab-pane fade border border-top-0"
-                      id="panel-menu03"
-                      role="tabpanel"
-                    >
-                      <dvi class="row p-3">
+                          aria-labelledby="tab-menu01"
+                          class="tab-pane fade show active border border-top-0 jumbotron"
+                          id="panel-menu01"
+                          role="tabpanel"
+                        >
+                          <div
+                            id="app__counter"
+                            class="row d-flex align-items-center"
+                          ></div>
+                        </div>
                         <div
-                          id="app__table--read-delete"
-                          class="col-md-12 order-md-2"
-                        ></div>
-                      </dvi>
+                          aria-labelledby="tab-menu02"
+                          class="tab-pane fade border border-top-0"
+                          id="panel-menu02"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div
+                              id="app__table--create-update"
+                              class="col-md-12 order-md-2"
+                            ></div>
+                          </dvi>
+                        </div>
+                        <div
+                          aria-labelledby="tab-menu03"
+                          class="tab-pane fade border border-top-0"
+                          id="panel-menu03"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div
+                              id="app__table--read-delete"
+                              class="col-md-12 order-md-2"
+                            ></div>
+                          </dvi>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </section>
                 </div>
-              </section>
-            </div>
             `;
+            })();
 
-            document.querySelector("#fizz-buzz-app").innerHTML = app;
             dispatchEvent();
           };
 
