@@ -1280,6 +1280,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         static get Type03() {
           return new FizzBuzzType03();
         }
+
+        static valuOf(value) {
+          switch (value) {
+            case "one":
+              return FizzBuzzTypeEnum.Type01;
+            case "two":
+              return FizzBuzzTypeEnum.Type02;
+            case "three":
+              return FizzBuzzTypeEnum.Type03;
+            default:
+              throw Error(`${value} is not defined enum type`);
+          }
+        }
       }
 
       class FizzBuzzType {
@@ -1716,31 +1729,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         changeEvent(e) {
           let service;
           let list;
-          switch (e.target.value) {
-            case "one":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            case "two":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type02);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            case "three":
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type03);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-              break;
-            default:
-              service = new FizzBuzzService(FizzBuzzTypeEnum.Type01);
-              list = service.generateList(FizzBuzzList.MAX_COUNT);
-              this.renderTable(list);
-              this._service = service;
-          }
+          service = new FizzBuzzService(
+            FizzBuzzTypeEnum.valuOf(e.target.value)
+          );
+          list = service.generateList(FizzBuzzList.MAX_COUNT);
+          this.renderTable(list);
+          this._service = service;
         }
 
         createSelect(id) {
@@ -2194,7 +2188,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-13 18:58:57 JST
+Last updated 2019-11-14 09:30:56 JST
 </div>
 </div>
 </body>
