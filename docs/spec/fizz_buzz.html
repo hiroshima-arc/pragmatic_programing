@@ -1775,135 +1775,133 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 .addEventListener("click", this.saveTableEvent.bind(this));
             };
 
-            const createMainComponent = (events =&gt; {
-              const renderSelect = selected =&gt; {
-                const createSelect = id =&gt; {
-                  switch (selected) {
-                    case "two":
-                      return `
+            const renderSelect = selected =&gt; {
+              const createSelect = id =&gt; {
+                switch (selected) {
+                  case "two":
+                    return `
                         &lt;select name="type" id="${id}"&gt;
                           &lt;option value="one"&gt;タイプ1&lt;/option&gt;
                           &lt;option selected value="two"&gt;タイプ2&lt;/option&gt;
                           &lt;option value="three"&gt;タイプ3&lt;/option&gt;
                         &lt;/select&gt;
                         `;
-                    case "three":
-                      return `
+                  case "three":
+                    return `
                         &lt;select name="type" id="${id}"&gt;
                           &lt;option value="one"&gt;タイプ1&lt;/option&gt;
                           &lt;option value="two"&gt;タイプ2&lt;/option&gt;
                           &lt;option selected value="three"&gt;タイプ3&lt;/option&gt;
                         &lt;/select&gt;
                         `;
-                    default:
-                      return `
+                  default:
+                    return `
                         &lt;select name="type" id="${id}"&gt;
                           &lt;option value="one"&gt;タイプ1&lt;/option&gt;
                           &lt;option value="two"&gt;タイプ2&lt;/option&gt;
                           &lt;option value="three"&gt;タイプ3&lt;/option&gt;
                         &lt;/select&gt;
                         `;
-                  }
-                };
-
-                document.querySelector(
-                  "#fizz-buzz-app-table-select"
-                ).innerHTML = createSelect(id);
-
-                document
-                  .querySelector(`#${id}`)
-                  .classList.add("browser-default");
-                document.querySelector(`#${id}`).classList.add("custom-select");
+                }
               };
 
-              const renderTable = aList =&gt; {
-                const createTable = aList =&gt; {
-                  return this._table.create(aList);
-                };
+              document.querySelector(
+                "#fizz-buzz-app-table-select"
+              ).innerHTML = createSelect(id);
 
-                const editTable = () =&gt; {
-                  $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
-                    "click",
-                    edit_toggle(this._service)
-                  );
+              document.querySelector(`#${id}`).classList.add("browser-default");
+              document.querySelector(`#${id}`).classList.add("custom-select");
+            };
 
-                  function save(value) {
-                    document.querySelector(
-                      "#app__message"
-                    ).innerHTML = Message.create(`${value}に編集しました。`);
-                  }
+            const renderTable = aList =&gt; {
+              const createTable = aList =&gt; {
+                return this._table.create(aList);
+              };
 
-                  function edit_toggle(service) {
-                    let edit_flag = false;
-                    return function() {
-                      if (edit_flag) return;
+              const editTable = () =&gt; {
+                $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
+                  "click",
+                  edit_toggle(this._service)
+                );
 
-                      let $input = $("&lt;input&gt;")
-                        .attr("type", "text")
-                        .val($(this).text());
+                function save(value) {
+                  document.querySelector(
+                    "#app__message"
+                  ).innerHTML = Message.create(`${value}に編集しました。`);
+                }
 
-                      $(this).html($input);
+                function edit_toggle(service) {
+                  let edit_flag = false;
+                  return function() {
+                    if (edit_flag) return;
 
-                      $("input", this)
-                        .focus()
-                        .keypress(function(e) {
-                          if (e.which == 13) {
-                            const number = $(this).val();
-                            try {
-                              const value = service.generate(number);
-                              save(value);
-                              $(this)
-                                .after(value)
-                                .unbind()
-                                .remove();
-                              edit_flag = false;
-                            } catch (e) {
-                              document.querySelector(
-                                "#app__message"
-                              ).innerHTML = Message.create(
-                                e.message,
-                                Message.DANGER
-                              );
-                            }
+                    let $input = $("&lt;input&gt;")
+                      .attr("type", "text")
+                      .val($(this).text());
+
+                    $(this).html($input);
+
+                    $("input", this)
+                      .focus()
+                      .keypress(function(e) {
+                        if (e.which == 13) {
+                          const number = $(this).val();
+                          try {
+                            const value = service.generate(number);
+                            save(value);
+                            $(this)
+                              .after(value)
+                              .unbind()
+                              .remove();
+                            edit_flag = false;
+                          } catch (e) {
+                            document.querySelector(
+                              "#app__message"
+                            ).innerHTML = Message.create(
+                              e.message,
+                              Message.DANGER
+                            );
                           }
-                        });
+                        }
+                      });
 
-                      $("input", this)
-                        .focus()
-                        .blur(function(e) {
-                          $(this)
-                            .after($(this).val())
-                            .unbind()
-                            .remove();
-                          edit_flag = false;
-                        });
-                      edit_flag = true;
-                    };
-                  }
-                };
-
-                document.querySelector(
-                  "#fizz-buzz-app-table"
-                ).innerHTML = createTable(aList);
-                document
-                  .querySelector("#fizz-buzz-app-table &gt; table")
-                  .classList.add("table");
-                document
-                  .querySelector("#fizz-buzz-app-table &gt; table")
-                  .classList.add("table-striped");
-                editTable();
+                    $("input", this)
+                      .focus()
+                      .blur(function(e) {
+                        $(this)
+                          .after($(this).val())
+                          .unbind()
+                          .remove();
+                        edit_flag = false;
+                      });
+                    edit_flag = true;
+                  };
+                }
               };
 
-              const renderButtonSave = () =&gt; {
-                const createButton = (id, tableId, label) =&gt; {
-                  return this._button.create(id, tableId, label);
-                };
+              document.querySelector(
+                "#fizz-buzz-app-table"
+              ).innerHTML = createTable(aList);
+              document
+                .querySelector("#fizz-buzz-app-table &gt; table")
+                .classList.add("table");
+              document
+                .querySelector("#fizz-buzz-app-table &gt; table")
+                .classList.add("table-striped");
+              editTable();
+            };
 
-                document.querySelector(
-                  "#fizz-buzz-app-table-button"
-                ).innerHTML = createButton(saveButtonId, tableId, "保存");
+            const renderButtonSave = () =&gt; {
+              const createButton = (id, tableId, label) =&gt; {
+                return this._button.create(id, tableId, label);
               };
 
+              document.querySelector(
+                "#fizz-buzz-app-table-button"
+              ).innerHTML = createButton(saveButtonId, tableId, "保存");
+            };
+
+            const createMainComponent = (events =&gt; {
               document.querySelector("#app__table--create-update").innerHTML = `
                 &lt;div id="fizz-buzz-app-table-select"&gt;&lt;/div&gt;
                 &lt;div id="fizz-buzz-app-table"&gt;&lt;/div&gt;
@@ -2237,7 +2235,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:35:07 JST
+Last updated 2019-11-14 13:36:28 JST
 </div>
 </div>
 </body>
