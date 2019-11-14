@@ -1034,13 +1034,13 @@
         increment() {
           this._counter += 1;
           this._value = this._service.generate(this._counter);
-          this.renderCounter();
+          this.render();
         }
 
         decrement() {
           this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
-          this.renderCounter();
+          this.render();
         }
 
         createCounter(incrementId, decrementId) {
@@ -1061,26 +1061,26 @@
           `;
         }
 
-        renderCounter() {
-          const incrementId = "fizz-buzz-app-counter-increment";
-          const decrementId = "fizz-buzz-app-counter-decrement";
-
-          document.querySelector(
-            "#app__counter"
-          ).innerHTML = this.createCounter(incrementId, decrementId);
-          document
-            .querySelector(`#${incrementId}`)
-            .addEventListener("click", this.increment.bind(this));
-          document
-            .querySelector(`#${decrementId}`)
-            .addEventListener("click", this.decrement.bind(this));
-        }
-
         renderComponent() {
           const renderMainComponent = () => {
             const dispatchEvent = () => {};
+            const renderCounter = () => {
+              const incrementId = "fizz-buzz-app-counter-increment";
+              const decrementId = "fizz-buzz-app-counter-decrement";
+
+              document.querySelector(
+                "#app__counter"
+              ).innerHTML = this.createCounter(incrementId, decrementId);
+              document
+                .querySelector(`#${incrementId}`)
+                .addEventListener("click", this.increment.bind(this));
+              document
+                .querySelector(`#${decrementId}`)
+                .addEventListener("click", this.decrement.bind(this));
+            };
+
             const createMainComponent = (events => {
-              this.renderCounter();
+              renderCounter();
 
               events;
             })(dispatchEvent);

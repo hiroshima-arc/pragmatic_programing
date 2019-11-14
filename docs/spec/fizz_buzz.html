@@ -1666,13 +1666,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         increment() {
           this._counter += 1;
           this._value = this._service.generate(this._counter);
-          this.renderCounter();
+          this.render();
         }
 
         decrement() {
           this.counter === 0 ? (this._counter = 0) : (this._counter -= 1);
           this._value = this._service.generate(this._counter);
-          this.renderCounter();
+          this.render();
         }
 
         createCounter(incrementId, decrementId) {
@@ -1693,26 +1693,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           `;
         }
 
-        renderCounter() {
-          const incrementId = "fizz-buzz-app-counter-increment";
-          const decrementId = "fizz-buzz-app-counter-decrement";
-
-          document.querySelector(
-            "#app__counter"
-          ).innerHTML = this.createCounter(incrementId, decrementId);
-          document
-            .querySelector(`#${incrementId}`)
-            .addEventListener("click", this.increment.bind(this));
-          document
-            .querySelector(`#${decrementId}`)
-            .addEventListener("click", this.decrement.bind(this));
-        }
-
         renderComponent() {
           const renderMainComponent = () =&gt; {
             const dispatchEvent = () =&gt; {};
+            const renderCounter = () =&gt; {
+              const incrementId = "fizz-buzz-app-counter-increment";
+              const decrementId = "fizz-buzz-app-counter-decrement";
+
+              document.querySelector(
+                "#app__counter"
+              ).innerHTML = this.createCounter(incrementId, decrementId);
+              document
+                .querySelector(`#${incrementId}`)
+                .addEventListener("click", this.increment.bind(this));
+              document
+                .querySelector(`#${decrementId}`)
+                .addEventListener("click", this.decrement.bind(this));
+            };
+
             const createMainComponent = (events =&gt; {
-              this.renderCounter();
+              renderCounter();
 
               events;
             })(dispatchEvent);
@@ -2245,7 +2245,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:51:35 JST
+Last updated 2019-11-14 13:55:31 JST
 </div>
 </div>
 </body>
