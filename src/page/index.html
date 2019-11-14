@@ -1358,7 +1358,7 @@
             .addEventListener("click", this.deleteAll.bind(this));
         }
 
-        renderTableComponent() {
+        renderComponent() {
           const readDelete = () => {
             document.querySelector("#app__table--read-delete").innerHTML = `
             <div id="fizz-buzz-app-table-select-read"></div>
@@ -1377,7 +1377,7 @@
         }
 
         render() {
-          this.renderTableComponent();
+          this.renderComponent();
         }
       }
 
