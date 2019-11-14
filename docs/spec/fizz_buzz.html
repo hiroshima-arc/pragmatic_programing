@@ -2015,8 +2015,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
       class FizzBuzzView {
         constructor(type) {
+          this._type = type || FizzBuzzTypeEnum.Type01;
           this._message = new Message();
-          this._service = new FizzBuzzService(type);
+          this._service = new FizzBuzzService(this._type);
           this._counterComponent = new Counter(this._service);
           this._tableCreateUpdateComponent = new TableCreateUpdate(
             this._service
@@ -2154,7 +2155,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       }
 
       document.addEventListener("DOMContentLoaded", e =&gt; {
-        const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+        const view = new FizzBuzzView();
         view.render();
       });
     &lt;/script&gt;
@@ -2186,7 +2187,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 09:42:48 JST
+Last updated 2019-11-14 09:47:33 JST
 </div>
 </div>
 </body>

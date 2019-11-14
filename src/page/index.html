@@ -1383,8 +1383,9 @@
 
       class FizzBuzzView {
         constructor(type) {
+          this._type = type || FizzBuzzTypeEnum.Type01;
           this._message = new Message();
-          this._service = new FizzBuzzService(type);
+          this._service = new FizzBuzzService(this._type);
           this._counterComponent = new Counter(this._service);
           this._tableCreateUpdateComponent = new TableCreateUpdate(
             this._service
@@ -1522,7 +1523,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", e => {
-        const view = new FizzBuzzView(FizzBuzzTypeEnum.Type01);
+        const view = new FizzBuzzView();
         view.render();
       });
     </script>
