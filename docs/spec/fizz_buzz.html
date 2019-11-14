@@ -1766,6 +1766,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             const saveButtonId = "fizz-buzz-app-table-button-save";
             const tableId = "fizz-buzz-app-table";
 
+            const dispatchEvent = () =&gt; {
+              document
+                .querySelector(`#${id}`)
+                .addEventListener("change", this.changeEvent.bind(this));
+              document
+                .querySelector(`#${saveButtonId}`)
+                .addEventListener("click", this.saveTable.bind(this));
+            };
+
             const createMainComponent = (events =&gt; {
               const renderSelect = selected =&gt; {
                 const createSelect = id =&gt; {
@@ -1800,9 +1809,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 document.querySelector(
                   "#fizz-buzz-app-table-select"
                 ).innerHTML = createSelect(id);
-                document
-                  .querySelector(`#${id}`)
-                  .addEventListener("change", this.changeEvent.bind(this));
 
                 document
                   .querySelector(`#${id}`)
@@ -1896,9 +1902,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 document.querySelector(
                   "#fizz-buzz-app-table-button"
                 ).innerHTML = createButton(saveButtonId, tableId, "保存");
-                document
-                  .querySelector(`#${saveButtonId}`)
-                  .addEventListener("click", this.saveTable.bind(this));
               };
 
               document.querySelector("#app__table--create-update").innerHTML = `
@@ -1910,7 +1913,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               renderSelect(this._selected);
               renderTable(this._list);
               renderButtonSave();
-            })();
+
+              events();
+            })(dispatchEvent);
           };
 
           const render = (() =&gt; {
@@ -2232,7 +2237,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:21:31 JST
+Last updated 2019-11-14 13:29:18 JST
 </div>
 </div>
 </body>

@@ -1134,6 +1134,15 @@
             const saveButtonId = "fizz-buzz-app-table-button-save";
             const tableId = "fizz-buzz-app-table";
 
+            const dispatchEvent = () => {
+              document
+                .querySelector(`#${id}`)
+                .addEventListener("change", this.changeEvent.bind(this));
+              document
+                .querySelector(`#${saveButtonId}`)
+                .addEventListener("click", this.saveTable.bind(this));
+            };
+
             const createMainComponent = (events => {
               const renderSelect = selected => {
                 const createSelect = id => {
@@ -1168,9 +1177,6 @@
                 document.querySelector(
                   "#fizz-buzz-app-table-select"
                 ).innerHTML = createSelect(id);
-                document
-                  .querySelector(`#${id}`)
-                  .addEventListener("change", this.changeEvent.bind(this));
 
                 document
                   .querySelector(`#${id}`)
@@ -1264,9 +1270,6 @@
                 document.querySelector(
                   "#fizz-buzz-app-table-button"
                 ).innerHTML = createButton(saveButtonId, tableId, "保存");
-                document
-                  .querySelector(`#${saveButtonId}`)
-                  .addEventListener("click", this.saveTable.bind(this));
               };
 
               document.querySelector("#app__table--create-update").innerHTML = `
@@ -1278,7 +1281,9 @@
               renderSelect(this._selected);
               renderTable(this._list);
               renderButtonSave();
-            })();
+
+              events();
+            })(dispatchEvent);
           };
 
           const render = (() => {
