@@ -1599,6 +1599,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           return 3;
         }
 
+        static get selectorId() {
+          return "app__message";
+        }
+
         static create(message, type) {
           switch (type) {
             case 1:
@@ -1641,14 +1645,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         clear() {
-          document.querySelector("#app__message").innerHTML = "";
+          document.querySelector(`#${Message.selectorId}`).innerHTML = "";
         }
 
         render(message, type) {
-          document.querySelector("#app__message").innerHTML = Message.create(
-            message,
-            type
-          );
+          document.querySelector(
+            `#${Message.selectorId}`
+          ).innerHTML = Message.create(message, type);
         }
       }
 
@@ -2097,52 +2100,64 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         renderComponent() {
           const renderMainComponent = () =&gt; {
+            const appSelectorId = "fizz-buzz-app";
+            const msgSelectorId = Message.selectorId;
+            const appCounterSelectorId = "app__counter";
+            const appCreateUpdateSelectorId = "app__table--create-update";
+            const appReadDeleteSelectorId = "app__table--read-delete";
+            const counterTabSelectorId = "tab-menu01";
+            const createUpdateTabSelectorId = "tab-menu02";
+            const readDeleteTabSelectorId = "tab-menu03";
+            const counterPanelSelectorId = "panel-menu01";
+            const createUpdatePanelSelectorId = "panel-menu02";
+            const readDeletePanelSelectorId = "panel-menu03";
+
             const dispatchEvent = () =&gt; {
               document
-                .querySelector("#tab-menu01")
+                .querySelector(`#${counterTabSelectorId}`)
                 .addEventListener("click", this.counterEvent.bind(this));
               document
-                .querySelector("#tab-menu02")
+                .querySelector(`#${createUpdateTabSelectorId}`)
                 .addEventListener("click", this.createUpdateEvent.bind(this));
               document
-                .querySelector("#tab-menu03")
+                .querySelector(`#${readDeleteTabSelectorId}`)
                 .addEventListener("click", this.readDeleteEvent.bind(this));
             };
 
             const createMainComponent = (events =&gt; {
-              document.querySelector("#fizz-buzz-app").innerHTML = `
+              document.querySelector(`#${appSelectorId}`).innerHTML = `
                 &lt;div class="py-3"&gt;
                   &lt;section id="menu"&gt;
                     &lt;div class="container"&gt;
-                      &lt;div id="app__message"&gt;&lt;/div&gt;
+                      &lt;div id="${msgSelectorId}"&gt;&lt;/div&gt;
                       &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
                         &lt;a
-                          aria-controls="panel-menu01"
+                          aria-controls="${counterPanelSelectorId}"
                           aria-selected="true"
                           class="nav-item nav-link active"
                           data-toggle="tab"
-                          href="#panel-menu01"
-                          id="tab-menu01"
+                          href="#${counterPanelSelectorId}"
+                          id="${counterTabSelectorId}"
                           role="tab"
                           &gt;Counter&lt;/a
                         &gt;
                         &lt;a
-                          aria-controls="panel-menu02"
+                          aria-controls="${createUpdatePanelSelectorId}"
                           aria-selected="false"
                           class="nav-item nav-link"
                           data-toggle="tab"
-                          href="#panel-menu02"
-                          id="tab-menu02"
+                          href="#${createUpdatePanelSelectorId}"
+                          id="${createUpdateTabSelectorId}"
                           role="tab"
                           &gt;Table(Create&amp;Update)&lt;/a
                         &gt;
                         &lt;a
-                          aria-controls="panel-menu03"
+                          aria-controls="${readDeletePanelSelectorId}"
                           aria-selected="false"
                           class="nav-item nav-link"
                           data-toggle="tab"
-                          href="#panel-menu03"
-                          id="tab-menu03"
+                          href="#${readDeletePanelSelectorId}"
+                          id="${readDeleteTabSelectorId}"
                           role="tab"
                           &gt;Table(Read&amp;Delete)&lt;/a
                         &gt;
@@ -2150,38 +2165,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                       &lt;div class="tab-content" id="panel-menus"&gt;
                         &lt;div
-                          aria-labelledby="tab-menu01"
+                          aria-labelledby="${counterTabSelectorId}"
                           class="tab-pane fade show active border border-top-0 jumbotron"
-                          id="panel-menu01"
+                          id="${counterPanelSelectorId}"
                           role="tabpanel"
                         &gt;
                           &lt;div
-                            id="app__counter"
+                            id="${appCounterSelectorId}"
                             class="row d-flex align-items-center"
                           &gt;&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;div
-                          aria-labelledby="tab-menu02"
+                          aria-labelledby="${createUpdateTabSelectorId}"
                           class="tab-pane fade border border-top-0"
-                          id="panel-menu02"
+                          id="${createUpdatePanelSelectorId}"
                           role="tabpanel"
                         &gt;
                           &lt;dvi class="row p-3"&gt;
                             &lt;div
-                              id="app__table--create-update"
+                              id="${appCreateUpdateSelectorId}"
                               class="col-md-12 order-md-2"
                             &gt;&lt;/div&gt;
                           &lt;/dvi&gt;
                         &lt;/div&gt;
                         &lt;div
-                          aria-labelledby="tab-menu03"
+                          aria-labelledby="${readDeleteTabSelectorId}"
                           class="tab-pane fade border border-top-0"
-                          id="panel-menu03"
+                          id="${readDeletePanelSelectorId}"
                           role="tabpanel"
                         &gt;
                           &lt;dvi class="row p-3"&gt;
                             &lt;div
-                              id="app__table--read-delete"
+                              id="${appReadDeleteSelectorId}"
                               class="col-md-12 order-md-2"
                             &gt;&lt;/div&gt;
                           &lt;/dvi&gt;
@@ -2191,6 +2206,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                   &lt;/section&gt;
                 &lt;/div&gt;
             `;
+
               events();
             })(dispatchEvent);
           };
@@ -2245,7 +2261,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 14:08:56 JST
+Last updated 2019-11-14 14:52:40 JST
 </div>
 </div>
 </body>
