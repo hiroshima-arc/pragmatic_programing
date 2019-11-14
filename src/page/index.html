@@ -1043,24 +1043,6 @@
           this.render();
         }
 
-        createCounter(incrementId, decrementId) {
-          return `
-            <div class="col-md-1">
-              <button class="btn btn-primary" id="${decrementId}">
-                -
-              </button>
-            </div>
-            <div class="col-md-10">
-              <h1 class="display-1 text-center">${this._value}</h1>
-            </div>
-            <div class="col-md-1">
-              <button class="btn btn-primary" id="${incrementId}">
-                +
-              </button>
-            </div>
-          `;
-        }
-
         renderComponent() {
           const renderMainComponent = () => {
             const dispatchEvent = () => {};
@@ -1068,9 +1050,28 @@
               const incrementId = "fizz-buzz-app-counter-increment";
               const decrementId = "fizz-buzz-app-counter-decrement";
 
-              document.querySelector(
-                "#app__counter"
-              ).innerHTML = this.createCounter(incrementId, decrementId);
+              const createCounter = (incrementId, decrementId) => {
+                return `
+                  <div class="col-md-1">
+                    <button class="btn btn-primary" id="${decrementId}">
+                      -
+                    </button>
+                  </div>
+                  <div class="col-md-10">
+                    <h1 class="display-1 text-center">${this._value}</h1>
+                  </div>
+                  <div class="col-md-1">
+                    <button class="btn btn-primary" id="${incrementId}">
+                      +
+                    </button>
+                  </div>
+                `;
+              };
+
+              document.querySelector("#app__counter").innerHTML = createCounter(
+                incrementId,
+                decrementId
+              );
               document
                 .querySelector(`#${incrementId}`)
                 .addEventListener("click", this.increment.bind(this));

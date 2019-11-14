@@ -1675,24 +1675,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this.render();
         }
 
-        createCounter(incrementId, decrementId) {
-          return `
-            &lt;div class="col-md-1"&gt;
-              &lt;button class="btn btn-primary" id="${decrementId}"&gt;
-                -
-              &lt;/button&gt;
-            &lt;/div&gt;
-            &lt;div class="col-md-10"&gt;
-              &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
-            &lt;/div&gt;
-            &lt;div class="col-md-1"&gt;
-              &lt;button class="btn btn-primary" id="${incrementId}"&gt;
-                +
-              &lt;/button&gt;
-            &lt;/div&gt;
-          `;
-        }
-
         renderComponent() {
           const renderMainComponent = () =&gt; {
             const dispatchEvent = () =&gt; {};
@@ -1700,9 +1682,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
               const incrementId = "fizz-buzz-app-counter-increment";
               const decrementId = "fizz-buzz-app-counter-decrement";
 
-              document.querySelector(
-                "#app__counter"
-              ).innerHTML = this.createCounter(incrementId, decrementId);
+              const createCounter = (incrementId, decrementId) =&gt; {
+                return `
+                  &lt;div class="col-md-1"&gt;
+                    &lt;button class="btn btn-primary" id="${decrementId}"&gt;
+                      -
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                  &lt;div class="col-md-10"&gt;
+                    &lt;h1 class="display-1 text-center"&gt;${this._value}&lt;/h1&gt;
+                  &lt;/div&gt;
+                  &lt;div class="col-md-1"&gt;
+                    &lt;button class="btn btn-primary" id="${incrementId}"&gt;
+                      +
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                `;
+              };
+
+              document.querySelector("#app__counter").innerHTML = createCounter(
+                incrementId,
+                decrementId
+              );
               document
                 .querySelector(`#${incrementId}`)
                 .addEventListener("click", this.increment.bind(this));
@@ -2245,7 +2246,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 13:55:31 JST
+Last updated 2019-11-14 13:58:42 JST
 </div>
 </div>
 </body>
