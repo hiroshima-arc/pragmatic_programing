@@ -1101,68 +1101,6 @@
           this.renderTable(this._service.generateList(FizzBuzzList.MAX_COUNT));
         }
 
-        createTable(aList) {
-          return this._table.create(aList);
-        }
-
-        editTable() {
-          $("#fizz-buzz-app-table > table > tbody > tr > td").on(
-            "click",
-            edit_toggle(this._service)
-          );
-
-          function save(value) {
-            document.querySelector("#app__message").innerHTML = Message.create(
-              `${value}に編集しました。`
-            );
-          }
-
-          function edit_toggle(service) {
-            let edit_flag = false;
-            return function() {
-              if (edit_flag) return;
-
-              let $input = $("<input>")
-                .attr("type", "text")
-                .val($(this).text());
-
-              $(this).html($input);
-
-              $("input", this)
-                .focus()
-                .keypress(function(e) {
-                  if (e.which == 13) {
-                    const number = $(this).val();
-                    try {
-                      const value = service.generate(number);
-                      save(value);
-                      $(this)
-                        .after(value)
-                        .unbind()
-                        .remove();
-                      edit_flag = false;
-                    } catch (e) {
-                      document.querySelector(
-                        "#app__message"
-                      ).innerHTML = Message.create(e.message, Message.DANGER);
-                    }
-                  }
-                });
-
-              $("input", this)
-                .focus()
-                .blur(function(e) {
-                  $(this)
-                    .after($(this).val())
-                    .unbind()
-                    .remove();
-                  edit_flag = false;
-                });
-              edit_flag = true;
-            };
-          }
-        }
-
         saveTable(e) {
           const createListFromTable = table => {
             let list = [];
@@ -1189,16 +1127,78 @@
         }
 
         renderTable(aList) {
+          const createTable = aList => {
+            return this._table.create(aList);
+          };
+
+          const editTable = () => {
+            $("#fizz-buzz-app-table > table > tbody > tr > td").on(
+              "click",
+              edit_toggle(this._service)
+            );
+
+            function save(value) {
+              document.querySelector(
+                "#app__message"
+              ).innerHTML = Message.create(`${value}に編集しました。`);
+            }
+
+            function edit_toggle(service) {
+              let edit_flag = false;
+              return function() {
+                if (edit_flag) return;
+
+                let $input = $("<input>")
+                  .attr("type", "text")
+                  .val($(this).text());
+
+                $(this).html($input);
+
+                $("input", this)
+                  .focus()
+                  .keypress(function(e) {
+                    if (e.which == 13) {
+                      const number = $(this).val();
+                      try {
+                        const value = service.generate(number);
+                        save(value);
+                        $(this)
+                          .after(value)
+                          .unbind()
+                          .remove();
+                        edit_flag = false;
+                      } catch (e) {
+                        document.querySelector(
+                          "#app__message"
+                        ).innerHTML = Message.create(e.message, Message.DANGER);
+                      }
+                    }
+                  });
+
+                $("input", this)
+                  .focus()
+                  .blur(function(e) {
+                    $(this)
+                      .after($(this).val())
+                      .unbind()
+                      .remove();
+                    edit_flag = false;
+                  });
+                edit_flag = true;
+              };
+            }
+          };
+
           document.querySelector(
             "#fizz-buzz-app-table"
-          ).innerHTML = this.createTable(aList);
+          ).innerHTML = createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table");
           document
             .querySelector("#fizz-buzz-app-table > table")
             .classList.add("table-striped");
-          this.editTable();
+          editTable();
         }
 
         renderComponent() {

@@ -1733,68 +1733,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           this.renderTable(this._service.generateList(FizzBuzzList.MAX_COUNT));
         }
 
-        createTable(aList) {
-          return this._table.create(aList);
-        }
-
-        editTable() {
-          $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
-            "click",
-            edit_toggle(this._service)
-          );
-
-          function save(value) {
-            document.querySelector("#app__message").innerHTML = Message.create(
-              `${value}に編集しました。`
-            );
-          }
-
-          function edit_toggle(service) {
-            let edit_flag = false;
-            return function() {
-              if (edit_flag) return;
-
-              let $input = $("&lt;input&gt;")
-                .attr("type", "text")
-                .val($(this).text());
-
-              $(this).html($input);
-
-              $("input", this)
-                .focus()
-                .keypress(function(e) {
-                  if (e.which == 13) {
-                    const number = $(this).val();
-                    try {
-                      const value = service.generate(number);
-                      save(value);
-                      $(this)
-                        .after(value)
-                        .unbind()
-                        .remove();
-                      edit_flag = false;
-                    } catch (e) {
-                      document.querySelector(
-                        "#app__message"
-                      ).innerHTML = Message.create(e.message, Message.DANGER);
-                    }
-                  }
-                });
-
-              $("input", this)
-                .focus()
-                .blur(function(e) {
-                  $(this)
-                    .after($(this).val())
-                    .unbind()
-                    .remove();
-                  edit_flag = false;
-                });
-              edit_flag = true;
-            };
-          }
-        }
-
         saveTable(e) {
           const createListFromTable = table =&gt; {
             let list = [];
@@ -1821,16 +1759,78 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
 
         renderTable(aList) {
+          const createTable = aList =&gt; {
+            return this._table.create(aList);
+          };
+
+          const editTable = () =&gt; {
+            $("#fizz-buzz-app-table &gt; table &gt; tbody &gt; tr &gt; td").on(
+              "click",
+              edit_toggle(this._service)
+            );
+
+            function save(value) {
+              document.querySelector(
+                "#app__message"
+              ).innerHTML = Message.create(`${value}に編集しました。`);
+            }
+
+            function edit_toggle(service) {
+              let edit_flag = false;
+              return function() {
+                if (edit_flag) return;
+
+                let $input = $("&lt;input&gt;")
+                  .attr("type", "text")
+                  .val($(this).text());
+
+                $(this).html($input);
+
+                $("input", this)
+                  .focus()
+                  .keypress(function(e) {
+                    if (e.which == 13) {
+                      const number = $(this).val();
+                      try {
+                        const value = service.generate(number);
+                        save(value);
+                        $(this)
+                          .after(value)
+                          .unbind()
+                          .remove();
+                        edit_flag = false;
+                      } catch (e) {
+                        document.querySelector(
+                          "#app__message"
+                        ).innerHTML = Message.create(e.message, Message.DANGER);
+                      }
+                    }
+                  });
+
+                $("input", this)
+                  .focus()
+                  .blur(function(e) {
+                    $(this)
+                      .after($(this).val())
+                      .unbind()
+                      .remove();
+                    edit_flag = false;
+                  });
+                edit_flag = true;
+              };
+            }
+          };
+
           document.querySelector(
             "#fizz-buzz-app-table"
-          ).innerHTML = this.createTable(aList);
+          ).innerHTML = createTable(aList);
           document
             .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table");
           document
             .querySelector("#fizz-buzz-app-table &gt; table")
             .classList.add("table-striped");
-          this.editTable();
+          editTable();
         }
 
         renderComponent() {
@@ -2208,7 +2208,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-14 12:57:26 JST
+Last updated 2019-11-14 13:04:50 JST
 </div>
 </div>
 </body>
