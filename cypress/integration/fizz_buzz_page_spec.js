@@ -1,7 +1,6 @@
 describe("FizzBuzz Page", () => {
   it("successfully loads", () => {
     cy.visit("http://localhost:8080"); // change URL to match your dev URL
-    cy.get("h2").should("contain", "FizzBuzz");
   });
 
   describe("カウンター画面", () => {
