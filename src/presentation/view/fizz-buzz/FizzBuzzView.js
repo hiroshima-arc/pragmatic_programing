@@ -31,7 +31,7 @@ export default class FizzBuzzView {
 
   renderComponent() {
     const selector = {
-      appId: "fizz-buzz-app",
+      appId: "app",
       msgId: Message.selectorId,
       appCounterId: "fizz-buzz-app-counter",
       appCreateUpdateId: "fizz-buzz-app-create-update",

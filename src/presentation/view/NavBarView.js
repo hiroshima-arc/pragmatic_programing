@@ -1,8 +1,15 @@
 import FizzBuzzView from "./fizz-buzz/FizzBuzzView";
+import { timingSafeEqual } from "crypto";
+import NoticeView from "./NoticeView";
 
 export default class NavBarView {
   constructor() {
+    this._noticeView = new NoticeView();
     this._fizzBuzzView = new FizzBuzzView();
+  }
+
+  topEvent(e) {
+    this._noticeView.render();
   }
 
   fizzBuzzEvent(e) {
@@ -11,16 +18,27 @@ export default class NavBarView {
 
   renderComponent() {
     const selector = {
+      notice: "notice-app-menu",
       fizzBuzz: "fizz-buzz-app-menu"
     };
 
     const dispatchEvent = () => {
+      document
+        .querySelector(`#${selector.notice}`)
+        .addEventListener("click", this.topEvent.bind(this));
       document
         .querySelector(`#${selector.fizzBuzz}`)
         .addEventListener("click", this.fizzBuzzEvent.bind(this));
     };
 
     const createComponent = (events => {
+      const top = `
+      <li class="nav-item active">
+        <a href="#" id="${selector.notice}" class="nav-link"
+          >Top <span class="sr-only">(current)</span></a
+        >
+      </li>
+      `;
       const fizzBuzz = `
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a href="#" id="${selector.fizzBuzz}" class="dropdown-item">FizzBuzz</a>
@@ -48,11 +66,7 @@ export default class NavBarView {
               <!-- ナビゲーションメニュー -->
               <!-- 左側メニュー: トップページの各コンテンツへのリンク -->
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                  <a href="#" class="nav-link"
-                    >Top <span class="sr-only">(current)</span></a
-                  >
-                </li>
+                ${top}
                 <li class="nav-item">
                   <a href="#" class="nav-link">About</a>
                 </li>
@@ -79,11 +93,8 @@ export default class NavBarView {
       `;
       events();
     })(dispatchEvent);
-
-    const render = () => {
-      createComponent();
-    };
   }
+
   render() {
     this.renderComponent();
   }
