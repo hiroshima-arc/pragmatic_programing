@@ -448,6 +448,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_repository">3.1.1. Repository</a></li>
 </ul>
 </li>
+<li><a href="#_domain">3.2. Domain</a>
+<ul class="sectlevel3">
+<li><a href="#_model">3.2.1. Model</a></li>
+<li><a href="#_type">3.2.2. Type</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_参照">4. 参照</a></li>
@@ -831,7 +837,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre>import IndexedDbRepository from '../../infrastructure/IndexedDbRepository';
-import FizzBuzzEntity from '../../domain/model/FizzBuzzEntity';
+import FizzBuzzEntity from '../../domain/model/fizz-buzz/FizzBuzzEntity';
 
 export default class FizzBuzzRepository extends IndexedDbRepository {
   constructor(dbName, storeName) {
@@ -875,6 +881,223 @@ export default class FizzBuzzRepository extends IndexedDbRepository {
 
   destroy() {
     return super.deleteDatabase();
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain">3.2. Domain</h3>
+<div class="sect3">
+<h4 id="_model">3.2.1. Model</h4>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzEntity {
+  constructor(list, id) {
+    this._list = list;
+    this._id = id || FizzBuzzEntity.generateUuid();
+  }
+
+  static generateUuid() {
+    let uuid = "";
+    for (let i = 0; i &lt; 32; i++) {
+      let random = (Math.random() * 16) | 0;
+
+      if (i === 8 || i === 12 || i === 16 || i === 20) {
+        uuid += "-";
+      }
+      uuid += (i === 12 ? 4 : i === 16 ? (random &amp; 3) | 8 : random).toString(
+        16
+      );
+    }
+    return uuid;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get list() {
+    return this._list;
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzList {
+  constructor(list) {
+    if (list.length &gt; FizzBuzzList.MAX_COUNT)
+      throw new Error(
+        `FizzBuzzList can't generate over ${FizzBuzzList.MAX_COUNT} items`
+      );
+
+    this._value = list;
+  }
+
+  static get MAX_COUNT() {
+    return 100;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  toString() {
+    return this._value;
+  }
+
+  add(value) {
+    let result = this._value;
+    result.push(value);
+    return new FizzBuzzList(result);
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzValue {
+  constructor(number, value) {
+    if (number &lt; 0)
+      throw new Error(
+        `FizzBuzzValue can't generate by minus nnumber ${number}`
+      );
+
+    this._number = number;
+    this._value = value;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  get number() {
+    return this._number;
+  }
+
+  toString() {
+    return this._value;
+  }
+
+  equals(other) {
+    return this._number === other._number &amp;&amp; this._value === other._value;
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type">3.2.2. Type</h4>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzType {
+  constructor() {
+    this.FIZZ = "Fizz";
+    this.BUZZ = "Buzz";
+  }
+
+  generate(number) {}
+
+  isFizz(number) {
+    return number % 3 === 0;
+  }
+
+  isBuzz(number) {
+    return number % 5 === 0;
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzType from './FizzBuzzType';
+import FizzBuzzValue from '../../model/fizz-buzz/FizzBuzzValue';
+
+export default class FizzBuzzType01 extends FizzBuzzType {
+  constructor() {
+    super();
+  }
+
+  generate(number) {
+    const isFizz = this.isFizz(number);
+    const isBuzz = this.isBuzz(number);
+
+    if (isFizz &amp;&amp; isBuzz)
+      return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+    if (isFizz) return new FizzBuzzValue(number, this.FIZZ);
+    if (isBuzz) return new FizzBuzzValue(number, this.BUZZ);
+    return new FizzBuzzValue(number, number);
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzType from './FizzBuzzType';
+import FizzBuzzValue from '../../model/fizz-buzz/FizzBuzzValue';
+
+export default class FizzBuzzType02 extends FizzBuzzType {
+  constructor() {
+    super();
+  }
+
+  generate(number) {
+    return new FizzBuzzValue(number, number);
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzType from './FizzBuzzType';
+import FizzBuzzValue from '../../model/fizz-buzz/FizzBuzzValue';
+
+export default class FizzBuzzType03 extends FizzBuzzType {
+  constructor() {
+    super();
+  }
+
+  generate(number) {
+    const isFizz = this.isFizz(number);
+    const isBuzz = this.isBuzz(number);
+
+    if (isFizz &amp;&amp; isBuzz)
+      return new FizzBuzzValue(number, this.FIZZ + this.BUZZ);
+    return new FizzBuzzValue(number, number);
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzType01 from './FizzBuzzType01';
+import FizzBuzzType02 from './FizzBuzzType02';
+import FizzBuzzType03 from './FizzBuzzType03';
+
+export default class FizzBuzzTypeEnum {
+  static get Type01() {
+    return new FizzBuzzType01();
+  }
+  static get Type02() {
+    return new FizzBuzzType02();
+  }
+  static get Type03() {
+    return new FizzBuzzType03();
+  }
+
+  static valuOf(value) {
+    switch (value) {
+      case "one":
+        return FizzBuzzTypeEnum.Type01;
+      case "two":
+        return FizzBuzzTypeEnum.Type02;
+      case "three":
+        return FizzBuzzTypeEnum.Type03;
+      default:
+        throw Error(`${value} is not defined enum type`);
+    }
   }
 }</pre>
 </div>
@@ -1253,7 +1476,7 @@ export default class FizzBuzzRepository extends IndexedDbRepository {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-18 14:25:09 JST
+Last updated 2019-11-18 15:02:01 JST
 </div>
 </div>
 </body>

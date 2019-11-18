@@ -1,5 +1,5 @@
 import IndexedDbRepository from '../../infrastructure/IndexedDbRepository';
-import FizzBuzzEntity from '../../domain/model/FizzBuzzEntity';
+import FizzBuzzEntity from '../../domain/model/fizz-buzz/FizzBuzzEntity';
 
 export default class FizzBuzzRepository extends IndexedDbRepository {
   constructor(dbName, storeName) {
