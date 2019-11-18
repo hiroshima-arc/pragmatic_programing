@@ -1,6 +1,8 @@
 describe("FizzBuzz Page", () => {
   it("successfully loads", () => {
     cy.visit("http://localhost:8080"); // change URL to match your dev URL
+    cy.get('#navbarDropdown').click();
+    cy.get('#fizz-buzz-app-menu').click();
   });
 
   describe("カウンター画面", () => {

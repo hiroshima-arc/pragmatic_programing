@@ -1,6 +1,6 @@
-import FizzBuzzView from './presentation/view/fizz-buzz/FizzBuzzView';
+import NavBar from "./presentation/view/NavBarView";
 
 document.addEventListener("DOMContentLoaded", e => {
-  const view = new FizzBuzzView();
-  view.render();
+  const navbar = new NavBar();
+  navbar.render();
 });
