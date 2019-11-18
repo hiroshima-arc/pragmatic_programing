@@ -61,6 +61,14 @@
 include::../../../src/infrastructure/IndexedDbRepository.js[]
 ----
 
+=== Application
+==== Repository
+----
+include::../../../src/application/repository/FizzBuzzRepository.js[]
+----
+
+
+
 
 ----
 include::../../../src/page/index.html[]

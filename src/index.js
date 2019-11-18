@@ -1,49 +1,5 @@
-import IndexedDbRepository from './infrastructure/IndexedDbRepository';
-
-class FizzBuzzRepository extends IndexedDbRepository {
-  constructor(dbName, storeName) {
-    super(dbName, storeName);
-  }
-
-  save(data) {
-    return super.put({ id: data.id, list: data.list });
-  }
-
-  saveBatch(entities) {
-    const aList = entities.map(entity => {
-      return { id: entity.id, list: entity.list };
-    });
-    return super.add(aList);
-  }
-
-  find(keyValue) {
-    return super.get(keyValue).then(data => {
-      return new Promise((resolve, reject) => {
-        const entity = new FizzBuzzEntity(data.list, data.id);
-        resolve(entity);
-      });
-    });
-  }
-
-  selectAll() {
-    return super.openCursor().then(aList => {
-      return new Promise((resolve, reject) => {
-        const entities = aList.map(
-          data => new FizzBuzzEntity(data.list, data.id)
-        );
-        resolve(entities);
-      });
-    });
-  }
-
-  delete(keyValue) {
-    return super.delete(keyValue);
-  }
-
-  destroy() {
-    return super.deleteDatabase();
-  }
-}
+import FizzBuzzRepository from './application/repository/FizzBuzzRepository';
+import FizzBuzzEntity from './domain/model/FizzBuzzEntity';
 
 class FizzBuzzTypeEnum {
   static get Type01() {
@@ -215,36 +171,6 @@ class FizzBuzzListCommand extends FizzBuzzCommand {
       .slice(1)
       .forEach(i => (this._list = this._list.add(this._type.generate(i))));
     return this._list.value;
-  }
-}
-
-class FizzBuzzEntity {
-  constructor(list, id) {
-    this._list = list;
-    this._id = id || FizzBuzzEntity.generateUuid();
-  }
-
-  static generateUuid() {
-    let uuid = "";
-    for (let i = 0; i < 32; i++) {
-      let random = (Math.random() * 16) | 0;
-
-      if (i === 8 || i === 12 || i === 16 || i === 20) {
-        uuid += "-";
-      }
-      uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(
-        16
-      );
-    }
-    return uuid;
-  }
-
-  get id() {
-    return this._id;
-  }
-
-  get list() {
-    return this._list;
   }
 }
 
