@@ -120,9 +120,35 @@ include::../../../src/domain/type/fizz-buzz/FizzBuzzType03.js[]
 include::../../../src/domain/type/fizz-buzz/FizzBuzzTypeEnum.js[]
 ----
 
+=== Presentation
+==== View
 
 ----
-include::../../../src/page/index.html[]
+include::../../../src/presentation/view/fizz-buzz/Button.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/Message.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/Table.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/Counter.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/TableCreateUpdate.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/TableReadDelete.js[]
+----
+
+----
+include::../../../src/presentation/view/fizz-buzz/FizzBuzzView.js[]
 ----
 
 == 参照
