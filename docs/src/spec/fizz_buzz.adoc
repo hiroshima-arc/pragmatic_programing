@@ -67,6 +67,23 @@ include::../../../src/infrastructure/IndexedDbRepository.js[]
 include::../../../src/application/repository/FizzBuzzRepository.js[]
 ----
 
+==== Service
+----
+include::../../../src/application/service/fizz-buzz/FizzBuzzCommand.js[]
+----
+
+----
+include::../../../src/application/service/fizz-buzz/FizzBuzzValueCommand.js[]
+----
+
+----
+include::../../../src/application/service/fizz-buzz/FizzBuzzListCommand.js[]
+----
+
+----
+include::../../../src/application/service/fizz-buzz/FizzBuzzService.js[]
+----
+
 === Domain
 ==== Model
 ----

@@ -446,6 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_application">3.1. Application</a>
 <ul class="sectlevel3">
 <li><a href="#_repository">3.1.1. Repository</a></li>
+<li><a href="#_service">3.1.2. Service</a></li>
 </ul>
 </li>
 <li><a href="#_domain">3.2. Domain</a>
@@ -881,6 +882,96 @@ export default class FizzBuzzRepository extends IndexedDbRepository {
 
   destroy() {
     return super.deleteDatabase();
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_service">3.1.2. Service</h4>
+<div class="listingblock">
+<div class="content">
+<pre>export default class FizzBuzzCommand {
+  constructor() {}
+  execute() {}
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzCommand from './FizzBuzzCommand';
+
+export default class FizzBuzzValueCommand extends FizzBuzzCommand {
+  constructor(type) {
+    super();
+    this._type = type;
+  }
+
+  execute(number) {
+    return this._type.generate(number).value;
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzCommand from './FizzBuzzCommand';
+import FizzBuzzList from '../../../domain/model/fizz-buzz/FizzBuzzList';
+
+export default class FizzBuzzListCommand extends FizzBuzzCommand {
+  constructor(type) {
+    super();
+    this._type = type;
+    this._list = new FizzBuzzList([]);
+  }
+
+  execute(number) {
+    // 配列は0から始まるので1を足す
+    [...Array(number + 1).keys()]
+      .slice(1)
+      .forEach(i =&gt; (this._list = this._list.add(this._type.generate(i))));
+    return this._list.value;
+  }
+}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>import FizzBuzzValueCommand from './FizzBuzzValueCommand';
+import FizzBuzzListCommand from './FizzBuzzListCommand';
+import FizzBuzzEntity from '../../../domain/model/fizz-buzz/FizzBuzzEntity';
+import FizzBuzzRepository from '../../repository/FizzBuzzRepository';
+
+export default class FizzBuzzService {
+  constructor(type) {
+    this._valueCommand = new FizzBuzzValueCommand(type);
+    this._listCommand = new FizzBuzzListCommand(type);
+    this._repository = new FizzBuzzRepository("fizzbuzz.db", "items");
+  }
+
+  generate(number) {
+    return this._valueCommand.execute(number);
+  }
+
+  generateList(number) {
+    return this._listCommand.execute(number);
+  }
+
+  save(list) {
+    const record = new FizzBuzzEntity(list);
+    return this._repository.save(record);
+  }
+
+  selectAll() {
+    return this._repository.selectAll();
+  }
+
+  delete(id) {
+    return this._repository.delete(id);
+  }
+
+  deleteAll() {
+    return this._repository.destroy();
   }
 }</pre>
 </div>
@@ -1476,7 +1567,7 @@ export default class FizzBuzzTypeEnum {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-18 15:02:01 JST
+Last updated 2019-11-18 15:19:21 JST
 </div>
 </div>
 </body>
