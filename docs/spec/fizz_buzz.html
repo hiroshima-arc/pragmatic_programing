@@ -946,12 +946,34 @@ export default class FizzBuzzListCommand extends FizzBuzzCommand {
 import FizzBuzzListCommand from './FizzBuzzListCommand';
 import FizzBuzzEntity from '../../../domain/model/fizz-buzz/FizzBuzzEntity';
 import FizzBuzzRepository from '../../repository/FizzBuzzRepository';
+import FizzBuzzTypeEnum from '../../../domain/type/fizz-buzz/FizzBuzzTypeEnum';
+import FizzBuzzList from '../../../domain/model/fizz-buzz/FizzBuzzList';
 
 export default class FizzBuzzService {
   constructor(type) {
     this._valueCommand = new FizzBuzzValueCommand(type);
     this._listCommand = new FizzBuzzListCommand(type);
     this._repository = new FizzBuzzRepository("fizzbuzz.db", "items");
+  }
+
+  static get Type01() {
+    return FizzBuzzTypeEnum.Type01;
+  }
+
+  static get Type02() {
+    return FizzBuzzTypeEnum.Type02;
+  }
+
+  static get Type03() {
+    return FizzBuzzTypeEnum.Type03;
+  }
+
+  static get MAX_COUNT() {
+    return FizzBuzzList.MAX_COUNT;
+  }
+
+  static valueOf(value) {
+    return FizzBuzzTypeEnum.valuOf(value)
   }
 
   generate(number) {
@@ -1441,9 +1463,7 @@ export default class FizzBuzzTypeEnum {
 <pre>import Table from './Table';
 import Button from './Button';
 import Message from './Message';
-import FizzBuzzList from '../../../domain/model/fizz-buzz/FizzBuzzList';
 import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
-import FizzBuzzTypeEnum from '../../../domain/type/fizz-buzz/FizzBuzzTypeEnum';
 
 export default class TableCreateUpdate {
   constructor(service) {
@@ -1451,14 +1471,14 @@ export default class TableCreateUpdate {
     this._button = new Button();
     this._message = new Message();
     this._service = service;
-    this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+    this._list = this._service.generateList(FizzBuzzService.MAX_COUNT);
   }
 
   changeEvent(e) {
     this._service = new FizzBuzzService(
-      FizzBuzzTypeEnum.valuOf(e.target.value)
+      FizzBuzzService.valueOf(e.target.value)
     );
-    this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+    this._list = this._service.generateList(FizzBuzzService.MAX_COUNT);
     this._selected = e.target.value;
     this.render(this._selector);
   }
@@ -1831,8 +1851,7 @@ export default class TableReadDelete {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>import FizzBuzzTypeEnum from '../../../domain/type/fizz-buzz/FizzBuzzTypeEnum';
-import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
+<pre>import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
 import Message from "./Message";
 import Counter from './Counter';
 import TableCreateUpdate from './TableCreateUpdate';
@@ -1840,7 +1859,7 @@ import TableReadDelete from './TableReadDelete';
 
 export default class FizzBuzzView {
   constructor(type) {
-    this._type = type || FizzBuzzTypeEnum.Type01;
+    this._type = type || FizzBuzzService.Type01;
     this._message = new Message();
     this._service = new FizzBuzzService(this._type);
     this._counterComponent = new Counter(this._service);
@@ -2019,7 +2038,7 @@ export default class FizzBuzzView {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-18 16:04:02 JST
+Last updated 2019-11-18 17:38:09 JST
 </div>
 </div>
 </body>

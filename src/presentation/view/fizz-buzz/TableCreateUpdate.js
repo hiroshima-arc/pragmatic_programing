@@ -1,9 +1,7 @@
 import Table from './Table';
 import Button from './Button';
 import Message from './Message';
-import FizzBuzzList from '../../../domain/model/fizz-buzz/FizzBuzzList';
 import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
-import FizzBuzzTypeEnum from '../../../domain/type/fizz-buzz/FizzBuzzTypeEnum';
 
 export default class TableCreateUpdate {
   constructor(service) {
@@ -11,14 +9,14 @@ export default class TableCreateUpdate {
     this._button = new Button();
     this._message = new Message();
     this._service = service;
-    this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+    this._list = this._service.generateList(FizzBuzzService.MAX_COUNT);
   }
 
   changeEvent(e) {
     this._service = new FizzBuzzService(
-      FizzBuzzTypeEnum.valuOf(e.target.value)
+      FizzBuzzService.valueOf(e.target.value)
     );
-    this._list = this._service.generateList(FizzBuzzList.MAX_COUNT);
+    this._list = this._service.generateList(FizzBuzzService.MAX_COUNT);
     this._selected = e.target.value;
     this.render(this._selector);
   }

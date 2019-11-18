@@ -1,4 +1,3 @@
-import FizzBuzzTypeEnum from '../../../domain/type/fizz-buzz/FizzBuzzTypeEnum';
 import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
 import Message from "./Message";
 import Counter from './Counter';
@@ -7,7 +6,7 @@ import TableReadDelete from './TableReadDelete';
 
 export default class FizzBuzzView {
   constructor(type) {
-    this._type = type || FizzBuzzTypeEnum.Type01;
+    this._type = type || FizzBuzzService.Type01;
     this._message = new Message();
     this._service = new FizzBuzzService(this._type);
     this._counterComponent = new Counter(this._service);
