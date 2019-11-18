@@ -56,6 +56,12 @@
 == 開発
 
 [source, html]
+=== Infrastracture
+----
+include::../../../src/infrastructure/IndexedDbRepository.js[]
+----
+
+
 ----
 include::../../../src/page/index.html[]
 ----
