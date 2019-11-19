@@ -1,12 +1,18 @@
 import NoticeView from "./NoticeView";
+import AboutView from "./AboutView";
 
 export default class Footer {
   constructor() {
     this._notice = new NoticeView();
+    this._about = new AboutView();
   }
 
   topEvent() {
     this._notice.render();
+  }
+
+  aboutEvent() {
+    this._about.render();
   }
 
   renderComponent() {
@@ -19,6 +25,10 @@ export default class Footer {
       document
         .querySelector(`#${selector.top}`)
         .addEventListener("click", this.topEvent.bind(this));
+
+      document
+        .querySelector(`#${selector.about}`)
+        .addEventListener("click", this.aboutEvent.bind(this));
     };
 
     const createComponent = (events => {

@@ -1,15 +1,21 @@
 import FizzBuzzView from "./fizz-buzz/FizzBuzzView";
 import { timingSafeEqual } from "crypto";
 import NoticeView from "./NoticeView";
+import AboutView from "./AboutView";
 
 export default class NavBarView {
   constructor() {
     this._noticeView = new NoticeView();
+    this._aboutView = new AboutView();
     this._fizzBuzzView = new FizzBuzzView();
   }
 
   topEvent(e) {
     this._noticeView.render();
+  }
+
+  aboutEvent(e) {
+    this._aboutView.render();
   }
 
   fizzBuzzEvent(e) {
@@ -19,6 +25,7 @@ export default class NavBarView {
   renderComponent() {
     const selector = {
       notice: "notice-app-menu",
+      about: "about-app-menu",
       fizzBuzz: "fizz-buzz-app-menu"
     };
 
@@ -26,6 +33,9 @@ export default class NavBarView {
       document
         .querySelector(`#${selector.notice}`)
         .addEventListener("click", this.topEvent.bind(this));
+      document
+        .querySelector(`#${selector.about}`)
+        .addEventListener("click", this.aboutEvent.bind(this));
       document
         .querySelector(`#${selector.fizzBuzz}`)
         .addEventListener("click", this.fizzBuzzEvent.bind(this));
@@ -39,6 +49,11 @@ export default class NavBarView {
         >
       </li>
       `;
+      const about = `
+      <li class="nav-item">
+        <a href="#" id="${selector.about}" class="nav-link">About</a>
+      </li>
+      `
       const fizzBuzz = `
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a href="#" id="${selector.fizzBuzz}" class="dropdown-item">FizzBuzz</a>
@@ -67,9 +82,7 @@ export default class NavBarView {
               <!-- 左側メニュー: トップページの各コンテンツへのリンク -->
               <ul class="navbar-nav mr-auto">
                 ${top}
-                <li class="nav-item">
-                  <a href="#" class="nav-link">About</a>
-                </li>
+                ${about}
                 <li class="nav-item dropdown">
                   <a
                     href="#"
