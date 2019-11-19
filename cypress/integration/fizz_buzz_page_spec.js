@@ -5,6 +5,10 @@ describe("FizzBuzz Page", () => {
     cy.get('#fizz-buzz-app-menu').click();
   });
 
+  it('機能名が表示される', () => {
+    cy.get('#function-name').should('contain', 'FizzBuzz');
+  })
+
   describe("カウンター画面", () => {
     const counterAppId = "fizz-buzz-app-counter";
 

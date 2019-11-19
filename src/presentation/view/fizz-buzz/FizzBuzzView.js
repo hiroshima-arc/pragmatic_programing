@@ -62,6 +62,7 @@ export default class FizzBuzzView {
                 <div class="py-3">
                   <section id="menu">
                     <div class="container">
+                      <h3 id="function-name" class="mb-3">FizzBuzz</h3>
                       <div id="${selector.msgId}"></div>
                       <div class="nav nav-tabs" id="tab-menus" role="tablist">
                         <a
