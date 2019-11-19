@@ -6,9 +6,9 @@
 
 ### 前提
 
-| ソフトウェア   | バージョン | 備考 |
-| :------------- | :--------- | :--- |
-| nodejs         | 10.16.3    |      |
+| ソフトウェア | バージョン | 備考 |
+| :----------- | :--------- | :--- |
+| nodejs       | 10.16.3    |      |
 
 ## 構成
 
@@ -26,7 +26,7 @@
 ```bash
 npm init -y
 npm install --save-dev npm-run-all watch foreman cpx rimraf markdown-to-html @marp-team/marp-cli
-npm install --save-dev prettier eslint jshint cross-env 
+npm install --save-dev prettier eslint jshint cross-env
 npm install --save-dev browser-sync connect-browser-sync nodemon now
 npx browser-sync init
 touch Procfile
@@ -82,3 +82,6 @@ npm run docs:slide:start
 **[⬆ back to top](#構成)**
 
 ## 参照
+
+- [FizzBuzz](http://www.hiroshima-arc.org/pragmatic_programing/spec/fizz_buzz.html)
+
