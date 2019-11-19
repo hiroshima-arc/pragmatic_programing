@@ -51,6 +51,119 @@
 
 === クラス図
 
+==== パッケージ構成
+[plantuml]
+----
+package Presentaion {
+    package View {
+    }
+}
+
+
+package Application {
+    package Repository {
+    }
+
+    package Service {
+    }
+}
+
+package Infrastructure {
+}
+
+
+package Domain {
+    package Model {
+    }
+
+    package Type {
+    }
+}
+
+Presentaion -> Application
+Application --> Domain
+Application -> Infrastructure
+----
+
+==== Presentaion
+===== View
+
+[plantuml]
+----
+class FizzBuzzView
+class Counter
+class TableCreateUpdate
+class TableReadDelete
+class Button
+class Message
+class Table
+
+FizzBuzzView o-- Counter
+FizzBuzzView o-- TableCreateUpdate
+FizzBuzzView o-- TableReadDelete
+FizzBuzzView o-- Message
+TableCreateUpdate o-- Button
+TableCreateUpdate o-- Table
+TableCreateUpdate o-- Message
+TableReadDelete o-- Button
+TableReadDelete o-- Table
+TableReadDelete o-- Message
+----
+
+==== Application
+
+===== Service
+[plantuml]
+----
+class FizzBuzzCommand
+class FizzBuzzListCommand
+class FizzBuzzValueCommand
+class FizzBuzzService
+
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzService -> FizzBuzzCommand
+----
+
+===== Repository
+[plantuml]
+----
+class FizzBuzzRepository
+
+IndexedDbRepository <|-- FizzBuzzRepository
+----
+
+==== Infrastructure
+
+[plantuml]
+----
+class IndexedDbRepository
+----
+
+==== Domain
+===== Model
+[plantuml]
+----
+class FizzBuzzEntity
+class FizzBuzzList
+class FizzBuzzValue
+----
+
+===== Type
+[plantuml]
+----
+class FizzBuzzType
+class FizzBuzzType01
+class FizzBuzzType02
+class FizzBuzzType03
+class FizzBuzzTypeEnum
+
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzTypeEnum -> FizzBuzzType
+----
+
 === シーケンス図
 
 == 開発
