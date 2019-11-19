@@ -1,8 +1,13 @@
 describe("FizzBuzz Page", () => {
   it("successfully loads", () => {
     cy.visit("http://localhost:8080"); // change URL to match your dev URL
-    cy.get("h2").should("contain", "FizzBuzz");
+    cy.get('#navbarDropdown').click();
+    cy.get('#fizz-buzz-app-menu').click();
   });
+
+  it('機能名が表示される', () => {
+    cy.get('#function-name').should('contain', 'FizzBuzz');
+  })
 
   describe("カウンター画面", () => {
     const counterAppId = "fizz-buzz-app-counter";

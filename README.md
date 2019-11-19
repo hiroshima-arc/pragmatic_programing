@@ -6,9 +6,9 @@
 
 ### 前提
 
-| ソフトウェア   | バージョン | 備考 |
-| :------------- | :--------- | :--- |
-| nodejs         | 10.16.3    |      |
+| ソフトウェア | バージョン | 備考 |
+| :----------- | :--------- | :--- |
+| nodejs       | 10.16.3    |      |
 
 ## 構成
 
@@ -26,8 +26,8 @@
 ```bash
 npm init -y
 npm install --save-dev npm-run-all watch foreman cpx rimraf markdown-to-html @marp-team/marp-cli
-npm install --save-dev prettier eslint jshint cross-env 
-npm install --save-dev browser-sync connect-browser-sync nodemon
+npm install --save-dev prettier eslint jshint cross-env
+npm install --save-dev browser-sync connect-browser-sync nodemon now
 npx browser-sync init
 touch Procfile
 ```
@@ -35,13 +35,20 @@ touch Procfile
 #### アプリケーションのセットアップ
 
 ```bash
-npm install --save-dev mocha chai cypress
+npm install --save-dev mocha chai cypress fake-indexeddb
 npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/register @babel/polyfill babel-plugin-istanbul cross-env nyc webpack webpack-cli webpack-dev-server babel-loader css-loader html-webpack-plugin mini-css-extract-plugin html-loader
 ```
 
 **[⬆ back to top](#構成)**
 
 ### 配置
+
+```bash
+npx now login
+npm run deploy
+```
+
+[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/new/project?template=https://github.com/hiroshima-arc/pragmatic_programing)
 
 **[⬆ back to top](#構成)**
 
@@ -75,3 +82,6 @@ npm run docs:slide:start
 **[⬆ back to top](#構成)**
 
 ## 参照
+
+- [FizzBuzz](http://www.hiroshima-arc.org/pragmatic_programing/spec/fizz_buzz.html)
+
