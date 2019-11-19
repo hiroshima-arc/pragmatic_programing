@@ -5,21 +5,21 @@ import AboutView from "./AboutView";
 
 export default class NavBarView {
   constructor() {
-    this._noticeView = new NoticeView();
-    this._aboutView = new AboutView();
-    this._fizzBuzzView = new FizzBuzzView();
+    this._notice = new NoticeView();
+    this._about = new AboutView();
+    this._fizzBuzz = new FizzBuzzView();
   }
 
   topEvent(e) {
-    this._noticeView.render();
+    this._notice.render();
   }
 
   aboutEvent(e) {
-    this._aboutView.render();
+    this._about.render();
   }
 
   fizzBuzzEvent(e) {
-    this._fizzBuzzView.render();
+    this._fizzBuzz.render();
   }
 
   renderComponent() {
