@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/hiroshima-arc/pragmatic_programing/workflows/NodeCI/badge.svg)](https://github.com/hiroshima-arc/pragmatic_programing/actions)
+
 # アプリケーションプログラマのための練習プログラム集
 
 ## 概要
