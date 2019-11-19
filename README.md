@@ -27,7 +27,7 @@
 npm init -y
 npm install --save-dev npm-run-all watch foreman cpx rimraf markdown-to-html @marp-team/marp-cli
 npm install --save-dev prettier eslint jshint cross-env 
-npm install --save-dev browser-sync connect-browser-sync nodemon
+npm install --save-dev browser-sync connect-browser-sync nodemon now
 npx browser-sync init
 touch Procfile
 ```
@@ -42,6 +42,13 @@ npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/register 
 **[⬆ back to top](#構成)**
 
 ### 配置
+
+```bash
+npx now login
+npm run deploy
+```
+
+[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/new/project?template=https://github.com/hiroshima-arc/pragmatic_programing)
 
 **[⬆ back to top](#構成)**
 
