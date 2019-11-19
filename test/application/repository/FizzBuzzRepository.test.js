@@ -27,7 +27,7 @@ describe("FizzBuzzRepositoryTest", () => {
     });
   });
 
-  it("すべての値を取得する", () => {
+  xit("すべての値を取得する", () => {
     const aList = [
       { id: 3, list: [1, 2, "Fizz", 4, "Buzz"] },
       { id: 4, list: [1, 2, "Fizz", 4, "Buzz"] },
