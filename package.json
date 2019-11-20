@@ -15,7 +15,7 @@
     "test:unit": "cross-env NODE_ENV=test nyc mocha --require @babel/register test/**/*.test.*",
     "test:integration": "cypress run",
     "test:cypress": "cypress open",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint src/**/*.js --fix",
     "format": "prettier --write src/**/*.*",
     "watch": "npm-run-all watch:*",
     "watch:format": "watch 'npm-run-all format' ./src ",

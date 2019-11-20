@@ -1,7 +1,8 @@
 export default class Button {
-  constructor() {}
+  // eslint-disable-next-line no-useless-constructor
+  constructor () {}
 
-  create(id, tableId, label) {
+  create (id, tableId, label) {
     return `
             <button
               id="${id}"
@@ -11,6 +12,6 @@ export default class Button {
             >
               ${label}
             </button>
-          `;
+          `
   }
 }

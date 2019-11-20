@@ -1,3 +1,5 @@
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable no-unused-vars */
 export default class IndexedDbRepository {
   constructor(dbName, storeName) {
     this._dbName = dbName;
@@ -65,7 +67,7 @@ export default class IndexedDbRepository {
         const store = trans.objectStore(this._storeName);
         aList.forEach(data => {
           try {
-            let addReq = store.add(data);
+            const addReq = store.add(data);
             addReq.onsuccess = () => {
               console.log("add data success");
             };
@@ -119,9 +121,9 @@ export default class IndexedDbRepository {
 
         try {
           const getReq = store.openCursor();
-          let result = [];
+          const result = [];
           getReq.onsuccess = event => {
-            let cur = event.target.result;
+            const cur = event.target.result;
             if (!cur) return resolve(result);
             result.push(cur.value);
             cur.continue();

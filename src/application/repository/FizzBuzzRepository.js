@@ -1,47 +1,48 @@
-import IndexedDbRepository from '../../infrastructure/IndexedDbRepository';
-import FizzBuzzEntity from '../../domain/model/fizz-buzz/FizzBuzzEntity';
+import IndexedDbRepository from '../../infrastructure/IndexedDbRepository'
+import FizzBuzzEntity from '../../domain/model/fizz-buzz/FizzBuzzEntity'
 
 export default class FizzBuzzRepository extends IndexedDbRepository {
-  constructor(dbName, storeName) {
-    super(dbName, storeName);
+  // eslint-disable-next-line no-useless-constructor
+  constructor (dbName, storeName) {
+    super(dbName, storeName)
   }
 
-  save(data) {
-    return super.put({ id: data.id, list: data.list });
+  save (data) {
+    return super.put({ id: data.id, list: data.list })
   }
 
-  saveBatch(entities) {
+  saveBatch (entities) {
     const aList = entities.map(entity => {
-      return { id: entity.id, list: entity.list };
-    });
-    return super.add(aList);
+      return { id: entity.id, list: entity.list }
+    })
+    return super.add(aList)
   }
 
-  find(keyValue) {
+  find (keyValue) {
     return super.get(keyValue).then(data => {
       return new Promise((resolve, reject) => {
-        const entity = new FizzBuzzEntity(data.list, data.id);
-        resolve(entity);
-      });
-    });
+        const entity = new FizzBuzzEntity(data.list, data.id)
+        resolve(entity)
+      })
+    })
   }
 
-  selectAll() {
+  selectAll () {
     return super.openCursor().then(aList => {
       return new Promise((resolve, reject) => {
         const entities = aList.map(
           data => new FizzBuzzEntity(data.list, data.id)
-        );
-        resolve(entities);
-      });
-    });
+        )
+        resolve(entities)
+      })
+    })
   }
 
-  delete(keyValue) {
-    return super.delete(keyValue);
+  delete (keyValue) {
+    return super.delete(keyValue)
   }
 
-  destroy() {
-    return super.deleteDatabase();
+  destroy () {
+    return super.deleteDatabase()
   }
 }

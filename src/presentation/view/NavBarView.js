@@ -1,46 +1,46 @@
-import FizzBuzzView from "./fizz-buzz/FizzBuzzView";
-import { timingSafeEqual } from "crypto";
-import NoticeView from "./NoticeView";
-import AboutView from "./AboutView";
+import FizzBuzzView from './fizz-buzz/FizzBuzzView'
+import NoticeView from './NoticeView'
+import AboutView from './AboutView'
 
 export default class NavBarView {
-  constructor() {
-    this._notice = new NoticeView();
-    this._about = new AboutView();
-    this._fizzBuzz = new FizzBuzzView();
+  constructor () {
+    this._notice = new NoticeView()
+    this._about = new AboutView()
+    this._fizzBuzz = new FizzBuzzView()
   }
 
-  topEvent(e) {
-    this._notice.render();
+  topEvent (e) {
+    this._notice.render()
   }
 
-  aboutEvent(e) {
-    this._about.render();
+  aboutEvent (e) {
+    this._about.render()
   }
 
-  fizzBuzzEvent(e) {
-    this._fizzBuzz.render();
+  fizzBuzzEvent (e) {
+    this._fizzBuzz.render()
   }
 
-  renderComponent() {
+  renderComponent () {
     const selector = {
-      notice: "notice-app-menu",
-      about: "about-app-menu",
-      fizzBuzz: "fizz-buzz-app-menu"
-    };
+      notice: 'notice-app-menu',
+      about: 'about-app-menu',
+      fizzBuzz: 'fizz-buzz-app-menu'
+    }
 
     const dispatchEvent = () => {
       document
         .querySelector(`#${selector.notice}`)
-        .addEventListener("click", this.topEvent.bind(this));
+        .addEventListener('click', this.topEvent.bind(this))
       document
         .querySelector(`#${selector.about}`)
-        .addEventListener("click", this.aboutEvent.bind(this));
+        .addEventListener('click', this.aboutEvent.bind(this))
       document
         .querySelector(`#${selector.fizzBuzz}`)
-        .addEventListener("click", this.fizzBuzzEvent.bind(this));
-    };
+        .addEventListener('click', this.fizzBuzzEvent.bind(this))
+    }
 
+    // eslint-disable-next-line no-unused-vars
     const createComponent = (events => {
       const top = `
       <li class="nav-item active">
@@ -48,7 +48,7 @@ export default class NavBarView {
           >Top <span class="sr-only">(current)</span></a
         >
       </li>
-      `;
+      `
       const about = `
       <li class="nav-item">
         <a href="#" id="${selector.about}" class="nav-link">About</a>
@@ -58,8 +58,8 @@ export default class NavBarView {
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a href="#" id="${selector.fizzBuzz}" class="dropdown-item">FizzBuzz</a>
         </div>
-      `;
-      document.querySelector("#navbar").innerHTML = `
+      `
+      document.querySelector('#navbar').innerHTML = `
         <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
           <!-- サブコンポーネント -->
           <div class="container">
@@ -103,12 +103,12 @@ export default class NavBarView {
           </div>
           <!-- サブコンポーネント -->
         </nav>
-      `;
-      events();
-    })(dispatchEvent);
+      `
+      events()
+    })(dispatchEvent)
   }
 
-  render() {
-    this.renderComponent();
+  render () {
+    this.renderComponent()
   }
 }

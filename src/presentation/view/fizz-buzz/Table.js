@@ -1,28 +1,29 @@
 export default class Table {
-  constructor() {}
+  // eslint-disable-next-line no-useless-constructor
+  constructor () {}
 
-  create(aList) {
+  create (aList) {
     const header = (() => {
-      return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`);
-    })();
+      return [...Array(10).keys()].map(i => `<th>${i + 1}</th>`)
+    })()
 
     const body = (() => {
-      let result = [];
-      let row = 0;
-      let col = [];
+      const result = []
+      let row = 0
+      let col = []
       aList.forEach((v, k) => {
         if ((k + 1) % 10 === 0) {
-          col.push(`<td>${v}</td>`);
-          result[row++] = col;
-          col = [];
+          col.push(`<td>${v}</td>`)
+          result[row++] = col
+          col = []
         } else {
-          col.push(`<td>${v}</td>`);
+          col.push(`<td>${v}</td>`)
         }
-      });
-      return result;
-    })();
+      })
+      return result
+    })()
 
-    const row = n => body[n].join(" ");
+    const row = n => body[n].join(' ')
 
     const result = `
             <table>
@@ -51,7 +52,7 @@ export default class Table {
                 <tr>${row(9)}</tr>
               </tbody>
             </table>
-        `;
-    return result;
+        `
+    return result
   }
 }

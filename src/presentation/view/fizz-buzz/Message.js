@@ -1,21 +1,24 @@
 export default class Message {
-  constructor() {}
+  // eslint-disable-next-line no-useless-constructor
+  constructor () {}
 
-  static get WARNING() {
-    return 1;
-  }
-  static get SUCCESS() {
-    return 2;
-  }
-  static get DANGER() {
-    return 3;
+  static get WARNING () {
+    return 1
   }
 
-  static get selectorId() {
-    return "app__message";
+  static get SUCCESS () {
+    return 2
   }
 
-  static create(message, type) {
+  static get DANGER () {
+    return 3
+  }
+
+  static get selectorId () {
+    return 'app__message'
+  }
+
+  static create (message, type) {
     switch (type) {
       case 1:
         return `
@@ -25,7 +28,7 @@ export default class Message {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-              `;
+              `
       case 2:
         return `
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -34,7 +37,7 @@ export default class Message {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-              `;
+              `
       case 3:
         return `
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -43,7 +46,7 @@ export default class Message {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-              `;
+              `
       default:
         return `
                     <div class="alert alert-primary alert-dismissible fade show" role="alert">
@@ -52,18 +55,18 @@ export default class Message {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-              `;
+              `
     }
   }
 
-  clear() {
-    document.querySelector(`#${Message.selectorId}`).innerHTML = "";
+  clear () {
+    document.querySelector(`#${Message.selectorId}`).innerHTML = ''
   }
 
-  render(message, type) {
+  render (message, type) {
     document.querySelector(`#${Message.selectorId}`).innerHTML = Message.create(
       message,
       type
-    );
+    )
   }
 }
