@@ -1,62 +1,63 @@
-import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService';
-import Message from "./Message";
-import Counter from './Counter';
-import TableCreateUpdate from './TableCreateUpdate';
-import TableReadDelete from './TableReadDelete';
+import FizzBuzzService from '../../../application/service/fizz-buzz/FizzBuzzService'
+import Message from './Message'
+import Counter from './Counter'
+import TableCreateUpdate from './TableCreateUpdate'
+import TableReadDelete from './TableReadDelete'
 
 export default class FizzBuzzView {
-  constructor(type) {
-    this._type = type || FizzBuzzService.Type01;
-    this._message = new Message();
-    this._service = new FizzBuzzService(this._type);
-    this._counterComponent = new Counter(this._service);
-    this._tableCreateUpdateComponent = new TableCreateUpdate(this._service);
-    this._tableReadDeleteComponent = new TableReadDelete(this._service);
+  constructor (type) {
+    this._type = type || FizzBuzzService.Type01
+    this._message = new Message()
+    this._service = new FizzBuzzService(this._type)
+    this._counterComponent = new Counter(this._service)
+    this._tableCreateUpdateComponent = new TableCreateUpdate(this._service)
+    this._tableReadDeleteComponent = new TableReadDelete(this._service)
   }
 
-  counterEvent(e) {
-    this._counterComponent.render(this._selector);
-    this._message.clear();
+  counterEvent (e) {
+    this._counterComponent.render(this._selector)
+    this._message.clear()
   }
 
-  createUpdateEvent(e) {
-    this._tableCreateUpdateComponent.render(this._selector);
-    this._message.clear();
+  createUpdateEvent (e) {
+    this._tableCreateUpdateComponent.render(this._selector)
+    this._message.clear()
   }
 
-  readDeleteEvent(e) {
-    this._tableReadDeleteComponent.render(this._selector);
-    this._message.clear();
+  readDeleteEvent (e) {
+    this._tableReadDeleteComponent.render(this._selector)
+    this._message.clear()
   }
 
-  renderComponent() {
+  renderComponent () {
     const selector = {
-      appId: "app",
+      appId: 'app',
       msgId: Message.selectorId,
-      appCounterId: "fizz-buzz-app-counter",
-      appCreateUpdateId: "fizz-buzz-app-create-update",
-      appReadDeleteId: "fizz-buzz-app-read-delete",
-      counterTabId: "tab-menu01",
-      createUpdateTabId: "tab-menu02",
-      readDeleteTabId: "tab-menu03",
-      counterPanelId: "panel-menu01",
-      createUpdatePanelId: "panel-menu02",
-      readDeletePanelId: "panel-menu03"
-    };
+      appCounterId: 'fizz-buzz-app-counter',
+      appCreateUpdateId: 'fizz-buzz-app-create-update',
+      appReadDeleteId: 'fizz-buzz-app-read-delete',
+      counterTabId: 'tab-menu01',
+      createUpdateTabId: 'tab-menu02',
+      readDeleteTabId: 'tab-menu03',
+      counterPanelId: 'panel-menu01',
+      createUpdatePanelId: 'panel-menu02',
+      readDeletePanelId: 'panel-menu03'
+    }
 
     const renderMainComponent = () => {
       const dispatchEvent = () => {
         document
           .querySelector(`#${selector.counterTabId}`)
-          .addEventListener("click", this.counterEvent.bind(this));
+          .addEventListener('click', this.counterEvent.bind(this))
         document
           .querySelector(`#${selector.createUpdateTabId}`)
-          .addEventListener("click", this.createUpdateEvent.bind(this));
+          .addEventListener('click', this.createUpdateEvent.bind(this))
         document
           .querySelector(`#${selector.readDeleteTabId}`)
-          .addEventListener("click", this.readDeleteEvent.bind(this));
-      };
+          .addEventListener('click', this.readDeleteEvent.bind(this))
+      }
 
+      // eslint-disable-next-line no-unused-vars
       const createMainComponent = (events => {
         document.querySelector(`#${selector.appId}`).innerHTML = `
                 <div class="py-3">
@@ -139,26 +140,27 @@ export default class FizzBuzzView {
                     </div>
                   </section>
                 </div>
-            `;
+            `
 
-        events();
-      })(dispatchEvent);
-    };
+        events()
+      })(dispatchEvent)
+    }
 
     const renderSubComponent = () => {
-      this._counterComponent.render(selector);
-      this._tableCreateUpdateComponent.render(selector);
-      this._tableReadDeleteComponent.render(selector);
-      this._selector = selector;
-    };
+      this._counterComponent.render(selector)
+      this._tableCreateUpdateComponent.render(selector)
+      this._tableReadDeleteComponent.render(selector)
+      this._selector = selector
+    }
 
+    // eslint-disable-next-line no-unused-vars
     const render = (() => {
-      renderMainComponent();
-      renderSubComponent();
-    })();
+      renderMainComponent()
+      renderSubComponent()
+    })()
   }
 
-  render() {
-    this.renderComponent();
+  render () {
+    this.renderComponent()
   }
 }

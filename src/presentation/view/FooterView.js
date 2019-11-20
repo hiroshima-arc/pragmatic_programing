@@ -1,48 +1,49 @@
-import NoticeView from "./NoticeView";
-import AboutView from "./AboutView";
+import NoticeView from './NoticeView'
+import AboutView from './AboutView'
 
 export default class Footer {
-  constructor() {
-    this._notice = new NoticeView();
-    this._about = new AboutView();
+  constructor () {
+    this._notice = new NoticeView()
+    this._about = new AboutView()
   }
 
-  topEvent() {
-    this._notice.render();
+  topEvent () {
+    this._notice.render()
   }
 
-  aboutEvent() {
-    this._about.render();
+  aboutEvent () {
+    this._about.render()
   }
 
-  renderComponent() {
+  renderComponent () {
     const selector = {
-      footer: "footer",
-      top: "footer-top",
-      about: "footer-about"
-    };
+      footer: 'footer',
+      top: 'footer-top',
+      about: 'footer-about'
+    }
     const dispatchEvent = () => {
       document
         .querySelector(`#${selector.top}`)
-        .addEventListener("click", this.topEvent.bind(this));
+        .addEventListener('click', this.topEvent.bind(this))
 
       document
         .querySelector(`#${selector.about}`)
-        .addEventListener("click", this.aboutEvent.bind(this));
-    };
+        .addEventListener('click', this.aboutEvent.bind(this))
+    }
 
+    // eslint-disable-next-line no-unused-vars
     const createComponent = (events => {
       const top = `
         <a href="#" id="${selector.top}" class="nav-link">Top</a>
-      `;
+      `
 
       const about = `
         <a href="#" id="${selector.about}" class="nav-link">About</a>
-      `;
+      `
 
       const copyright = `
         Copyright &copy;2019 HiroshiamARC, All Rights Reserved.
-      `;
+      `
 
       document.querySelector(`#${selector.footer}`).innerHTML = `
         <footer class="py-4 bg-dark text-light">
@@ -62,13 +63,13 @@ export default class Footer {
             </p>
           </div>
         </footer>
-      `;
+      `
 
-      events();
-    })(dispatchEvent);
+      events()
+    })(dispatchEvent)
   }
 
-  render() {
-    this.renderComponent();
+  render () {
+    this.renderComponent()
   }
 }

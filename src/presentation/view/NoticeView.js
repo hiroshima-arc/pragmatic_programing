@@ -1,27 +1,28 @@
-import FizzBuzzView from "./fizz-buzz/FizzBuzzView";
+import FizzBuzzView from './fizz-buzz/FizzBuzzView'
 
 export default class NoticeView {
-  constructor() {
-    this._fizzBuzz = new FizzBuzzView();
+  constructor () {
+    this._fizzBuzz = new FizzBuzzView()
   }
 
-  fizzBUzzEvent() {
-    this._fizzBuzz.render();
+  fizzBUzzEvent () {
+    this._fizzBuzz.render()
   }
 
-  renderComponent() {
+  renderComponent () {
     const selector = {
-      fizzBuzz: "fizz-buzz-app"
+      fizzBuzz: 'fizz-buzz-app'
     }
 
     const dispatchEvent = () => {
       document
         .querySelector(`#${selector.fizzBuzz}`)
-        .addEventListener("click", this.fizzBUzzEvent.bind(this));
-    };
+        .addEventListener('click', this.fizzBUzzEvent.bind(this))
+    }
 
+    // eslint-disable-next-line no-unused-vars
     const createComponent = (events => {
-      document.querySelector("#app").innerHTML = `
+      document.querySelector('#app').innerHTML = `
       <div class="container">
         <h3 id="function-name" class="mb-3">お知らせ</h3>
           <div class="col-md-10">
@@ -31,13 +32,13 @@ export default class NoticeView {
             </dl>
         </div>
       </div>
-      `;
+      `
 
-      events();
-    })(dispatchEvent);
+      events()
+    })(dispatchEvent)
   }
 
-  render() {
-    this.renderComponent();
+  render () {
+    this.renderComponent()
   }
 }

@@ -1,36 +1,36 @@
 
 export default class Counter {
-  constructor(service) {
-    this._counter = 0;
-    this._service = service;
-    this._value = this._service.generate(this._counter);
+  constructor (service) {
+    this._counter = 0
+    this._service = service
+    this._value = this._service.generate(this._counter)
   }
 
-  incrementEvent() {
-    this._counter += 1;
-    this._value = this._service.generate(this._counter);
-    this.render(this._selector);
+  incrementEvent () {
+    this._counter += 1
+    this._value = this._service.generate(this._counter)
+    this.render(this._selector)
   }
 
-  decrementEvent() {
-    this._counter === 0 ? (this._counter = 0) : (this._counter -= 1);
-    this._value = this._service.generate(this._counter);
-    this.render(this._selector);
+  decrementEvent () {
+    this._counter === 0 ? (this._counter = 0) : (this._counter -= 1)
+    this._value = this._service.generate(this._counter)
+    this.render(this._selector)
   }
 
-  renderComponent() {
+  renderComponent () {
     const renderMainComponent = () => {
-      const incrementId = `${this._selector.appCounterId}__increment`;
-      const decrementId = `${this._selector.appCounterId}__decrement`;
+      const incrementId = `${this._selector.appCounterId}__increment`
+      const decrementId = `${this._selector.appCounterId}__decrement`
 
       const dispatchEvent = () => {
         document
           .querySelector(`#${incrementId}`)
-          .addEventListener("click", this.incrementEvent.bind(this));
+          .addEventListener('click', this.incrementEvent.bind(this))
         document
           .querySelector(`#${decrementId}`)
-          .addEventListener("click", this.decrementEvent.bind(this));
-      };
+          .addEventListener('click', this.decrementEvent.bind(this))
+      }
 
       const renderCounter = () => {
         const createCounter = (incrementId, decrementId) => {
@@ -48,28 +48,30 @@ export default class Counter {
                       +
                     </button>
                   </div>
-                `;
-        };
+                `
+        }
 
         document.querySelector(
           `#${this._selector.appCounterId}`
-        ).innerHTML = createCounter(incrementId, decrementId);
-      };
+        ).innerHTML = createCounter(incrementId, decrementId)
+      }
 
+      // eslint-disable-next-line no-unused-vars
       const createMainComponent = (events => {
-        renderCounter();
+        renderCounter()
 
-        events();
-      })(dispatchEvent);
-    };
+        events()
+      })(dispatchEvent)
+    }
 
+    // eslint-disable-next-line no-unused-vars
     const render = (() => {
-      renderMainComponent();
-    })();
+      renderMainComponent()
+    })()
   }
 
-  render(selector) {
-    this._selector = selector;
-    this.renderComponent();
+  render (selector) {
+    this._selector = selector
+    this.renderComponent()
   }
 }
