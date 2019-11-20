@@ -25,3 +25,10 @@ jobs:
         npm start & npx cypress run
       env:
         CI: true
+    - name: code coverage
+      run: |
+        npm ci
+        npm run test:coverage
+      env:
+        CI: true
+        CODACY_PROJECT_TOKEN: 78b9a58c780f43a49cdad82b8f6b81b5
