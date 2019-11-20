@@ -1,1 +1,5 @@
 cypress/support/examples
+cypress/fixtures
+bs-config.js
+webpack.dev.js
+webpack.prod.js
