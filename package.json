@@ -16,7 +16,7 @@
     "test:integration": "cypress run",
     "test:cypress": "cypress open",
     "lint": "eslint src/**/*.js --fix",
-    "format": "prettier --write src/**/*.*",
+    "format": "prettier --write src/page/*.*",
     "watch": "npm-run-all watch:*",
     "watch:format": "watch 'npm-run-all format' ./src ",
     "watch:webpack": "webpack --watch",
