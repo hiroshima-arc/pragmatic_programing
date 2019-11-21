@@ -435,8 +435,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_設計">2. 設計</a>
 <ul class="sectlevel2">
 <li><a href="#_todoリスト">2.1. TODOリスト</a></li>
-<li><a href="#_クラス図">2.2. クラス図</a></li>
-<li><a href="#_シーケンス図">2.3. シーケンス図</a></li>
+<li><a href="#_ユースケース図">2.2. ユースケース図</a></li>
+<li><a href="#_クラス図">2.3. クラス図</a></li>
+<li><a href="#_シーケンス図">2.4. シーケンス図</a></li>
 </ul>
 </li>
 <li><a href="#_開発">3. 開発</a></li>
@@ -593,28 +594,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; hashCode()</p>
 </li>
 <li>
+<p>&#10063; nullとの等価性比較</p>
+</li>
+<li>
+<p>&#10063; 他のオブジェクトとの等価性比較</p>
+</li>
+<li>
 <p>&#10003; 5 CHF * 2 = 10 CHF</p>
 </li>
 <li>
-<p>&#10063; equalsの一般化</p>
+<p>&#10063; DollarとFrancの重複</p>
 </li>
 <li>
-<p>&#10063; timesの一般化
-=== ユースケース図</p>
+<p>&#10003; equalsの一般化</p>
+</li>
+<li>
+<p>&#10063; timesの一般化</p>
+</li>
+<li>
+<p>&#10063; FrancとDollarを比較する</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_クラス図">2.2. クラス図</h3>
+<h3 id="_ユースケース図">2.2. ユースケース図</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-4f33f8f13b4ed99e8f3c66f1ecd041a1.png" alt="diag 4f33f8f13b4ed99e8f3c66f1ecd041a1" width="330" height="251">
+<img src="diag-7867bd9a98c63054f2392415588c0659.png" alt="diag 7867bd9a98c63054f2392415588c0659" width="325" height="225">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_シーケンス図">2.3. シーケンス図</h3>
+<h3 id="_シーケンス図">2.4. シーケンス図</h3>
 
 </div>
 </div>
@@ -697,9 +713,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;Moneyの丸め処理をどうする?&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;equals()&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;hashCode()&lt;/li&gt;
+                &lt;li&gt;nullとの等価性比較&lt;/li&gt;
+                &lt;li&gt;他のオブジェクトとの等価性比較&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;5 CHF * 2 = 10 CHF&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;equalsの一般化&lt;/li&gt;
+                &lt;li&gt;DollarとFrancの重複&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;equalsの一般化&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;timesの一般化&lt;/li&gt;
+                &lt;li&gt;FrancとDollarを比較する&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -751,6 +771,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre>test("Equality", () =&gt; {
   assert.isOk(new Dollar(5).equals(new Dollar(5)));
   assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
+  assert.isOk(new Franc(5).equals(new Franc(5)));
+  assert.isNotOk(new Franc(5).equals(new Franc(6)));
 });</pre>
 </div>
 </div>
@@ -799,24 +821,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class Franc {
+<pre>class Franc extends Money {
   constructor(amount) {
-    this._amount = amount;
+    super(amount);
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>times(multiplier) {
-  return new Franc(this._amount * multiplier);
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>          equals(object) {
-            const dollar = object;
-            return this._amount == dollar._amount;
+<pre>          times(multiplier) {
+            return new Franc(this._amount * multiplier);
           }
         }
       &lt;/script&gt;
@@ -846,7 +860,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 17:26:48 JST
+Last updated 2019-11-21 17:36:51 JST
 </div>
 </div>
 </body>

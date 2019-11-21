@@ -67,9 +67,13 @@
                   <li>Moneyの丸め処理をどうする?</li>
                   <li><del>equals()</del></li>
                   <li>hashCode()</li>
+                  <li>nullとの等価性比較</li>
+                  <li>他のオブジェクトとの等価性比較</li>
                   <li><del>5 CHF * 2 = 10 CHF</del></li>
-                  <li>equalsの一般化</li>
+                  <li>DollarとFrancの重複</li>
+                  <li><del>equalsの一般化</del></li>
                   <li>timesの一般化</li>
+                  <li>FrancとDollarを比較する</li>
                 </ul>
               </div>
             </div>
@@ -150,18 +154,13 @@
           }
         }
 
-        class Franc {
+        class Franc extends Money {
           constructor(amount) {
-            this._amount = amount;
+            super(amount);
           }
 
           times(multiplier) {
             return new Franc(this._amount * multiplier);
-          }
-
-          equals(object) {
-            const dollar = object;
-            return this._amount == dollar._amount;
           }
         }
       </script>

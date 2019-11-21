@@ -46,9 +46,14 @@
 * [ ] Moneyの丸め処理をどうする?
 * [x] equals()
 * [ ] hashCode()
+* [ ] nullとの等価性比較
+* [ ] 他のオブジェクトとの等価性比較
 * [x] 5 CHF * 2 = 10 CHF
-* [ ] equalsの一般化
+* [ ] DollarとFrancの重複
+* [x] equalsの一般化
 * [ ] timesの一般化
+* [ ] FrancとDollarを比較する
+
 === ユースケース図
 
 === クラス図
@@ -60,16 +65,15 @@ class Money {
   equals(object) :boolean
 }
 class Dollar {
-  amount
   times(multiplier) :Dollar
-  equals(object) :boolean
 }
 
 class Franc {
-  amount
   times(multiplier) Franc:
-  equals(object) :boolean
 }
+
+Money <|-- Dollar
+Money <|-- Franc
 ----
 
 
