@@ -110,6 +110,14 @@
             assert.equal(10, five.amount);
           });
         });
+
+        class Dollar {
+          constructor(amount) {
+            this.amount = 10;
+          }
+
+          times(multiplier) {}
+        }
       </script>
       <script>
         mocha.globals(["jQuery"]);
