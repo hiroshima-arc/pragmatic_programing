@@ -731,13 +731,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>class Dollar {
   constructor(amount) {
-    this.amount = 10;
+    this.amount = amount;
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>          times(multiplier) {}
+<pre>          times(multiplier) {
+            this.amount *= multiplier;
+          }
         }
       &lt;/script&gt;
       &lt;script&gt;
@@ -766,7 +768,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 10:41:00 JST
+Last updated 2019-11-21 10:47:49 JST
 </div>
 </div>
 </body>
