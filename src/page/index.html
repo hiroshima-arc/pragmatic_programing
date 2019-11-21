@@ -105,9 +105,11 @@
         const assert = chai.assert;
         suite("MoneyTest", () => {
           test("Multiplication", () => {
-            five = new Dollar(5);
-            five.times(2);
-            assert.equal(10, five.amount);
+            let five = new Dollar(5);
+            let product = five.times(2);
+            assert.equal(10, product.amount);
+            product = five.times(3);
+            assert.equal(15, product.amount);
           });
         });
 
@@ -117,7 +119,7 @@
           }
 
           times(multiplier) {
-            this.amount *= multiplier;
+            return new Dollar(this.amount * multiplier);
           }
         }
       </script>
