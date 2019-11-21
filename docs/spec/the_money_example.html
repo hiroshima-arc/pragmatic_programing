@@ -570,7 +570,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_todoリスト">2.1. TODOリスト</h3>
-
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; $5 + 10 CHF = $10(レートが2:1の場合)</p>
+</li>
+<li>
+<p>&#10063; $5 * 2 = $10</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_ユースケース図">2.2. ユースケース図</h3>
@@ -589,7 +598,124 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_開発">3. 開発</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;!-- Required meta tags -&#8594;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    /&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- Bootstrap CSS --&gt;
+&lt;link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+  crossorigin="anonymous"
+/&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    &lt;title&gt;アプリケーションプログラマのための練習プログラム集&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!-- ヘッダー --&gt;
+    &lt;header class="py-4"&gt;&lt;/header&gt;
+    &lt;!-- /ヘッダー --&gt;
+    &lt;div class="container text-center"&gt;
+      &lt;h1&gt;アプリケーションプログラマのための練習プログラム集&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;!-- ナビゲーションバー --&gt;
+    &lt;div id="navbar"&gt;&lt;/div&gt;
+    &lt;!-- /ナビゲーションバー --&gt;
+    &lt;!-- メイン --&gt;
+    &lt;main&gt;
+      &lt;!-- コンテンツ01 --&gt;
+      &lt;div class="py-4"&gt;
+        &lt;section id="app-dev"&gt;
+          &lt;div class="container"&gt;
+            &lt;div class="row"&gt;
+              &lt;h2&gt;TheMoneyExample&lt;/h2&gt;
+            &lt;/div&gt;
+            &lt;div class="row p-3"&gt;
+              &lt;!-- 左側カラム（画面幅md以上）　--&gt;
+              &lt;div class="col-md-2"&gt;
+                &lt;h3&gt;仕様&lt;/h3&gt;
+              &lt;/div&gt;
+              &lt;!-- 右側カラム（画面幅md以上） --&gt;
+              &lt;div class="col-md-10"&gt;
+                &lt;p&gt;
+                  通貨の異なる２つの金額を足し、通貨間の為替レートに基づいて換算された金額を得る。
+                &lt;/p&gt;
+                &lt;p&gt;
+                  金額（通貨単位あたりの額）に数値（通貨単位数）を掛け、金額を得る。
+                &lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="row p-3"&gt;
+              &lt;!-- 左側カラム（画面幅md以上）　--&gt;
+              &lt;div class="col-md-2"&gt;
+                &lt;h3&gt;ToDoリスト&lt;/h3&gt;
+              &lt;/div&gt;
+              &lt;!-- 右側カラム（画面幅md以上） --&gt;
+              &lt;div class="col-md-10"&gt;
+                &lt;ul&gt;
+                  &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
+                  &lt;li&gt;
+                    $5 * 2 = $10
+                  &lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
+      &lt;!-- /コンテンツ01 --&gt;
+    &lt;/main&gt;
+    &lt;!-- /メイン --&gt;
+    &lt;!-- フッター --&gt;
+    &lt;div id="footer"&gt;&lt;/div&gt;
+    &lt;!-- /フッター --&gt;
+    &lt;div id="dev"&gt;
+      &lt;section id="mocha"&gt;&lt;/section&gt;
+      &lt;!-- Optional JavaScript --&gt;
+      &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
+      &lt;script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"
+      &gt;&lt;/script&gt;
+      &lt;script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"
+      &gt;&lt;/script&gt;
+      &lt;script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"
+      &gt;&lt;/script&gt;
+      &lt;script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"&gt;&lt;/script&gt;
+      &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"&gt;&lt;/script&gt;
+      &lt;script&gt;
+        mocha.setup("tdd");
+      &lt;/script&gt;
+      &lt;script&gt;&lt;/script&gt;
+      &lt;script&gt;
+        mocha.globals(["jQuery"]);
+        mocha.run();
+      &lt;/script&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -607,7 +733,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 09:58:56 JST
+Last updated 2019-11-21 10:19:09 JST
 </div>
 </div>
 </body>
