@@ -706,7 +706,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       &lt;script&gt;
         mocha.setup("tdd");
       &lt;/script&gt;
-      &lt;script&gt;&lt;/script&gt;
+      &lt;script&gt;
+        const assert = chai.assert;
+        suite("MoneyTest", () =&gt; {
+          test("Multiplication", () =&gt; {
+            five = new Dollar(5);
+            five.times(2);
+            assert.equal(10, five.amount);
+          });
+        });
+      &lt;/script&gt;
       &lt;script&gt;
         mocha.globals(["jQuery"]);
         mocha.run();
@@ -733,7 +742,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 10:19:09 JST
+Last updated 2019-11-21 10:29:32 JST
 </div>
 </div>
 </body>
