@@ -113,6 +113,10 @@
             product = five.times(3);
             assert.equal(15, product.amount);
           });
+
+          test("Equality", () => {
+            assert.isOk(new Dollar(5).equals(new Dollar(5)));
+          });
         });
 
         class Dollar {
@@ -122,6 +126,10 @@
 
           times(multiplier) {
             return new Dollar(this.amount * multiplier);
+          }
+
+          equals(object) {
+            return true;
           }
         }
       </script>

@@ -733,8 +733,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
           assert.equal(10, product.amount);
           product = five.times(3);
           assert.equal(15, product.amount);
-        });
-      });</pre>
+        });</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("Equality", () =&gt; {
+    assert.isOk(new Dollar(5).equals(new Dollar(5)));
+  });
+});</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -747,8 +754,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>          times(multiplier) {
-            return new Dollar(this.amount * multiplier);
+<pre>times(multiplier) {
+  return new Dollar(this.amount * multiplier);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>          equals(object) {
+            return true;
           }
         }
       &lt;/script&gt;
@@ -778,7 +792,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 11:17:39 JST
+Last updated 2019-11-21 11:19:48 JST
 </div>
 </div>
 </body>
