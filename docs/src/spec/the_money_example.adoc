@@ -47,7 +47,8 @@
 * [x] equals()
 * [ ] hashCode()
 * [x] 5 CHF * 2 = 10 CHF
-
+* [ ] equalsの一般化
+* [ ] timesの一般化
 === ユースケース図
 
 === クラス図
