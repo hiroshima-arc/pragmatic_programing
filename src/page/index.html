@@ -118,6 +118,8 @@
           test("Equality", () => {
             assert.isOk(new Dollar(5).equals(new Dollar(5)));
             assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
+            assert.isOk(new Franc(5).equals(new Franc(5)));
+            assert.isNotOk(new Franc(5).equals(new Franc(6)));
           });
 
           test("FrancMultiplication", () => {
