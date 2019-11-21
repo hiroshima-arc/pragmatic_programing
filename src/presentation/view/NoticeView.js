@@ -22,19 +22,20 @@ export default class NoticeView {
 
     // eslint-disable-next-line no-unused-vars
     const createComponent = (events => {
-      document.querySelector('#app').innerHTML = `
-      <div class="container">
-        <h3 id="function-name" class="mb-3">お知らせ</h3>
-          <div class="col-md-10">
-            <dl class="row">
-              <dt class="col-md-3">2019年11月20日</dt>
-              <dd class="col-md-9"><a href="#" id="${selector.fizzBuzz}">FizzBuzz</a>リリース</dd>
-            </dl>
+      if (document.querySelector('#app')) {
+        document.querySelector('#app').innerHTML = `
+        <div class="container">
+          <h3 id="function-name" class="mb-3">お知らせ</h3>
+            <div class="col-md-10">
+              <dl class="row">
+                <dt class="col-md-3">2019年11月20日</dt>
+                <dd class="col-md-9"><a href="#" id="${selector.fizzBuzz}">FizzBuzz</a>リリース</dd>
+              </dl>
+          </div>
         </div>
-      </div>
-      `
-
-      events()
+        `
+        events()
+      }
     })(dispatchEvent)
   }
 
