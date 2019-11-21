@@ -73,7 +73,8 @@
                   <li>DollarとFrancの重複</li>
                   <li><del>equalsの一般化</del></li>
                   <li>timesの一般化</li>
-                  <li>FrancとDollarを比較する</li>
+                  <li><del>FrancとDollarを比較する</del></li>
+                  <li>通貨の概念</li>
                 </ul>
               </div>
             </div>
@@ -124,6 +125,7 @@
             assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
             assert.isOk(new Franc(5).equals(new Franc(5)));
             assert.isNotOk(new Franc(5).equals(new Franc(6)));
+            assert.isNotOk(new Franc(5).equals(new Dollar(5)));
           });
 
           test("FrancMultiplication", () => {
@@ -140,7 +142,10 @@
 
           equals(object) {
             const money = object;
-            return this._amount == money._amount;
+            return (
+              this._amount === money._amount &&
+              this instanceof object.constructor
+            );
           }
         }
 

@@ -612,7 +612,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; timesの一般化</p>
 </li>
 <li>
-<p>&#10063; FrancとDollarを比較する</p>
+<p>&#10003; FrancとDollarを比較する</p>
+</li>
+<li>
+<p>&#10063; 通貨の概念</p>
 </li>
 </ul>
 </div>
@@ -719,7 +722,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;DollarとFrancの重複&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;equalsの一般化&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;timesの一般化&lt;/li&gt;
-                &lt;li&gt;FrancとDollarを比較する&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;FrancとDollarを比較する&lt;/del&gt;&lt;/li&gt;
+                &lt;li&gt;通貨の概念&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -773,6 +777,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
   assert.isOk(new Franc(5).equals(new Franc(5)));
   assert.isNotOk(new Franc(5).equals(new Franc(6)));
+  assert.isNotOk(new Franc(5).equals(new Dollar(5)));
 });</pre>
 </div>
 </div>
@@ -798,7 +803,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>  equals(object) {
     const money = object;
-    return this._amount == money._amount;
+    return (
+      this._amount === money._amount &amp;&amp;
+      this instanceof object.constructor
+    );
   }
 }</pre>
 </div>
@@ -860,7 +868,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 17:36:51 JST
+Last updated 2019-11-21 17:53:02 JST
 </div>
 </div>
 </body>
