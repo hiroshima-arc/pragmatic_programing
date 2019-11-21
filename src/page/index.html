@@ -62,7 +62,7 @@
                 <ul>
                   <li>$5 + $10CHF = $10(レートが2:1の場合)</li>
                   <li><del>$5 * 2 = $10</del></li>
-                  <li>amountをprivateにする</li>
+                  <li><del>amountをprivateにする</del></li>
                   <li><del>Dollarの副作用をどうする?</del></li>
                   <li>Moneyの丸め処理をどうする?</li>
                   <li><del>equals()</del></li>
@@ -120,16 +120,16 @@
 
         class Dollar {
           constructor(amount) {
-            this.amount = amount;
+            this._amount = amount;
           }
 
           times(multiplier) {
-            return new Dollar(this.amount * multiplier);
+            return new Dollar(this._amount * multiplier);
           }
 
           equals(object) {
             const dollar = object;
-            return this.amount == dollar.amount;
+            return this._amount == dollar._amount;
           }
         }
       </script>
