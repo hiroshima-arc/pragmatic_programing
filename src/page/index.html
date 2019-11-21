@@ -127,18 +127,24 @@
           });
         });
 
-        class Dollar {
+        class Money {
           constructor(amount) {
             this._amount = amount;
           }
 
-          times(multiplier) {
-            return new Dollar(this._amount * multiplier);
+          equals(object) {
+            const money = object;
+            return this._amount == money._amount;
+          }
+        }
+
+        class Dollar extends Money {
+          constructor(amount) {
+            super(amount);
           }
 
-          equals(object) {
-            const dollar = object;
-            return this._amount == dollar._amount;
+          times(multiplier) {
+            return new Dollar(this._amount * multiplier);
           }
         }
 

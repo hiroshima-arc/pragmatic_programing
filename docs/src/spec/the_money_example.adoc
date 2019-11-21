@@ -54,6 +54,11 @@
 === クラス図
 [plantuml]
 ----
+class Money {
+  amount
+  times(multiplier) :Money
+  equals(object) :boolean
+}
 class Dollar {
   amount
   times(multiplier) :Dollar
