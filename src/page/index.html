@@ -65,7 +65,7 @@
                   <li>amountをprivateにする</li>
                   <li><del>Dollarの副作用をどうする?</del></li>
                   <li>Moneyの丸め処理をどうする?</li>
-                  <li>equals()</li>
+                  <li><del>equals()</del></li>
                   <li>hashCode()</li>
                 </ul>
               </div>
@@ -116,6 +116,7 @@
 
           test("Equality", () => {
             assert.isOk(new Dollar(5).equals(new Dollar(5)));
+            assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
           });
         });
 
@@ -129,7 +130,8 @@
           }
 
           equals(object) {
-            return true;
+            const dollar = object;
+            return this.amount == dollar.amount;
           }
         }
       </script>

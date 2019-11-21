@@ -588,7 +588,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; Moneyの丸め処理をどうする?</p>
 </li>
 <li>
-<p>&#10063; equals()</p>
+<p>&#10003; equals()</p>
 </li>
 <li>
 <p>&#10063; hashCode()</p>
@@ -686,7 +686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;amountをprivateにする&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Dollarの副作用をどうする?&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;Moneyの丸め処理をどうする?&lt;/li&gt;
-                &lt;li&gt;equals()&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;equals()&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;hashCode()&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
@@ -740,6 +740,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>  test("Equality", () =&gt; {
     assert.isOk(new Dollar(5).equals(new Dollar(5)));
+    assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
   });
 });</pre>
 </div>
@@ -762,7 +763,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>          equals(object) {
-            return true;
+            const dollar = object;
+            return this.amount == dollar.amount;
           }
         }
       &lt;/script&gt;
@@ -792,7 +794,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 11:19:48 JST
+Last updated 2019-11-21 11:22:13 JST
 </div>
 </div>
 </body>
