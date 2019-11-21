@@ -67,7 +67,7 @@
                   <li>Moneyの丸め処理をどうする?</li>
                   <li><del>equals()</del></li>
                   <li>hashCode()</li>
-                  <li>5 CHF * 2 = 10 CHF</li>
+                  <li><del>5 CHF * 2 = 10 CHF</del></li>
                 </ul>
               </div>
             </div>
@@ -117,6 +117,12 @@
             assert.isOk(new Dollar(5).equals(new Dollar(5)));
             assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
           });
+
+          test("FrancMultiplication", () => {
+            const five = new Franc(5);
+            assert.isOk(new Franc(10).equals(five.times(2)));
+            assert.isOk(new Franc(15).equals(five.times(3)));
+          });
         });
 
         class Dollar {
@@ -126,6 +132,21 @@
 
           times(multiplier) {
             return new Dollar(this._amount * multiplier);
+          }
+
+          equals(object) {
+            const dollar = object;
+            return this._amount == dollar._amount;
+          }
+        }
+
+        class Franc {
+          constructor(amount) {
+            this._amount = amount;
+          }
+
+          times(multiplier) {
+            return new Franc(this._amount * multiplier);
           }
 
           equals(object) {

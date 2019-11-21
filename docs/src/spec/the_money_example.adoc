@@ -46,7 +46,7 @@
 * [ ] Moneyの丸め処理をどうする?
 * [x] equals()
 * [ ] hashCode()
-* [ ] 5 CHF * 2 = 10 CHF
+* [x] 5 CHF * 2 = 10 CHF
 
 === ユースケース図
 
@@ -56,6 +56,12 @@
 class Dollar {
   amount
   times(multiplier) :Dollar
+  equals(object) :boolean
+}
+
+class Franc {
+  amount
+  times(multiplier) Franc:
   equals(object) :boolean
 }
 ----

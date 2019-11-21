@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; hashCode()</p>
 </li>
 <li>
-<p>&#10063; 5 CHF * 2 = 10 CHF</p>
+<p>&#10003; 5 CHF * 2 = 10 CHF</p>
 </li>
 </ul>
 </div>
@@ -607,7 +607,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-ee3bd57b2794eb43bf9b2ed93d90277c.png" alt="diag ee3bd57b2794eb43bf9b2ed93d90277c" width="154" height="104">
+<img src="diag-f70b834b441dcf1cc517304d5ce5c24d.png" alt="diag f70b834b441dcf1cc517304d5ce5c24d" width="326" height="104">
 </div>
 </div>
 </div>
@@ -695,7 +695,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;Moneyの丸め処理をどうする?&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;equals()&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;hashCode()&lt;/li&gt;
-                &lt;li&gt;5 CHF * 2 = 10 CHF&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;5 CHF * 2 = 10 CHF&lt;/del&gt;&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -744,9 +744,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("Equality", () =&gt; {
-    assert.isOk(new Dollar(5).equals(new Dollar(5)));
-    assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
+<pre>test("Equality", () =&gt; {
+  assert.isOk(new Dollar(5).equals(new Dollar(5)));
+  assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("FrancMultiplication", () =&gt; {
+    const five = new Franc(5);
+    assert.isOk(new Franc(10).equals(five.times(2)));
+    assert.isOk(new Franc(15).equals(five.times(3)));
   });
 });</pre>
 </div>
@@ -763,6 +772,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>times(multiplier) {
   return new Dollar(this._amount * multiplier);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  equals(object) {
+    const dollar = object;
+    return this._amount == dollar._amount;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class Franc {
+  constructor(amount) {
+    this._amount = amount;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>times(multiplier) {
+  return new Franc(this._amount * multiplier);
 }</pre>
 </div>
 </div>
@@ -800,7 +833,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 11:51:09 JST
+Last updated 2019-11-21 11:56:22 JST
 </div>
 </div>
 </body>
