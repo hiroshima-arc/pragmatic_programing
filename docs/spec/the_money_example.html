@@ -582,7 +582,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; amountをprivateにする</p>
 </li>
 <li>
-<p>&#10063; Dollarの副作用をどうする?</p>
+<p>&#10003; Dollarの副作用をどうする?</p>
 </li>
 <li>
 <p>&#10063; Moneyの丸め処理をどうする?</p>
@@ -678,7 +678,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;$5 * 2 = $10&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;amountをprivateにする&lt;/li&gt;
-                &lt;li&gt;Dollarの副作用をどうする?&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;Dollarの副作用をどうする?&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;Moneyの丸め処理をどうする?&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
@@ -720,9 +720,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       const assert = chai.assert;
       suite("MoneyTest", () =&gt; {
         test("Multiplication", () =&gt; {
-          five = new Dollar(5);
-          five.times(2);
-          assert.equal(10, five.amount);
+          let five = new Dollar(5);
+          let product = five.times(2);
+          assert.equal(10, product.amount);
+          product = five.times(3);
+          assert.equal(15, product.amount);
         });
       });</pre>
 </div>
@@ -738,7 +740,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>          times(multiplier) {
-            this.amount *= multiplier;
+            return new Dollar(this.amount * multiplier);
           }
         }
       &lt;/script&gt;
@@ -768,7 +770,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 10:49:46 JST
+Last updated 2019-11-21 10:58:21 JST
 </div>
 </div>
 </body>
