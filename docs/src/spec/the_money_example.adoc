@@ -51,6 +51,15 @@
 === ユースケース図
 
 === クラス図
+[plantuml]
+----
+class Dollar {
+  amount
+  times(multiplier) :Dollar
+  equals(object) :boolean
+}
+----
+
 
 === シーケンス図
 
