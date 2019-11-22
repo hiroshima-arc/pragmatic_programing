@@ -615,7 +615,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; FrancとDollarを比較する</p>
 </li>
 <li>
-<p>&#10063; 通貨の概念</p>
+<p>&#10003; 通貨の概念</p>
 </li>
 <li>
 <p>&#10063; testFrancMultiplicationを削除する?</p>
@@ -631,7 +631,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-ebafd54d17f718f8893277cbd34cc429.png" alt="diag ebafd54d17f718f8893277cbd34cc429" width="325" height="277">
+<img src="diag-7929fe2a482f9215c5a2cf8750f6aa54.png" alt="diag 7929fe2a482f9215c5a2cf8750f6aa54" width="325" height="264">
 </div>
 </div>
 </div>
@@ -726,7 +726,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;&lt;del&gt;equalsの一般化&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;timesの一般化&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;FrancとDollarを比較する&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;通貨の概念&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;通貨の概念&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;testFrancMultiplicationを削除する?&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
@@ -806,8 +806,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>class Money {
-  constructor(amount) {
+  constructor(amount, currency) {
     this._amount = amount;
+    this._currency = currency;
   }</pre>
 </div>
 </div>
@@ -818,7 +819,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>currency() {}</pre>
+<pre>currency() {
+  this._currency;
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -835,14 +838,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>static dollar(amount) {
-  return new Dollar(amount);
+  return new Dollar(amount, "USD");
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  static franc(amount) {
-    return new Franc(amount);
+    return new Franc(amount, "CHF");
   }
 }</pre>
 </div>
@@ -850,22 +853,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>class Dollar extends Money {
-  constructor(amount) {
-    super(amount);
+  constructor(amount, currency) {
+    super(amount, currency);
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>currency() {
-  return "USD";
+  return this._currency;
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  times(multiplier) {
-    return new Dollar(this._amount * multiplier);
+    return Money.dollar(this._amount * multiplier);
   }
 }</pre>
 </div>
@@ -873,22 +876,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>class Franc extends Money {
-  constructor(amount) {
-    super(amount);
+  constructor(amount, currency) {
+    super(amount, currency);
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>currency() {
-  return "CHF";
+  return this._currency;
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>          times(multiplier) {
-            return new Franc(this._amount * multiplier);
+            return Money.franc(this._amount * multiplier);
           }
         }
       &lt;/script&gt;
@@ -918,7 +921,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-22 11:10:55 JST
+Last updated 2019-11-22 11:54:36 JST
 </div>
 </div>
 </body>
