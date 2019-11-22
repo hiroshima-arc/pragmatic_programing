@@ -116,22 +116,22 @@
         suite("MoneyTest", () => {
           test("Multiplication", () => {
             const five = Money.dollar(5);
-            assert.isOk(new Dollar(10).equals(five.times(2)));
-            assert.isOk(new Dollar(15).equals(five.times(3)));
+            assert.isOk(Money.dollar(10).equals(five.times(2)));
+            assert.isOk(Money.dollar(15).equals(five.times(3)));
           });
 
           test("Equality", () => {
-            assert.isOk(new Dollar(5).equals(new Dollar(5)));
-            assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
-            assert.isOk(new Franc(5).equals(new Franc(5)));
-            assert.isNotOk(new Franc(5).equals(new Franc(6)));
-            assert.isNotOk(new Franc(5).equals(new Dollar(5)));
+            assert.isOk(Money.dollar(5).equals(Money.dollar(5)));
+            assert.isNotOk(Money.dollar(5).equals(Money.dollar(6)));
+            assert.isOk(Money.franc(5).equals(Money.franc(5)));
+            assert.isNotOk(Money.franc(5).equals(Money.franc(6)));
+            assert.isNotOk(Money.franc(5).equals(Money.dollar(5)));
           });
 
           test("FrancMultiplication", () => {
-            const five = new Franc(5);
-            assert.isOk(new Franc(10).equals(five.times(2)));
-            assert.isOk(new Franc(15).equals(five.times(3)));
+            const five = Money.franc(5);
+            assert.isOk(Money.franc(10).equals(five.times(2)));
+            assert.isOk(Money.franc(15).equals(five.times(3)));
           });
         });
 
@@ -152,6 +152,10 @@
 
           static dollar(amount) {
             return new Dollar(amount);
+          }
+
+          static franc(amount) {
+            return new Franc(amount);
           }
         }
 
