@@ -142,8 +142,9 @@
         });
 
         class Money {
-          constructor(amount) {
+          constructor(amount, currency) {
             this._amount = amount;
+            this._currency = currency;
           }
 
           times(multiplier) {}
@@ -171,8 +172,7 @@
 
         class Dollar extends Money {
           constructor(amount, currency) {
-            super(amount);
-            this._currency = currency;
+            super(amount, currency);
           }
 
           currency() {
@@ -186,8 +186,7 @@
 
         class Franc extends Money {
           constructor(amount, currency) {
-            super(amount);
-            this._currency = currency;
+            super(amount, currency);
           }
 
           currency() {
