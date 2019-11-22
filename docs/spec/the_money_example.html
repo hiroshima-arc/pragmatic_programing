@@ -617,6 +617,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10063; 通貨の概念</p>
 </li>
+<li>
+<p>&#10063; testFrancMultiplicationを削除する?</p>
+</li>
 </ul>
 </div>
 </div>
@@ -628,7 +631,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-7867bd9a98c63054f2392415588c0659.png" alt="diag 7867bd9a98c63054f2392415588c0659" width="325" height="225">
+<img src="diag-fb0f85704325919eb12fa86741418c7f.png" alt="diag fb0f85704325919eb12fa86741418c7f" width="325" height="251">
 </div>
 </div>
 </div>
@@ -724,6 +727,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;timesの一般化&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;FrancとDollarを比較する&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;通貨の概念&lt;/li&gt;
+                &lt;li&gt;testFrancMultiplicationを削除する?&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -764,29 +768,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       const assert = chai.assert;
       suite("MoneyTest", () =&gt; {
         test("Multiplication", () =&gt; {
-          let five = new Dollar(5);
-          assert.isOk(new Dollar(10).equals(five.times(2)));
-          assert.isOk(new Dollar(15).equals(five.times(3)));
+          const five = Money.dollar(5);
+          assert.isOk(Money.dollar(10).equals(five.times(2)));
+          assert.isOk(Money.dollar(15).equals(five.times(3)));
         });</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>test("Equality", () =&gt; {
-  assert.isOk(new Dollar(5).equals(new Dollar(5)));
-  assert.isNotOk(new Dollar(5).equals(new Dollar(6)));
-  assert.isOk(new Franc(5).equals(new Franc(5)));
-  assert.isNotOk(new Franc(5).equals(new Franc(6)));
-  assert.isNotOk(new Franc(5).equals(new Dollar(5)));
+  assert.isOk(Money.dollar(5).equals(Money.dollar(5)));
+  assert.isNotOk(Money.dollar(5).equals(Money.dollar(6)));
+  assert.isOk(Money.franc(5).equals(Money.franc(5)));
+  assert.isNotOk(Money.franc(5).equals(Money.franc(6)));
+  assert.isNotOk(Money.franc(5).equals(Money.dollar(5)));
 });</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  test("FrancMultiplication", () =&gt; {
-    const five = new Franc(5);
-    assert.isOk(new Franc(10).equals(five.times(2)));
-    assert.isOk(new Franc(15).equals(five.times(3)));
+    const five = Money.franc(5);
+    assert.isOk(Money.franc(10).equals(five.times(2)));
+    assert.isOk(Money.franc(15).equals(five.times(3)));
   });
 });</pre>
 </div>
@@ -801,12 +805,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  equals(object) {
-    const money = object;
-    return (
-      this._amount === money._amount &amp;&amp;
-      this instanceof object.constructor
-    );
+<pre>times(multiplier) {}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>equals(object) {
+  const money = object;
+  return (
+    this._amount === money._amount &amp;&amp;
+    this instanceof object.constructor
+  );
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static dollar(amount) {
+  return new Dollar(amount);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  static franc(amount) {
+    return new Franc(amount);
   }
 }</pre>
 </div>
@@ -868,7 +891,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-21 17:53:02 JST
+Last updated 2019-11-22 10:57:59 JST
 </div>
 </div>
 </body>
