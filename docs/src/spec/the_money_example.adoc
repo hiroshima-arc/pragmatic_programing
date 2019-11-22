@@ -71,11 +71,9 @@ class Money {
   {static} franc(amount): Franc
 }
 class Dollar {
-  times(multiplier) :Dollar
 }
 
 class Franc {
-  times(multiplier) Franc:
 }
 
 Money <|-- Dollar

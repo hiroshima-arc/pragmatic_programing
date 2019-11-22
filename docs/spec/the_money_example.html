@@ -631,7 +631,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-7929fe2a482f9215c5a2cf8750f6aa54.png" alt="diag 7929fe2a482f9215c5a2cf8750f6aa54" width="325" height="264">
+<img src="diag-b6068ae1e397b859761d0ed03cc2fba6.png" alt="diag b6068ae1e397b859761d0ed03cc2fba6" width="180" height="252">
 </div>
 </div>
 </div>
@@ -796,9 +796,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("Currency", () =&gt; {
-    assert.equal("USD", Money.dollar(1).currency());
-    assert.equal("CHF", Money.franc(1).currency());
+<pre>test("Currency", () =&gt; {
+  assert.equal("USD", Money.dollar(1).currency());
+  assert.equal("CHF", Money.franc(1).currency());
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("DeifferentClassEquality", () =&gt; {
+    assert.isOk(new Money(10, "CHF").equals(new Franc(10, "CHF")));
   });
 });</pre>
 </div>
@@ -814,13 +821,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>times(multiplier) {}</pre>
+<pre>times(multiplier) {
+  return new Money(this._amount * multiplier, this._currency);
+}</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>currency() {
-  this._currency;
+  return this._currency;
 }</pre>
 </div>
 </div>
@@ -830,8 +839,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   const money = object;
   return (
     this._amount === money._amount &amp;&amp;
-    this instanceof object.constructor
+    this._currency === money._currency
   );
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>toString() {
+  return this._amount + " " + this._currency;
 }</pre>
 </div>
 </div>
@@ -855,43 +871,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre>class Dollar extends Money {
   constructor(amount, currency) {
     super(amount, currency);
-  }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>currency() {
-  return this._currency;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  times(multiplier) {
-    return Money.dollar(this._amount * multiplier);
   }
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class Franc extends Money {
-  constructor(amount, currency) {
-    super(amount, currency);
-  }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>currency() {
-  return this._currency;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>          times(multiplier) {
-            return Money.franc(this._amount * multiplier);
+<pre>        class Franc extends Money {
+          constructor(amount, currency) {
+            super(amount, currency);
           }
         }
       &lt;/script&gt;
@@ -921,7 +909,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-22 11:54:36 JST
+Last updated 2019-11-22 12:50:19 JST
 </div>
 </div>
 </body>
