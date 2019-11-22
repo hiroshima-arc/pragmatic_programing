@@ -115,7 +115,7 @@
         const assert = chai.assert;
         suite("MoneyTest", () => {
           test("Multiplication", () => {
-            let five = new Dollar(5);
+            const five = Money.dollar(5);
             assert.isOk(new Dollar(10).equals(five.times(2)));
             assert.isOk(new Dollar(15).equals(five.times(3)));
           });
@@ -140,12 +140,18 @@
             this._amount = amount;
           }
 
+          times(multiplier) {}
+
           equals(object) {
             const money = object;
             return (
               this._amount === money._amount &&
               this instanceof object.constructor
             );
+          }
+
+          static dollar(amount) {
+            return new Dollar(amount);
           }
         }
 
