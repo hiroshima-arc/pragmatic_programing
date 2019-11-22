@@ -161,7 +161,7 @@
           }
 
           static dollar(amount) {
-            return new Dollar(amount);
+            return new Dollar(amount, "USD");
           }
 
           static franc(amount) {
@@ -170,9 +170,9 @@
         }
 
         class Dollar extends Money {
-          constructor(amount) {
+          constructor(amount, currency) {
             super(amount);
-            this._currency = "USD";
+            this._currency = currency;
           }
 
           currency() {
@@ -180,7 +180,7 @@
           }
 
           times(multiplier) {
-            return new Dollar(this._amount * multiplier);
+            return Money.dollar(this._amount * multiplier);
           }
         }
 
