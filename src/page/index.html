@@ -139,6 +139,10 @@
             assert.equal("USD", Money.dollar(1).currency());
             assert.equal("CHF", Money.franc(1).currency());
           });
+
+          test("DeifferentClassEquality", () => {
+            assert.isOk(new Money(10, "CHF").equals(new Franc(10, "CHF")));
+          });
         });
 
         class Money {
@@ -147,18 +151,24 @@
             this._currency = currency;
           }
 
-          times(multiplier) {}
+          times(multiplier) {
+            return new Money(this._amount * multiplier, this._currency);
+          }
 
           currency() {
-            this._currency;
+            return this._currency;
           }
 
           equals(object) {
             const money = object;
             return (
               this._amount === money._amount &&
-              this instanceof object.constructor
+              this._currency === money._currency
             );
+          }
+
+          toString() {
+            return this._amount + " " + this._currency;
           }
 
           static dollar(amount) {
@@ -174,27 +184,11 @@
           constructor(amount, currency) {
             super(amount, currency);
           }
-
-          currency() {
-            return this._currency;
-          }
-
-          times(multiplier) {
-            return Money.dollar(this._amount * multiplier);
-          }
         }
 
         class Franc extends Money {
           constructor(amount, currency) {
             super(amount, currency);
-          }
-
-          currency() {
-            return this._currency;
-          }
-
-          times(multiplier) {
-            return Money.franc(this._amount * multiplier);
           }
         }
       </script>
