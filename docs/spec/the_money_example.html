@@ -631,7 +631,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-fb0f85704325919eb12fa86741418c7f.png" alt="diag fb0f85704325919eb12fa86741418c7f" width="325" height="251">
+<img src="diag-ebafd54d17f718f8893277cbd34cc429.png" alt="diag ebafd54d17f718f8893277cbd34cc429" width="325" height="277">
 </div>
 </div>
 </div>
@@ -787,10 +787,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("FrancMultiplication", () =&gt; {
-    const five = Money.franc(5);
-    assert.isOk(Money.franc(10).equals(five.times(2)));
-    assert.isOk(Money.franc(15).equals(five.times(3)));
+<pre>test("FrancMultiplication", () =&gt; {
+  const five = Money.franc(5);
+  assert.isOk(Money.franc(10).equals(five.times(2)));
+  assert.isOk(Money.franc(15).equals(five.times(3)));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("Currency", () =&gt; {
+    assert.equal("USD", Money.dollar(1).currency());
+    assert.equal("CHF", Money.franc(1).currency());
   });
 });</pre>
 </div>
@@ -806,6 +814,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>times(multiplier) {}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>currency() {}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -844,6 +857,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>currency() {
+  return "USD";
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>  times(multiplier) {
     return new Dollar(this._amount * multiplier);
   }
@@ -856,6 +876,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   constructor(amount) {
     super(amount);
   }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>currency() {
+  return "CHF";
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -891,7 +918,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-22 10:57:59 JST
+Last updated 2019-11-22 11:10:55 JST
 </div>
 </div>
 </body>

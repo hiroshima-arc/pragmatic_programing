@@ -65,15 +65,18 @@
 class Money {
   amount
   {abstract} times(multiplier) :Money
+  {abstract} currency() :String
   equals(object) :boolean
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
 class Dollar {
+  currency() :String
   times(multiplier) :Dollar
 }
 
 class Franc {
+  currency() :String
   times(multiplier) Franc:
 }
 

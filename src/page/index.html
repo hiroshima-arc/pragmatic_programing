@@ -134,6 +134,11 @@
             assert.isOk(Money.franc(10).equals(five.times(2)));
             assert.isOk(Money.franc(15).equals(five.times(3)));
           });
+
+          test("Currency", () => {
+            assert.equal("USD", Money.dollar(1).currency());
+            assert.equal("CHF", Money.franc(1).currency());
+          });
         });
 
         class Money {
@@ -142,6 +147,8 @@
           }
 
           times(multiplier) {}
+
+          currency() {}
 
           equals(object) {
             const money = object;
@@ -165,6 +172,10 @@
             super(amount);
           }
 
+          currency() {
+            return "USD";
+          }
+
           times(multiplier) {
             return new Dollar(this._amount * multiplier);
           }
@@ -173,6 +184,10 @@
         class Franc extends Money {
           constructor(amount) {
             super(amount);
+          }
+
+          currency() {
+            return "CHF";
           }
 
           times(multiplier) {
