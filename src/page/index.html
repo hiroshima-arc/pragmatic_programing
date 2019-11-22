@@ -148,7 +148,9 @@
 
           times(multiplier) {}
 
-          currency() {}
+          currency() {
+            this._currency;
+          }
 
           equals(object) {
             const money = object;
@@ -163,7 +165,7 @@
           }
 
           static franc(amount) {
-            return new Franc(amount);
+            return new Franc(amount, "CHF");
           }
         }
 
@@ -183,9 +185,9 @@
         }
 
         class Franc extends Money {
-          constructor(amount) {
+          constructor(amount, currency) {
             super(amount);
-            this._currency = "CHF";
+            this._currency = currency;
           }
 
           currency() {
@@ -193,7 +195,7 @@
           }
 
           times(multiplier) {
-            return new Franc(this._amount * multiplier);
+            return Money.franc(this._amount * multiplier);
           }
         }
       </script>
