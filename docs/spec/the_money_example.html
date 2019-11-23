@@ -582,7 +582,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; $5 + $5がMoneyを返す</p>
 </li>
 <li>
-<p>&#10063; Bank.reduce(Money)</p>
+<p>&#10003; Bank.reduce(Money)</p>
+</li>
+<li>
+<p>&#10063; Moneyを変換して換算を行う</p>
+</li>
+<li>
+<p>&#10063; Reduce(Bank, String)</p>
 </li>
 </ul>
 </div>
@@ -595,7 +601,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-4ba02e2fdcb72a6bd2e37ebd859adac5.png" alt="diag 4ba02e2fdcb72a6bd2e37ebd859adac5" width="496" height="264">
+<img src="diag-6168070e69ebbf7be17246e0fa4b38ee.png" alt="diag 6168070e69ebbf7be17246e0fa4b38ee" width="496" height="290">
 </div>
 </div>
 </div>
@@ -679,7 +685,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
                 &lt;li&gt;$5 + $5 = $10&lt;/li&gt;
                 &lt;li&gt;$5 + $5がMoneyを返す&lt;/li&gt;
-                &lt;li&gt;Bank.reduce(Money)&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;Bank.reduce(Money)&lt;/del&gt;&lt;/li&gt;
+                &lt;li&gt;Moneyを変換して換算を行う&lt;/li&gt;
+                &lt;li&gt;Reduce(Bank, String)&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -767,18 +775,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("ReduceSum", () =&gt; {
-    const sum = new Sum(Money.dollar(3), Money.dollar(4));
+<pre>test("ReduceSum", () =&gt; {
+  const sum = new Sum(Money.dollar(3), Money.dollar(4));
+  const bank = new Bank();
+  const result = bank.reduce(sum, "USD");
+  assert.isOk(Money.dollar(7).equals(result));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("ReduceMoney", () =&gt; {
     const bank = new Bank();
-    const result = bank.reduce(sum, "USD");
-    assert.isOk(Money.dollar(7).equals(result));
+    const result = bank.reduce(Money.dollar(1), "USD");
+    assert.isOk(Money.dollar(1).equals(result));
   });
 });</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class Expression {}</pre>
+<pre>class Expression {
+  reduce(to) {}
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -814,8 +833,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>class Bank {
   reduce(source, to) {
-    const sum = source;
-    return sum.reduce(to);
+    return source.reduce(to);
   }
 }</pre>
 </div>
@@ -848,6 +866,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>plus(addend) {
   return new Sum(this, addend);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>reduce(to) {
+  return this;
 }</pre>
 </div>
 </div>
@@ -916,7 +941,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 12:03:13 JST
+Last updated 2019-11-23 12:28:44 JST
 </div>
 </div>
 </body>

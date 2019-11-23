@@ -42,8 +42,9 @@
 * [ ] $5 + 10 CHF = $10(レートが2:1の場合)
 * [ ] $5 + $5 = $10
 * [ ] $5 + $5がMoneyを返す
-* [ ] Bank.reduce(Money)
-
+* [x] Bank.reduce(Money)
+* [ ] Moneyを変換して換算を行う
+* [ ] Reduce(Bank, String)
 
 === ユースケース図
 
@@ -51,6 +52,7 @@
 [plantuml]
 ----
 class Expression {
+  reduce()
 }
 class Sum {
   augend
@@ -62,10 +64,11 @@ class Bank {
 }
 class Money {
   amount
-  currency
+  currency() :String
   times(multiplier) :Money
   plus(addend) :Expression
   equals(object) :boolean
+  reduce(to) :Money
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
