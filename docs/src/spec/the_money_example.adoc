@@ -40,11 +40,11 @@
 === TODOリスト
 
 * [ ] $5 + 10 CHF = $10(レートが2:1の場合)
-* [ ] $5 + $5 = $10
+* [x] $5 + $5 = $10
 * [ ] $5 + $5がMoneyを返す
 * [x] Bank.reduce(Money)
-* [ ] Moneyを変換して換算を行う
-* [ ] Reduce(Bank, String)
+* [x] Moneyを変換して換算を行う
+* [x] Reduce(Bank, String)
 
 === ユースケース図
 
@@ -55,15 +55,25 @@ class Expression {
   reduce()
 }
 class Sum {
-  augend
-  addend
+  augend: Expression
+  addend: Expression
   reduce(to): Money
 }
 class Bank {
+  rates: Map
   reduce(source, to): Money
+  addRate(from, to, rate): void
+  rate(from, to): int
+}
+class Pair {
+  from: String
+  to: String
+  equlas(object): boolean
+  hashCode(): int
+  toString(): String
 }
 class Money {
-  amount
+  amount: int
   currency() :String
   times(multiplier) :Money
   plus(addend) :Expression
@@ -76,6 +86,7 @@ Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
+Bank -> Pair
 ----
 
 
