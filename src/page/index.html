@@ -143,8 +143,11 @@
           });
         });
 
-        class Sum {
+        class Expression {}
+
+        class Sum extends Expression {
           constructor(augend, addend) {
+            super();
             this._augend = augend;
             this._addend = addend;
           }
@@ -155,15 +158,17 @@
           get addend() {
             return this._addend;
           }
-        }
 
-        class Expression {}
+          reduce(to) {
+            const amount = this._augend.amount + this._addend.amount;
+            return new Money(amount, to);
+          }
+        }
 
         class Bank {
           reduce(source, to) {
             const sum = source;
-            const amount = sum.augend.amount + sum.addend.amount;
-            return new Money(amount, to);
+            return sum.reduce(to);
           }
         }
 
