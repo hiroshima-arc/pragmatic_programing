@@ -42,6 +42,7 @@
 * [ ] $5 + 10 CHF = $10(レートが2:1の場合)
 * [ ] $5 + $5 = $10
 * [ ] $5 + $5がMoneyを返す
+* [ ] Bank.reduce(Money)
 
 
 === ユースケース図
@@ -50,6 +51,11 @@
 [plantuml]
 ----
 class Expression {
+}
+class Sum {
+  augend
+  addend
+  reduce(to): Money
 }
 class Bank {
   reduce(source, to): Money
@@ -64,7 +70,9 @@ class Money {
   {static} franc(amount): Franc
 }
 Expression <|.. Money
-Bank -> Money
+Expression <|.. Sum
+Money <- Sum
+Sum <- Bank
 ----
 
 

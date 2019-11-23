@@ -581,6 +581,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10063; $5 + $5がMoneyを返す</p>
 </li>
+<li>
+<p>&#10063; Bank.reduce(Money)</p>
+</li>
 </ul>
 </div>
 </div>
@@ -592,7 +595,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d7ddc26d640a6d4dfdc26b6c4a6c5ca5.png" alt="diag d7ddc26d640a6d4dfdc26b6c4a6c5ca5" width="352" height="264">
+<img src="diag-4ba02e2fdcb72a6bd2e37ebd859adac5.png" alt="diag 4ba02e2fdcb72a6bd2e37ebd859adac5" width="496" height="264">
 </div>
 </div>
 </div>
@@ -676,6 +679,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
                 &lt;li&gt;$5 + $5 = $10&lt;/li&gt;
                 &lt;li&gt;$5 + $5がMoneyを返す&lt;/li&gt;
+                &lt;li&gt;Bank.reduce(Money)&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -741,12 +745,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("SimpleAddition", () =&gt; {
-    const five = Money.dollar(5);
-    const sum = five.plus(five);
+<pre>test("SimpleAddition", () =&gt; {
+  const five = Money.dollar(5);
+  const sum = five.plus(five);
+  const bank = new Bank();
+  const reduced = bank.reduce(sum, "USD");
+  assert.isOk(Money.dollar(10).equals(reduced));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("PlusReturnsSum", () =&gt; {
+  const five = Money.dollar(5);
+  const result = five.plus(five);
+  const sum = result;
+  assert.isOk(five.equals(sum.augend));
+  assert.isOk(five.equals(sum.addend));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("ReduceSum", () =&gt; {
+    const sum = new Sum(Money.dollar(3), Money.dollar(4));
     const bank = new Bank();
-    const reduced = bank.reduce(sum, "USD");
-    assert.isOk(Money.dollar(10).equals(reduced));
+    const result = bank.reduce(sum, "USD");
+    assert.isOk(Money.dollar(7).equals(result));
   });
 });</pre>
 </div>
@@ -758,9 +783,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>class Sum extends Expression {
+  constructor(augend, addend) {
+    super();
+    this._augend = augend;
+    this._addend = addend;
+  }
+  get augend() {
+    return this._augend;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get addend() {
+  return this._addend;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  reduce(to) {
+    const amount = this._augend.amount + this._addend.amount;
+    return new Money(amount, to);
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>class Bank {
   reduce(source, to) {
-    return Money.dollar(10);
+    const sum = source;
+    return sum.reduce(to);
   }
 }</pre>
 </div>
@@ -792,7 +847,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>plus(addend) {
-  return new Money(this._amount + addend.amount, this._currency);
+  return new Sum(this, addend);
 }</pre>
 </div>
 </div>
@@ -861,7 +916,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 11:31:50 JST
+Last updated 2019-11-23 12:03:13 JST
 </div>
 </div>
 </body>
