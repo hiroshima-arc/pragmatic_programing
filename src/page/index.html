@@ -61,7 +61,7 @@
               <div class="col-md-10">
                 <ul>
                   <li>$5 + $10CHF = $10(レートが2:1の場合)</li>
-                  <li>$5 + $5 = $10</li>
+                  <li><del>$5 * 2 = $10</del></li>
                 </ul>
               </div>
             </div>
@@ -117,6 +117,11 @@
             assert.equal("USD", Money.dollar(1).currency());
             assert.equal("CHF", Money.franc(1).currency());
           });
+
+          test("SimpleAddition", () => {
+            const sum = Money.dollar(5).plus(Money.dollar(5));
+            assert.isOk(Money.dollar(10).equals(sum));
+          });
         });
 
         class Money {
@@ -125,8 +130,16 @@
             this._currency = currency;
           }
 
+          get amount() {
+            return this._amount;
+          }
+
           times(multiplier) {
             return new Money(this._amount * multiplier, this._currency);
+          }
+
+          plus(addend) {
+            return new Money(this._amount + addend.amount, this._currency);
           }
 
           currency() {
