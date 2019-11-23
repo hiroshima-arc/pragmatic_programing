@@ -178,6 +178,16 @@
             const result = bank.reduce(sum, "USD");
             assert.isOk(Money.dollar(15).equals(result));
           });
+
+          test("SumTimes", () => {
+            const fiveBucks = Money.dollar(5);
+            const tenFrancs = Money.franc(10);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 2);
+            const sum = new Sum(fiveBucks, tenFrancs).times(2);
+            const result = bank.reduce(sum, "USD");
+            assert.isOk(Money.dollar(20).equals(result));
+          });
         });
 
         class Pair {
@@ -209,6 +219,8 @@
         }
 
         class Expression {
+          times(multiplier) {}
+          plus(added) {}
           reduce(bank, to) {}
         }
 
@@ -224,6 +236,13 @@
 
           get addend() {
             return this._addend;
+          }
+
+          times(multiplier) {
+            return new Sum(
+              this._augend.times(multiplier),
+              this._augend.times(multiplier)
+            );
           }
 
           plus(addend) {
