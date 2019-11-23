@@ -600,6 +600,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; レポートを画面に表示する</p>
 </li>
 <li>
+<p>&#10063; レポートをアップロードする</p>
+</li>
+<li>
+<p>&#10063; レポートをダウンロードする</p>
+</li>
+<li>
 <p>&#10063; 為替レートを画面で新規追加する</p>
 </li>
 <li>
@@ -701,6 +707,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div class="col-md-10"&gt;
               &lt;ul&gt;
                 &lt;li&gt;レポートを画面に表示する&lt;/li&gt;
+                &lt;li&gt;レポートをアップロードする&lt;/li&gt;
+                &lt;li&gt;レポートをダウンロードする&lt;/li&gt;
                 &lt;li&gt;為替レートを画面で新規追加する&lt;/li&gt;
                 &lt;li&gt;為替レートを画面で更新する&lt;/li&gt;
                 &lt;li&gt;為替レートを画面で削除する&lt;/li&gt;
@@ -708,46 +716,261 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
+      &lt;/section&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div class="py-3"&gt;
+  &lt;section id="menu"&gt;
+    &lt;div class="container"&gt;
+      &lt;div id="message"&gt;&lt;/div&gt;
+      &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
+        &lt;a
+          aria-controls="panel-menu01"
+          aria-selected="true"
+          class="nav-item nav-link active"
+          data-toggle="tab"
+          href="#panel-menu01"
+          id="tab-menu01"
+          role="tab"
+          &gt;レポート&lt;/a
+        &gt;
+        &lt;a
+          aria-controls="panel-menu02"
+          aria-selected="false"
+          class="nav-item nav-link"
+          data-toggle="tab"
+          href="#panel-menu02"
+          id="tab-menu02"
+          role="tab"
+          &gt;為替レート&lt;/a
+        &gt;
+      &lt;/div&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>          &lt;div class="tab-content" id="panel-menus"&gt;
+            &lt;div
+              aria-labelledby="tab-menu01"
+              class="tab-pane fade show active border border-top-0"
+              id="panel-menu01"
+              role="tabpanel"
+            &gt;
+              &lt;dvi class="row p-3"&gt;
+                &lt;div id="report" class="col-md-12 order-md-2"&gt;
+                  &lt;div class="row"&gt;
+                    &lt;div class="col-md-12"&gt;
+                      &lt;form&gt;
+                        &lt;div class="form-group"&gt;
+                          &lt;p&gt;
+                            CSVファイルを選択して下さい。&lt;br /&gt;
+                            ※文字コードがUTF-8の場合は文字化けします。
+                          &lt;/p&gt;
+                          &lt;input
+                            type="file"
+                            class="form-control-file"
+                            id="app-csv-uploader-id-fba-stock-data"
+                          /&gt;
+                        &lt;/div&gt;
+                      &lt;/form&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="row"&gt;
+                    &lt;table class="table table-striped"&gt;
+                      &lt;tbody&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;銘柄&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;株数&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;価格&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;合計&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;IBM&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;1000&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;25 USD&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;25000 USD&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;Novartis&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;400&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;150 CHF&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;60000 CHF&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;総計&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;
+                            &lt;p&gt;65000 USD&lt;/p&gt;
+                          &lt;/td&gt;
+                          &lt;td&gt;&lt;/td&gt;
+                        &lt;/tr&gt;
+                      &lt;/tbody&gt;
+                    &lt;/table&gt;
+                  &lt;/div&gt;
+                  &lt;div class="col-md-12 py-2"&gt;
+                    &lt;button
+                      type="button"
+                      class="btn btn-primary btn"
+                      id="app-csv-download-fba-stack-data"
+                    &gt;
+                      CSVダウンロード
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/dvi&gt;
+            &lt;/div&gt;
+            &lt;div
+              aria-labelledby="tab-menu02"
+              class="tab-pane fade border border-top-0"
+              id="panel-menu02"
+              role="tabpanel"
+            &gt;
+              &lt;dvi class="row p-3"&gt;
+                &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
+                  &lt;table class="table table-striped"&gt;
+                    &lt;tbody&gt;
+                      &lt;tr&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;換算元&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;換算先&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;レート&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;&lt;/td&gt;
+                        &lt;td&gt;&lt;/td&gt;
+                      &lt;/tr&gt;
+                      &lt;tr&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;CHF&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;USD&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;p&gt;1.5&lt;/p&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;span class="table-edit"&gt;
+                            &lt;button
+                              value="1"
+                              type="button"
+                              class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                            &gt;
+                              編集
+                            &lt;/button&gt;
+                          &lt;/span&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;span class="table-remove"&gt;
+                            &lt;button
+                              value="1"
+                              type="button"
+                              class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                            &gt;
+                              削除
+                            &lt;/button&gt;
+                          &lt;/span&gt;
+                        &lt;/td&gt;
+                      &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                  &lt;/table&gt;
+                  &lt;div id="button"&gt;
+                    &lt;button
+                      id="button-add"
+                      type="button"
+                      class="btn btn-primary btn-rounded btn-sm my-0"
+                    &gt;
+                      追加
+                    &lt;/button&gt;
+                    &lt;button
+                      id="button-delete"
+                      type="button"
+                      class="btn btn-danger btn-rounded btn-sm my-0"
+                    &gt;
+                      全削除
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/dvi&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
       &lt;/section&gt;
     &lt;/div&gt;
-    &lt;!-- /コンテンツ01 --&gt;
-  &lt;/main&gt;
-  &lt;!-- /メイン --&gt;
-  &lt;!-- フッター --&gt;
-  &lt;div id="footer"&gt;&lt;/div&gt;
-  &lt;!-- /フッター --&gt;
-  &lt;div id="dev"&gt;
-    &lt;section id="mocha"&gt;&lt;/section&gt;
-    &lt;!-- Optional JavaScript --&gt;
-    &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
-    &lt;script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    &gt;&lt;/script&gt;
-    &lt;script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    &gt;&lt;/script&gt;
-    &lt;script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    &gt;&lt;/script&gt;
-    &lt;script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"&gt;&lt;/script&gt;
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"&gt;&lt;/script&gt;
-    &lt;script&gt;
-      mocha.setup("tdd");
-    &lt;/script&gt;
-    &lt;script&gt;
-      const assert = chai.assert;
-      suite("MoneyTest", () =&gt; {
-        test("Multiplication", () =&gt; {
-          const five = Money.dollar(5);
-          assert.isOk(Money.dollar(10).equals(five.times(2)));
-          assert.isOk(Money.dollar(15).equals(five.times(3)));
-        });</pre>
+  &lt;/div&gt;
+  &lt;!-- /コンテンツ01 --&gt;
+&lt;/main&gt;
+&lt;!-- /メイン --&gt;
+&lt;!-- フッター --&gt;
+&lt;div id="footer"&gt;&lt;/div&gt;
+&lt;!-- /フッター --&gt;
+&lt;div id="dev"&gt;
+  &lt;section id="mocha"&gt;&lt;/section&gt;
+  &lt;!-- Optional JavaScript --&gt;
+  &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
+  &lt;script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  &gt;&lt;/script&gt;
+  &lt;script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"
+  &gt;&lt;/script&gt;
+  &lt;script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"
+  &gt;&lt;/script&gt;
+  &lt;script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    mocha.setup("tdd");
+  &lt;/script&gt;
+  &lt;script&gt;
+    const assert = chai.assert;
+    suite("MoneyTest", () =&gt; {
+      test("Multiplication", () =&gt; {
+        const five = Money.dollar(5);
+        assert.isOk(Money.dollar(10).equals(five.times(2)));
+        assert.isOk(Money.dollar(15).equals(five.times(3)));
+      });</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1095,7 +1318,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 14:46:43 JST
+Last updated 2019-11-23 15:25:59 JST
 </div>
 </div>
 </body>
