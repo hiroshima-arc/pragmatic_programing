@@ -157,6 +157,15 @@
             const result = bank.reduce(Money.franc(2), "USD");
             assert.isOk(Money.dollar(1).equals(result));
           });
+
+          test("MixedAddition", () => {
+            const fiveBucks = Money.dollar(5);
+            const tenFrancs = Money.franc(10);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 2);
+            const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
+            assert.isOk(Money.dollar(10).equals(result));
+          });
         });
 
         class Pair {
@@ -206,7 +215,9 @@
           }
 
           reduce(bank, to) {
-            const amount = this._augend.amount + this._addend.amount;
+            const amount =
+              this._augend.reduce(bank, to).amount +
+              this._addend.reduce(bank, to).amount;
             return new Money(amount, to);
           }
         }
