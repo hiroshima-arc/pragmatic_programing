@@ -48,14 +48,22 @@
 === クラス図
 [plantuml]
 ----
+class Expression {
+}
+class Bank {
+  reduce(source, to): Money
+}
 class Money {
   amount
-  {abstract} times(multiplier) :Money
-  currency() :String
+  currency
+  times(multiplier) :Money
+  plus(addend) :Expression
   equals(object) :boolean
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+Expression <|.. Money
+Bank -> Money
 ----
 
 

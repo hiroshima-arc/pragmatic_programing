@@ -119,13 +119,25 @@
           });
 
           test("SimpleAddition", () => {
-            const sum = Money.dollar(5).plus(Money.dollar(5));
-            assert.isOk(Money.dollar(10).equals(sum));
+            const five = Money.dollar(5);
+            const sum = five.plus(five);
+            const bank = new Bank();
+            const reduced = bank.reduce(sum, "USD");
+            assert.isOk(Money.dollar(10).equals(reduced));
           });
         });
 
-        class Money {
+        class Expression {}
+
+        class Bank {
+          reduce(source, to) {
+            return Money.dollar(10);
+          }
+        }
+
+        class Money extends Expression {
           constructor(amount, currency) {
+            super();
             this._amount = amount;
             this._currency = currency;
           }

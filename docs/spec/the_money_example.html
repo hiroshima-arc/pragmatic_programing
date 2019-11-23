@@ -589,7 +589,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-efe965bd4852334ac7dd466b415a9cc5.png" alt="diag efe965bd4852334ac7dd466b415a9cc5" width="157" height="143">
+<img src="diag-d7ddc26d640a6d4dfdc26b6c4a6c5ca5.png" alt="diag d7ddc26d640a6d4dfdc26b6c4a6c5ca5" width="352" height="264">
 </div>
 </div>
 </div>
@@ -671,7 +671,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div class="col-md-10"&gt;
               &lt;ul&gt;
                 &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
-                &lt;li&gt;$5 + $5 = $10&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;$5 * 2 = $10&lt;/del&gt;&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -729,17 +729,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("Currency", () =&gt; {
-    assert.equal("USD", Money.dollar(1).currency());
-    assert.equal("CHF", Money.franc(1).currency());
+<pre>test("Currency", () =&gt; {
+  assert.equal("USD", Money.dollar(1).currency());
+  assert.equal("CHF", Money.franc(1).currency());
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("SimpleAddition", () =&gt; {
+    const five = Money.dollar(5);
+    const sum = five.plus(five);
+    const bank = new Bank();
+    const reduced = bank.reduce(sum, "USD");
+    assert.isOk(Money.dollar(10).equals(reduced));
   });
 });</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class Money {
+<pre>class Expression {}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class Bank {
+  reduce(source, to) {
+    return Money.dollar(10);
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class Money extends Expression {
   constructor(amount, currency) {
+    super();
     this._amount = amount;
     this._currency = currency;
   }</pre>
@@ -747,8 +773,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>get amount() {
+  return this._amount;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>times(multiplier) {
   return new Money(this._amount * multiplier, this._currency);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>plus(addend) {
+  return new Money(this._amount + addend.amount, this._currency);
 }</pre>
 </div>
 </div>
@@ -817,7 +857,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 11:04:23 JST
+Last updated 2019-11-23 11:28:39 JST
 </div>
 </div>
 </body>
