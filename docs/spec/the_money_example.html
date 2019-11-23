@@ -591,7 +591,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; Reduce(Bank, String)</p>
 </li>
 <li>
-<p>&#10063; Sum.plus</p>
+<p>&#10003; Sum.plus</p>
 </li>
 <li>
 <p>&#10063; Expression.times</p>
@@ -694,7 +694,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;&lt;del&gt;Bank.reduce(Money)&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Moneyを変換して換算を行う&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Reduce(Bank, String)&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;Sum.plus&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;Sum.plus&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;Expression.times&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
@@ -812,13 +812,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("MixedAddition", () =&gt; {
+<pre>test("MixedAddition", () =&gt; {
+  const fiveBucks = Money.dollar(5);
+  const tenFrancs = Money.franc(10);
+  const bank = new Bank();
+  bank.addRate("CHF", "USD", 2);
+  const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
+  assert.isOk(Money.dollar(10).equals(result));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("SumPlusMoney", () =&gt; {
     const fiveBucks = Money.dollar(5);
     const tenFrancs = Money.franc(10);
     const bank = new Bank();
     bank.addRate("CHF", "USD", 2);
-    const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
-    assert.isOk(Money.dollar(10).equals(result));
+    const sum = new Sum(fiveBucks, tenFrancs).plus(fiveBucks);
+    const result = bank.reduce(sum, "USD");
+    assert.isOk(Money.dollar(15).equals(result));
   });
 });</pre>
 </div>
@@ -899,7 +912,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>plus(addend) {
-  return null;
+  return new Sum(this, addend);
 }</pre>
 </div>
 </div>
@@ -1049,7 +1062,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 14:13:30 JST
+Last updated 2019-11-23 14:18:33 JST
 </div>
 </div>
 </body>
