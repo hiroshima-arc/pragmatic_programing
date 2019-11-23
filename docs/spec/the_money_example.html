@@ -573,7 +573,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; $5 + 10 CHF = $10(レートが2:1の場合)</p>
+<p>&#10003; $5 + 10 CHF = $10(レートが2:1の場合)</p>
 </li>
 <li>
 <p>&#10003; $5 + $5 = $10</p>
@@ -590,6 +590,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10003; Reduce(Bank, String)</p>
 </li>
+<li>
+<p>&#10063; Sum.plus</p>
+</li>
+<li>
+<p>&#10063; Expression.times</p>
+</li>
 </ul>
 </div>
 </div>
@@ -601,7 +607,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-0cc9b0d0823661985ea0c5434e5725db.png" alt="diag 0cc9b0d0823661985ea0c5434e5725db" width="688" height="290">
+<img src="diag-2db36df5782ff3336083dcb55232264c.png" alt="diag 2db36df5782ff3336083dcb55232264c" width="712" height="290">
 </div>
 </div>
 </div>
@@ -682,12 +688,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;!-- 右側カラム（画面幅md以上） --&gt;
             &lt;div class="col-md-10"&gt;
               &lt;ul&gt;
-                &lt;li&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;$5 + $10CHF = $10(レートが2:1の場合)&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;$5 + $5 = $10&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;$5 + $5がMoneyを返す&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Bank.reduce(Money)&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Moneyを変換して換算を行う&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Reduce(Bank, String)&lt;/del&gt;&lt;/li&gt;
+                &lt;li&gt;Sum.plus&lt;/li&gt;
+                &lt;li&gt;Expression.times&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -794,11 +802,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("ReduceMoneyDifferentCurrency()", () =&gt; {
+<pre>test("ReduceMoneyDifferentCurrency()", () =&gt; {
+  const bank = new Bank();
+  bank.addRate("CHF", "USD", 2);
+  const result = bank.reduce(Money.franc(2), "USD");
+  assert.isOk(Money.dollar(1).equals(result));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("MixedAddition", () =&gt; {
+    const fiveBucks = Money.dollar(5);
+    const tenFrancs = Money.franc(10);
     const bank = new Bank();
     bank.addRate("CHF", "USD", 2);
-    const result = bank.reduce(Money.franc(2), "USD");
-    assert.isOk(Money.dollar(1).equals(result));
+    const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
+    assert.isOk(Money.dollar(10).equals(result));
   });
 });</pre>
 </div>
@@ -878,8 +898,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>plus(addend) {
+  return null;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>  reduce(bank, to) {
-    const amount = this._augend.amount + this._addend.amount;
+    const amount =
+      this._augend.reduce(bank, to).amount +
+      this._addend.reduce(bank, to).amount;
     return new Money(amount, to);
   }
 }</pre>
@@ -1020,7 +1049,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 13:47:40 JST
+Last updated 2019-11-23 14:13:30 JST
 </div>
 </div>
 </body>
