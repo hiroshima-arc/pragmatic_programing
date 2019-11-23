@@ -160,7 +160,7 @@
         });
 
         class Expression {
-          reduce(to) {}
+          reduce(bank, to) {}
         }
 
         class Sum extends Expression {
@@ -177,7 +177,7 @@
             return this._addend;
           }
 
-          reduce(to) {
+          reduce(bank, to) {
             const amount = this._augend.amount + this._addend.amount;
             return new Money(amount, to);
           }
@@ -185,10 +185,14 @@
 
         class Bank {
           reduce(source, to) {
-            return source.reduce(to);
+            return source.reduce(this, to);
           }
 
           addRate(from, to, rate) {}
+
+          rate(from, to) {
+            return from === "CHF" && to === "USD" ? 2 : 1;
+          }
         }
 
         class Money extends Expression {
@@ -210,8 +214,8 @@
             return new Sum(this, addend);
           }
 
-          reduce(to) {
-            const rate = this._currency === "CHF" && to === "USD" ? 2 : 1;
+          reduce(bank, to) {
+            const rate = bank.rate(this._currency, to);
             return new Money(this._amount / rate, to);
           }
 
