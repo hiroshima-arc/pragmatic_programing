@@ -603,13 +603,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 5 CHF * 2 = 10 CHF</p>
 </li>
 <li>
-<p>&#10063; DollarとFrancの重複</p>
+<p>&#10003; DollarとFrancの重複</p>
 </li>
 <li>
 <p>&#10003; equalsの一般化</p>
 </li>
 <li>
-<p>&#10063; timesの一般化</p>
+<p>&#10003; timesの一般化</p>
 </li>
 <li>
 <p>&#10003; FrancとDollarを比較する</p>
@@ -618,7 +618,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 通貨の概念</p>
 </li>
 <li>
-<p>&#10063; testFrancMultiplicationを削除する?</p>
+<p>&#10003; testFrancMultiplicationを削除する?</p>
 </li>
 </ul>
 </div>
@@ -631,7 +631,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-b6068ae1e397b859761d0ed03cc2fba6.png" alt="diag b6068ae1e397b859761d0ed03cc2fba6" width="180" height="252">
+<img src="diag-efe965bd4852334ac7dd466b415a9cc5.png" alt="diag efe965bd4852334ac7dd466b415a9cc5" width="157" height="143">
 </div>
 </div>
 </div>
@@ -722,12 +722,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;nullとの等価性比較&lt;/li&gt;
                 &lt;li&gt;他のオブジェクトとの等価性比較&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;5 CHF * 2 = 10 CHF&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;DollarとFrancの重複&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;DollarとFrancの重複&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;equalsの一般化&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;timesの一般化&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;timesの一般化&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;FrancとDollarを比較する&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;通貨の概念&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;testFrancMultiplicationを削除する?&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;testFrancMultiplicationを削除する?&lt;/del&gt;&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -779,33 +779,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre>test("Equality", () =&gt; {
   assert.isOk(Money.dollar(5).equals(Money.dollar(5)));
   assert.isNotOk(Money.dollar(5).equals(Money.dollar(6)));
-  assert.isOk(Money.franc(5).equals(Money.franc(5)));
-  assert.isNotOk(Money.franc(5).equals(Money.franc(6)));
   assert.isNotOk(Money.franc(5).equals(Money.dollar(5)));
 });</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>test("FrancMultiplication", () =&gt; {
-  const five = Money.franc(5);
-  assert.isOk(Money.franc(10).equals(five.times(2)));
-  assert.isOk(Money.franc(15).equals(five.times(3)));
-});</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>test("Currency", () =&gt; {
-  assert.equal("USD", Money.dollar(1).currency());
-  assert.equal("CHF", Money.franc(1).currency());
-});</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  test("DeifferentClassEquality", () =&gt; {
-    assert.isOk(new Money(10, "CHF").equals(new Franc(10, "CHF")));
+<pre>  test("Currency", () =&gt; {
+    assert.equal("USD", Money.dollar(1).currency());
+    assert.equal("CHF", Money.franc(1).currency());
   });
 });</pre>
 </div>
@@ -854,32 +836,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>static dollar(amount) {
-  return new Dollar(amount, "USD");
+  return new Money(amount, "USD");
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  static franc(amount) {
-    return new Franc(amount, "CHF");
-  }
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>class Dollar extends Money {
-  constructor(amount, currency) {
-    super(amount, currency);
-  }
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        class Franc extends Money {
-          constructor(amount, currency) {
-            super(amount, currency);
+<pre>          static franc(amount) {
+            return new Money(amount, "CHF");
           }
         }
       &lt;/script&gt;
@@ -909,7 +873,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-22 12:50:19 JST
+Last updated 2019-11-23 10:58:01 JST
 </div>
 </div>
 </body>
