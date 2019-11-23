@@ -214,6 +214,10 @@
             return this._addend;
           }
 
+          plus(addend) {
+            return null;
+          }
+
           reduce(bank, to) {
             const amount =
               this._augend.reduce(bank, to).amount +
