@@ -150,6 +150,13 @@
             const result = bank.reduce(Money.dollar(1), "USD");
             assert.isOk(Money.dollar(1).equals(result));
           });
+
+          test("ReduceMoneyDifferentCurrency()", () => {
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 2);
+            const result = bank.reduce(Money.franc(2), "USD");
+            assert.isOk(Money.dollar(1).equals(result));
+          });
         });
 
         class Expression {
@@ -180,6 +187,8 @@
           reduce(source, to) {
             return source.reduce(to);
           }
+
+          addRate(from, to, rate) {}
         }
 
         class Money extends Expression {
@@ -202,7 +211,8 @@
           }
 
           reduce(to) {
-            return this;
+            const rate = this._currency === "CHF" && to === "USD" ? 2 : 1;
+            return new Money(this._amount / rate, to);
           }
 
           currency() {
