@@ -150,7 +150,9 @@
           });
         });
 
-        class Expression {}
+        class Expression {
+          reduce(to) {}
+        }
 
         class Sum extends Expression {
           constructor(augend, addend) {
@@ -174,11 +176,7 @@
 
         class Bank {
           reduce(source, to) {
-            if (source.constructor === Money) {
-              return source;
-            }
-            const sum = source;
-            return sum.reduce(to);
+            return source.reduce(to);
           }
         }
 
@@ -199,6 +197,10 @@
 
           plus(addend) {
             return new Sum(this, addend);
+          }
+
+          reduce(to) {
+            return this;
           }
 
           currency() {
