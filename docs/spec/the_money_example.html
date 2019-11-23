@@ -594,7 +594,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; Sum.plus</p>
 </li>
 <li>
-<p>&#10063; Expression.times</p>
+<p>&#10003; Expression.times</p>
 </li>
 </ul>
 </div>
@@ -607,7 +607,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-2db36df5782ff3336083dcb55232264c.png" alt="diag 2db36df5782ff3336083dcb55232264c" width="712" height="290">
+<img src="diag-77a36f5cdd6e3e54440e6c700a745926.png" alt="diag 77a36f5cdd6e3e54440e6c700a745926" width="736" height="316">
 </div>
 </div>
 </div>
@@ -695,7 +695,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 &lt;li&gt;&lt;del&gt;Moneyを変換して換算を行う&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Reduce(Bank, String)&lt;/del&gt;&lt;/li&gt;
                 &lt;li&gt;&lt;del&gt;Sum.plus&lt;/del&gt;&lt;/li&gt;
-                &lt;li&gt;Expression.times&lt;/li&gt;
+                &lt;li&gt;&lt;del&gt;Expression.times&lt;/del&gt;&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -824,14 +824,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  test("SumPlusMoney", () =&gt; {
+<pre>test("SumPlusMoney", () =&gt; {
+  const fiveBucks = Money.dollar(5);
+  const tenFrancs = Money.franc(10);
+  const bank = new Bank();
+  bank.addRate("CHF", "USD", 2);
+  const sum = new Sum(fiveBucks, tenFrancs).plus(fiveBucks);
+  const result = bank.reduce(sum, "USD");
+  assert.isOk(Money.dollar(15).equals(result));
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("SumTimes", () =&gt; {
     const fiveBucks = Money.dollar(5);
     const tenFrancs = Money.franc(10);
     const bank = new Bank();
     bank.addRate("CHF", "USD", 2);
-    const sum = new Sum(fiveBucks, tenFrancs).plus(fiveBucks);
+    const sum = new Sum(fiveBucks, tenFrancs).times(2);
     const result = bank.reduce(sum, "USD");
-    assert.isOk(Money.dollar(15).equals(result));
+    assert.isOk(Money.dollar(20).equals(result));
   });
 });</pre>
 </div>
@@ -885,6 +898,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>class Expression {
+  times(multiplier) {}
+  plus(added) {}
   reduce(bank, to) {}
 }</pre>
 </div>
@@ -906,6 +921,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>get addend() {
   return this._addend;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>times(multiplier) {
+  return new Sum(
+    this._augend.times(multiplier),
+    this._augend.times(multiplier)
+  );
 }</pre>
 </div>
 </div>
@@ -1062,7 +1087,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-23 14:18:33 JST
+Last updated 2019-11-23 14:24:42 JST
 </div>
 </div>
 </body>

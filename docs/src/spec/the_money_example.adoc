@@ -46,7 +46,7 @@
 * [x] Moneyを変換して換算を行う
 * [x] Reduce(Bank, String)
 * [x] Sum.plus
-* [ ] Expression.times
+* [x] Expression.times
 
 === ユースケース図
 
@@ -54,11 +54,14 @@
 [plantuml]
 ----
 class Expression {
-  reduce()
+  times(multiplier)
+  plus(addend)
+  reduce(bank, to)
 }
 class Sum {
   augend: Expression
   addend: Expression
+  times(multiplier): Expression
   reduce(to): Money
   plus(added): Expression
 }
