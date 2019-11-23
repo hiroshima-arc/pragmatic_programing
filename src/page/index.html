@@ -126,7 +126,29 @@
             const reduced = bank.reduce(sum, "USD");
             assert.isOk(Money.dollar(10).equals(reduced));
           });
+
+          test("PlusReturnsSum", () => {
+            const five = Money.dollar(5);
+            const result = five.plus(five);
+            const sum = result;
+            assert.isOk(five.equals(sum.augend));
+            assert.isOk(five.equals(sum.addend));
+          });
         });
+
+        class Sum {
+          constructor(augend, addend) {
+            this._augend = augend;
+            this._addend = addend;
+          }
+          get augend() {
+            return this._augend;
+          }
+
+          get addend() {
+            return this._addend;
+          }
+        }
 
         class Expression {}
 
@@ -152,7 +174,7 @@
           }
 
           plus(addend) {
-            return new Money(this._amount + addend.amount, this._currency);
+            return new Sum(this, addend);
           }
 
           currency() {
