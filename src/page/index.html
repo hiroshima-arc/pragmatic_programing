@@ -159,6 +159,34 @@
           });
         });
 
+        class Pair {
+          constructor(from, to) {
+            this._from = from;
+            this._to = to;
+          }
+
+          get from() {
+            return this._from;
+          }
+
+          get to() {
+            return this._to;
+          }
+
+          equals(object) {
+            const pair = object;
+            return this._from === pair.from && this._to === pair.to;
+          }
+
+          toString() {
+            return `${this._from}-${this._to}`;
+          }
+
+          hashCode() {
+            return 0;
+          }
+        }
+
         class Expression {
           reduce(bank, to) {}
         }
@@ -184,14 +212,21 @@
         }
 
         class Bank {
+          constructor() {
+            this._rates = new Map();
+          }
+
           reduce(source, to) {
             return source.reduce(this, to);
           }
 
-          addRate(from, to, rate) {}
+          addRate(from, to, rate) {
+            this._rates.set(new Pair(from, to).toString(), rate);
+          }
 
           rate(from, to) {
-            return from === "CHF" && to === "USD" ? 2 : 1;
+            if (from === to) return 1;
+            return this._rates.get(new Pair(from, to).toString());
           }
         }
 
