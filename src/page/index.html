@@ -124,24 +124,12 @@
           test("Equality", () => {
             assert.isOk(Money.dollar(5).equals(Money.dollar(5)));
             assert.isNotOk(Money.dollar(5).equals(Money.dollar(6)));
-            assert.isOk(Money.franc(5).equals(Money.franc(5)));
-            assert.isNotOk(Money.franc(5).equals(Money.franc(6)));
             assert.isNotOk(Money.franc(5).equals(Money.dollar(5)));
-          });
-
-          test("FrancMultiplication", () => {
-            const five = Money.franc(5);
-            assert.isOk(Money.franc(10).equals(five.times(2)));
-            assert.isOk(Money.franc(15).equals(five.times(3)));
           });
 
           test("Currency", () => {
             assert.equal("USD", Money.dollar(1).currency());
             assert.equal("CHF", Money.franc(1).currency());
-          });
-
-          test("DeifferentClassEquality", () => {
-            assert.isOk(new Money(10, "CHF").equals(new Franc(10, "CHF")));
           });
         });
 
@@ -172,23 +160,11 @@
           }
 
           static dollar(amount) {
-            return new Dollar(amount, "USD");
+            return new Money(amount, "USD");
           }
 
           static franc(amount) {
-            return new Franc(amount, "CHF");
-          }
-        }
-
-        class Dollar extends Money {
-          constructor(amount, currency) {
-            super(amount, currency);
-          }
-        }
-
-        class Franc extends Money {
-          constructor(amount, currency) {
-            super(amount, currency);
+            return new Money(amount, "CHF");
           }
         }
       </script>
