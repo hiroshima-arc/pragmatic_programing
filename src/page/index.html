@@ -134,6 +134,13 @@
             assert.isOk(five.equals(sum.augend));
             assert.isOk(five.equals(sum.addend));
           });
+
+          test("ReduceSum", () => {
+            const sum = new Sum(Money.dollar(3), Money.dollar(4));
+            const bank = new Bank();
+            const result = bank.reduce(sum, "USD");
+            assert.isOk(Money.dollar(7).equals(result));
+          });
         });
 
         class Sum {
@@ -154,7 +161,9 @@
 
         class Bank {
           reduce(source, to) {
-            return Money.dollar(10);
+            const sum = source;
+            const amount = sum.augend.amount + sum.addend.amount;
+            return new Money(amount, to);
           }
         }
 
