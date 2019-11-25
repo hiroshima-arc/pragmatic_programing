@@ -55,6 +55,16 @@
             <div class="row p-3">
               <!-- 左側カラム（画面幅md以上）　-->
               <div class="col-md-2">
+                <h3>クラス図</h3>
+              </div>
+              <!-- 右側カラム（画面幅md以上） -->
+              <div class="col-md-10">
+                <div id="class-diagram" class="mermaid"></div>
+              </div>
+            </div>
+            <div class="row p-3">
+              <!-- 左側カラム（画面幅md以上）　-->
+              <div class="col-md-2">
                 <h3>ToDoリスト</h3>
               </div>
               <!-- 右側カラム（画面幅md以上） -->
@@ -304,8 +314,60 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"
       ></script>
+      <!-- mocha, chai -->
       <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
+      <!-- mermaid -->
+      <script
+        src="https://unpkg.com/mermaid/dist/mermaid.min.js"
+        charset="UTF-8"
+      ></script>
+      <script>
+        mermaid.initialize({
+          startOnLoad: true
+        });
+        document.querySelector("#class-diagram").innerHTML = `
+                    classDiagram
+                      Expression <|-- Money
+                      Expression <|-- Sum
+                      class Expression {
+                        +times(multiplier)
+                        +plus(added)
+                        +reduce(bank, to)
+                      }
+                      class Money {
+                        -amount
+                        +currency()
+                        +plus(addend)
+                        +equals(object)
+                        +dollar(amount)
+                        +franc(amount)
+                      }
+                      Money <-- Sum
+                      class Sum {
+                        -augend
+                        -addend
+                        +times(multiplier)
+                        +reduce(to)
+                        +plus(added)
+                      }
+                      Sum <-- Bank
+                      class Bank {
+                        -rates
+                        +reduce(source, to)
+                        +addRate(from, to, rate)
+                        +rate(from, to)
+                      }
+                      Bank <-- Pair
+                      class Pair {
+                        -from
+                        -to
+                        +equals(object)
+                        +hashCode()
+                        +toString()
+                      }
+                 `;
+      </script>
       <script>
         mocha.setup("tdd");
       </script>
