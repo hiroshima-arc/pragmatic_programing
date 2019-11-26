@@ -59,17 +59,8 @@
               </div>
               <!-- 右側カラム（画面幅md以上） -->
               <div class="col-md-10">
-                <img id="im"
+                <img id="class-im"
                 src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
-                <form>
-                  <textarea id="inflated" cols="64" rows="8"> </textarea>
-                  <p>
-                    <input
-                      type="submit"
-                      onclick="compress(document.getElementById('inflated').value);return false;"
-                    />
-                  </p>
-                </form>
               </div>
             </div>
             <div class="row p-3">
@@ -306,6 +297,24 @@
     <div id="footer"></div>
     <!-- /フッター -->
     <div id="dev">
+      <section id="plunt-uml">
+        <div class="row p-3">
+          <div class="col-md-2">
+            <h3>クラス図</h3>
+          </div>
+          <div class="col-md-10">
+            <form>
+              <textarea id="class-diagram-input" cols="64" rows="8"> </textarea>
+              <p>
+                <input
+                  type="submit"
+                  onclick="compress(document.getElementById('class-diagram-input').value, 'class-im');return false;"
+                />
+              </p>
+            </form>
+          </div>
+        </div>
+      </section>
       <section id="mocha"></section>
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -342,6 +351,8 @@
       <script src="./lib/rawdeflate.js"></script>
       <script>
         const classDiagram = (() => {
+          const inputId = "class-diagram-input";
+          const outputId = "class-im";
           const source = `
                 class Expression {
                   times(multiplier)
@@ -384,8 +395,8 @@
                 Sum <- Bank
                 Bank -> Pair
           `;
-          document.querySelector("#inflated").value = source;
-          compress(source);
+          document.getElementById(inputId).value = source;
+          compress(source, outputId);
         })();
 
         function encode64(data) {
@@ -450,12 +461,12 @@
           deflater.onmessage = done_deflating;
         }
 
-        function done_deflating(e) {
-          document.getElementById("im").src =
+        function done_deflating(e, id) {
+          document.getElementById(id).src =
             "http://www.plantuml.com/plantuml/img/" + encode64(e.data);
         }
 
-        function compress(s) {
+        function compress(s, id) {
           //UTF8
           s = unescape(encodeURIComponent(s));
 
@@ -467,7 +478,7 @@
             }
           } else {
             setTimeout(function() {
-              done_deflating({ data: deflate(s) });
+              done_deflating({ data: deflate(s) }, id);
             }, 100);
           }
         }
