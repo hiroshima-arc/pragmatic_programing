@@ -3,6 +3,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -52,6 +53,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "./contents.css",
       chunkFilename: "[id].css"
-    })
+    }),
+    new CopyWebpackPlugin([{ from: "src/page/lib", to: "lib" }])
   ]
 };

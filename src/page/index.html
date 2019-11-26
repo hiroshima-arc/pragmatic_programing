@@ -339,12 +339,8 @@
       </script>
       <!-- PluntUML -->
       <!--  taken from https://github.com/johan/js-deflate -->
-      <script src="rawdeflate.js"></script>
+      <script src="./lib/rawdeflate.js"></script>
       <script>
-        const $ = function(id) {
-          return document.getElementById(id);
-        };
-
         const classDiagram = (() => {
           const source = `
                 class Expression {
