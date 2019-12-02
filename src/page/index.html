@@ -77,6 +77,8 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"
       ></script>
+      <!-- PapaParse -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>
 
       <!-- markdown -->
       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -89,10 +91,16 @@
 
 金額（通貨単位あたりの額）に数値（通貨単位数）を掛け、金額を得る。
 
+## 入力CSVファイル仕様
+
+|銘柄   |株数 |価格  |通貨 |
+|:---  |:--- |:--- |:--- |
+| string  |  int  | int | string |
+
 ## ToDoリスト
 
 - [x] レポートを画面に表示する
-- [ ] レポートをアップロードする
+- [x] レポートをアップロードする
 - [ ] レポートをダウンロードする
 - [ ] 為替レートを画面で新規追加する
 - [ ] 為替レートを画面で更新する
@@ -536,30 +544,53 @@ ReportViewModel <- View
         class View {
           constructor() {
             const items = [];
-            const ibm = new ReportViewModelItem(
-              "IBM",
-              1000,
-              new Money(25, "USD")
-            );
-            items.push(ibm);
-            const novartis = new ReportViewModelItem(
-              "Novartis",
-              400,
-              new Money(150, "CHF")
-            );
-            items.push(novartis);
             this._report = new ReportViewModel(items);
           }
 
           dispatchEvent() {
             const uploadEvent = e => {
-              e.preventDefault();
-              alert("Called");
+              if (
+                window.File &&
+                window.FileReader &&
+                window.FileList &&
+                window.Blob
+              ) {
+                const fileData = e.target.files[0];
+
+                if (!fileData.name.match(".csv$")) {
+                  alert("CSVファイルを選択してください");
+                  return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                  const data = reader.result;
+                  const parseData = Papa.parse(data, {
+                    header: true,
+                    skipEmptyLines: true
+                  });
+                  const items = parseData.data.map(
+                    i =>
+                      new ReportViewModelItem(
+                        i.銘柄,
+                        i.株数,
+                        new Money(i.価格, i.通貨)
+                      )
+                  );
+                  this._report = new ReportViewModel(items);
+                  this.render();
+                };
+
+                reader.readAsText(fileData, "utf-8");
+              } else {
+                alert("File APIに対応したブラウザでご確認ください");
+              }
             };
 
             document
               .querySelector("#app-money-upload")
-              .addEventListener("click", uploadEvent);
+              .addEventListener("change", uploadEvent);
           }
 
           render() {
@@ -654,7 +685,6 @@ ReportViewModel <- View
                             <div class="form-group">
                               <p>
                                 CSVファイルを選択して下さい。<br />
-                                ※文字コードがUTF-8の場合は文字化けします。
                               </p>
                               <input
                                 type="file"

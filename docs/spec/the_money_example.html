@@ -434,15 +434,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_仕様">1. 仕様</a></li>
 <li><a href="#_設計">2. 設計</a>
 <ul class="sectlevel2">
-<li><a href="#_todoリスト">2.1. TODOリスト</a></li>
-<li><a href="#_ユースケース図">2.2. ユースケース図</a></li>
-<li><a href="#_クラス図">2.3. クラス図</a></li>
-<li><a href="#_シーケンス図">2.4. シーケンス図</a></li>
+<li><a href="#_入力csvファイル仕様">2.1. 入力CSVファイル仕様</a></li>
+<li><a href="#_todoリスト">2.2. TODOリスト</a></li>
+<li><a href="#_ユースケース図">2.3. ユースケース図</a></li>
+<li><a href="#_クラス図">2.4. クラス図</a></li>
+<li><a href="#_シーケンス図">2.5. シーケンス図</a></li>
 </ul>
 </li>
 <li><a href="#_開発">3. 開発</a></li>
-<li><a href="#_todoリスト_2">4. ToDoリスト</a></li>
-<li><a href="#_参照">5. 参照</a></li>
+<li><a href="#_入力csvファイル仕様_2">4. 入力CSVファイル仕様</a></li>
+<li><a href="#_todoリスト_2">5. ToDoリスト</a></li>
+<li><a href="#_参照">6. 参照</a></li>
 </ul>
 </div>
 </div>
@@ -570,7 +572,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_設計">2. 設計</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_todoリスト">2.1. TODOリスト</h3>
+<h3 id="_入力csvファイル仕様">2.1. 入力CSVファイル仕様</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">銘柄</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">株数</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">価格</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">通貨</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_todoリスト">2.2. TODOリスト</h3>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
@@ -601,7 +628,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートを画面に表示する</p>
 </li>
 <li>
-<p>&#10063; レポートをアップロードする</p>
+<p>&#10003; レポートをアップロードする</p>
 </li>
 <li>
 <p>&#10063; レポートをダウンロードする</p>
@@ -619,19 +646,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ユースケース図">2.2. ユースケース図</h3>
+<h3 id="_ユースケース図">2.3. ユースケース図</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_クラス図">2.3. クラス図</h3>
+<h3 id="_クラス図">2.4. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-ba15663d0531635aec6a8ed5fab845fe.png" alt="diag ba15663d0531635aec6a8ed5fab845fe" width="740" height="476">
+<img src="diag-bf31e633bd78317f829eaadc355985a0.png" alt="diag bf31e633bd78317f829eaadc355985a0" width="759" height="476">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_シーケンス図">2.4. シーケンス図</h3>
+<h3 id="_シーケンス図">2.5. シーケンス図</h3>
 
 </div>
 </div>
@@ -726,7 +753,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"
-  &gt;&lt;/script&gt;</pre>
+  &gt;&lt;/script&gt;
+  &lt;!-- PapaParse --&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"&gt;&lt;/script&gt;</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -748,7 +777,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_todoリスト_2">4. ToDoリスト</h2>
+<h2 id="_入力csvファイル仕様_2">4. 入力CSVファイル仕様</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>|銘柄   |株数 |価格  |通貨 |
+|:---  |:--- |:--- |:--- |
+| string  |  int  | int | string |</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todoリスト_2">5. ToDoリスト</h2>
 <div class="sectionbody">
 <div class="ulist checklist">
 <ul class="checklist">
@@ -756,7 +795,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートを画面に表示する</p>
 </li>
 <li>
-<p>&#10063; レポートをアップロードする</p>
+<p>&#10003; レポートをアップロードする</p>
 </li>
 <li>
 <p>&#10063; レポートをダウンロードする</p>
@@ -843,6 +882,7 @@ class ReportViewModelItem {
 }
 ReportViewModelItem -o ReportViewModel
 class View {
+  dispatchEvent(): void
   render(): void
 }
 Expression &lt;|.. Money
@@ -1352,20 +1392,72 @@ if (deflater) {
 <pre>class View {
   constructor() {
     const items = [];
-    const ibm = new ReportViewModelItem(
-      "IBM",
-      1000,
-      new Money(25, "USD")
-    );
-    items.push(ibm);
-    const novartis = new ReportViewModelItem(
-      "Novartis",
-      400,
-      new Money(150, "CHF")
-    );
-    items.push(novartis);
     this._report = new ReportViewModel(items);
   }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>dispatchEvent() {
+  const uploadEvent = e =&gt; {
+    if (
+      window.File &amp;&amp;
+      window.FileReader &amp;&amp;
+      window.FileList &amp;&amp;
+      window.Blob
+    ) {
+      const fileData = e.target.files[0];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (!fileData.name.match(".csv$")) {
+  alert("CSVファイルを選択してください");
+  return;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const reader = new FileReader();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>reader.onload = () =&gt; {
+  const data = reader.result;
+  const parseData = Papa.parse(data, {
+    header: true,
+    skipEmptyLines: true
+  });
+  const items = parseData.data.map(
+    i =&gt;
+      new ReportViewModelItem(
+        i.銘柄,
+        i.株数,
+        new Money(i.価格, i.通貨)
+      )
+  );
+  this._report = new ReportViewModel(items);
+  this.render();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    reader.readAsText(fileData, "utf-8");
+  } else {
+    alert("File APIに対応したブラウザでご確認ください");
+  }
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  document
+    .querySelector("#app-money-upload")
+    .addEventListener("change", uploadEvent);
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1470,6 +1562,28 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>const upload = () =&gt; {
+  return `
+        &lt;div class="col-md-12"&gt;
+          &lt;form&gt;
+            &lt;div class="form-group"&gt;
+              &lt;p&gt;
+                CSVファイルを選択して下さい。&lt;br /&gt;
+              &lt;/p&gt;
+              &lt;input
+                type="file"
+                class="form-control-file"
+                id="app-money-upload"
+              /&gt;
+            &lt;/div&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>    return `
     &lt;div
       aria-labelledby="tab-menu01"
@@ -1480,21 +1594,7 @@ if (deflater) {
       &lt;dvi class="row p-3"&gt;
         &lt;div id="report" class="col-md-12 order-md-2"&gt;
           &lt;div class="row"&gt;
-            &lt;div class="col-md-12"&gt;
-              &lt;form&gt;
-                &lt;div class="form-group"&gt;
-                  &lt;p&gt;
-                    CSVファイルを選択して下さい。&lt;br /&gt;
-                    ※文字コードがUTF-8の場合は文字化けします。
-                  &lt;/p&gt;
-                  &lt;input
-                    type="file"
-                    class="form-control-file"
-                    id="app-csv-uploader-id-fba-stock-data"
-                  /&gt;
-                &lt;/div&gt;
-              &lt;/form&gt;
-            &lt;/div&gt;
+            ${upload()}
           &lt;/div&gt;
           &lt;div class="row"&gt;
             ${table()}
@@ -1604,15 +1704,16 @@ if (deflater) {
   `;
     };
     const result = `
-  &lt;section id="menu"&gt;
-    &lt;div class="container"&gt;
-      &lt;div id="message"&gt;&lt;/div&gt;
-      ${tabNav}
-      ${tabContent()}
-    &lt;/div&gt;
-  &lt;/section&gt;
+      &lt;section id="menu"&gt;
+        &lt;div class="container"&gt;
+          &lt;div id="message"&gt;&lt;/div&gt;
+          ${tabNav}
+          ${tabContent()}
+        &lt;/div&gt;
+      &lt;/section&gt;
     `;
     document.querySelector("#money-app").innerHTML = result;
+    this.dispatchEvent();
   }
 }</pre>
 </div>
@@ -1637,7 +1738,7 @@ if (deflater) {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_参照">5. 参照</h2>
+<h2 id="_参照">6. 参照</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1651,7 +1752,7 @@ if (deflater) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-02 16:32:11 JST
+Last updated 2019-12-02 18:25:21 JST
 </div>
 </div>
 </body>
