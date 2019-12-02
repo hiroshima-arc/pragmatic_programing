@@ -38,47 +38,12 @@
               <h2>TheMoneyExample</h2>
             </div>
             <div class="row p-3">
-              <!-- 左側カラム（画面幅md以上）　-->
-              <div class="col-md-2">
-                <h3>仕様</h3>
-              </div>
-              <!-- 右側カラム（画面幅md以上） -->
-              <div class="col-md-10">
-                <p>
-                  通貨の異なる２つの金額を足し、通貨間の為替レートに基づいて換算された金額を得る。
-                </p>
-                <p>
-                  金額（通貨単位あたりの額）に数値（通貨単位数）を掛け、金額を得る。
-                </p>
-              </div>
+              <div id="spec"></div>
             </div>
             <div class="row p-3">
-              <!-- 左側カラム（画面幅md以上）　-->
-              <div class="col-md-2">
-                <h3>クラス図</h3>
-              </div>
-              <!-- 右側カラム（画面幅md以上） -->
-              <div class="col-md-10">
+              <h2>クラス図</h3>
                 <img id="class-im"
                 src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
-              </div>
-            </div>
-            <div class="row p-3">
-              <!-- 左側カラム（画面幅md以上）　-->
-              <div class="col-md-2">
-                <h3>ToDoリスト</h3>
-              </div>
-              <!-- 右側カラム（画面幅md以上） -->
-              <div class="col-md-10">
-                <ul>
-                  <li>レポートを画面に表示する</li>
-                  <li>レポートをアップロードする</li>
-                  <li>レポートをダウンロードする</li>
-                  <li>為替レートを画面で新規追加する</li>
-                  <li>為替レートを画面で更新する</li>
-                  <li>為替レートを画面で削除する</li>
-                </ul>
-              </div>
             </div>
           </div>
         </section>
@@ -297,24 +262,6 @@
     <div id="footer"></div>
     <!-- /フッター -->
     <div id="dev">
-      <section id="plunt-uml">
-        <div class="row p-3">
-          <div class="col-md-2">
-            <h3>クラス図</h3>
-          </div>
-          <div class="col-md-10">
-            <form>
-              <textarea id="class-diagram-input" cols="64" rows="8"> </textarea>
-              <p>
-                <input
-                  type="submit"
-                  onclick="compress(document.getElementById('class-diagram-input').value, 'class-im');return false;"
-                />
-              </p>
-            </form>
-          </div>
-        </div>
-      </section>
       <section id="mocha"></section>
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -333,6 +280,29 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"
       ></script>
+
+      <!-- markdown -->
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+      <script>
+        document.getElementById("spec").innerHTML = marked(
+          `
+## 仕様
+
+通貨の異なる２つの金額を足し、通貨間の為替レートに基づいて換算された金額を得る。
+
+金額（通貨単位あたりの額）に数値（通貨単位数）を掛け、金額を得る。
+
+## ToDoリスト
+
+- [ ] レポートを画面に表示する
+- [ ] レポートをアップロードする
+- [ ] レポートをダウンロードする
+- [ ] 為替レートを画面で新規追加する
+- [ ] 為替レートを画面で更新する
+- [ ] 為替レートを画面で削除する
+`
+        );
+      </script>
 
       <!-- mermaid -->
       <script
@@ -353,48 +323,47 @@
           const inputId = "class-diagram-input";
           const outputId = "class-im";
           const source = `
-                class Expression {
-                  times(multiplier)
-                  plus(addend)
-                  reduce(bank, to)
-                }
-                class Sum {
-                  augend: Expression
-                  addend: Expression
-                  times(multiplier): Expression
-                  reduce(to): Money
-                  plus(added): Expression
-                }
-                class Bank {
-                  rates: Map
-                  reduce(source, to): Money
-                  addRate(from, to, rate): void
-                  rate(from, to): int
-                }
-                class Pair {
-                  from: String
-                  to: String
-                  equlas(object): boolean
-                  hashCode(): int
-                  toString(): String
-                }
-                class Money {
-                  amount: int
-                  currency() :String
-                  times(multiplier) :Money
-                  plus(addend) :Expression
-                  equals(object) :boolean
-                  reduce(to) :Money
-                  {static} dollar(amount): Dollar
-                  {static} franc(amount): Franc
-                }
-                Expression <|.. Money
-                Expression <|.. Sum
-                Money <- Sum
-                Sum <- Bank
-                Bank -> Pair
+class Expression {
+  times(multiplier)
+  plus(addend)
+  reduce(bank, to)
+}
+class Sum {
+  augend: Expression
+  addend: Expression
+  times(multiplier): Expression
+  reduce(to): Money
+  plus(added): Expression
+}
+class Bank {
+  rates: Map
+  reduce(source, to): Money
+  addRate(from, to, rate): void
+  rate(from, to): int
+}
+class Pair {
+  from: String
+  to: String
+  equlas(object): boolean
+  hashCode(): int
+  toString(): String
+}
+class Money {
+  amount: int
+  currency() :String
+  times(multiplier) :Money
+  plus(addend) :Expression
+  equals(object) :boolean
+  reduce(to) :Money
+  {static} dollar(amount): Dollar
+  {static} franc(amount): Franc
+}
+Expression <|.. Money
+Expression <|.. Sum
+Money <- Sum
+Sum <- Bank
+Bank -> Pair
           `;
-          document.getElementById(inputId).value = source;
           compress(source, outputId);
         })();
 
