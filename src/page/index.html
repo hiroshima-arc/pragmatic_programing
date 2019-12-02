@@ -498,6 +498,9 @@ ReportViewModel <- View
           constructor(items) {
             this._items = items;
           }
+          get items() {
+            return this._items;
+          }
         }
 
         class ReportViewModelItem {
@@ -510,6 +513,25 @@ ReportViewModel <- View
         }
 
         class View {
+          constructor() {
+            const items = [];
+            const ibm = new ReportViewModelItem(
+              "IBM",
+              1000,
+              new Money(25, "USD"),
+              new Money(25, "USD").times(1000)
+            );
+            items.push(ibm);
+            const novartis = new ReportViewModelItem(
+              "Novartis",
+              400,
+              new Money(150, "CHF"),
+              new Money(150, "CHF").times(400)
+            );
+            items.push(novartis);
+            this._report = new ReportViewModel(items);
+          }
+
           render() {
             const tabNav = `
               <div class="nav nav-tabs" id="tab-menus" role="tablist">
@@ -535,8 +557,80 @@ ReportViewModel <- View
                 >
               </div>
           `;
+
             const tabContent = () => {
-              const report = `
+              const report = (() => {
+                const table = () => {
+                  const header = () => {
+                    const line = ["銘柄", "株数", "価格", "合計"]
+                      .map(i => `<th>${i}</th>`)
+                      .join(" ");
+
+                    return `
+                          <thead>
+                            <tr>
+                              ${line}
+                            </tr>
+                          </thead>
+                    `;
+                  };
+
+                  const body = () => {
+                    const itmes = this._report.items;
+                    const line = [
+                      {
+                        stockName: "IBM",
+                        stockAmount: 1000,
+                        price: "25 USD",
+                        sum: "2500 USD"
+                      },
+                      {
+                        stockName: "Novartis",
+                        stockAmount: 400,
+                        price: "150 CHF",
+                        sum: "60000 CHF"
+                      }
+                    ]
+                      .map(
+                        i => `
+                    <tr>
+                      <td>${i.stockName}</td>
+                      <td>${i.stockAmount}</td>
+                      <td>${i.price}</td>
+                      <td>${i.sum}</td>
+                    </tr>
+                    `
+                      )
+                      .join(" ");
+                    const total = `
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                <p>総計</p>
+                              </td>
+                              <td>
+                                <p>65000 USD</p>
+                              </td>
+                            </tr>
+                    `;
+                    return `
+                          <tbody>
+                            ${line}
+                            ${total}
+                          </tbody>
+                    `;
+                  };
+
+                  return `
+                        <table id="report-table" class="table table-striped">
+                            ${header()}
+                            ${body()}
+                        </table>
+                  `;
+                };
+
+                return `
                 <div
                   aria-labelledby="tab-menu01"
                   class="tab-pane fade show active border border-top-0"
@@ -563,64 +657,7 @@ ReportViewModel <- View
                         </div>
                       </div>
                       <div class="row">
-                        <table id="report-table" class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>
-                                <p>銘柄</p>
-                              </th>
-                              <th>
-                                <p>株数</p>
-                              </th>
-                              <th>
-                                <p>価格</p>
-                              </th>
-                              <th>
-                                <p>合計</p>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>IBM</p>
-                              </td>
-                              <td>
-                                <p>1000</p>
-                              </td>
-                              <td>
-                                <p>25 USD</p>
-                              </td>
-                              <td>
-                                <p>25000 USD</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>Novartis</p>
-                              </td>
-                              <td>
-                                <p>400</p>
-                              </td>
-                              <td>
-                                <p>150 CHF</p>
-                              </td>
-                              <td>
-                                <p>60000 CHF</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                <p>総計</p>
-                              </td>
-                              <td>
-                                <p>65000 USD</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        ${table()}
                       </div>
                       <div class="col-md-12 py-2">
                         <button
@@ -635,6 +672,8 @@ ReportViewModel <- View
                   </dvi>
                 </div>
             `;
+              })();
+
               const exChangeRate = `
                 <div
                   aria-labelledby="tab-menu02"
