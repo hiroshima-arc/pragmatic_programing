@@ -155,6 +155,17 @@ class Money {
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+class ReportViewModel {
+  items<ReportViewModelItem>: List
+  total: Sum
+}
+class ReportViewModelItem {
+  stockName: String
+  stockAmount: int
+  price: Money
+  sum: Sum
+}
+ReportViewModelItem -o ReportViewModel
 class View {
   render(): void
 }
@@ -163,9 +174,10 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
-Sum <-- View
-Money <-- View
+Sum <-- ReportViewModelItem
+Money <-- ReportViewModelItem
 Bank <-- View
+ReportViewModel <- View
           `;
           compress(source, outputId);
         })();
@@ -705,8 +717,6 @@ Bank <-- View
             `
             document.querySelector("#money-app").innerHTML = result;
           };
-          renderReport() {};
-          renderExhangeRate() {};
         }
         
         const view = new View();
