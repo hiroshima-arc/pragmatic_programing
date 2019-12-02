@@ -94,11 +94,19 @@ class Money {
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+class View {
+  render(): void
+  renderReport() :void
+  renderExchangeRate() :void
+}
 Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
+Sum <-- View
+Money <-- View
+Bank <-- View
 ----
 
 
