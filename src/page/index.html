@@ -49,210 +49,7 @@
         </section>
 
         <div class="py-3">
-          <section id="menu">
-            <div class="container">
-              <div id="message"></div>
-              <div class="nav nav-tabs" id="tab-menus" role="tablist">
-                <a
-                  aria-controls="panel-menu01"
-                  aria-selected="true"
-                  class="nav-item nav-link active"
-                  data-toggle="tab"
-                  href="#panel-menu01"
-                  id="tab-menu01"
-                  role="tab"
-                  >レポート</a
-                >
-                <a
-                  aria-controls="panel-menu02"
-                  aria-selected="false"
-                  class="nav-item nav-link"
-                  data-toggle="tab"
-                  href="#panel-menu02"
-                  id="tab-menu02"
-                  role="tab"
-                  >為替レート</a
-                >
-              </div>
-
-              <div class="tab-content" id="panel-menus">
-                <div
-                  aria-labelledby="tab-menu01"
-                  class="tab-pane fade show active border border-top-0"
-                  id="panel-menu01"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="report" class="col-md-12 order-md-2">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <form>
-                            <div class="form-group">
-                              <p>
-                                CSVファイルを選択して下さい。<br />
-                                ※文字コードがUTF-8の場合は文字化けします。
-                              </p>
-                              <input
-                                type="file"
-                                class="form-control-file"
-                                id="app-csv-uploader-id-fba-stock-data"
-                              />
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <table id="report-table" class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>
-                                <p>銘柄</p>
-                              </th>
-                              <th>
-                                <p>株数</p>
-                              </th>
-                              <th>
-                                <p>価格</p>
-                              </th>
-                              <th>
-                                <p>合計</p>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>IBM</p>
-                              </td>
-                              <td>
-                                <p>1000</p>
-                              </td>
-                              <td>
-                                <p>25 USD</p>
-                              </td>
-                              <td>
-                                <p>25000 USD</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>Novartis</p>
-                              </td>
-                              <td>
-                                <p>400</p>
-                              </td>
-                              <td>
-                                <p>150 CHF</p>
-                              </td>
-                              <td>
-                                <p>60000 CHF</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                <p>総計</p>
-                              </td>
-                              <td>
-                                <p>65000 USD</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-12 py-2">
-                        <button
-                          type="button"
-                          class="btn btn-primary btn"
-                          id="app-csv-download-fba-stack-data"
-                        >
-                          CSVダウンロード
-                        </button>
-                      </div>
-                    </div>
-                  </dvi>
-                </div>
-                <div
-                  aria-labelledby="tab-menu02"
-                  class="tab-pane fade border border-top-0"
-                  id="panel-menu02"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="exchange-rate" class="col-md-12 order-md-2">
-                      <table
-                        id="exchange-rate-table"
-                        class="table table-striped"
-                      >
-                        <thead>
-                          <tr>
-                            <th>
-                              <p>換算元</p>
-                            </th>
-                            <th>
-                              <p>換算先</p>
-                            </th>
-                            <th>
-                              <p>レート</p>
-                            </th>
-                            <td></td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <p>CHF</p>
-                            </td>
-                            <td>
-                              <p>USD</p>
-                            </td>
-                            <td>
-                              <p>1.5</p>
-                            </td>
-                            <td>
-                              <span class="button">
-                                <button
-                                  value="1"
-                                  type="button"
-                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  編集
-                                </button>
-                                <button
-                                  value="1"
-                                  type="button"
-                                  class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  削除
-                                </button>
-                              </span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div id="button">
-                        <button
-                          id="button-add"
-                          type="button"
-                          class="btn btn-primary btn-rounded btn-sm my-0"
-                        >
-                          追加
-                        </button>
-                        <button
-                          id="button-delete"
-                          type="button"
-                          class="btn btn-danger btn-rounded btn-sm my-0"
-                        >
-                          全削除
-                        </button>
-                      </div>
-                    </div>
-                  </dvi>
-                </div>
-              </div>
-            </div>
-          </section>
+          <div id="app"></div>
         </div>
       </div>
       <!-- /コンテンツ01 -->
@@ -686,6 +483,223 @@ Bank <-- View
             return new Money(amount, "CHF");
           }
         }
+
+        class View {
+          render() {
+            const result = `
+          <section id="menu">
+            <div class="container">
+              <div id="message"></div>
+              <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                <a
+                  aria-controls="panel-menu01"
+                  aria-selected="true"
+                  class="nav-item nav-link active"
+                  data-toggle="tab"
+                  href="#panel-menu01"
+                  id="tab-menu01"
+                  role="tab"
+                  >レポート</a
+                >
+                <a
+                  aria-controls="panel-menu02"
+                  aria-selected="false"
+                  class="nav-item nav-link"
+                  data-toggle="tab"
+                  href="#panel-menu02"
+                  id="tab-menu02"
+                  role="tab"
+                  >為替レート</a
+                >
+              </div>
+
+              <div class="tab-content" id="panel-menus">
+                <div
+                  aria-labelledby="tab-menu01"
+                  class="tab-pane fade show active border border-top-0"
+                  id="panel-menu01"
+                  role="tabpanel"
+                >
+                  <dvi class="row p-3">
+                    <div id="report" class="col-md-12 order-md-2">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <form>
+                            <div class="form-group">
+                              <p>
+                                CSVファイルを選択して下さい。<br />
+                                ※文字コードがUTF-8の場合は文字化けします。
+                              </p>
+                              <input
+                                type="file"
+                                class="form-control-file"
+                                id="app-csv-uploader-id-fba-stock-data"
+                              />
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <table id="report-table" class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>
+                                <p>銘柄</p>
+                              </th>
+                              <th>
+                                <p>株数</p>
+                              </th>
+                              <th>
+                                <p>価格</p>
+                              </th>
+                              <th>
+                                <p>合計</p>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>IBM</p>
+                              </td>
+                              <td>
+                                <p>1000</p>
+                              </td>
+                              <td>
+                                <p>25 USD</p>
+                              </td>
+                              <td>
+                                <p>25000 USD</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>Novartis</p>
+                              </td>
+                              <td>
+                                <p>400</p>
+                              </td>
+                              <td>
+                                <p>150 CHF</p>
+                              </td>
+                              <td>
+                                <p>60000 CHF</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                <p>総計</p>
+                              </td>
+                              <td>
+                                <p>65000 USD</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12 py-2">
+                        <button
+                          type="button"
+                          class="btn btn-primary btn"
+                          id="app-csv-download-fba-stack-data"
+                        >
+                          CSVダウンロード
+                        </button>
+                      </div>
+                    </div>
+                  </dvi>
+                </div>
+                <div
+                  aria-labelledby="tab-menu02"
+                  class="tab-pane fade border border-top-0"
+                  id="panel-menu02"
+                  role="tabpanel"
+                >
+                  <dvi class="row p-3">
+                    <div id="exchange-rate" class="col-md-12 order-md-2">
+                      <table
+                        id="exchange-rate-table"
+                        class="table table-striped"
+                      >
+                        <thead>
+                          <tr>
+                            <th>
+                              <p>換算元</p>
+                            </th>
+                            <th>
+                              <p>換算先</p>
+                            </th>
+                            <th>
+                              <p>レート</p>
+                            </th>
+                            <td></td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <p>CHF</p>
+                            </td>
+                            <td>
+                              <p>USD</p>
+                            </td>
+                            <td>
+                              <p>1.5</p>
+                            </td>
+                            <td>
+                              <span class="button">
+                                <button
+                                  value="1"
+                                  type="button"
+                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                >
+                                  編集
+                                </button>
+                                <button
+                                  value="1"
+                                  type="button"
+                                  class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                                >
+                                  削除
+                                </button>
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div id="button">
+                        <button
+                          id="button-add"
+                          type="button"
+                          class="btn btn-primary btn-rounded btn-sm my-0"
+                        >
+                          追加
+                        </button>
+                        <button
+                          id="button-delete"
+                          type="button"
+                          class="btn btn-danger btn-rounded btn-sm my-0"
+                        >
+                          全削除
+                        </button>
+                      </div>
+                    </div>
+                  </dvi>
+                </div>
+              </div>
+            </div>
+          </section>
+            `
+            document.querySelector("#app").innerHTML = result;
+          };
+          renderReport() {};
+          renderExhangeRate() {};
+        }
+        
+        const view = new View();
+        view.render()
       </script>
       <script>
         mocha.globals(["jQuery"]);
