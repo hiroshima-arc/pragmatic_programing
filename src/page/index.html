@@ -41,9 +41,9 @@
               <div id="spec"></div>
             </div>
             <div class="row p-3">
-              <h2>クラス図</h3>
-                <img id="class-im"
-                src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
+              <h2>クラス図</h2>
+              <img id="class-im"
+              src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
             </div>
           </div>
         </section>
@@ -494,9 +494,24 @@ ReportViewModel <- View
           }
         }
 
+        class ReportViewModel {
+          constructor(items) {
+            this._items = items;
+          }
+        }
+
+        class ReportViewModelItem {
+          constructor(stockName, stockAmount, price, sum) {
+            this._stockName = stockName;
+            this._stockAmount = stockAmount;
+            this._price = price;
+            this._sum = sum;
+          }
+        }
+
         class View {
           render() {
-          const tabNav = `
+            const tabNav = `
               <div class="nav nav-tabs" id="tab-menus" role="tablist">
                 <a
                   aria-controls="panel-menu01"
@@ -519,9 +534,9 @@ ReportViewModel <- View
                   >為替レート</a
                 >
               </div>
-          `
-          const tabContent = () => {
-            const report = `
+          `;
+            const tabContent = () => {
+              const report = `
                 <div
                   aria-labelledby="tab-menu01"
                   class="tab-pane fade show active border border-top-0"
@@ -619,8 +634,8 @@ ReportViewModel <- View
                     </div>
                   </dvi>
                 </div>
-            `
-            const exChangeRate = `
+            `;
+              const exChangeRate = `
                 <div
                   aria-labelledby="tab-menu02"
                   class="tab-pane fade border border-top-0"
@@ -698,15 +713,15 @@ ReportViewModel <- View
                     </div>
                   </dvi>
                 </div>
-            `
-            return `
+            `;
+              return `
               <div class="tab-content" id="panel-menus">
                 ${report}
                 ${exChangeRate}
               </div>
-          `
-        }
-          const result = `
+          `;
+            };
+            const result = `
           <section id="menu">
             <div class="container">
               <div id="message"></div>
@@ -714,13 +729,13 @@ ReportViewModel <- View
               ${tabContent()}
             </div>
           </section>
-            `
+            `;
             document.querySelector("#money-app").innerHTML = result;
-          };
+          }
         }
-        
+
         const view = new View();
-        view.render()
+        view.render();
       </script>
       <script>
         mocha.globals(["jQuery"]);
