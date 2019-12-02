@@ -167,6 +167,7 @@ class ReportViewModelItem {
 }
 ReportViewModelItem -o ReportViewModel
 class View {
+  dispatchEvent(): void
   render(): void
 }
 Expression <|.. Money
@@ -550,6 +551,17 @@ ReportViewModel <- View
             this._report = new ReportViewModel(items);
           }
 
+          dispatchEvent() {
+            const uploadEvent = e => {
+              e.preventDefault();
+              alert("Called");
+            };
+
+            document
+              .querySelector("#app-money-upload")
+              .addEventListener("click", uploadEvent);
+          }
+
           render() {
             const tabNav = `
               <div class="nav nav-tabs" id="tab-menus" role="tablist">
@@ -635,16 +647,8 @@ ReportViewModel <- View
                   `;
                 };
 
-                return `
-                <div
-                  aria-labelledby="tab-menu01"
-                  class="tab-pane fade show active border border-top-0"
-                  id="panel-menu01"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="report" class="col-md-12 order-md-2">
-                      <div class="row">
+                const upload = () => {
+                  return `
                         <div class="col-md-12">
                           <form>
                             <div class="form-group">
@@ -655,11 +659,25 @@ ReportViewModel <- View
                               <input
                                 type="file"
                                 class="form-control-file"
-                                id="app-csv-uploader-id-fba-stock-data"
+                                id="app-money-upload"
                               />
                             </div>
                           </form>
                         </div>
+                  `;
+                };
+
+                return `
+                <div
+                  aria-labelledby="tab-menu01"
+                  class="tab-pane fade show active border border-top-0"
+                  id="panel-menu01"
+                  role="tabpanel"
+                >
+                  <dvi class="row p-3">
+                    <div id="report" class="col-md-12 order-md-2">
+                      <div class="row">
+                        ${upload()}
                       </div>
                       <div class="row">
                         ${table()}
@@ -766,15 +784,16 @@ ReportViewModel <- View
           `;
             };
             const result = `
-          <section id="menu">
-            <div class="container">
-              <div id="message"></div>
-              ${tabNav}
-              ${tabContent()}
-            </div>
-          </section>
+              <section id="menu">
+                <div class="container">
+                  <div id="message"></div>
+                  ${tabNav}
+                  ${tabContent()}
+                </div>
+              </section>
             `;
             document.querySelector("#money-app").innerHTML = result;
+            this.dispatchEvent();
           }
         }
 
