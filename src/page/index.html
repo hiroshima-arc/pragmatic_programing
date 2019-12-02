@@ -49,7 +49,7 @@
         </section>
 
         <div class="py-3">
-          <div id="app"></div>
+          <div id="money-app"></div>
         </div>
       </div>
       <!-- /コンテンツ01 -->
@@ -157,8 +157,6 @@ class Money {
 }
 class View {
   render(): void
-  renderReport() :void
-  renderExchangeRate() :void
 }
 Expression <|.. Money
 Expression <|.. Sum
@@ -486,10 +484,7 @@ Bank <-- View
 
         class View {
           render() {
-            const result = `
-          <section id="menu">
-            <div class="container">
-              <div id="message"></div>
+          const tabNav = `
               <div class="nav nav-tabs" id="tab-menus" role="tablist">
                 <a
                   aria-controls="panel-menu01"
@@ -512,8 +507,9 @@ Bank <-- View
                   >為替レート</a
                 >
               </div>
-
-              <div class="tab-content" id="panel-menus">
+          `
+          const tabContent = () => {
+            const report = `
                 <div
                   aria-labelledby="tab-menu01"
                   class="tab-pane fade show active border border-top-0"
@@ -611,6 +607,8 @@ Bank <-- View
                     </div>
                   </dvi>
                 </div>
+            `
+            const exChangeRate = `
                 <div
                   aria-labelledby="tab-menu02"
                   class="tab-pane fade border border-top-0"
@@ -688,11 +686,24 @@ Bank <-- View
                     </div>
                   </dvi>
                 </div>
+            `
+            return `
+              <div class="tab-content" id="panel-menus">
+                ${report}
+                ${exChangeRate}
               </div>
+          `
+        }
+          const result = `
+          <section id="menu">
+            <div class="container">
+              <div id="message"></div>
+              ${tabNav}
+              ${tabContent()}
             </div>
           </section>
             `
-            document.querySelector("#app").innerHTML = result;
+            document.querySelector("#money-app").innerHTML = result;
           };
           renderReport() {};
           renderExhangeRate() {};
