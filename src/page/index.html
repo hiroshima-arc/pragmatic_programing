@@ -91,7 +91,7 @@
 
 ## ToDoリスト
 
-- [ ] レポートを画面に表示する
+- [x] レポートを画面に表示する
 - [ ] レポートをアップロードする
 - [ ] レポートをダウンロードする
 - [ ] 為替レートを画面で新規追加する
@@ -163,7 +163,7 @@ class ReportViewModelItem {
   stockName: String
   stockAmount: int
   price: Money
-  sum: Sum
+  sum: Money
 }
 ReportViewModelItem -o ReportViewModel
 class View {
@@ -174,7 +174,7 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
-Sum <-- ReportViewModelItem
+Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
 Bank <-- View
 ReportViewModel <- View
@@ -497,18 +497,38 @@ ReportViewModel <- View
         class ReportViewModel {
           constructor(items) {
             this._items = items;
+            this._bank = new Bank();
+            this._bank.addRate("CHF", "USD", 1.5);
           }
           get items() {
             return this._items;
           }
+          get total() {
+            let result = new Money(0, "USD");
+            this._items.forEach(i => {
+              result = this._bank.reduce(new Sum(result, i.sum), "USD");
+            });
+            return result;
+          }
         }
 
         class ReportViewModelItem {
-          constructor(stockName, stockAmount, price, sum) {
+          constructor(stockName, stockAmount, price) {
             this._stockName = stockName;
             this._stockAmount = stockAmount;
             this._price = price;
-            this._sum = sum;
+          }
+          get stockName() {
+            return this._stockName;
+          }
+          get stockAmount() {
+            return this._stockAmount;
+          }
+          get price() {
+            return this._price;
+          }
+          get sum() {
+            return this._price.times(this._stockAmount);
           }
         }
 
@@ -518,15 +538,13 @@ ReportViewModel <- View
             const ibm = new ReportViewModelItem(
               "IBM",
               1000,
-              new Money(25, "USD"),
-              new Money(25, "USD").times(1000)
+              new Money(25, "USD")
             );
             items.push(ibm);
             const novartis = new ReportViewModelItem(
               "Novartis",
               400,
-              new Money(150, "CHF"),
-              new Money(150, "CHF").times(400)
+              new Money(150, "CHF")
             );
             items.push(novartis);
             this._report = new ReportViewModel(items);
@@ -576,21 +594,8 @@ ReportViewModel <- View
                   };
 
                   const body = () => {
-                    const itmes = this._report.items;
-                    const line = [
-                      {
-                        stockName: "IBM",
-                        stockAmount: 1000,
-                        price: "25 USD",
-                        sum: "2500 USD"
-                      },
-                      {
-                        stockName: "Novartis",
-                        stockAmount: 400,
-                        price: "150 CHF",
-                        sum: "60000 CHF"
-                      }
-                    ]
+                    const items = this._report.items;
+                    const line = items
                       .map(
                         i => `
                     <tr>
@@ -610,7 +615,7 @@ ReportViewModel <- View
                                 <p>総計</p>
                               </td>
                               <td>
-                                <p>65000 USD</p>
+                                <p>${this._report.total}</p>
                               </td>
                             </tr>
                     `;

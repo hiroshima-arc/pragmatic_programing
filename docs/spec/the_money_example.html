@@ -598,7 +598,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; Expression.times</p>
 </li>
 <li>
-<p>&#10063; レポートを画面に表示する</p>
+<p>&#10003; レポートを画面に表示する</p>
 </li>
 <li>
 <p>&#10063; レポートをアップロードする</p>
@@ -626,7 +626,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.3. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-ea429aa7681bd3c5bce387eb8b0e0107.png" alt="diag ea429aa7681bd3c5bce387eb8b0e0107" width="736" height="463">
+<img src="diag-ba15663d0531635aec6a8ed5fab845fe.png" alt="diag ba15663d0531635aec6a8ed5fab845fe" width="740" height="476">
 </div>
 </div>
 </div>
@@ -688,9 +688,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             &lt;div id="spec"&gt;&lt;/div&gt;
           &lt;/div&gt;
           &lt;div class="row p-3"&gt;
-            &lt;h2&gt;クラス図&lt;/h3&gt;
-              &lt;img id="class-im"
-              src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000&gt;
+            &lt;h2&gt;クラス図&lt;/h2&gt;
+            &lt;img id="class-im"
+            src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/section&gt;</pre>
@@ -698,214 +698,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>&lt;div class="py-3"&gt;
-  &lt;section id="menu"&gt;
-    &lt;div class="container"&gt;
-      &lt;div id="message"&gt;&lt;/div&gt;
-      &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
-        &lt;a
-          aria-controls="panel-menu01"
-          aria-selected="true"
-          class="nav-item nav-link active"
-          data-toggle="tab"
-          href="#panel-menu01"
-          id="tab-menu01"
-          role="tab"
-          &gt;レポート&lt;/a
-        &gt;
-        &lt;a
-          aria-controls="panel-menu02"
-          aria-selected="false"
-          class="nav-item nav-link"
-          data-toggle="tab"
-          href="#panel-menu02"
-          id="tab-menu02"
-          role="tab"
-          &gt;為替レート&lt;/a
-        &gt;
-      &lt;/div&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>          &lt;div class="tab-content" id="panel-menus"&gt;
-            &lt;div
-              aria-labelledby="tab-menu01"
-              class="tab-pane fade show active border border-top-0"
-              id="panel-menu01"
-              role="tabpanel"
-            &gt;
-              &lt;dvi class="row p-3"&gt;
-                &lt;div id="report" class="col-md-12 order-md-2"&gt;
-                  &lt;div class="row"&gt;
-                    &lt;div class="col-md-12"&gt;
-                      &lt;form&gt;
-                        &lt;div class="form-group"&gt;
-                          &lt;p&gt;
-                            CSVファイルを選択して下さい。&lt;br /&gt;
-                            ※文字コードがUTF-8の場合は文字化けします。
-                          &lt;/p&gt;
-                          &lt;input
-                            type="file"
-                            class="form-control-file"
-                            id="app-csv-uploader-id-fba-stock-data"
-                          /&gt;
-                        &lt;/div&gt;
-                      &lt;/form&gt;
-                    &lt;/div&gt;
-                  &lt;/div&gt;
-                  &lt;div class="row"&gt;
-                    &lt;table id="report-table" class="table table-striped"&gt;
-                      &lt;thead&gt;
-                        &lt;tr&gt;
-                          &lt;th&gt;
-                            &lt;p&gt;銘柄&lt;/p&gt;
-                          &lt;/th&gt;
-                          &lt;th&gt;
-                            &lt;p&gt;株数&lt;/p&gt;
-                          &lt;/th&gt;
-                          &lt;th&gt;
-                            &lt;p&gt;価格&lt;/p&gt;
-                          &lt;/th&gt;
-                          &lt;th&gt;
-                            &lt;p&gt;合計&lt;/p&gt;
-                          &lt;/th&gt;
-                        &lt;/tr&gt;
-                      &lt;/thead&gt;
-                      &lt;tbody&gt;
-                        &lt;tr&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;IBM&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;1000&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;25 USD&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;25000 USD&lt;/p&gt;
-                          &lt;/td&gt;
-                        &lt;/tr&gt;
-                        &lt;tr&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;Novartis&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;400&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;150 CHF&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;60000 CHF&lt;/p&gt;
-                          &lt;/td&gt;
-                        &lt;/tr&gt;
-                        &lt;tr&gt;
-                          &lt;td&gt;&lt;/td&gt;
-                          &lt;td&gt;&lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;総計&lt;/p&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;p&gt;65000 USD&lt;/p&gt;
-                          &lt;/td&gt;
-                        &lt;/tr&gt;
-                      &lt;/tbody&gt;
-                    &lt;/table&gt;
-                  &lt;/div&gt;
-                  &lt;div class="col-md-12 py-2"&gt;
-                    &lt;button
-                      type="button"
-                      class="btn btn-primary btn"
-                      id="app-csv-download-fba-stack-data"
-                    &gt;
-                      CSVダウンロード
-                    &lt;/button&gt;
-                  &lt;/div&gt;
-                &lt;/div&gt;
-              &lt;/dvi&gt;
-            &lt;/div&gt;
-            &lt;div
-              aria-labelledby="tab-menu02"
-              class="tab-pane fade border border-top-0"
-              id="panel-menu02"
-              role="tabpanel"
-            &gt;
-              &lt;dvi class="row p-3"&gt;
-                &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
-                  &lt;table
-                    id="exchange-rate-table"
-                    class="table table-striped"
-                  &gt;
-                    &lt;thead&gt;
-                      &lt;tr&gt;
-                        &lt;th&gt;
-                          &lt;p&gt;換算元&lt;/p&gt;
-                        &lt;/th&gt;
-                        &lt;th&gt;
-                          &lt;p&gt;換算先&lt;/p&gt;
-                        &lt;/th&gt;
-                        &lt;th&gt;
-                          &lt;p&gt;レート&lt;/p&gt;
-                        &lt;/th&gt;
-                        &lt;td&gt;&lt;/td&gt;
-                      &lt;/tr&gt;
-                    &lt;/thead&gt;
-                    &lt;tbody&gt;
-                      &lt;tr&gt;
-                        &lt;td&gt;
-                          &lt;p&gt;CHF&lt;/p&gt;
-                        &lt;/td&gt;
-                        &lt;td&gt;
-                          &lt;p&gt;USD&lt;/p&gt;
-                        &lt;/td&gt;
-                        &lt;td&gt;
-                          &lt;p&gt;1.5&lt;/p&gt;
-                        &lt;/td&gt;
-                        &lt;td&gt;
-                          &lt;span class="button"&gt;
-                            &lt;button
-                              value="1"
-                              type="button"
-                              class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                            &gt;
-                              編集
-                            &lt;/button&gt;
-                            &lt;button
-                              value="1"
-                              type="button"
-                              class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                            &gt;
-                              削除
-                            &lt;/button&gt;
-                          &lt;/span&gt;
-                        &lt;/td&gt;
-                      &lt;/tr&gt;
-                    &lt;/tbody&gt;
-                  &lt;/table&gt;
-                  &lt;div id="button"&gt;
-                    &lt;button
-                      id="button-add"
-                      type="button"
-                      class="btn btn-primary btn-rounded btn-sm my-0"
-                    &gt;
-                      追加
-                    &lt;/button&gt;
-                    &lt;button
-                      id="button-delete"
-                      type="button"
-                      class="btn btn-danger btn-rounded btn-sm my-0"
-                    &gt;
-                      全削除
-                    &lt;/button&gt;
-                  &lt;/div&gt;
-                &lt;/div&gt;
-              &lt;/dvi&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/section&gt;
+<pre>    &lt;div class="py-3"&gt;
+      &lt;div id="money-app"&gt;&lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;!-- /コンテンツ01 --&gt;
@@ -959,7 +753,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; レポートを画面に表示する</p>
+<p>&#10003; レポートを画面に表示する</p>
 </li>
 <li>
 <p>&#10063; レポートをアップロードする</p>
@@ -1037,19 +831,29 @@ class Money {
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+class ReportViewModel {
+  items&lt;ReportViewModelItem&gt;: List
+  total: Sum
+}
+class ReportViewModelItem {
+  stockName: String
+  stockAmount: int
+  price: Money
+  sum: Money
+}
+ReportViewModelItem -o ReportViewModel
 class View {
   render(): void
-  renderReport() :void
-  renderExchangeRate() :void
 }
 Expression &lt;|.. Money
 Expression &lt;|.. Sum
 Money &lt;- Sum
 Sum &lt;- Bank
 Bank -&gt; Pair
-Sum &lt;-- View
-Money &lt;-- View
+Sum &lt;-- ReportViewModel
+Money &lt;-- ReportViewModelItem
 Bank &lt;-- View
+ReportViewModel &lt;- View
           `;
           compress(source, outputId);
         })();</pre>
@@ -1493,10 +1297,330 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>          static franc(amount) {
-            return new Money(amount, "CHF");
-          }
-        }
+<pre>  static franc(amount) {
+    return new Money(amount, "CHF");
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class ReportViewModel {
+  constructor(items) {
+    this._items = items;
+    this._bank = new Bank();
+    this._bank.addRate("CHF", "USD", 1.5);
+  }
+  get items() {
+    return this._items;
+  }
+  get total() {
+    let result = new Money(0, "USD");
+    this._items.forEach(i =&gt; {
+      result = this._bank.reduce(new Sum(result, i.sum), "USD");
+    });
+    return result;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class ReportViewModelItem {
+  constructor(stockName, stockAmount, price) {
+    this._stockName = stockName;
+    this._stockAmount = stockAmount;
+    this._price = price;
+  }
+  get stockName() {
+    return this._stockName;
+  }
+  get stockAmount() {
+    return this._stockAmount;
+  }
+  get price() {
+    return this._price;
+  }
+  get sum() {
+    return this._price.times(this._stockAmount);
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class View {
+  constructor() {
+    const items = [];
+    const ibm = new ReportViewModelItem(
+      "IBM",
+      1000,
+      new Money(25, "USD")
+    );
+    items.push(ibm);
+    const novartis = new ReportViewModelItem(
+      "Novartis",
+      400,
+      new Money(150, "CHF")
+    );
+    items.push(novartis);
+    this._report = new ReportViewModel(items);
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>render() {
+  const tabNav = `
+    &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
+      &lt;a
+        aria-controls="panel-menu01"
+        aria-selected="true"
+        class="nav-item nav-link active"
+        data-toggle="tab"
+        href="#panel-menu01"
+        id="tab-menu01"
+        role="tab"
+        &gt;レポート&lt;/a
+      &gt;
+      &lt;a
+        aria-controls="panel-menu02"
+        aria-selected="false"
+        class="nav-item nav-link"
+        data-toggle="tab"
+        href="#panel-menu02"
+        id="tab-menu02"
+        role="tab"
+        &gt;為替レート&lt;/a
+      &gt;
+    &lt;/div&gt;
+`;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const tabContent = () =&gt; {
+  const report = (() =&gt; {
+    const table = () =&gt; {
+      const header = () =&gt; {
+        const line = ["銘柄", "株数", "価格", "合計"]
+          .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
+          .join(" ");</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+        &lt;thead&gt;
+          &lt;tr&gt;
+            ${line}
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const body = () =&gt; {
+  const items = this._report.items;
+  const line = items
+    .map(
+      i =&gt; `
+  &lt;tr&gt;
+    &lt;td&gt;${i.stockName}&lt;/td&gt;
+    &lt;td&gt;${i.stockAmount}&lt;/td&gt;
+    &lt;td&gt;${i.price}&lt;/td&gt;
+    &lt;td&gt;${i.sum}&lt;/td&gt;
+  &lt;/tr&gt;
+  `
+    )
+    .join(" ");
+  const total = `
+          &lt;tr&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;
+              &lt;p&gt;総計&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+              &lt;p&gt;${this._report.total}&lt;/p&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+  `;
+  return `
+        &lt;tbody&gt;
+          ${line}
+          ${total}
+        &lt;/tbody&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+        &lt;table id="report-table" class="table table-striped"&gt;
+            ${header()}
+            ${body()}
+        &lt;/table&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return `
+    &lt;div
+      aria-labelledby="tab-menu01"
+      class="tab-pane fade show active border border-top-0"
+      id="panel-menu01"
+      role="tabpanel"
+    &gt;
+      &lt;dvi class="row p-3"&gt;
+        &lt;div id="report" class="col-md-12 order-md-2"&gt;
+          &lt;div class="row"&gt;
+            &lt;div class="col-md-12"&gt;
+              &lt;form&gt;
+                &lt;div class="form-group"&gt;
+                  &lt;p&gt;
+                    CSVファイルを選択して下さい。&lt;br /&gt;
+                    ※文字コードがUTF-8の場合は文字化けします。
+                  &lt;/p&gt;
+                  &lt;input
+                    type="file"
+                    class="form-control-file"
+                    id="app-csv-uploader-id-fba-stock-data"
+                  /&gt;
+                &lt;/div&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class="row"&gt;
+            ${table()}
+          &lt;/div&gt;
+          &lt;div class="col-md-12 py-2"&gt;
+            &lt;button
+              type="button"
+              class="btn btn-primary btn"
+              id="app-csv-download-fba-stack-data"
+            &gt;
+              CSVダウンロード
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/dvi&gt;
+    &lt;/div&gt;
+`;
+  })();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>      const exChangeRate = `
+        &lt;div
+          aria-labelledby="tab-menu02"
+          class="tab-pane fade border border-top-0"
+          id="panel-menu02"
+          role="tabpanel"
+        &gt;
+          &lt;dvi class="row p-3"&gt;
+            &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
+              &lt;table
+                id="exchange-rate-table"
+                class="table table-striped"
+              &gt;
+                &lt;thead&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;
+                      &lt;p&gt;換算元&lt;/p&gt;
+                    &lt;/th&gt;
+                    &lt;th&gt;
+                      &lt;p&gt;換算先&lt;/p&gt;
+                    &lt;/th&gt;
+                    &lt;th&gt;
+                      &lt;p&gt;レート&lt;/p&gt;
+                    &lt;/th&gt;
+                    &lt;td&gt;&lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      &lt;p&gt;CHF&lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;p&gt;USD&lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;p&gt;1.5&lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;span class="button"&gt;
+                        &lt;button
+                          value="1"
+                          type="button"
+                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                        &gt;
+                          編集
+                        &lt;/button&gt;
+                        &lt;button
+                          value="1"
+                          type="button"
+                          class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                        &gt;
+                          削除
+                        &lt;/button&gt;
+                      &lt;/span&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+              &lt;div id="button"&gt;
+                &lt;button
+                  id="button-add"
+                  type="button"
+                  class="btn btn-primary btn-rounded btn-sm my-0"
+                &gt;
+                  追加
+                &lt;/button&gt;
+                &lt;button
+                  id="button-delete"
+                  type="button"
+                  class="btn btn-danger btn-rounded btn-sm my-0"
+                &gt;
+                  全削除
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/dvi&gt;
+        &lt;/div&gt;
+    `;
+      return `
+      &lt;div class="tab-content" id="panel-menus"&gt;
+        ${report}
+        ${exChangeRate}
+      &lt;/div&gt;
+  `;
+    };
+    const result = `
+  &lt;section id="menu"&gt;
+    &lt;div class="container"&gt;
+      &lt;div id="message"&gt;&lt;/div&gt;
+      ${tabNav}
+      ${tabContent()}
+    &lt;/div&gt;
+  &lt;/section&gt;
+    `;
+    document.querySelector("#money-app").innerHTML = result;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        const view = new View();
+        view.render();
       &lt;/script&gt;
       &lt;script&gt;
         mocha.globals(["jQuery"]);
@@ -1527,7 +1651,7 @@ if (deflater) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-02 13:31:18 JST
+Last updated 2019-12-02 16:32:11 JST
 </div>
 </div>
 </body>
