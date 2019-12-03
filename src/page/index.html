@@ -555,7 +555,7 @@ ReportViewModel <- View
 
             const items = [];
             this._report = new ReportViewModel(items);
-            this._exChangeRateRecord = [["CHF", "USD", "1.5"]];
+            this._exChangeRateRecord = [["1", "CHF", "USD", "1.5"]];
             this._selectTab = this.REPORT;
           }
 
@@ -616,7 +616,56 @@ ReportViewModel <- View
             };
 
             const addExChangeRateEvent = e => {
-              this._exChangeRateRecord.push(["CHF", "USD", "1.5"]);
+              this._exChangeRateRecord.push(["2", "CHF", "USD", "1.5"]);
+              this._selectTab = this.EXCHANGE;
+              this.render();
+            };
+
+            const editExChangeRateEvent = e => {
+              e.target.disabled = true;
+              e.target.parentElement.getElementsByTagName(
+                "button"
+              )[1].disabled = false;
+
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[0];
+              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[1];
+              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[2];
+              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[3];
+
+              from.innerHTML = `<input type="text" size="10" value=${from.innerText}>`;
+              to.innerHTML = `<input type="text" size="10" value=${to.innerText}>`;
+              rate.innerHTML = `<input type="text" size="10" value=${rate.innerText}>`;
+            };
+
+            const saveExChangeRateEvent = e => {
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[0];
+              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[0];
+              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[1];
+              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[2];
+
+              this._exChangeRateRecord.push([
+                id.innerText,
+                from.value,
+                to.value,
+                rate.value
+              ]);
+
               this._selectTab = this.EXCHANGE;
               this.render();
             };
@@ -630,6 +679,15 @@ ReportViewModel <- View
             document
               .querySelector("#button-add")
               .addEventListener("click", addExChangeRateEvent);
+            this._exChangeRateRecord.forEach(i => {
+              document
+                .querySelector(`#button-edit-${i[0]}`)
+                .addEventListener("click", editExChangeRateEvent);
+              document
+                .querySelector(`#button-save-${i[0]}`)
+                .addEventListener("click", saveExChangeRateEvent);
+              document.querySelector(`#button-save-${i[0]}`).disabled = true;
+            });
           }
 
           render() {
@@ -784,7 +842,7 @@ ReportViewModel <- View
 
                 const table = record => {
                   const header = () => {
-                    const th = ["換算元", "換算先", "レート", ""]
+                    const th = ["ID", "換算元", "換算先", "レート", ""]
                       .map(i => `<th>${i}</th>`)
                       .join(" ");
 
@@ -804,7 +862,7 @@ ReportViewModel <- View
                       const edit = () => {
                         return `
                                 <button
-                                  value="1"
+                                  id="button-edit-${item[0]}"
                                   type="button"
                                   class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
                                 >
@@ -813,10 +871,22 @@ ReportViewModel <- View
                       `;
                       };
 
+                      const save = () => {
+                        return `
+                                <button
+                                  id="button-save-${item[0]}"
+                                  type="button"
+                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                >
+                                  保存
+                                </button>
+                      `;
+                      };
+
                       const delet = () => {
                         return `
                                 <button
-                                  value="1"
+                                  id="button-delet-${item[0]}"
                                   type="button"
                                   class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
                                 >
@@ -830,6 +900,7 @@ ReportViewModel <- View
                             <td>
                               <span class="button">
                                 ${edit()}
+                                ${save()}
                                 ${delet()}
                               </span>
                             </td>
