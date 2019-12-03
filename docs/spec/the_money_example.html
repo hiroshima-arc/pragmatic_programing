@@ -661,7 +661,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートをダウンロードする</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で新規追加する</p>
+<p>&#10003; 為替レートを画面で新規追加する</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で更新する</p>
@@ -838,7 +838,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートをダウンロードする</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で新規追加する</p>
+<p>&#10003; 為替レートを画面で新規追加する</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で更新する</p>
@@ -1429,9 +1429,17 @@ if (deflater) {
 <div class="content">
 <pre>class View {
   constructor() {
-    const items = [];
-    this._report = new ReportViewModel(items);
-  }</pre>
+    this.REPORT = 1;
+    this.EXCHANGE = 2;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  const items = [];
+  this._report = new ReportViewModel(items);
+  this._exChangeRateRecord = [["CHF", "USD", "1.5"]];
+  this._selectTab = this.REPORT;
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1477,6 +1485,7 @@ if (deflater) {
       )
   );
   this._report = new ReportViewModel(items);
+  this._selectTab = this.REPORT;
   this.render();
 };</pre>
 </div>
@@ -1515,24 +1524,44 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>const addExChangeRateEvent = e =&gt; {
+  this._exChangeRateRecord.push(["CHF", "USD", "1.5"]);
+  this._selectTab = this.EXCHANGE;
+  this.render();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>  document
     .querySelector("#app-money-upload")
     .addEventListener("change", uploadEvent);
   document
     .querySelector("#app-money-download")
     .addEventListener("click", downloadEvent);
+  document
+    .querySelector("#button-add")
+    .addEventListener("click", addExChangeRateEvent);
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>render() {
-  const tabNav = `
+  const reportSelect =
+    this._selectTab === this.REPORT ? "active" : "";
+  const exChangeSelect =
+    this._selectTab === this.EXCHANGE ? "active" : "";</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  const tabNav = `
     &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
       &lt;a
         aria-controls="panel-menu01"
         aria-selected="true"
-        class="nav-item nav-link active"
+        class="nav-item nav-link ${reportSelect}"
         data-toggle="tab"
         href="#panel-menu01"
         id="tab-menu01"
@@ -1542,7 +1571,7 @@ a.download = "data.csv";</pre>
       &lt;a
         aria-controls="panel-menu02"
         aria-selected="false"
-        class="nav-item nav-link"
+        class="nav-item nav-link ${exChangeSelect}"
         data-toggle="tab"
         href="#panel-menu02"
         id="tab-menu02"
@@ -1555,13 +1584,18 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const tabContent = () =&gt; {
+<pre>const tabContent = (() =&gt; {
   const report = (() =&gt; {
-    const table = () =&gt; {
-      const header = () =&gt; {
-        const line = ["銘柄", "株数", "価格", "合計"]
-          .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
-          .join(" ");</pre>
+    const activeShow = reportSelect ? "active show" : "";</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const table = () =&gt; {
+  const header = () =&gt; {
+    const line = ["銘柄", "株数", "価格", "合計"]
+      .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
+      .join(" ");</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1666,7 +1700,7 @@ a.download = "data.csv";</pre>
 <pre>    return `
     &lt;div
       aria-labelledby="tab-menu01"
-      class="tab-pane fade show active border border-top-0"
+      class="tab-pane fade border border-top-0 ${activeShow}"
       id="panel-menu01"
       role="tabpanel"
     &gt;
@@ -1690,98 +1724,193 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>      const exChangeRate = `
-        &lt;div
-          aria-labelledby="tab-menu02"
-          class="tab-pane fade border border-top-0"
-          id="panel-menu02"
-          role="tabpanel"
+<pre>const exChangeRate = (record =&gt; {
+  const activeShow = exChangeSelect ? "active show" : "";</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const table = record =&gt; {
+  const header = () =&gt; {
+    const th = ["換算元", "換算先", "レート", ""]
+      .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
+      .join(" ");</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+      &lt;thead&gt;
+        &lt;tr&gt;
+          ${th}
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const body = () =&gt; {
+  const line = item =&gt; {
+    const td = item.map(i =&gt; `&lt;td&gt;${i}&lt;/td&gt;`);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const edit = () =&gt; {
+  return `
+          &lt;button
+            value="1"
+            type="button"
+            class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+          &gt;
+            編集
+          &lt;/button&gt;
+`;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const delet = () =&gt; {
+  return `
+          &lt;button
+            value="1"
+            type="button"
+            class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+          &gt;
+            削除
+          &lt;/button&gt;
+`;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>td.push(
+  `
+      &lt;td&gt;
+        &lt;span class="button"&gt;
+          ${edit()}
+          ${delet()}
+        &lt;/span&gt;
+      &lt;/td&gt;
+`
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+      &lt;tr&gt;
+        ${td.join("")}
+      &lt;/tr&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+      &lt;tbody&gt;
+        ${record.map(line).join("")}
+      &lt;/tbody&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+      &lt;table
+        id="exchange-rate-table"
+        class="table table-striped"
+      &gt;
+        ${header()}
+        ${body()}
+      &lt;/table&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const button = () =&gt; {
+  const add = () =&gt; {
+    return `
+        &lt;button
+          id="button-add"
+          type="button"
+          class="btn btn-primary btn-rounded btn-sm my-0"
         &gt;
-          &lt;dvi class="row p-3"&gt;
-            &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
-              &lt;table
-                id="exchange-rate-table"
-                class="table table-striped"
-              &gt;
-                &lt;thead&gt;
-                  &lt;tr&gt;
-                    &lt;th&gt;
-                      &lt;p&gt;換算元&lt;/p&gt;
-                    &lt;/th&gt;
-                    &lt;th&gt;
-                      &lt;p&gt;換算先&lt;/p&gt;
-                    &lt;/th&gt;
-                    &lt;th&gt;
-                      &lt;p&gt;レート&lt;/p&gt;
-                    &lt;/th&gt;
-                    &lt;td&gt;&lt;/td&gt;
-                  &lt;/tr&gt;
-                &lt;/thead&gt;
-                &lt;tbody&gt;
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      &lt;p&gt;CHF&lt;/p&gt;
-                    &lt;/td&gt;
-                    &lt;td&gt;
-                      &lt;p&gt;USD&lt;/p&gt;
-                    &lt;/td&gt;
-                    &lt;td&gt;
-                      &lt;p&gt;1.5&lt;/p&gt;
-                    &lt;/td&gt;
-                    &lt;td&gt;
-                      &lt;span class="button"&gt;
-                        &lt;button
-                          value="1"
-                          type="button"
-                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                        &gt;
-                          編集
-                        &lt;/button&gt;
-                        &lt;button
-                          value="1"
-                          type="button"
-                          class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                        &gt;
-                          削除
-                        &lt;/button&gt;
-                      &lt;/span&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                &lt;/tbody&gt;
-              &lt;/table&gt;
-              &lt;div id="button"&gt;
-                &lt;button
-                  id="button-add"
-                  type="button"
-                  class="btn btn-primary btn-rounded btn-sm my-0"
-                &gt;
-                  追加
-                &lt;/button&gt;
-                &lt;button
-                  id="button-delete"
-                  type="button"
-                  class="btn btn-danger btn-rounded btn-sm my-0"
-                &gt;
-                  全削除
-                &lt;/button&gt;
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/dvi&gt;
-        &lt;/div&gt;
+          追加
+        &lt;/button&gt;
     `;
-      return `
-      &lt;div class="tab-content" id="panel-menus"&gt;
-        ${report}
-        ${exChangeRate}
+  };</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  const deletAll = () =&gt; {
+    return `
+        &lt;button
+          id="button-delete"
+          type="button"
+          class="btn btn-danger btn-rounded btn-sm my-0"
+        &gt;
+          全削除
+        &lt;/button&gt;
+    `;
+  };
+  return `
+      &lt;div id="button"&gt;
+        ${add()}
+        ${deletAll()}
       &lt;/div&gt;
   `;
-    };
-    const result = `
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return `
+    &lt;div
+      aria-labelledby="tab-menu02"
+      class="tab-pane fade border border-top-0 ${activeShow}"
+      id="panel-menu02"
+      role="tabpanel"
+    &gt;
+      &lt;dvi class="row p-3"&gt;
+        &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
+          ${table(record)}
+          ${button()}
+        &lt;/div&gt;
+      &lt;/dvi&gt;
+    &lt;/div&gt;
+`;
+  })(this._exChangeRateRecord);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return `
+    &lt;div class="tab-content" id="panel-menus"&gt;
+      ${report}
+      ${exChangeRate}
+    &lt;/div&gt;
+`;
+  })();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    const result = `
       &lt;section id="menu"&gt;
         &lt;div class="container"&gt;
           &lt;div id="message"&gt;&lt;/div&gt;
           ${tabNav}
-          ${tabContent()}
+          ${tabContent}
         &lt;/div&gt;
       &lt;/section&gt;
     `;
@@ -1825,7 +1954,7 @@ a.download = "data.csv";</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 12:16:30 JST
+Last updated 2019-12-03 14:36:59 JST
 </div>
 </div>
 </body>
