@@ -757,19 +757,10 @@ ReportViewModel <- View
             `;
               })();
 
-              const exChangeRate = `
-                <div
-                  aria-labelledby="tab-menu02"
-                  class="tab-pane fade border border-top-0"
-                  id="panel-menu02"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="exchange-rate" class="col-md-12 order-md-2">
-                      <table
-                        id="exchange-rate-table"
-                        class="table table-striped"
-                      >
+              const exChangeRate = (() => {
+                const table = () => {
+                  const header = () => {
+                    return `
                         <thead>
                           <tr>
                             <th>
@@ -784,7 +775,36 @@ ReportViewModel <- View
                             <td></td>
                           </tr>
                         </thead>
-                        <tbody>
+                    `;
+                  };
+
+                  const body = () => {
+                    const edit = () => {
+                      return `
+                                <button
+                                  value="1"
+                                  type="button"
+                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                >
+                                  編集
+                                </button>
+                      `;
+                    };
+
+                    const delet = () => {
+                      return `
+                                <button
+                                  value="1"
+                                  type="button"
+                                  class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                                >
+                                  削除
+                                </button>
+                      `;
+                    };
+
+                    const line = () => {
+                      return `
                           <tr>
                             <td>
                               <p>CHF</p>
@@ -797,26 +817,34 @@ ReportViewModel <- View
                             </td>
                             <td>
                               <span class="button">
-                                <button
-                                  value="1"
-                                  type="button"
-                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  編集
-                                </button>
-                                <button
-                                  value="1"
-                                  type="button"
-                                  class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  削除
-                                </button>
+                                ${edit()}
+                                ${delet()}
                               </span>
                             </td>
                           </tr>
+                      `;
+                    };
+                    return `
+                        <tbody>
+                          ${line()}
                         </tbody>
+                    `;
+                  };
+
+                  return `
+                      <table
+                        id="exchange-rate-table"
+                        class="table table-striped"
+                      >
+                        ${header()}
+                        ${body()}
                       </table>
-                      <div id="button">
+                  `;
+                };
+
+                const button = () => {
+                  const add = () => {
+                    return `
                         <button
                           id="button-add"
                           type="button"
@@ -824,6 +852,11 @@ ReportViewModel <- View
                         >
                           追加
                         </button>
+                    `;
+                  };
+
+                  const deletAll = () => {
+                    return `
                         <button
                           id="button-delete"
                           type="button"
@@ -831,11 +864,33 @@ ReportViewModel <- View
                         >
                           全削除
                         </button>
+                    `;
+                  };
+                  return `
+                      <div id="button">
+                        ${add()}
+                        ${deletAll()}
                       </div>
+                  `;
+                };
+
+                return `
+                <div
+                  aria-labelledby="tab-menu02"
+                  class="tab-pane fade border border-top-0"
+                  id="panel-menu02"
+                  role="tabpanel"
+                >
+                  <dvi class="row p-3">
+                    <div id="exchange-rate" class="col-md-12 order-md-2">
+                      ${table()}
+                      ${button()}
                     </div>
                   </dvi>
                 </div>
             `;
+              })();
+
               return `
               <div class="tab-content" id="panel-menus">
                 ${report}
