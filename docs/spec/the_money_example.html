@@ -435,16 +435,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_設計">2. 設計</a>
 <ul class="sectlevel2">
 <li><a href="#_入力csvファイル仕様">2.1. 入力CSVファイル仕様</a></li>
-<li><a href="#_todoリスト">2.2. TODOリスト</a></li>
-<li><a href="#_ユースケース図">2.3. ユースケース図</a></li>
-<li><a href="#_クラス図">2.4. クラス図</a></li>
-<li><a href="#_シーケンス図">2.5. シーケンス図</a></li>
+<li><a href="#_出力csvファイル仕様">2.2. 出力CSVファイル仕様</a></li>
+<li><a href="#_todoリスト">2.3. TODOリスト</a></li>
+<li><a href="#_ユースケース図">2.4. ユースケース図</a></li>
+<li><a href="#_クラス図">2.5. クラス図</a></li>
+<li><a href="#_シーケンス図">2.6. シーケンス図</a></li>
 </ul>
 </li>
 <li><a href="#_開発">3. 開発</a></li>
 <li><a href="#_入力csvファイル仕様_2">4. 入力CSVファイル仕様</a></li>
-<li><a href="#_todoリスト_2">5. ToDoリスト</a></li>
-<li><a href="#_参照">6. 参照</a></li>
+<li><a href="#_出力csvファイル仕様_2">5. 出力CSVファイル仕様</a></li>
+<li><a href="#_todoリスト_2">6. ToDoリスト</a></li>
+<li><a href="#_参照">7. 参照</a></li>
 </ul>
 </div>
 </div>
@@ -597,7 +599,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </table>
 </div>
 <div class="sect2">
-<h3 id="_todoリスト">2.2. TODOリスト</h3>
+<h3 id="_出力csvファイル仕様">2.2. 出力CSVファイル仕様</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">銘柄</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">株数</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">価格</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">合計</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_todoリスト">2.3. TODOリスト</h3>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
@@ -631,7 +658,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートをアップロードする</p>
 </li>
 <li>
-<p>&#10063; レポートをダウンロードする</p>
+<p>&#10003; レポートをダウンロードする</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で新規追加する</p>
@@ -646,11 +673,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ユースケース図">2.3. ユースケース図</h3>
+<h3 id="_ユースケース図">2.4. ユースケース図</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_クラス図">2.4. クラス図</h3>
+<h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
 <img src="diag-bf31e633bd78317f829eaadc355985a0.png" alt="diag bf31e633bd78317f829eaadc355985a0" width="759" height="476">
@@ -658,7 +685,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_シーケンス図">2.5. シーケンス図</h3>
+<h3 id="_シーケンス図">2.6. シーケンス図</h3>
 
 </div>
 </div>
@@ -787,7 +814,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_todoリスト_2">5. ToDoリスト</h2>
+<h2 id="_出力csvファイル仕様_2">5. 出力CSVファイル仕様</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>|銘柄   |株数 |価格  |合計 |
+|:---  |:--- |:--- |:--- |
+| string  |  int  | int | int |</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_todoリスト_2">6. ToDoリスト</h2>
 <div class="sectionbody">
 <div class="ulist checklist">
 <ul class="checklist">
@@ -798,7 +835,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; レポートをアップロードする</p>
 </li>
 <li>
-<p>&#10063; レポートをダウンロードする</p>
+<p>&#10003; レポートをダウンロードする</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で新規追加する</p>
@@ -1371,6 +1408,7 @@ if (deflater) {
     this._stockName = stockName;
     this._stockAmount = stockAmount;
     this._price = price;
+    this._sum = price.times(stockAmount);
   }
   get stockName() {
     return this._stockName;
@@ -1382,7 +1420,7 @@ if (deflater) {
     return this._price;
   }
   get sum() {
-    return this._price.times(this._stockAmount);
+    return this._sum;
   }
 }</pre>
 </div>
@@ -1454,9 +1492,35 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>const downloadEvent = e =&gt; {
+  const csv = Papa.unparse(this._report.items);
+  const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+  const blog = new Blob([bom, csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blog);
+  const a = document.createElement("a");</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>a.href = url;
+a.target = "_blank";
+a.download = "data.csv";</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  a.click();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>  document
     .querySelector("#app-money-upload")
     .addEventListener("change", uploadEvent);
+  document
+    .querySelector("#app-money-download")
+    .addEventListener("click", downloadEvent);
 }</pre>
 </div>
 </div>
@@ -1584,6 +1648,21 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>const download = () =&gt; {
+  return `
+        &lt;button
+          type="button"
+          class="btn btn-primary btn"
+          id="app-money-download"
+        &gt;
+          CSVダウンロード
+        &lt;/button&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>    return `
     &lt;div
       aria-labelledby="tab-menu01"
@@ -1600,13 +1679,7 @@ if (deflater) {
             ${table()}
           &lt;/div&gt;
           &lt;div class="col-md-12 py-2"&gt;
-            &lt;button
-              type="button"
-              class="btn btn-primary btn"
-              id="app-csv-download-fba-stack-data"
-            &gt;
-              CSVダウンロード
-            &lt;/button&gt;
+            ${download()}
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/dvi&gt;
@@ -1738,7 +1811,7 @@ if (deflater) {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_参照">6. 参照</h2>
+<h2 id="_参照">7. 参照</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1752,7 +1825,7 @@ if (deflater) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-02 18:25:21 JST
+Last updated 2019-12-03 12:16:30 JST
 </div>
 </div>
 </body>
