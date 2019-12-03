@@ -680,7 +680,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-bf31e633bd78317f829eaadc355985a0.png" alt="diag bf31e633bd78317f829eaadc355985a0" width="759" height="476">
+<img src="diag-91dba1fcb34d34e6c8a2790c5fdb9b14.png" alt="diag 91dba1fcb34d34e6c8a2790c5fdb9b14" width="750" height="515">
 </div>
 </div>
 </div>
@@ -919,6 +919,11 @@ class ReportViewModelItem {
 }
 ReportViewModelItem -o ReportViewModel
 class View {
+  REPORT: 1
+  EXCHANGE: 2
+  _report: ReportViewModel
+  _exChangeRateRecord&lt;object&gt;: List
+  _selectTab: int
   dispatchEvent(): void
   render(): void
 }
@@ -929,7 +934,6 @@ Sum &lt;- Bank
 Bank -&gt; Pair
 Sum &lt;-- ReportViewModel
 Money &lt;-- ReportViewModelItem
-Bank &lt;-- View
 ReportViewModel &lt;- View
           `;
           compress(source, outputId);
@@ -2112,7 +2116,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 17:28:07 JST
+Last updated 2019-12-03 17:43:20 JST
 </div>
 </div>
 </body>

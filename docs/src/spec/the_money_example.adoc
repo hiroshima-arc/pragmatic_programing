@@ -120,6 +120,11 @@ class ReportViewModelItem {
 }
 ReportViewModelItem -o ReportViewModel
 class View {
+  REPORT: 1
+  EXCHANGE: 2
+  _report: ReportViewModel
+  _exChangeRateRecord<object>: List
+  _selectTab: int
   dispatchEvent(): void
   render(): void
 }
@@ -130,7 +135,6 @@ Sum <- Bank
 Bank -> Pair
 Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
-Bank <-- View
 ReportViewModel <- View
 ----
 
