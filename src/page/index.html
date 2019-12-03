@@ -550,8 +550,13 @@ ReportViewModel <- View
 
         class View {
           constructor() {
+            this.REPORT = 1;
+            this.EXCHANGE = 2;
+
             const items = [];
             this._report = new ReportViewModel(items);
+            this._exChangeRateRecord = [["CHF", "USD", "1.5"]];
+            this._selectTab = this.REPORT;
           }
 
           dispatchEvent() {
@@ -586,6 +591,7 @@ ReportViewModel <- View
                       )
                   );
                   this._report = new ReportViewModel(items);
+                  this._selectTab = this.REPORT;
                   this.render();
                 };
 
@@ -609,21 +615,35 @@ ReportViewModel <- View
               a.click();
             };
 
+            const addExChangeRateEvent = e => {
+              this._exChangeRateRecord.push(["CHF", "USD", "1.5"]);
+              this._selectTab = this.EXCHANGE;
+              this.render();
+            };
+
             document
               .querySelector("#app-money-upload")
               .addEventListener("change", uploadEvent);
             document
               .querySelector("#app-money-download")
               .addEventListener("click", downloadEvent);
+            document
+              .querySelector("#button-add")
+              .addEventListener("click", addExChangeRateEvent);
           }
 
           render() {
+            const reportSelect =
+              this._selectTab === this.REPORT ? "active" : "";
+            const exChangeSelect =
+              this._selectTab === this.EXCHANGE ? "active" : "";
+
             const tabNav = `
               <div class="nav nav-tabs" id="tab-menus" role="tablist">
                 <a
                   aria-controls="panel-menu01"
                   aria-selected="true"
-                  class="nav-item nav-link active"
+                  class="nav-item nav-link ${reportSelect}"
                   data-toggle="tab"
                   href="#panel-menu01"
                   id="tab-menu01"
@@ -633,7 +653,7 @@ ReportViewModel <- View
                 <a
                   aria-controls="panel-menu02"
                   aria-selected="false"
-                  class="nav-item nav-link"
+                  class="nav-item nav-link ${exChangeSelect}"
                   data-toggle="tab"
                   href="#panel-menu02"
                   id="tab-menu02"
@@ -645,6 +665,8 @@ ReportViewModel <- View
 
             const tabContent = (() => {
               const report = (() => {
+                const activeShow = reportSelect ? "active show" : "";
+
                 const table = () => {
                   const header = () => {
                     const line = ["銘柄", "株数", "価格", "合計"]
@@ -736,7 +758,7 @@ ReportViewModel <- View
                 return `
                 <div
                   aria-labelledby="tab-menu01"
-                  class="tab-pane fade show active border border-top-0"
+                  class="tab-pane fade border border-top-0 ${activeShow}"
                   id="panel-menu01"
                   role="tabpanel"
                 >
@@ -757,8 +779,10 @@ ReportViewModel <- View
             `;
               })();
 
-              const exChangeRate = (() => {
-                const table = () => {
+              const exChangeRate = (record => {
+                const activeShow = exChangeSelect ? "active show" : "";
+
+                const table = record => {
                   const header = () => {
                     const th = ["換算元", "換算先", "レート", ""]
                       .map(i => `<th>${i}</th>`)
@@ -774,10 +798,8 @@ ReportViewModel <- View
                   };
 
                   const body = () => {
-                    const line = () => {
-                      const td = ["CHF", "USD", "1.5"].map(
-                        i => `<td>${i}</td>`
-                      );
+                    const line = item => {
+                      const td = item.map(i => `<td>${i}</td>`);
 
                       const edit = () => {
                         return `
@@ -820,9 +842,10 @@ ReportViewModel <- View
                           </tr>
                       `;
                     };
+
                     return `
                         <tbody>
-                          ${line()}
+                          ${record.map(line).join("")}
                         </tbody>
                     `;
                   };
@@ -873,19 +896,19 @@ ReportViewModel <- View
                 return `
                 <div
                   aria-labelledby="tab-menu02"
-                  class="tab-pane fade border border-top-0"
+                  class="tab-pane fade border border-top-0 ${activeShow}"
                   id="panel-menu02"
                   role="tabpanel"
                 >
                   <dvi class="row p-3">
                     <div id="exchange-rate" class="col-md-12 order-md-2">
-                      ${table()}
+                      ${table(record)}
                       ${button()}
                     </div>
                   </dvi>
                 </div>
             `;
-              })();
+              })(this._exChangeRateRecord);
 
               return `
               <div class="tab-content" id="panel-menus">
