@@ -664,7 +664,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 為替レートを画面で新規追加する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で更新する</p>
+<p>&#10003; 為替レートを画面で更新する</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で削除する</p>
@@ -841,7 +841,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 為替レートを画面で新規追加する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で更新する</p>
+<p>&#10003; 為替レートを画面で更新する</p>
 </li>
 <li>
 <p>&#10063; 為替レートを画面で削除する
@@ -1437,7 +1437,9 @@ if (deflater) {
 <div class="content">
 <pre>  const items = [];
   this._report = new ReportViewModel(items);
-  this._exChangeRateRecord = [["CHF", "USD", "1.5"]];
+  this._exChangeRateRecord = [
+    { id: "1", from: "CHF", to: "USD", rate: "1.5" }
+  ];
   this._selectTab = this.REPORT;
 }</pre>
 </div>
@@ -1525,8 +1527,98 @@ a.download = "data.csv";</pre>
 <div class="literalblock">
 <div class="content">
 <pre>const addExChangeRateEvent = e =&gt; {
-  this._exChangeRateRecord.push(["CHF", "USD", "1.5"]);
+  const id = Math.max.apply(
+    Math,
+    this._exChangeRateRecord.map(o =&gt; {
+      return parseInt(o.id) + 1;
+    })
+  );</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._exChangeRateRecord.push({
+    id: id,
+    from: "",
+    to: "",
+    rate: ""
+  });
   this._selectTab = this.EXCHANGE;
+  this.render();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const editExChangeRateEvent = e =&gt; {
+  e.target.disabled = true;
+  e.target.parentElement.getElementsByTagName(
+    "button"
+  )[1].disabled = false;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+  "td"
+)[0];
+const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+  "td"
+)[1];
+const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+  "td"
+)[2];
+const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+  "td"
+)[3];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  from.innerHTML = `&lt;input type="text" size="10" value=${from.innerText}&gt;`;
+  to.innerHTML = `&lt;input type="text" size="10" value=${to.innerText}&gt;`;
+  rate.innerHTML = `&lt;input type="text" size="10" value=${rate.innerText}&gt;`;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const saveExChangeRateEvent = e =&gt; {
+  const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "td"
+  )[0];
+  const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "input"
+  )[0];
+  const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "input"
+  )[1];
+  const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "input"
+  )[2];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._exChangeRateRecord.splice(
+  this._exChangeRateRecord.findIndex(i =&gt; i.id === id.innerText),
+  1
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._exChangeRateRecord.push({
+  id: id.innerText,
+  from: from.value,
+  to: to.value,
+  rate: rate.value
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.EXCHANGE;
   this.render();
 };</pre>
 </div>
@@ -1542,6 +1634,15 @@ a.download = "data.csv";</pre>
   document
     .querySelector("#button-add")
     .addEventListener("click", addExChangeRateEvent);
+  this._exChangeRateRecord.forEach(i =&gt; {
+    document
+      .querySelector(`#button-edit-${i.id}`)
+      .addEventListener("click", editExChangeRateEvent);
+    document
+      .querySelector(`#button-save-${i.id}`)
+      .addEventListener("click", saveExChangeRateEvent);
+    document.querySelector(`#button-save-${i.id}`).disabled = true;
+  });
 }</pre>
 </div>
 </div>
@@ -1732,7 +1833,7 @@ a.download = "data.csv";</pre>
 <div class="content">
 <pre>const table = record =&gt; {
   const header = () =&gt; {
-    const th = ["換算元", "換算先", "レート", ""]
+    const th = ["ID", "換算元", "換算先", "レート", ""]
       .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
       .join(" ");</pre>
 </div>
@@ -1753,19 +1854,29 @@ a.download = "data.csv";</pre>
 <div class="content">
 <pre>const body = () =&gt; {
   const line = item =&gt; {
-    const td = item.map(i =&gt; `&lt;td&gt;${i}&lt;/td&gt;`);</pre>
+    const edit = () =&gt; {
+      return `
+              &lt;button
+                id="button-edit-${item.id}"
+                type="button"
+                class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+              &gt;
+                編集
+              &lt;/button&gt;
+    `;
+    };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const edit = () =&gt; {
+<pre>const save = () =&gt; {
   return `
           &lt;button
-            value="1"
+            id="button-save-${item.id}"
             type="button"
             class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
           &gt;
-            編集
+            保存
           &lt;/button&gt;
 `;
 };</pre>
@@ -1776,7 +1887,7 @@ a.download = "data.csv";</pre>
 <pre>const delet = () =&gt; {
   return `
           &lt;button
-            value="1"
+            id="button-delet-${item.id}"
             type="button"
             class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
           &gt;
@@ -1788,23 +1899,19 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>td.push(
-  `
-      &lt;td&gt;
-        &lt;span class="button"&gt;
-          ${edit()}
-          ${delet()}
-        &lt;/span&gt;
-      &lt;/td&gt;
-`
-);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
 <pre>  return `
       &lt;tr&gt;
-        ${td.join("")}
+        &lt;td&gt;${item.id}&lt;/td&gt;
+        &lt;td&gt;${item.from}&lt;/td&gt;
+        &lt;td&gt;${item.to}&lt;/td&gt;
+        &lt;td&gt;${item.rate}&lt;/td&gt;
+        &lt;td&gt;
+          &lt;span class="button"&gt;
+            ${edit()}
+            ${save()}
+            ${delet()}
+          &lt;/span&gt;
+        &lt;/td&gt;
       &lt;/tr&gt;
   `;
 };</pre>
@@ -1954,7 +2061,7 @@ a.download = "data.csv";</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 14:36:59 JST
+Last updated 2019-12-03 17:07:59 JST
 </div>
 </div>
 </body>
