@@ -667,7 +667,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 為替レートを画面で更新する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で削除する</p>
+<p>&#10003; 為替レートを画面で削除する</p>
 </li>
 </ul>
 </div>
@@ -844,7 +844,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 為替レートを画面で更新する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを画面で削除する
+<p>&#10003; 為替レートを画面で削除する
 `
         );
       &lt;/script&gt;</p>
@@ -1527,7 +1527,7 @@ a.download = "data.csv";</pre>
 <div class="literalblock">
 <div class="content">
 <pre>const addExChangeRateEvent = e =&gt; {
-  const id = Math.max.apply(
+  let id = Math.max.apply(
     Math,
     this._exChangeRateRecord.map(o =&gt; {
       return parseInt(o.id) + 1;
@@ -1537,13 +1537,22 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._exChangeRateRecord.push({
-    id: id,
-    from: "",
-    to: "",
-    rate: ""
-  });
-  this._selectTab = this.EXCHANGE;
+<pre>if (!isFinite(id)) id = 1;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._exChangeRateRecord.push({
+  id: id,
+  from: "",
+  to: "",
+  rate: ""
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.EXCHANGE;
   this.render();
 };</pre>
 </div>
@@ -1625,6 +1634,42 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>const deleteAllExChangeRateEvent = e =&gt; {
+  this._exChangeRateRecord = [];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.EXCHANGE;
+  this.render();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const delteExhangeRateEvent = e =&gt; {
+  const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "td"
+  )[0];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._exChangeRateRecord.splice(
+  this._exChangeRateRecord.findIndex(i =&gt; i.id === id.innerText),
+  1
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.EXCHANGE;
+  this.render();
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>  document
     .querySelector("#app-money-upload")
     .addEventListener("change", uploadEvent);
@@ -1634,6 +1679,9 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
   document
     .querySelector("#button-add")
     .addEventListener("click", addExChangeRateEvent);
+  document
+    .querySelector("#button-delete")
+    .addEventListener("click", deleteAllExChangeRateEvent);
   this._exChangeRateRecord.forEach(i =&gt; {
     document
       .querySelector(`#button-edit-${i.id}`)
@@ -1642,6 +1690,9 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
       .querySelector(`#button-save-${i.id}`)
       .addEventListener("click", saveExChangeRateEvent);
     document.querySelector(`#button-save-${i.id}`).disabled = true;
+    document
+      .querySelector(`#button-delete-${i.id}`)
+      .addEventListener("click", delteExhangeRateEvent);
   });
 }</pre>
 </div>
@@ -1887,7 +1938,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <pre>const delet = () =&gt; {
   return `
           &lt;button
-            id="button-delet-${item.id}"
+            id="button-delete-${item.id}"
             type="button"
             class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
           &gt;
@@ -2061,7 +2112,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 17:07:59 JST
+Last updated 2019-12-03 17:28:07 JST
 </div>
 </div>
 </body>

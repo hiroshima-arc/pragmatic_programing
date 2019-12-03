@@ -110,7 +110,7 @@
 - [x] レポートをダウンロードする
 - [x] 為替レートを画面で新規追加する
 - [x] 為替レートを画面で更新する
-- [ ] 為替レートを画面で削除する
+- [x] 為替レートを画面で削除する
 `
         );
       </script>
@@ -692,8 +692,22 @@ ReportViewModel <- View
               this.render();
             };
 
-            const deleteAllEvent = e => {
+            const deleteAllExChangeRateEvent = e => {
               this._exChangeRateRecord = [];
+
+              this._selectTab = this.EXCHANGE;
+              this.render();
+            };
+
+            const delteExhangeRateEvent = e => {
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[0];
+
+              this._exChangeRateRecord.splice(
+                this._exChangeRateRecord.findIndex(i => i.id === id.innerText),
+                1
+              );
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -710,7 +724,7 @@ ReportViewModel <- View
               .addEventListener("click", addExChangeRateEvent);
             document
               .querySelector("#button-delete")
-              .addEventListener("click", deleteAllEvent);
+              .addEventListener("click", deleteAllExChangeRateEvent);
             this._exChangeRateRecord.forEach(i => {
               document
                 .querySelector(`#button-edit-${i.id}`)
@@ -719,6 +733,9 @@ ReportViewModel <- View
                 .querySelector(`#button-save-${i.id}`)
                 .addEventListener("click", saveExChangeRateEvent);
               document.querySelector(`#button-save-${i.id}`).disabled = true;
+              document
+                .querySelector(`#button-delete-${i.id}`)
+                .addEventListener("click", delteExhangeRateEvent);
             });
           }
 
@@ -916,7 +933,7 @@ ReportViewModel <- View
                       const delet = () => {
                         return `
                                 <button
-                                  id="button-delet-${item.id}"
+                                  id="button-delete-${item.id}"
                                   type="button"
                                   class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
                                 >
