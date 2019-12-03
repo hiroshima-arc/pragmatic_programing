@@ -105,12 +105,8 @@
 
 ## ToDoリスト
 
-- [x] レポートを画面に表示する
-- [x] レポートをアップロードする
-- [x] レポートをダウンロードする
-- [x] 為替レートを画面で新規追加する
-- [x] 為替レートを画面で更新する
-- [x] 為替レートを画面で削除する
+- [ ] レポートを保存する
+- [ ] 為替レートを保存する
 `
         );
       </script>
@@ -169,6 +165,8 @@ class Money {
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+class ExChangeRate {
+}
 class ReportViewModel {
   items<ReportViewModelItem>: List
   total: Sum
@@ -179,7 +177,14 @@ class ReportViewModelItem {
   price: Money
   sum: Money
 }
-ReportViewModelItem -o ReportViewModel
+class ExChangeRateViewModel {
+}
+class MoneyService {
+}
+class ReportRepository {
+}
+class ExChangeRateRepository {
+}
 class View {
   REPORT: 1
   EXCHANGE: 2
@@ -196,7 +201,16 @@ Sum <- Bank
 Bank -> Pair
 Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
-ReportViewModel <- View
+Bank --> ExChangeRate
+ExChangeRateViewModel o- ExChangeRate
+ExChangeRateViewModel <-- MoneyService
+ExChangeRate <- ExChangeRateRepository
+ReportRepository -o MoneyService
+ReportViewModel <- ReportRepository
+MoneyService o- ExChangeRateRepository
+ReportViewModelItem -o ReportViewModel
+ReportViewModel <-- MoneyService
+MoneyService <-- View
           `;
           compress(source, outputId);
         })();

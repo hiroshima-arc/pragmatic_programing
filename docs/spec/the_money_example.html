@@ -669,6 +669,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10003; 為替レートを画面で削除する</p>
 </li>
+<li>
+<p>&#10063; レポートを保存する</p>
+</li>
+<li>
+<p>&#10063; 為替レートを保存する</p>
+</li>
 </ul>
 </div>
 </div>
@@ -680,7 +686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-91dba1fcb34d34e6c8a2790c5fdb9b14.png" alt="diag 91dba1fcb34d34e6c8a2790c5fdb9b14" width="750" height="515">
+<img src="diag-21b67bab56cfc6ac874e12227a1345e3.png" alt="diag 21b67bab56cfc6ac874e12227a1345e3" width="863" height="783">
 </div>
 </div>
 </div>
@@ -829,22 +835,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10003; レポートを画面に表示する</p>
+<p>&#10063; レポートを保存する</p>
 </li>
 <li>
-<p>&#10003; レポートをアップロードする</p>
-</li>
-<li>
-<p>&#10003; レポートをダウンロードする</p>
-</li>
-<li>
-<p>&#10003; 為替レートを画面で新規追加する</p>
-</li>
-<li>
-<p>&#10003; 為替レートを画面で更新する</p>
-</li>
-<li>
-<p>&#10003; 為替レートを画面で削除する
+<p>&#10063; 為替レートを保存する
 `
         );
       &lt;/script&gt;</p>
@@ -907,6 +901,8 @@ class Money {
   {static} dollar(amount): Dollar
   {static} franc(amount): Franc
 }
+class ExChangeRate {
+}
 class ReportViewModel {
   items&lt;ReportViewModelItem&gt;: List
   total: Sum
@@ -917,7 +913,14 @@ class ReportViewModelItem {
   price: Money
   sum: Money
 }
-ReportViewModelItem -o ReportViewModel
+class ExChangeRateViewModel {
+}
+class MoneyService {
+}
+class ReportRepository {
+}
+class ExChangeRateRepository {
+}
 class View {
   REPORT: 1
   EXCHANGE: 2
@@ -934,7 +937,16 @@ Sum &lt;- Bank
 Bank -&gt; Pair
 Sum &lt;-- ReportViewModel
 Money &lt;-- ReportViewModelItem
-ReportViewModel &lt;- View
+Bank --&gt; ExChangeRate
+ExChangeRateViewModel o- ExChangeRate
+ExChangeRateViewModel &lt;-- MoneyService
+ExChangeRate &lt;- ExChangeRateRepository
+ReportRepository -o MoneyService
+ReportViewModel &lt;- ReportRepository
+MoneyService o- ExChangeRateRepository
+ReportViewModelItem -o ReportViewModel
+ReportViewModel &lt;-- MoneyService
+MoneyService &lt;-- View
           `;
           compress(source, outputId);
         })();</pre>
@@ -2116,7 +2128,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 17:43:20 JST
+Last updated 2019-12-03 19:09:42 JST
 </div>
 </div>
 </body>
