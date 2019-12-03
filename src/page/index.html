@@ -643,7 +643,7 @@ ReportViewModel <- View
               </div>
           `;
 
-            const tabContent = () => {
+            const tabContent = (() => {
               const report = (() => {
                 const table = () => {
                   const header = () => {
@@ -760,27 +760,27 @@ ReportViewModel <- View
               const exChangeRate = (() => {
                 const table = () => {
                   const header = () => {
+                    const th = ["換算元", "換算先", "レート", ""]
+                      .map(i => `<th>${i}</th>`)
+                      .join(" ");
+
                     return `
                         <thead>
                           <tr>
-                            <th>
-                              <p>換算元</p>
-                            </th>
-                            <th>
-                              <p>換算先</p>
-                            </th>
-                            <th>
-                              <p>レート</p>
-                            </th>
-                            <td></td>
+                            ${th}
                           </tr>
                         </thead>
                     `;
                   };
 
                   const body = () => {
-                    const edit = () => {
-                      return `
+                    const line = () => {
+                      const td = ["CHF", "USD", "1.5"].map(
+                        i => `<td>${i}</td>`
+                      );
+
+                      const edit = () => {
+                        return `
                                 <button
                                   value="1"
                                   type="button"
@@ -789,10 +789,10 @@ ReportViewModel <- View
                                   編集
                                 </button>
                       `;
-                    };
+                      };
 
-                    const delet = () => {
-                      return `
+                      const delet = () => {
+                        return `
                                 <button
                                   value="1"
                                   type="button"
@@ -801,26 +801,22 @@ ReportViewModel <- View
                                   削除
                                 </button>
                       `;
-                    };
+                      };
 
-                    const line = () => {
-                      return `
-                          <tr>
-                            <td>
-                              <p>CHF</p>
-                            </td>
-                            <td>
-                              <p>USD</p>
-                            </td>
-                            <td>
-                              <p>1.5</p>
-                            </td>
+                      td.push(
+                        `
                             <td>
                               <span class="button">
                                 ${edit()}
                                 ${delet()}
                               </span>
                             </td>
+                      `
+                      );
+
+                      return `
+                          <tr>
+                            ${td.join("")}
                           </tr>
                       `;
                     };
@@ -897,13 +893,14 @@ ReportViewModel <- View
                 ${exChangeRate}
               </div>
           `;
-            };
+            })();
+
             const result = `
               <section id="menu">
                 <div class="container">
                   <div id="message"></div>
                   ${tabNav}
-                  ${tabContent()}
+                  ${tabContent}
                 </div>
               </section>
             `;
