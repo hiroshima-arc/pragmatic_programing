@@ -618,12 +618,14 @@ ReportViewModel <- View
             };
 
             const addExChangeRateEvent = e => {
-              const id = Math.max.apply(
+              let id = Math.max.apply(
                 Math,
                 this._exChangeRateRecord.map(o => {
                   return parseInt(o.id) + 1;
                 })
               );
+
+              if (!isFinite(id)) id = 1;
 
               this._exChangeRateRecord.push({
                 id: id,
@@ -631,6 +633,7 @@ ReportViewModel <- View
                 to: "",
                 rate: ""
               });
+
               this._selectTab = this.EXCHANGE;
               this.render();
             };
@@ -689,6 +692,13 @@ ReportViewModel <- View
               this.render();
             };
 
+            const deleteAllEvent = e => {
+              this._exChangeRateRecord = [];
+
+              this._selectTab = this.EXCHANGE;
+              this.render();
+            };
+
             document
               .querySelector("#app-money-upload")
               .addEventListener("change", uploadEvent);
@@ -698,6 +708,9 @@ ReportViewModel <- View
             document
               .querySelector("#button-add")
               .addEventListener("click", addExChangeRateEvent);
+            document
+              .querySelector("#button-delete")
+              .addEventListener("click", deleteAllEvent);
             this._exChangeRateRecord.forEach(i => {
               document
                 .querySelector(`#button-edit-${i.id}`)
