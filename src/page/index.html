@@ -80,6 +80,21 @@
       <!-- PapaParse -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>
 
+      <!-- nanoSQL2 -->
+      <!-- ES6 Only (Faster & Smaller) -->
+      <script
+        src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.js"
+        integrity="sha256-W1pVgKda7GC4fwXqq9jfOrssBDJJXZqck+ultRPVzmc="
+        crossorigin="anonymous"
+      ></script>
+      <!-- ES5 (Internet Explorer/Old Browser Support) -->
+      <!-- Promise must be polyfilled as well -->
+      <script
+        src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.es5.js"
+        integrity="sha256-1t9VlpFUgHaxlLQy6HM9ROQvTiuUv2M12Fp1oTh3+yg="
+        crossorigin="anonymous"
+      ></script>
+
       <!-- markdown -->
       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
       <script>
@@ -607,7 +622,56 @@ MoneyService --o View
           }
         }
 
+        class ExChangeRateRepository {
+          constructor() {
+            // typical setup
+            nSQL()
+              .createDatabase({
+                id: "money", // can be anything that's a string
+                mode: "PERM", // save changes to IndexedDB, WebSQL or SnapDB!
+                tables: [
+                  // tables can be created as part of createDatabase or created later with create table queries
+                  {
+                    name: "exchange_rates",
+                    model: {
+                      "id:uuid": { pk: true },
+                      "from:string": {},
+                      "to:string": {},
+                      "rate:int": {}
+                    }
+                  }
+                ],
+                version: 3, // current schema/database version
+                onVersionUpdate: prevVersion => {
+                  // migrate versions
+                  return new Promise((res, rej) => {
+                    switch (prevVersion) {
+                      case 1:
+                        // migrate v1 to v2
+                        res(2);
+                        break;
+                      case 2:
+                        // migrate v2 to v3
+                        res(3);
+                        break;
+                    }
+                  });
+                }
+              })
+              .then(() => {
+                // ready to query!
+              })
+              .catch(() => {
+                // ran into a problem
+              });
+          }
+        }
+
         class MoneyService {
+          constructor() {
+            this._exChangeRateRepository = new ExChangeRateRepository();
+          }
+
           createReportViewModel(data) {
             const items = data.map(
               i =>
