@@ -182,7 +182,7 @@ class ExChangeRateViewModel {
 class MoneyService {
   createReportViewModel(data): RepositoryViewModel
   selectAllExChangeRate(): ExChangeRateViewModel 
-  createExChangeRate(id, from, to, rate): object 
+  createExChangeRate(id, from, to, rate): ExChangeRate 
   updateExChangeRate(id, from, to, rate, record):  ExChangeRateViewModel
   deleteExChangeRate(id, record): ExChangeRateViewModel
   deleteAllExChangeRate(): ExChangeRateViewModel
@@ -582,6 +582,31 @@ MoneyService --o View
           }
         }
 
+        class ExChangeRate {
+          constructor(id, from, to, rate) {
+            this._id = parseInt(id);
+            this._from = from;
+            this._to = to;
+            this._rate = rate;
+          }
+
+          get id() {
+            return this._id;
+          }
+
+          get from() {
+            return this._from;
+          }
+
+          get to() {
+            return this._to;
+          }
+
+          get rate() {
+            return this._rate;
+          }
+        }
+
         class MoneyService {
           createReportViewModel(data) {
             const items = data.map(
@@ -596,17 +621,12 @@ MoneyService --o View
           }
 
           selectAllExChangeRate() {
-            const list = [{ id: 1, from: "CHF", to: "USD", rate: "1.5" }];
+            const list = [new ExChangeRate(1, "CHF", "USD", "1.5")];
             return new ExChangeRateViewModel(list);
           }
 
           createExChangeRate(id, from, to, rate) {
-            return {
-              id: parseInt(id),
-              from: from,
-              to: to,
-              rate: rate
-            };
+            return new ExChangeRate(id, from, to, rate);
           }
 
           updateExChangeRate(id, from, to, rate, record) {
