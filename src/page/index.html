@@ -196,7 +196,6 @@ class View {
   EXCHANGE: 2
   _service: MoneyService
   _report: ReportViewModel
-  _exChangeRateRecord<object>: List
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -644,7 +643,6 @@ MoneyService --o View
             this._service = new MoneyService();
             this._report = this._service.createReportViewModel([]);
             this._exChangeRate = this._service.selectAllExChangeRate();
-            this._exChangeRateRecord = this._exChangeRate.record;
             this._selectTab = this.REPORT;
           }
 
@@ -703,22 +701,20 @@ MoneyService --o View
             const addExChangeRateEvent = e => {
               let id = Math.max.apply(
                 Math,
-                this._exChangeRateRecord.map(o => {
+                this._exChangeRate.record.map(o => {
                   return parseInt(o.id) + 1;
                 })
               );
 
               if (!isFinite(id)) id = 1;
 
-              this._exChangeRateRecord = this._service.updateExChangeRate(
+              this._exChangeRate = this._service.updateExChangeRate(
                 id,
                 "",
                 "",
                 "",
-                this._exChangeRateRecord
+                this._exChangeRate.record
               );
-
-              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -767,9 +763,8 @@ MoneyService --o View
                 from.value,
                 to.value,
                 rate.value,
-                this._exChangeRateRecord
+                this._exChangeRate.record
               );
-              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -777,7 +772,6 @@ MoneyService --o View
 
             const deleteAllExChangeRateEvent = e => {
               this._exChangeRate = this._service.deleteAllExChangeRate();
-              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -790,9 +784,8 @@ MoneyService --o View
 
               this._exChangeRate = this._service.deleteExChangeRate(
                 id.innerText,
-                this._exChangeRateRecord
+                this._exChangeRate.record
               );
-              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -810,7 +803,7 @@ MoneyService --o View
             document
               .querySelector("#button-delete")
               .addEventListener("click", deleteAllExChangeRateEvent);
-            this._exChangeRateRecord.forEach(i => {
+            this._exChangeRate.record.forEach(i => {
               document
                 .querySelector(`#button-edit-${i.id}`)
                 .addEventListener("click", editExChangeRateEvent);
@@ -1109,7 +1102,7 @@ MoneyService --o View
                   </dvi>
                 </div>
             `;
-              })(this._exChangeRateRecord);
+              })(this._exChangeRate.record);
 
               return `
               <div class="tab-content" id="panel-menus">
