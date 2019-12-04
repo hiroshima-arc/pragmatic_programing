@@ -413,6 +413,21 @@ MoneyService --o View
           });
         });
 
+        suite("ExChangeRepositoryTest", () => {
+          test("Create", () => {
+            const repository = new ExChangeRateRepository();
+            return repository.setup().then(result => {
+              const dbList = nSQL().listDatabases();
+              console.log(dbList);
+              return repository.create().then(result => {
+                return repository.selectAll().then(result => {
+                  return assert.equal([], result);
+                });
+              });
+            });
+          });
+        });
+
         class Pair {
           constructor(from, to) {
             this._from = from;
@@ -623,47 +638,73 @@ MoneyService --o View
         }
 
         class ExChangeRateRepository {
-          constructor() {
-            // typical setup
-            nSQL()
-              .createDatabase({
-                id: "money", // can be anything that's a string
-                mode: "PERM", // save changes to IndexedDB, WebSQL or SnapDB!
-                tables: [
-                  // tables can be created as part of createDatabase or created later with create table queries
-                  {
-                    name: "exchange_rates",
-                    model: {
-                      "id:uuid": { pk: true },
-                      "from:string": {},
-                      "to:string": {},
-                      "rate:int": {}
+          constructor() {}
+
+          setup() {
+            return new Promise((resolve, reject) => {
+              // Persistent Database
+              nSQL()
+                .createDatabase({
+                  id: "test",
+                  mode: "PERM",
+                  tables: [
+                    {
+                      name: "users",
+                      model: {
+                        "id:uuid": { pk: true },
+                        "name:string": {},
+                        "age:int": {},
+                        "meta:obj": {
+                          model: {
+                            "color:string": {}
+                          }
+                        },
+                        "tags:string[]": { default: [] }
+                      },
+                      indexes: {
+                        "tags:string[]": {},
+                        "meta.color:string": {},
+                        "age:int": {}
+                      }
                     }
-                  }
-                ],
-                version: 3, // current schema/database version
-                onVersionUpdate: prevVersion => {
-                  // migrate versions
-                  return new Promise((res, rej) => {
-                    switch (prevVersion) {
-                      case 1:
-                        // migrate v1 to v2
-                        res(2);
-                        break;
-                      case 2:
-                        // migrate v2 to v3
-                        res(3);
-                        break;
-                    }
-                  });
-                }
-              })
-              .then(() => {
-                // ready to query!
-              })
-              .catch(() => {
-                // ran into a problem
-              });
+                  ]
+                })
+                .then(() => {
+                  return resolve();
+                })
+                .catch(() => {
+                  return reject();
+                });
+            });
+          }
+
+          create(list) {
+            return new Promise((resolve, reject) => {
+              nSQL("users")
+                .query("upsert", {
+                  name: "Jeb",
+                  age: 20,
+                  meta: { color: "blue" },
+                  tags: ["some", "tags", "here"]
+                })
+                .exec()
+                .then(rows => {
+                  console.log(rows);
+                  return resolve();
+                });
+            });
+          }
+
+          selectAll() {
+            return new Promise((resolve, reject) => {
+              nSQL("users")
+                .query("select")
+                .exec()
+                .then(rows => {
+                  console.log(rows);
+                  return resolve(rows);
+                });
+            });
           }
         }
 
@@ -908,29 +949,29 @@ MoneyService --o View
               this._selectTab === this.EXCHANGE ? "active" : "";
 
             const tabNav = `
-              <div class="nav nav-tabs" id="tab-menus" role="tablist">
-                <a
-                  aria-controls="panel-menu01"
-                  aria-selected="true"
-                  class="nav-item nav-link ${reportSelect}"
-                  data-toggle="tab"
-                  href="#panel-menu01"
-                  id="tab-menu01"
-                  role="tab"
-                  >レポート</a
-                >
-                <a
-                  aria-controls="panel-menu02"
-                  aria-selected="false"
-                  class="nav-item nav-link ${exChangeSelect}"
-                  data-toggle="tab"
-                  href="#panel-menu02"
-                  id="tab-menu02"
-                  role="tab"
-                  >為替レート</a
-                >
-              </div>
-          `;
+                      <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                        <a
+                          aria-controls="panel-menu01"
+                          aria-selected="true"
+                          class="nav-item nav-link ${reportSelect}"
+                          data-toggle="tab"
+                          href="#panel-menu01"
+                          id="tab-menu01"
+                          role="tab"
+                          >レポート</a
+                        >
+                        <a
+                          aria-controls="panel-menu02"
+                          aria-selected="false"
+                          class="nav-item nav-link ${exChangeSelect}"
+                          data-toggle="tab"
+                          href="#panel-menu02"
+                          id="tab-menu02"
+                          role="tab"
+                          >為替レート</a
+                        >
+                      </div>
+                  `;
 
             const tabContent = (() => {
               const report = (() => {
@@ -943,12 +984,12 @@ MoneyService --o View
                       .join(" ");
 
                     return `
-                          <thead>
-                            <tr>
-                              ${line}
-                            </tr>
-                          </thead>
-                    `;
+                                  <thead>
+                                    <tr>
+                                      ${line}
+                                    </tr>
+                                  </thead>
+                            `;
                   };
 
                   const body = () => {
@@ -956,96 +997,96 @@ MoneyService --o View
                     const line = items
                       .map(
                         i => `
-                    <tr>
-                      <td>${i.stockName}</td>
-                      <td>${i.stockAmount}</td>
-                      <td>${i.price}</td>
-                      <td>${i.sum}</td>
-                    </tr>
-                    `
+                            <tr>
+                              <td>${i.stockName}</td>
+                              <td>${i.stockAmount}</td>
+                              <td>${i.price}</td>
+                              <td>${i.sum}</td>
+                            </tr>
+                            `
                       )
                       .join(" ");
                     const total = `
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                <p>総計</p>
-                              </td>
-                              <td>
-                                <p>${this._report.total}</p>
-                              </td>
-                            </tr>
-                    `;
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td>
+                                        <p>総計</p>
+                                      </td>
+                                      <td>
+                                        <p>${this._report.total}</p>
+                                      </td>
+                                    </tr>
+                            `;
                     return `
-                          <tbody>
-                            ${line}
-                            ${total}
-                          </tbody>
-                    `;
+                                  <tbody>
+                                    ${line}
+                                    ${total}
+                                  </tbody>
+                            `;
                   };
 
                   return `
-                        <table id="report-table" class="table table-striped">
-                            ${header()}
-                            ${body()}
-                        </table>
-                  `;
+                                <table id="report-table" class="table table-striped">
+                                    ${header()}
+                                    ${body()}
+                                </table>
+                          `;
                 };
 
                 const upload = () => {
                   return `
-                        <div class="col-md-12">
-                          <form>
-                            <div class="form-group">
-                              <p>
-                                CSVファイルを選択して下さい。<br />
-                              </p>
-                              <input
-                                type="file"
-                                class="form-control-file"
-                                id="app-money-upload"
-                              />
-                            </div>
-                          </form>
-                        </div>
-                  `;
+                                <div class="col-md-12">
+                                  <form>
+                                    <div class="form-group">
+                                      <p>
+                                        CSVファイルを選択して下さい。<br />
+                                      </p>
+                                      <input
+                                        type="file"
+                                        class="form-control-file"
+                                        id="app-money-upload"
+                                      />
+                                    </div>
+                                  </form>
+                                </div>
+                          `;
                 };
 
                 const download = () => {
                   return `
-                        <button
-                          type="button"
-                          class="btn btn-primary btn"
-                          id="app-money-download"
-                        >
-                          CSVダウンロード
-                        </button>
-                  `;
+                                <button
+                                  type="button"
+                                  class="btn btn-primary btn"
+                                  id="app-money-download"
+                                >
+                                  CSVダウンロード
+                                </button>
+                          `;
                 };
 
                 return `
-                <div
-                  aria-labelledby="tab-menu01"
-                  class="tab-pane fade border border-top-0 ${activeShow}"
-                  id="panel-menu01"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="report" class="col-md-12 order-md-2">
-                      <div class="row">
-                        ${upload()}
-                      </div>
-                      <div class="row">
-                        ${table()}
-                      </div>
-                      <div class="col-md-12 py-2">
-                        ${download()}
-                      </div>
-                    </div>
-                  </dvi>
-                </div>
-            `;
+                        <div
+                          aria-labelledby="tab-menu01"
+                          class="tab-pane fade border border-top-0 ${activeShow}"
+                          id="panel-menu01"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div id="report" class="col-md-12 order-md-2">
+                              <div class="row">
+                                ${upload()}
+                              </div>
+                              <div class="row">
+                                ${table()}
+                              </div>
+                              <div class="col-md-12 py-2">
+                                ${download()}
+                              </div>
+                            </div>
+                          </dvi>
+                        </div>
+                    `;
               })();
 
               const exChangeRate = (record => {
@@ -1058,153 +1099,153 @@ MoneyService --o View
                       .join(" ");
 
                     return `
-                        <thead>
-                          <tr>
-                            ${th}
-                          </tr>
-                        </thead>
-                    `;
+                                <thead>
+                                  <tr>
+                                    ${th}
+                                  </tr>
+                                </thead>
+                            `;
                   };
 
                   const body = () => {
                     const line = item => {
                       const edit = () => {
                         return `
-                                <button
-                                  id="button-edit-${item.id}"
-                                  type="button"
-                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  編集
-                                </button>
-                      `;
+                                        <button
+                                          id="button-edit-${item.id}"
+                                          type="button"
+                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          編集
+                                        </button>
+                              `;
                       };
 
                       const save = () => {
                         return `
-                                <button
-                                  id="button-save-${item.id}"
-                                  type="button"
-                                  class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  保存
-                                </button>
-                      `;
+                                        <button
+                                          id="button-save-${item.id}"
+                                          type="button"
+                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          保存
+                                        </button>
+                              `;
                       };
 
                       const delet = () => {
                         return `
-                                <button
-                                  id="button-delete-${item.id}"
-                                  type="button"
-                                  class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                                >
-                                  削除
-                                </button>
-                      `;
+                                        <button
+                                          id="button-delete-${item.id}"
+                                          type="button"
+                                          class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          削除
+                                        </button>
+                              `;
                       };
 
                       return `
-                          <tr>
-                            <td>${item.id}</td>
-                            <td>${item.from}</td>
-                            <td>${item.to}</td>
-                            <td>${item.rate}</td>
-                            <td>
-                              <span class="button">
-                                ${edit()}
-                                ${save()}
-                                ${delet()}
-                              </span>
-                            </td>
-                          </tr>
-                      `;
+                                  <tr>
+                                    <td>${item.id}</td>
+                                    <td>${item.from}</td>
+                                    <td>${item.to}</td>
+                                    <td>${item.rate}</td>
+                                    <td>
+                                      <span class="button">
+                                        ${edit()}
+                                        ${save()}
+                                        ${delet()}
+                                      </span>
+                                    </td>
+                                  </tr>
+                              `;
                     };
 
                     return `
-                        <tbody>
-                          ${record.map(line).join("")}
-                        </tbody>
-                    `;
+                                <tbody>
+                                  ${record.map(line).join("")}
+                                </tbody>
+                            `;
                   };
 
                   return `
-                      <table
-                        id="exchange-rate-table"
-                        class="table table-striped"
-                      >
-                        ${header()}
-                        ${body()}
-                      </table>
-                  `;
+                              <table
+                                id="exchange-rate-table"
+                                class="table table-striped"
+                              >
+                                ${header()}
+                                ${body()}
+                              </table>
+                          `;
                 };
 
                 const button = () => {
                   const add = () => {
                     return `
-                        <button
-                          id="button-add"
-                          type="button"
-                          class="btn btn-primary btn-rounded btn-sm my-0"
-                        >
-                          追加
-                        </button>
-                    `;
+                                <button
+                                  id="button-add"
+                                  type="button"
+                                  class="btn btn-primary btn-rounded btn-sm my-0"
+                                >
+                                  追加
+                                </button>
+                            `;
                   };
 
                   const deletAll = () => {
                     return `
-                        <button
-                          id="button-delete"
-                          type="button"
-                          class="btn btn-danger btn-rounded btn-sm my-0"
-                        >
-                          全削除
-                        </button>
-                    `;
+                                <button
+                                  id="button-delete"
+                                  type="button"
+                                  class="btn btn-danger btn-rounded btn-sm my-0"
+                                >
+                                  全削除
+                                </button>
+                            `;
                   };
                   return `
-                      <div id="button">
-                        ${add()}
-                        ${deletAll()}
-                      </div>
-                  `;
+                              <div id="button">
+                                ${add()}
+                                ${deletAll()}
+                              </div>
+                          `;
                 };
 
                 return `
-                <div
-                  aria-labelledby="tab-menu02"
-                  class="tab-pane fade border border-top-0 ${activeShow}"
-                  id="panel-menu02"
-                  role="tabpanel"
-                >
-                  <dvi class="row p-3">
-                    <div id="exchange-rate" class="col-md-12 order-md-2">
-                      ${table(record)}
-                      ${button()}
-                    </div>
-                  </dvi>
-                </div>
-            `;
+                        <div
+                          aria-labelledby="tab-menu02"
+                          class="tab-pane fade border border-top-0 ${activeShow}"
+                          id="panel-menu02"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div id="exchange-rate" class="col-md-12 order-md-2">
+                              ${table(record)}
+                              ${button()}
+                            </div>
+                          </dvi>
+                        </div>
+                    `;
               })(this._exChangeRate.record);
 
               return `
-              <div class="tab-content" id="panel-menus">
-                ${report}
-                ${exChangeRate}
-              </div>
-          `;
+                      <div class="tab-content" id="panel-menus">
+                        ${report}
+                        ${exChangeRate}
+                      </div>
+                  `;
             })();
 
             const result = `
-              <section id="menu">
-                <div class="container">
-                  <div id="message"></div>
-                  ${tabNav}
-                  ${tabContent}
-                </div>
-              </section>
-            `;
+                      <section id="menu">
+                        <div class="container">
+                          <div id="message"></div>
+                          ${tabNav}
+                          ${tabContent}
+                        </div>
+                      </section>
+                    `;
             document.querySelector("#money-app").innerHTML = result;
             this.dispatchEvent();
           }
