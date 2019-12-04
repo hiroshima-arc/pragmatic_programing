@@ -180,6 +180,8 @@ class ReportViewModelItem {
 class ExChangeRateViewModel {
 }
 class MoneyService {
+  createReportViewModel()
+  createExChangeRate()
 }
 class ReportRepository {
 }
@@ -188,6 +190,7 @@ class ExChangeRateRepository {
 class View {
   REPORT: 1
   EXCHANGE: 2
+  _service: MoneyService
   _report: ReportViewModel
   _exChangeRateRecord<object>: List
   _selectTab: int
@@ -210,7 +213,7 @@ ReportViewModel <- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel <-- MoneyService
-MoneyService <-- View
+MoneyService --o View
           `;
           compress(source, outputId);
         })();
@@ -566,16 +569,32 @@ MoneyService <-- View
           }
         }
 
+        class MoneyService {
+          createReportViewModel(data) {
+            const items = data.map(
+              i =>
+                new ReportViewModelItem(
+                  i.銘柄,
+                  i.株数,
+                  new Money(i.価格, i.通貨)
+                )
+            );
+            return new ReportViewModel(items);
+          }
+
+          createExChangeRate() {
+            return [{ id: "1", from: "CHF", to: "USD", rate: "1.5" }];
+          }
+        }
+
         class View {
           constructor() {
             this.REPORT = 1;
             this.EXCHANGE = 2;
 
-            const items = [];
-            this._report = new ReportViewModel(items);
-            this._exChangeRateRecord = [
-              { id: "1", from: "CHF", to: "USD", rate: "1.5" }
-            ];
+            this._service = new MoneyService();
+            this._report = this._service.createReportViewModel([]);
+            this._exChangeRateRecord = this._service.createExChangeRate();
             this._selectTab = this.REPORT;
           }
 
@@ -602,15 +621,11 @@ MoneyService <-- View
                     header: true,
                     skipEmptyLines: true
                   });
-                  const items = parseData.data.map(
-                    i =>
-                      new ReportViewModelItem(
-                        i.銘柄,
-                        i.株数,
-                        new Money(i.価格, i.通貨)
-                      )
+
+                  this._report = this._service.createReportViewModel(
+                    parseData.data
                   );
-                  this._report = new ReportViewModel(items);
+
                   this._selectTab = this.REPORT;
                   this.render();
                 };
