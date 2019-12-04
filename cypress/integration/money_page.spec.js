@@ -43,6 +43,7 @@ describe('The Money Example', () => {
 
     it('為替レートを削除する', () => {
       cy.get('#button-delete-2').click()
+      cy.get('#exchange-rate-table > tbody > :nth-child(1) > :nth-child(1)').should('contain', '1')
     })
 
     it('為替レートを全て削除する', () => {

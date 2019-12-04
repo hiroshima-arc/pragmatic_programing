@@ -180,8 +180,12 @@ class ReportViewModelItem {
 class ExChangeRateViewModel {
 }
 class MoneyService {
-  createReportViewModel()
-  createExChangeRate()
+  createReportViewModel(data): RepositoryViewModel
+  selectAllExChangeRate(): List
+  createExChangeRate(id, from, to, rate): Object
+  updateExChangeRate(id, from, to, rate, record): List
+  deleteExChangeRate(id, record): List
+  deleteAllExChangeRate(): List
 }
 class ReportRepository {
 }
@@ -582,8 +586,41 @@ MoneyService --o View
             return new ReportViewModel(items);
           }
 
-          createExChangeRate() {
-            return [{ id: "1", from: "CHF", to: "USD", rate: "1.5" }];
+          selectAllExChangeRate() {
+            return [{ id: 1, from: "CHF", to: "USD", rate: "1.5" }];
+          }
+
+          createExChangeRate(id, from, to, rate) {
+            return {
+              id: parseInt(id),
+              from: from,
+              to: to,
+              rate: rate
+            };
+          }
+
+          updateExChangeRate(id, from, to, rate, record) {
+            const start = record.findIndex(
+              i => parseInt(i.id) === parseInt(id)
+            );
+            if (start >= 0) record.splice(start, 1);
+
+            record.push(this.createExChangeRate(id, from, to, rate));
+
+            return record.sort((a, b) => a.id - b.id);
+          }
+
+          deleteExChangeRate(id, record) {
+            const start = record.findIndex(
+              i => parseInt(i.id) === parseInt(id)
+            );
+            if (start >= 0) record.splice(start, 1);
+
+            return record;
+          }
+
+          deleteAllExChangeRate() {
+            return [];
           }
         }
 
@@ -594,7 +631,7 @@ MoneyService --o View
 
             this._service = new MoneyService();
             this._report = this._service.createReportViewModel([]);
-            this._exChangeRateRecord = this._service.createExChangeRate();
+            this._exChangeRateRecord = this._service.selectAllExChangeRate();
             this._selectTab = this.REPORT;
           }
 
@@ -660,12 +697,13 @@ MoneyService --o View
 
               if (!isFinite(id)) id = 1;
 
-              this._exChangeRateRecord.push({
-                id: id,
-                from: "",
-                to: "",
-                rate: ""
-              });
+              this._exChangeRateRecord = this._service.updateExChangeRate(
+                id,
+                "",
+                "",
+                "",
+                this._exChangeRateRecord
+              );
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -709,24 +747,20 @@ MoneyService --o View
                 "input"
               )[2];
 
-              this._exChangeRateRecord.splice(
-                this._exChangeRateRecord.findIndex(i => i.id === id.innerText),
-                1
+              this._exChangeRateRecord = this._service.updateExChangeRate(
+                id.innerHTML,
+                from.value,
+                to.value,
+                rate.value,
+                this._exChangeRateRecord
               );
-
-              this._exChangeRateRecord.push({
-                id: id.innerText,
-                from: from.value,
-                to: to.value,
-                rate: rate.value
-              });
 
               this._selectTab = this.EXCHANGE;
               this.render();
             };
 
             const deleteAllExChangeRateEvent = e => {
-              this._exChangeRateRecord = [];
+              this._exChangeRateRecord = this._service.deleteAllExChangeRate();
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -737,9 +771,9 @@ MoneyService --o View
                 "td"
               )[0];
 
-              this._exChangeRateRecord.splice(
-                this._exChangeRateRecord.findIndex(i => i.id === id.innerText),
-                1
+              this._exChangeRateRecord = this._service.deleteExChangeRate(
+                id.innerText,
+                this._exChangeRateRecord
               );
 
               this._selectTab = this.EXCHANGE;
