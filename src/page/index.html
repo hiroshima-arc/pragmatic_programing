@@ -415,13 +415,20 @@ MoneyService --o View
 
         suite("ExChangeRepositoryTest", () => {
           test("Create", () => {
-            const repository = new ExChangeRateRepository();
+            const entitiy = new ExChangeRate("CHF", "USD", 1.5);
+            const repository = new ExChangeRateRepository(
+              "money_test",
+              "exchange_rates"
+            );
             return repository.setup().then(result => {
               const dbList = nSQL().listDatabases();
               console.log(dbList);
-              return repository.create().then(result => {
+              return repository.create(entitiy).then(result => {
                 return repository.selectAll().then(result => {
-                  return assert.equal([], result);
+                  assert.isOk(result[0].id);
+                  assert.equal(result[0].from, entitiy.from);
+                  assert.equal(result[0].to, entitiy.to);
+                  assert.equal(result[0].rate, entitiy.rate);
                 });
               });
             });
@@ -613,11 +620,11 @@ MoneyService --o View
         }
 
         class ExChangeRate {
-          constructor(id, from, to, rate) {
-            this._id = parseInt(id);
+          constructor(from, to, rate, id) {
             this._from = from;
             this._to = to;
             this._rate = rate;
+            this._id = id;
           }
 
           get id() {
@@ -638,34 +645,36 @@ MoneyService --o View
         }
 
         class ExChangeRateRepository {
-          constructor() {}
+          constructor(db, table) {
+            this._db = db;
+            this._table = table;
+          }
+
+          get db() {
+            return this._db;
+          }
+
+          get table() {
+            return this._table;
+          }
 
           setup() {
             return new Promise((resolve, reject) => {
               // Persistent Database
               nSQL()
                 .createDatabase({
-                  id: "test",
+                  id: this.db,
                   mode: "PERM",
                   tables: [
                     {
-                      name: "users",
+                      name: this.table,
                       model: {
                         "id:uuid": { pk: true },
-                        "name:string": {},
-                        "age:int": {},
-                        "meta:obj": {
-                          model: {
-                            "color:string": {}
-                          }
-                        },
-                        "tags:string[]": { default: [] }
+                        "from:string": {},
+                        "to:string": {},
+                        "rate:float:": {}
                       },
-                      indexes: {
-                        "tags:string[]": {},
-                        "meta.color:string": {},
-                        "age:int": {}
-                      }
+                      indexes: {}
                     }
                   ]
                 })
@@ -678,31 +687,35 @@ MoneyService --o View
             });
           }
 
-          create(list) {
+          create(data) {
             return new Promise((resolve, reject) => {
-              nSQL("users")
-                .query("upsert", {
-                  name: "Jeb",
-                  age: 20,
-                  meta: { color: "blue" },
-                  tags: ["some", "tags", "here"]
-                })
+              nSQL(this.table)
+                .query("upsert", data)
                 .exec()
                 .then(rows => {
                   console.log(rows);
                   return resolve();
+                })
+                .catch(() => {
+                  return reject();
                 });
             });
           }
 
           selectAll() {
             return new Promise((resolve, reject) => {
-              nSQL("users")
+              nSQL(this.table)
                 .query("select")
                 .exec()
                 .then(rows => {
                   console.log(rows);
-                  return resolve(rows);
+                  const result = rows.map(
+                    row => new ExChangeRate(row.from, row.to, row.rate, row.id)
+                  );
+                  return resolve(result);
+                })
+                .catch(() => {
+                  return reject();
                 });
             });
           }
@@ -726,7 +739,7 @@ MoneyService --o View
           }
 
           selectAllExChangeRate() {
-            const list = [new ExChangeRate(1, "CHF", "USD", "1.5")];
+            const list = [new ExChangeRate("CHF", "USD", "1.5", 1)];
             return new ExChangeRateViewModel(list);
           }
 
@@ -834,10 +847,10 @@ MoneyService --o View
               if (!isFinite(id)) id = 1;
 
               this._exChangeRate = this._service.updateExChangeRate(
+                "",
+                "",
+                "",
                 id,
-                "",
-                "",
-                "",
                 this._exChangeRate.record
               );
 
@@ -884,10 +897,10 @@ MoneyService --o View
               )[2];
 
               this._exChangeRate = this._service.updateExChangeRate(
-                id.innerHTML,
                 from.value,
                 to.value,
                 rate.value,
+                id.innerHTML,
                 this._exChangeRate.record
               );
 
