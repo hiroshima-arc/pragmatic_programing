@@ -181,11 +181,11 @@ class ExChangeRateViewModel {
 }
 class MoneyService {
   createReportViewModel(data): RepositoryViewModel
-  selectAllExChangeRate(): List
-  createExChangeRate(id, from, to, rate): Object
-  updateExChangeRate(id, from, to, rate, record): List
-  deleteExChangeRate(id, record): List
-  deleteAllExChangeRate(): List
+  selectAllExChangeRate(): ExChangeRateViewModel 
+  createExChangeRate(id, from, to, rate): object 
+  updateExChangeRate(id, from, to, rate, record):  ExChangeRateViewModel
+  deleteExChangeRate(id, record): ExChangeRateViewModel
+  deleteAllExChangeRate(): ExChangeRateViewModel
 }
 class ReportRepository {
 }
@@ -573,6 +573,16 @@ MoneyService --o View
           }
         }
 
+        class ExChangeRateViewModel {
+          constructor(exChangeRateRecord) {
+            this._record = exChangeRateRecord;
+          }
+
+          get record() {
+            return this._record;
+          }
+        }
+
         class MoneyService {
           createReportViewModel(data) {
             const items = data.map(
@@ -587,7 +597,8 @@ MoneyService --o View
           }
 
           selectAllExChangeRate() {
-            return [{ id: 1, from: "CHF", to: "USD", rate: "1.5" }];
+            const list = [{ id: 1, from: "CHF", to: "USD", rate: "1.5" }];
+            return new ExChangeRateViewModel(list);
           }
 
           createExChangeRate(id, from, to, rate) {
@@ -606,8 +617,9 @@ MoneyService --o View
             if (start >= 0) record.splice(start, 1);
 
             record.push(this.createExChangeRate(id, from, to, rate));
+            record.sort((a, b) => a.id - b.id);
 
-            return record.sort((a, b) => a.id - b.id);
+            return new ExChangeRateViewModel(record);
           }
 
           deleteExChangeRate(id, record) {
@@ -616,11 +628,11 @@ MoneyService --o View
             );
             if (start >= 0) record.splice(start, 1);
 
-            return record;
+            return new ExChangeRateViewModel(record);
           }
 
           deleteAllExChangeRate() {
-            return [];
+            return new ExChangeRateViewModel([]);
           }
         }
 
@@ -631,7 +643,8 @@ MoneyService --o View
 
             this._service = new MoneyService();
             this._report = this._service.createReportViewModel([]);
-            this._exChangeRateRecord = this._service.selectAllExChangeRate();
+            this._exChangeRate = this._service.selectAllExChangeRate();
+            this._exChangeRateRecord = this._exChangeRate.record;
             this._selectTab = this.REPORT;
           }
 
@@ -705,6 +718,8 @@ MoneyService --o View
                 this._exChangeRateRecord
               );
 
+              this._exChangeRateRecord = this._exChangeRate.record;
+
               this._selectTab = this.EXCHANGE;
               this.render();
             };
@@ -747,20 +762,22 @@ MoneyService --o View
                 "input"
               )[2];
 
-              this._exChangeRateRecord = this._service.updateExChangeRate(
+              this._exChangeRate = this._service.updateExChangeRate(
                 id.innerHTML,
                 from.value,
                 to.value,
                 rate.value,
                 this._exChangeRateRecord
               );
+              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
             };
 
             const deleteAllExChangeRateEvent = e => {
-              this._exChangeRateRecord = this._service.deleteAllExChangeRate();
+              this._exChangeRate = this._service.deleteAllExChangeRate();
+              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
@@ -771,10 +788,11 @@ MoneyService --o View
                 "td"
               )[0];
 
-              this._exChangeRateRecord = this._service.deleteExChangeRate(
+              this._exChangeRate = this._service.deleteExChangeRate(
                 id.innerText,
                 this._exChangeRateRecord
               );
+              this._exChangeRateRecord = this._exChangeRate.record;
 
               this._selectTab = this.EXCHANGE;
               this.render();
