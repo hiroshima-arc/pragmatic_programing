@@ -1095,9 +1095,6 @@ ExChangeRateViewModel --o View
                 "button"
               )[1].disabled = false;
 
-              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[0];
               const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
                 "td"
               )[1];
@@ -1114,9 +1111,6 @@ ExChangeRateViewModel --o View
             };
 
             const saveExChangeRateEvent = e => {
-              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[0];
               const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
                 "input"
               )[0];
@@ -1126,14 +1120,12 @@ ExChangeRateViewModel --o View
               const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
                 "input"
               )[2];
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[3].value;
 
               this._service
-                .updateExChangeRate(
-                  from.value,
-                  to.value,
-                  rate.value,
-                  id.innerHTML
-                )
+                .updateExChangeRate(from.value, to.value, rate.value, id)
                 .then(result => {
                   this._selectTab = this.EXCHANGE;
                   this.render();
@@ -1149,10 +1141,10 @@ ExChangeRateViewModel --o View
 
             const delteExhangeRateEvent = e => {
               const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[0];
+                "input"
+              )[0].value;
 
-              this._service.deleteExChangeRate(id.innerText).then(() => {
+              this._service.deleteExChangeRate(id).then(() => {
                 this._selectTab = this.EXCHANGE;
                 this.render();
               });
@@ -1409,6 +1401,9 @@ ExChangeRateViewModel --o View
                                         ${save()}
                                         ${delet()}
                                       </span>
+                                    </td>
+                                    <td>
+                                      <input type="hidden" value=${item.id}>
                                     </td>
                                   </tr>
                               `;
