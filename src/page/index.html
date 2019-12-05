@@ -1170,16 +1170,16 @@ ExChangeRateViewModel --o View
             document
               .querySelector("#button-delete")
               .addEventListener("click", deleteAllExChangeRateEvent);
-            this._exChangeRate.record.forEach(i => {
+            this._exChangeRate.record.forEach((v, k) => {
               document
-                .querySelector(`#button-edit-${i.id}`)
+                .querySelector(`#button-edit-${k}`)
                 .addEventListener("click", editExChangeRateEvent);
               document
-                .querySelector(`#button-save-${i.id}`)
+                .querySelector(`#button-save-${k}`)
                 .addEventListener("click", saveExChangeRateEvent);
-              document.querySelector(`#button-save-${i.id}`).disabled = true;
+              document.querySelector(`#button-save-${k}`).disabled = true;
               document
-                .querySelector(`#button-delete-${i.id}`)
+                .querySelector(`#button-delete-${k}`)
                 .addEventListener("click", delteExhangeRateEvent);
             });
           }
@@ -1350,11 +1350,11 @@ ExChangeRateViewModel --o View
                   };
 
                   const body = () => {
-                    const line = item => {
+                    const line = (item, key) => {
                       const edit = () => {
                         return `
                                         <button
-                                          id="button-edit-${item.id}"
+                                          id="button-edit-${key}"
                                           type="button"
                                           class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1366,7 +1366,7 @@ ExChangeRateViewModel --o View
                       const save = () => {
                         return `
                                         <button
-                                          id="button-save-${item.id}"
+                                          id="button-save-${key}"
                                           type="button"
                                           class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1378,7 +1378,7 @@ ExChangeRateViewModel --o View
                       const delet = () => {
                         return `
                                         <button
-                                          id="button-delete-${item.id}"
+                                          id="button-delete-${key}"
                                           type="button"
                                           class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1406,7 +1406,7 @@ ExChangeRateViewModel --o View
 
                     return `
                                 <tbody>
-                                  ${record.map(line).join("")}
+                                  ${record.map((v, k) => line(v, k)).join("")}
                                 </tbody>
                             `;
                   };
