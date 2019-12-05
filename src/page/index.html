@@ -433,16 +433,27 @@ ExChangeRateViewModel --o View
         });
 
         suite("ExChangeRepositoryTest", () => {
-          test("Create", () => {
-            const entitiy = new ExChangeRate("CHF", "USD", 1.5);
-            const repository = new ExChangeRateRepository(
+          let repository;
+          setup(() => {
+            console.log("Called");
+            repository = new ExChangeRateRepository(
               "money_test",
               "exchange_rates"
             );
+          });
+
+          test("Setup", () => {
             return repository.setup().then(result => {
               const dbList = nSQL().listDatabases();
-              console.log(dbList);
-              return repository.create(entitiy).then(result => {
+              assert.equal("money_test", dbList[0]);
+            });
+          });
+
+          test("Create", () => {
+            const entitiy = new ExChangeRate("CHF", "USD", 1.5);
+
+            return repository.connect().then(() => {
+              return repository.create(entitiy).then(() => {
                 return repository.selectAll().then(result => {
                   assert.isOk(result[0].id);
                   assert.equal(result[0].from, entitiy.from);
@@ -455,10 +466,7 @@ ExChangeRateViewModel --o View
 
           test("Update", () => {
             const entitiy = new ExChangeRate("CHF", "USD", 1.5);
-            const repository = new ExChangeRateRepository(
-              "money_test",
-              "exchange_rates"
-            );
+
             return repository.connect().then(() => {
               return repository.create(entitiy).then(result => {
                 const id = result.id;
@@ -477,12 +485,9 @@ ExChangeRateViewModel --o View
 
           test("Delete", () => {
             const entitiy = new ExChangeRate("CHF", "USD", 1.5);
-            const repository = new ExChangeRateRepository(
-              "money_test",
-              "exchange_rates"
-            );
-            return repository.connect().then(result => {
-              return repository.create(entitiy).then(result => {
+
+            return repository.connect().then(() => {
+              return repository.create(entitiy).then(() => {
                 return repository.selectAll().then(result => {
                   const id = result[0].id;
                   return repository.delete(id).then(result => {
@@ -498,10 +503,7 @@ ExChangeRateViewModel --o View
           test("DeleteAll", () => {
             const entitiy1 = new ExChangeRate("CHF", "USD", 1.5);
             const entitiy2 = new ExChangeRate("CHF", "USD", 2.0);
-            const repository = new ExChangeRateRepository(
-              "money_test",
-              "exchange_rates"
-            );
+
             return repository.connect().then(() => {
               return repository.createBatch([entitiy1, entitiy2]).then(() => {
                 return repository.destroy().then(() => {
