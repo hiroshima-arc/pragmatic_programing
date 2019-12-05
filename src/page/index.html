@@ -1158,6 +1158,13 @@ ExChangeRateViewModel --o View
               });
             };
 
+            const selectExChangeRateTabEvent = e => {
+              this._service.selectAllExChangeRate().then(result => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
+            };
+
             document
               .querySelector("#app-money-upload")
               .addEventListener("change", uploadEvent);
@@ -1182,6 +1189,9 @@ ExChangeRateViewModel --o View
                 .querySelector(`#button-delete-${k}`)
                 .addEventListener("click", delteExhangeRateEvent);
             });
+            document
+              .querySelector("#tab-menu02")
+              .addEventListener("click", selectExChangeRateTabEvent);
           }
 
           render() {
