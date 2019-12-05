@@ -453,6 +453,24 @@ MoneyService --o View
               });
             });
           });
+
+          test("DeleteAll", () => {
+            const entitiy1 = new ExChangeRate("CHF", "USD", 1.5);
+            const entitiy2 = new ExChangeRate("CHF", "USD", 2.0);
+            const repository = new ExChangeRateRepository(
+              "money_test",
+              "exchange_rates"
+            );
+            return repository.connect().then(() => {
+              return repository.createBatch([entitiy1, entitiy2]).then(() => {
+                return repository.destroy().then(() => {
+                  return repository.selectAll().then(result => {
+                    assert.equal(0, result.length);
+                  });
+                });
+              });
+            });
+          });
         });
 
         class Pair {
@@ -786,6 +804,37 @@ MoneyService --o View
                 })
                 .catch(() => {
                   return reject();
+                });
+            });
+          }
+
+          createBatch(list) {
+            return new Promise((resolve, reject) => {
+              nSQL(this.table)
+                .query("upsert", list)
+                .exec()
+                .then(rows => {
+                  console.log(rows);
+                  return resolve(
+                    rows.map(
+                      row =>
+                        new ExChangeRate(row.from, row.to, row.rate, row.id)
+                    )
+                  );
+                });
+            });
+          }
+
+          destroy() {
+            return new Promise((resolve, reject) => {
+              nSQL(this.table)
+                .query("delete")
+                .exec()
+                .then(() => {
+                  resolve();
+                })
+                .catch(() => {
+                  reject();
                 });
             });
           }
