@@ -446,7 +446,7 @@ MoneyService --o View
                   const id = result[0].id;
                   return repository.delete(id).then(result => {
                     repository.find(id).then(result => {
-                      assert.isNotOk(result.id);
+                      assert.deepEqual([], result);
                     });
                   });
                 });
@@ -766,11 +766,23 @@ MoneyService --o View
           find(id) {
             return new Promise((resolve, reject) => {
               nSQL(this.table)
-                .query("select", ["id"])
+                .query("select")
+                .where(["id", "=", id])
                 .exec()
                 .then(rows => {
                   console.log(rows);
-                  return resolve(rows[0]);
+                  if (rows.length === 0) {
+                    return resolve([]);
+                  } else {
+                    return resolve(
+                      new ExChangeRate(
+                        rows[0].from,
+                        rows[0].to,
+                        rows[0].rate,
+                        rows[0].id
+                      )
+                    );
+                  }
                 })
                 .catch(() => {
                   return reject();
