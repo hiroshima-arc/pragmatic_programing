@@ -181,6 +181,10 @@ class Money {
   {static} franc(amount): Franc
 }
 class ExChangeRate {
+  from: String
+  to: String
+  rate: float
+  id: int
 }
 class ReportViewModel {
   items<ReportViewModelItem>: List
@@ -193,6 +197,7 @@ class ReportViewModelItem {
   sum: Money
 }
 class ExChangeRateViewModel {
+  record: List<ExChangeRate>
 }
 class MoneyService {
   createReportViewModel(data): RepositoryViewModel
@@ -205,12 +210,24 @@ class MoneyService {
 class ReportRepository {
 }
 class ExChangeRateRepository {
+  db: String
+  table: String
+  setup(): void
+  connect(): void
+  create(): ExChangeRate
+  createBatch(): List<ExChangeRate>
+  save(): ExChangeRate
+  find(): ExChangeRate
+  seletAll(): List<ExChangeRate>
+  delete(): void
+  destroy(): void
 }
 class View {
   REPORT: 1
   EXCHANGE: 2
   _service: MoneyService
   _report: ReportViewModel
+  _exChangeRate: ExChangeRateViewModel
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -220,10 +237,10 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
+Bank <-- ReportViewModel
 Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
-Bank --> ExChangeRate
-ExChangeRateViewModel o- ExChangeRate
+ExChangeRate --o ExChangeRateViewModel
 ExChangeRateViewModel <-- MoneyService
 ExChangeRate <- ExChangeRateRepository
 ReportRepository -o MoneyService
@@ -232,6 +249,8 @@ MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel <-- MoneyService
 MoneyService --o View
+ReportViewModel --o View
+ExChangeRateViewModel --o View
           `;
           compress(source, outputId);
         })();
