@@ -68,7 +68,7 @@
 * [x] 為替レートを画面で更新する
 * [x] 為替レートを画面で削除する
 * [ ] レポートを保存する
-* [ ] 為替レートを保存する
+* [x] 為替レートを保存する
 
 === ユースケース図
 
@@ -111,6 +111,10 @@ class Money {
   {static} franc(amount): Franc
 }
 class ExChangeRate {
+  from: String
+  to: String
+  rate: float
+  id: int
 }
 class ReportViewModel {
   items<ReportViewModelItem>: List
@@ -123,18 +127,37 @@ class ReportViewModelItem {
   sum: Money
 }
 class ExChangeRateViewModel {
+  record: List<ExChangeRate>
 }
 class MoneyService {
+  createReportViewModel(data): RepositoryViewModel
+  selectAllExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(): ExChangeRateViewModel
+  updateExChangeRate(id):  ExChangeRateViewModel
+  deleteExChangeRate(id): ExChangeRateViewModel
+  deleteAllExChangeRate(): ExChangeRateViewModel
 }
 class ReportRepository {
 }
 class ExChangeRateRepository {
+  db: String
+  table: String
+  setup(): void
+  connect(): void
+  create(): ExChangeRate
+  createBatch(): List<ExChangeRate>
+  save(): ExChangeRate
+  find(): ExChangeRate
+  seletAll(): List<ExChangeRate>
+  delete(): void
+  destroy(): void
 }
 class View {
   REPORT: 1
   EXCHANGE: 2
+  _service: MoneyService
   _report: ReportViewModel
-  _exChangeRateRecord<object>: List
+  _exChangeRate: ExChangeRateViewModel
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -144,10 +167,10 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
+Bank <-- ReportViewModel
 Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
-Bank --> ExChangeRate
-ExChangeRateViewModel o- ExChangeRate
+ExChangeRate --o ExChangeRateViewModel
 ExChangeRateViewModel <-- MoneyService
 ExChangeRate <- ExChangeRateRepository
 ReportRepository -o MoneyService
@@ -155,7 +178,9 @@ ReportViewModel <- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel <-- MoneyService
-MoneyService <-- View
+MoneyService --o View
+ReportViewModel --o View
+ExChangeRateViewModel --o View
 ----
 
 

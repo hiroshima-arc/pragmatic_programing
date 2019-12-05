@@ -673,7 +673,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; レポートを保存する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを保存する</p>
+<p>&#10003; 為替レートを保存する</p>
 </li>
 </ul>
 </div>
@@ -686,7 +686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-21b67bab56cfc6ac874e12227a1345e3.png" alt="diag 21b67bab56cfc6ac874e12227a1345e3" width="863" height="783">
+<img src="diag-d838c1713c589448c690f0223c6871f2.png" alt="diag d838c1713c589448c690f0223c6871f2" width="958" height="939">
 </div>
 </div>
 </div>
@@ -793,6 +793,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>&lt;!-- nanoSQL2 --&gt;
+&lt;!-- ES6 Only (Faster &amp; Smaller) --&gt;
+&lt;script
+  src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.js"
+  integrity="sha256-W1pVgKda7GC4fwXqq9jfOrssBDJJXZqck+ultRPVzmc="
+  crossorigin="anonymous"
+&gt;&lt;/script&gt;
+&lt;!-- ES5 (Internet Explorer/Old Browser Support) --&gt;
+&lt;!-- Promise must be polyfilled as well --&gt;
+&lt;script
+  src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.es5.js"
+  integrity="sha256-1t9VlpFUgHaxlLQy6HM9ROQvTiuUv2M12Fp1oTh3+yg="
+  crossorigin="anonymous"
+&gt;&lt;/script&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>      &lt;!-- markdown --&gt;
       &lt;script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"&gt;&lt;/script&gt;
       &lt;script&gt;
@@ -838,7 +856,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10063; レポートを保存する</p>
 </li>
 <li>
-<p>&#10063; 為替レートを保存する
+<p>&#10003; 為替レートを保存する
 `
         );
       &lt;/script&gt;</p>
@@ -902,6 +920,10 @@ class Money {
   {static} franc(amount): Franc
 }
 class ExChangeRate {
+  from: String
+  to: String
+  rate: float
+  id: int
 }
 class ReportViewModel {
   items&lt;ReportViewModelItem&gt;: List
@@ -914,18 +936,37 @@ class ReportViewModelItem {
   sum: Money
 }
 class ExChangeRateViewModel {
+  record: List&lt;ExChangeRate&gt;
 }
 class MoneyService {
+  createReportViewModel(data): RepositoryViewModel
+  selectAllExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(): ExChangeRateViewModel
+  updateExChangeRate(id):  ExChangeRateViewModel
+  deleteExChangeRate(id): ExChangeRateViewModel
+  deleteAllExChangeRate(): ExChangeRateViewModel
 }
 class ReportRepository {
 }
 class ExChangeRateRepository {
+  db: String
+  table: String
+  setup(): void
+  connect(): void
+  create(): ExChangeRate
+  createBatch(): List&lt;ExChangeRate&gt;
+  save(): ExChangeRate
+  find(): ExChangeRate
+  seletAll(): List&lt;ExChangeRate&gt;
+  delete(): void
+  destroy(): void
 }
 class View {
   REPORT: 1
   EXCHANGE: 2
+  _service: MoneyService
   _report: ReportViewModel
-  _exChangeRateRecord&lt;object&gt;: List
+  _exChangeRate: ExChangeRateViewModel
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -935,10 +976,10 @@ Expression &lt;|.. Sum
 Money &lt;- Sum
 Sum &lt;- Bank
 Bank -&gt; Pair
+Bank &lt;-- ReportViewModel
 Sum &lt;-- ReportViewModel
 Money &lt;-- ReportViewModelItem
-Bank --&gt; ExChangeRate
-ExChangeRateViewModel o- ExChangeRate
+ExChangeRate --o ExChangeRateViewModel
 ExChangeRateViewModel &lt;-- MoneyService
 ExChangeRate &lt;- ExChangeRateRepository
 ReportRepository -o MoneyService
@@ -946,7 +987,9 @@ ReportViewModel &lt;- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel &lt;-- MoneyService
-MoneyService &lt;-- View
+MoneyService --o View
+ReportViewModel --o View
+ExChangeRateViewModel --o View
           `;
           compress(source, outputId);
         })();</pre>
@@ -1179,6 +1222,119 @@ if (deflater) {
     const sum = new Sum(fiveBucks, tenFrancs).times(2);
     const result = bank.reduce(sum, "USD");
     assert.isOk(Money.dollar(20).equals(result));
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>suite("ExChangeRepositoryTest", () =&gt; {
+  let repository;
+  setup(() =&gt; {
+    repository = new ExChangeRateRepository(
+      "money_test",
+      "exchange_rates"
+    );
+  });</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Setup", () =&gt; {
+  return repository.setup().then(result =&gt; {
+    const dbList = nSQL().listDatabases();
+    assert.equal("money_test", dbList[1]);
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Create", () =&gt; {
+  const entitiy = new ExChangeRate("CHF", "USD", 1.5);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return repository.connect().then(() =&gt; {
+    return repository.create(entitiy).then(() =&gt; {
+      return repository.selectAll().then(result =&gt; {
+        assert.isOk(result[0].id);
+        assert.equal(result[0].from, entitiy.from);
+        assert.equal(result[0].to, entitiy.to);
+        assert.equal(result[0].rate, entitiy.rate);
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Update", () =&gt; {
+  const entitiy = new ExChangeRate("CHF", "USD", 1.5);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return repository.connect().then(() =&gt; {
+    return repository.create(entitiy).then(result =&gt; {
+      const id = result.id;
+      const updateEntity = new ExChangeRate("USD", "CHF", 3.0, id);
+      return repository.save(updateEntity).then(() =&gt; {
+        return repository.find(id).then(result =&gt; {
+          assert.equal(id, result.id);
+          assert.equal("USD", result.from);
+          assert.equal("CHF", result.to);
+          assert.equal(3, result.rate);
+        });
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Delete", () =&gt; {
+  const entitiy = new ExChangeRate("CHF", "USD", 1.5);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return repository.connect().then(() =&gt; {
+    return repository.create(entitiy).then(() =&gt; {
+      return repository.selectAll().then(result =&gt; {
+        const id = result[0].id;
+        return repository.delete(id).then(result =&gt; {
+          repository.find(id).then(result =&gt; {
+            assert.deepEqual([], result);
+          });
+        });
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("DeleteAll", () =&gt; {
+  const entitiy1 = new ExChangeRate("CHF", "USD", 1.5);
+  const entitiy2 = new ExChangeRate("CHF", "USD", 2.0);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return repository.connect().then(() =&gt; {
+      return repository.createBatch([entitiy1, entitiy2]).then(() =&gt; {
+        return repository.destroy().then(() =&gt; {
+          return repository.selectAll().then(result =&gt; {
+            assert.equal(0, result.length);
+          });
+        });
+      });
+    });
   });
 });</pre>
 </div>
@@ -1443,6 +1599,424 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>class ExChangeRateViewModel {
+  constructor(exChangeRateRecord) {
+    this._record = exChangeRateRecord;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  get record() {
+    return this._record;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class ExChangeRate {
+  constructor(from, to, rate, id) {
+    this._from = from;
+    this._to = to;
+    this._rate = rate;
+    this._id = id;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get id() {
+  return this._id;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get from() {
+  return this._from;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get to() {
+  return this._to;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  get rate() {
+    return this._rate;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class ExChangeRateRepository {
+  constructor(db, table) {
+    this._db = db;
+    this._table = table;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get db() {
+  return this._db;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get table() {
+  return this._table;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>setup() {
+  return new Promise((resolve, reject) =&gt; {
+    // Persistent Database
+    nSQL()
+      .createDatabase({
+        id: this.db,
+        mode: "PERM",
+        tables: [
+          {
+            name: this.table,
+            model: {
+              "id:uuid": { pk: true },
+              "from:string": {},
+              "to:string": {},
+              "rate:float:": {}
+            },
+            indexes: {}
+          }
+        ]
+      })
+      .then(() =&gt; {
+        return resolve();
+      })
+      .catch(() =&gt; {
+        return reject();
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>connect() {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL().useDatabase(this.db);
+    resolve();
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>create(data) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("upsert", data)
+      .exec()
+      .then(rows =&gt; {
+        return resolve(
+          rows.map(
+            row =&gt;
+              new ExChangeRate(row.from, row.to, row.rate, row.id)
+          )[0]
+        );
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>save(data) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("delete")
+      .where(["id", "=", data.id])
+      .exec()
+      .then(rows =&gt; {
+        return resolve(
+          nSQL(this.table)
+            .query("upsert", data)
+            .exec()
+            .then(rows =&gt; {
+              return resolve(
+                rows.map(
+                  row =&gt;
+                    new ExChangeRate(
+                      row.from,
+                      row.to,
+                      row.rate,
+                      row.id
+                    )
+                )[0]
+              );
+            })
+            .catch(() =&gt; {
+              return reject();
+            })
+        );
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>selectAll() {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("select")
+      .exec()
+      .then(rows =&gt; {
+        const result = rows.map(
+          row =&gt; new ExChangeRate(row.from, row.to, row.rate, row.id)
+        );
+        return resolve(result);
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>delete(id) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("delete")
+      .where(["id", "=", id])
+      .exec()
+      .then(rows =&gt; {
+        return resolve();
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>find(id) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("select")
+      .where(["id", "=", id])
+      .exec()
+      .then(rows =&gt; {
+        if (rows.length === 0) {
+          return resolve([]);
+        } else {
+          return resolve(
+            new ExChangeRate(
+              rows[0].from,
+              rows[0].to,
+              rows[0].rate,
+              rows[0].id
+            )
+          );
+        }
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>createBatch(list) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("upsert", list)
+      .exec()
+      .then(rows =&gt; {
+        return resolve(
+          rows.map(
+            row =&gt;
+              new ExChangeRate(row.from, row.to, row.rate, row.id)
+          )
+        );
+      })
+      .catch(err =&gt; {
+        reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  destroy() {
+    return new Promise((resolve, reject) =&gt; {
+      nSQL(this.table)
+        .query("delete")
+        .exec()
+        .then(() =&gt; {
+          resolve();
+        })
+        .catch(err =&gt; {
+          reject(err);
+        });
+    });
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class MoneyService {
+  constructor() {
+    this._exChangeRateRepository = new ExChangeRateRepository(
+      "money",
+      "exchange_rates"
+    );
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>createReportViewModel(data) {
+  const items = data.map(
+    i =&gt;
+      new ReportViewModelItem(
+        i.銘柄,
+        i.株数,
+        new Money(i.価格, i.通貨)
+      )
+  );
+  return new ReportViewModel(items);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>setUpDb() {
+  return new Promise((resolve, reject) =&gt; {
+    const dbList = nSQL().listDatabases();
+    if (dbList.length &gt; 0) resolve();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    this._exChangeRateRepository
+      .setup()
+      .then(() =&gt; {
+        resolve();
+      })
+      .catch(err =&gt; {
+        reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>selectAllExChangeRate() {
+  return new Promise((resolve, reject) =&gt; {
+    this._exChangeRateRepository
+      .connect()
+      .then(() =&gt; {
+        this._exChangeRateRepository
+          .selectAll()
+          .then(result =&gt; {
+            return resolve(new ExChangeRateViewModel(result));
+          })
+          .catch(err =&gt; {
+            reject(err);
+          });
+      })
+      .catch(err =&gt; {
+        reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>updateExChangeRate(from, to, rate, id) {
+  return new Promise((resolve, reject) =&gt; {
+    const entity = new ExChangeRate(from, to, rate, id);
+    return this._exChangeRateRepository.save(entity).then(() =&gt; {
+      return this._exChangeRateRepository.selectAll().then(result =&gt; {
+        return resolve(new ExChangeRateViewModel(result));
+      });
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>addExChangeRate() {
+  return new Promise((resolve, reject) =&gt; {
+    const entity = new ExChangeRate("CHF", "USD", 1.5);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return this._exChangeRateRepository.create(entity).then(() =&gt; {
+      return this._exChangeRateRepository.selectAll().then(result =&gt; {
+        return resolve(new ExChangeRateViewModel(result));
+      });
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>deleteExChangeRate(id) {
+  return new Promise((resolve, reject) =&gt; {
+    this._exChangeRateRepository.delete(id).then(() =&gt; {
+      this._exChangeRateRepository.selectAll().then(result =&gt; {
+        return resolve(new ExChangeRateViewModel(result));
+      });
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  deleteAllExChangeRate() {
+    return new Promise((resolve, reject) =&gt; {
+      this._exChangeRateRepository.destroy().then(() =&gt; {
+        this._exChangeRateRepository.selectAll().then(result =&gt; {
+          return resolve(new ExChangeRateViewModel(result));
+        });
+      });
+    });
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>class View {
   constructor() {
     this.REPORT = 1;
@@ -1451,11 +2025,8 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  const items = [];
-  this._report = new ReportViewModel(items);
-  this._exChangeRateRecord = [
-    { id: "1", from: "CHF", to: "USD", rate: "1.5" }
-  ];
+<pre>  this._service = new MoneyService();
+  this._report = this._service.createReportViewModel([]);
   this._selectTab = this.REPORT;
 }</pre>
 </div>
@@ -1493,17 +2064,19 @@ if (deflater) {
   const parseData = Papa.parse(data, {
     header: true,
     skipEmptyLines: true
-  });
-  const items = parseData.data.map(
-    i =&gt;
-      new ReportViewModelItem(
-        i.銘柄,
-        i.株数,
-        new Money(i.価格, i.通貨)
-      )
-  );
-  this._report = new ReportViewModel(items);
-  this._selectTab = this.REPORT;
+  });</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._report = this._service.createReportViewModel(
+  parseData.data
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.REPORT;
   this.render();
 };</pre>
 </div>
@@ -1543,33 +2116,10 @@ a.download = "data.csv";</pre>
 <div class="literalblock">
 <div class="content">
 <pre>const addExChangeRateEvent = e =&gt; {
-  let id = Math.max.apply(
-    Math,
-    this._exChangeRateRecord.map(o =&gt; {
-      return parseInt(o.id) + 1;
-    })
-  );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (!isFinite(id)) id = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>this._exChangeRateRecord.push({
-  id: id,
-  from: "",
-  to: "",
-  rate: ""
-});</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  this._selectTab = this.EXCHANGE;
-  this.render();
+  this._service.addExChangeRate().then(data =&gt; {
+    this._selectTab = this.EXCHANGE;
+    this.render();
+  });
 };</pre>
 </div>
 </div>
@@ -1625,39 +2175,27 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>this._exChangeRateRecord.splice(
-  this._exChangeRateRecord.findIndex(i =&gt; i.id === id.innerText),
-  1
-);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>this._exChangeRateRecord.push({
-  id: id.innerText,
-  from: from.value,
-  to: to.value,
-  rate: rate.value
-});</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  this._selectTab = this.EXCHANGE;
-  this.render();
+<pre>  this._service
+    .updateExChangeRate(
+      from.value,
+      to.value,
+      rate.value,
+      id.innerHTML
+    )
+    .then(result =&gt; {
+      this._selectTab = this.EXCHANGE;
+      this.render();
+    });
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>const deleteAllExChangeRateEvent = e =&gt; {
-  this._exChangeRateRecord = [];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  this._selectTab = this.EXCHANGE;
-  this.render();
+  this._service.deleteAllExChangeRate().then(() =&gt; {
+    this._selectTab = this.EXCHANGE;
+    this.render();
+  });
 };</pre>
 </div>
 </div>
@@ -1671,16 +2209,20 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>this._exChangeRateRecord.splice(
-  this._exChangeRateRecord.findIndex(i =&gt; i.id === id.innerText),
-  1
-);</pre>
+<pre>  this._service.deleteExChangeRate(id.innerText).then(() =&gt; {
+    this._selectTab = this.EXCHANGE;
+    this.render();
+  });
+};</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._selectTab = this.EXCHANGE;
-  this.render();
+<pre>const selectExChangeRateTabEvent = e =&gt; {
+  this._service.selectAllExChangeRate().then(result =&gt; {
+    this._selectTab = this.EXCHANGE;
+    this.render();
+  });
 };</pre>
 </div>
 </div>
@@ -1698,18 +2240,21 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
   document
     .querySelector("#button-delete")
     .addEventListener("click", deleteAllExChangeRateEvent);
-  this._exChangeRateRecord.forEach(i =&gt; {
+  this._exChangeRate.record.forEach((v, k) =&gt; {
     document
-      .querySelector(`#button-edit-${i.id}`)
+      .querySelector(`#button-edit-${k}`)
       .addEventListener("click", editExChangeRateEvent);
     document
-      .querySelector(`#button-save-${i.id}`)
+      .querySelector(`#button-save-${k}`)
       .addEventListener("click", saveExChangeRateEvent);
-    document.querySelector(`#button-save-${i.id}`).disabled = true;
+    document.querySelector(`#button-save-${k}`).disabled = true;
     document
-      .querySelector(`#button-delete-${i.id}`)
+      .querySelector(`#button-delete-${k}`)
       .addEventListener("click", delteExhangeRateEvent);
   });
+  document
+    .querySelector("#tab-menu02")
+    .addEventListener("click", selectExChangeRateTabEvent);
 }</pre>
 </div>
 </div>
@@ -1724,36 +2269,36 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  const tabNav = `
-    &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
-      &lt;a
-        aria-controls="panel-menu01"
-        aria-selected="true"
-        class="nav-item nav-link ${reportSelect}"
-        data-toggle="tab"
-        href="#panel-menu01"
-        id="tab-menu01"
-        role="tab"
-        &gt;レポート&lt;/a
-      &gt;
-      &lt;a
-        aria-controls="panel-menu02"
-        aria-selected="false"
-        class="nav-item nav-link ${exChangeSelect}"
-        data-toggle="tab"
-        href="#panel-menu02"
-        id="tab-menu02"
-        role="tab"
-        &gt;為替レート&lt;/a
-      &gt;
-    &lt;/div&gt;
-`;</pre>
+<pre>const tabNav = `
+          &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
+            &lt;a
+              aria-controls="panel-menu01"
+              aria-selected="true"
+              class="nav-item nav-link ${reportSelect}"
+              data-toggle="tab"
+              href="#panel-menu01"
+              id="tab-menu01"
+              role="tab"
+              &gt;レポート&lt;/a
+            &gt;
+            &lt;a
+              aria-controls="panel-menu02"
+              aria-selected="false"
+              class="nav-item nav-link ${exChangeSelect}"
+              data-toggle="tab"
+              href="#panel-menu02"
+              id="tab-menu02"
+              role="tab"
+              &gt;為替レート&lt;/a
+            &gt;
+          &lt;/div&gt;
+      `;</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const tabContent = (() =&gt; {
-  const report = (() =&gt; {
+<pre>const tabContent = exChangeRateRecord =&gt; {
+  const report = () =&gt; {
     const activeShow = reportSelect ? "active show" : "";</pre>
 </div>
 </div>
@@ -1769,12 +2314,12 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-        &lt;thead&gt;
-          &lt;tr&gt;
-            ${line}
-          &lt;/tr&gt;
-        &lt;/thead&gt;
-  `;
+                &lt;thead&gt;
+                  &lt;tr&gt;
+                    ${line}
+                  &lt;/tr&gt;
+                &lt;/thead&gt;
+          `;
 };</pre>
 </div>
 </div>
@@ -1785,44 +2330,44 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
   const line = items
     .map(
       i =&gt; `
-  &lt;tr&gt;
-    &lt;td&gt;${i.stockName}&lt;/td&gt;
-    &lt;td&gt;${i.stockAmount}&lt;/td&gt;
-    &lt;td&gt;${i.price}&lt;/td&gt;
-    &lt;td&gt;${i.sum}&lt;/td&gt;
-  &lt;/tr&gt;
-  `
+          &lt;tr&gt;
+            &lt;td&gt;${i.stockName}&lt;/td&gt;
+            &lt;td&gt;${i.stockAmount}&lt;/td&gt;
+            &lt;td&gt;${i.price}&lt;/td&gt;
+            &lt;td&gt;${i.sum}&lt;/td&gt;
+          &lt;/tr&gt;
+          `
     )
     .join(" ");
   const total = `
-          &lt;tr&gt;
-            &lt;td&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;/td&gt;
-            &lt;td&gt;
-              &lt;p&gt;総計&lt;/p&gt;
-            &lt;/td&gt;
-            &lt;td&gt;
-              &lt;p&gt;${this._report.total}&lt;/p&gt;
-            &lt;/td&gt;
-          &lt;/tr&gt;
-  `;
+                  &lt;tr&gt;
+                    &lt;td&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;p&gt;総計&lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;p&gt;${this._report.total}&lt;/p&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+          `;
   return `
-        &lt;tbody&gt;
-          ${line}
-          ${total}
-        &lt;/tbody&gt;
-  `;
+                &lt;tbody&gt;
+                  ${line}
+                  ${total}
+                &lt;/tbody&gt;
+          `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-        &lt;table id="report-table" class="table table-striped"&gt;
-            ${header()}
-            ${body()}
-        &lt;/table&gt;
-  `;
+                &lt;table id="report-table" class="table table-striped"&gt;
+                    ${header()}
+                    ${body()}
+                &lt;/table&gt;
+          `;
 };</pre>
 </div>
 </div>
@@ -1830,21 +2375,21 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const upload = () =&gt; {
   return `
-        &lt;div class="col-md-12"&gt;
-          &lt;form&gt;
-            &lt;div class="form-group"&gt;
-              &lt;p&gt;
-                CSVファイルを選択して下さい。&lt;br /&gt;
-              &lt;/p&gt;
-              &lt;input
-                type="file"
-                class="form-control-file"
-                id="app-money-upload"
-              /&gt;
-            &lt;/div&gt;
-          &lt;/form&gt;
-        &lt;/div&gt;
-  `;
+                &lt;div class="col-md-12"&gt;
+                  &lt;form&gt;
+                    &lt;div class="form-group"&gt;
+                      &lt;p&gt;
+                        CSVファイルを選択して下さい。&lt;br /&gt;
+                      &lt;/p&gt;
+                      &lt;input
+                        type="file"
+                        class="form-control-file"
+                        id="app-money-upload"
+                      /&gt;
+                    &lt;/div&gt;
+                  &lt;/form&gt;
+                &lt;/div&gt;
+          `;
 };</pre>
 </div>
 </div>
@@ -1852,47 +2397,47 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const download = () =&gt; {
   return `
-        &lt;button
-          type="button"
-          class="btn btn-primary btn"
-          id="app-money-download"
-        &gt;
-          CSVダウンロード
-        &lt;/button&gt;
-  `;
+                &lt;button
+                  type="button"
+                  class="btn btn-primary btn"
+                  id="app-money-download"
+                &gt;
+                  CSVダウンロード
+                &lt;/button&gt;
+          `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>    return `
-    &lt;div
-      aria-labelledby="tab-menu01"
-      class="tab-pane fade border border-top-0 ${activeShow}"
-      id="panel-menu01"
-      role="tabpanel"
-    &gt;
-      &lt;dvi class="row p-3"&gt;
-        &lt;div id="report" class="col-md-12 order-md-2"&gt;
-          &lt;div class="row"&gt;
-            ${upload()}
+<pre>  return `
+          &lt;div
+            aria-labelledby="tab-menu01"
+            class="tab-pane fade border border-top-0 ${activeShow}"
+            id="panel-menu01"
+            role="tabpanel"
+          &gt;
+            &lt;dvi class="row p-3"&gt;
+              &lt;div id="report" class="col-md-12 order-md-2"&gt;
+                &lt;div class="row"&gt;
+                  ${upload()}
+                &lt;/div&gt;
+                &lt;div class="row"&gt;
+                  ${table()}
+                &lt;/div&gt;
+                &lt;div class="col-md-12 py-2"&gt;
+                  ${download()}
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/dvi&gt;
           &lt;/div&gt;
-          &lt;div class="row"&gt;
-            ${table()}
-          &lt;/div&gt;
-          &lt;div class="col-md-12 py-2"&gt;
-            ${download()}
-          &lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/dvi&gt;
-    &lt;/div&gt;
-`;
-  })();</pre>
+      `;
+};</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const exChangeRate = (record =&gt; {
+<pre>const exChangeRate = record =&gt; {
   const activeShow = exChangeSelect ? "active show" : "";</pre>
 </div>
 </div>
@@ -1908,29 +2453,29 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-      &lt;thead&gt;
-        &lt;tr&gt;
-          ${th}
-        &lt;/tr&gt;
-      &lt;/thead&gt;
-  `;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  ${th}
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+          `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>const body = () =&gt; {
-  const line = item =&gt; {
+  const line = (item, key) =&gt; {
     const edit = () =&gt; {
       return `
-              &lt;button
-                id="button-edit-${item.id}"
-                type="button"
-                class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-              &gt;
-                編集
-              &lt;/button&gt;
-    `;
+                      &lt;button
+                        id="button-edit-${key}"
+                        type="button"
+                        class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                      &gt;
+                        編集
+                      &lt;/button&gt;
+            `;
     };</pre>
 </div>
 </div>
@@ -1938,14 +2483,14 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const save = () =&gt; {
   return `
-          &lt;button
-            id="button-save-${item.id}"
-            type="button"
-            class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-          &gt;
-            保存
-          &lt;/button&gt;
-`;
+                  &lt;button
+                    id="button-save-${key}"
+                    type="button"
+                    class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                  &gt;
+                    保存
+                  &lt;/button&gt;
+        `;
 };</pre>
 </div>
 </div>
@@ -1953,58 +2498,58 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const delet = () =&gt; {
   return `
-          &lt;button
-            id="button-delete-${item.id}"
-            type="button"
-            class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-          &gt;
-            削除
-          &lt;/button&gt;
-`;
+                  &lt;button
+                    id="button-delete-${key}"
+                    type="button"
+                    class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                  &gt;
+                    削除
+                  &lt;/button&gt;
+        `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-      &lt;tr&gt;
-        &lt;td&gt;${item.id}&lt;/td&gt;
-        &lt;td&gt;${item.from}&lt;/td&gt;
-        &lt;td&gt;${item.to}&lt;/td&gt;
-        &lt;td&gt;${item.rate}&lt;/td&gt;
-        &lt;td&gt;
-          &lt;span class="button"&gt;
-            ${edit()}
-            ${save()}
-            ${delet()}
-          &lt;/span&gt;
-        &lt;/td&gt;
-      &lt;/tr&gt;
-  `;
+              &lt;tr&gt;
+                &lt;td&gt;${item.id}&lt;/td&gt;
+                &lt;td&gt;${item.from}&lt;/td&gt;
+                &lt;td&gt;${item.to}&lt;/td&gt;
+                &lt;td&gt;${item.rate}&lt;/td&gt;
+                &lt;td&gt;
+                  &lt;span class="button"&gt;
+                    ${edit()}
+                    ${save()}
+                    ${delet()}
+                  &lt;/span&gt;
+                &lt;/td&gt;
+              &lt;/tr&gt;
+          `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-      &lt;tbody&gt;
-        ${record.map(line).join("")}
-      &lt;/tbody&gt;
-  `;
+              &lt;tbody&gt;
+                ${record.map((v, k) =&gt; line(v, k)).join("")}
+              &lt;/tbody&gt;
+          `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  return `
-      &lt;table
-        id="exchange-rate-table"
-        class="table table-striped"
-      &gt;
-        ${header()}
-        ${body()}
-      &lt;/table&gt;
-  `;
+              &lt;table
+                id="exchange-rate-table"
+                class="table table-striped"
+              &gt;
+                ${header()}
+                ${body()}
+              &lt;/table&gt;
+          `;
 };</pre>
 </div>
 </div>
@@ -2013,14 +2558,14 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <pre>const button = () =&gt; {
   const add = () =&gt; {
     return `
-        &lt;button
-          id="button-add"
-          type="button"
-          class="btn btn-primary btn-rounded btn-sm my-0"
-        &gt;
-          追加
-        &lt;/button&gt;
-    `;
+                &lt;button
+                  id="button-add"
+                  type="button"
+                  class="btn btn-primary btn-rounded btn-sm my-0"
+                &gt;
+                  追加
+                &lt;/button&gt;
+            `;
   };</pre>
 </div>
 </div>
@@ -2028,68 +2573,78 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>  const deletAll = () =&gt; {
     return `
-        &lt;button
-          id="button-delete"
-          type="button"
-          class="btn btn-danger btn-rounded btn-sm my-0"
-        &gt;
-          全削除
-        &lt;/button&gt;
-    `;
+                &lt;button
+                  id="button-delete"
+                  type="button"
+                  class="btn btn-danger btn-rounded btn-sm my-0"
+                &gt;
+                  全削除
+                &lt;/button&gt;
+            `;
   };
   return `
-      &lt;div id="button"&gt;
-        ${add()}
-        ${deletAll()}
-      &lt;/div&gt;
+              &lt;div id="button"&gt;
+                ${add()}
+                ${deletAll()}
+              &lt;/div&gt;
+          `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+          &lt;div
+            aria-labelledby="tab-menu02"
+            class="tab-pane fade border border-top-0 ${activeShow}"
+            id="panel-menu02"
+            role="tabpanel"
+          &gt;
+            &lt;dvi class="row p-3"&gt;
+              &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
+                ${table(record)}
+                ${button()}
+              &lt;/div&gt;
+            &lt;/dvi&gt;
+          &lt;/div&gt;
+      `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return `
+  &lt;div class="tab-content" id="panel-menus"&gt;
+    ${report()}
+    ${exChangeRate(exChangeRateRecord)}
+  &lt;/div&gt;
   `;
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>    return `
-    &lt;div
-      aria-labelledby="tab-menu02"
-      class="tab-pane fade border border-top-0 ${activeShow}"
-      id="panel-menu02"
-      role="tabpanel"
-    &gt;
-      &lt;dvi class="row p-3"&gt;
-        &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
-          ${table(record)}
-          ${button()}
-        &lt;/div&gt;
-      &lt;/dvi&gt;
-    &lt;/div&gt;
-`;
-  })(this._exChangeRateRecord);</pre>
+<pre>this._service.setUpDb().then(() =&gt; {
+  this._service.selectAllExChangeRate().then(data =&gt; {
+    this._exChangeRate = data;
+    const content = tabContent(this._exChangeRate.record);
+    const result = `
+          &lt;section id="menu"&gt;
+            &lt;div class="container"&gt;
+              &lt;div id="message"&gt;&lt;/div&gt;
+              ${tabNav}
+              ${tabContent(this._exChangeRate.record)}
+            &lt;/div&gt;
+          &lt;/section&gt;
+        `;</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>    return `
-    &lt;div class="tab-content" id="panel-menus"&gt;
-      ${report}
-      ${exChangeRate}
-    &lt;/div&gt;
-`;
-  })();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    const result = `
-      &lt;section id="menu"&gt;
-        &lt;div class="container"&gt;
-          &lt;div id="message"&gt;&lt;/div&gt;
-          ${tabNav}
-          ${tabContent}
-        &lt;/div&gt;
-      &lt;/section&gt;
-    `;
-    document.querySelector("#money-app").innerHTML = result;
-    this.dispatchEvent();
+<pre>        document.querySelector("#money-app").innerHTML = result;
+        this.dispatchEvent();
+      });
+    });
   }
 }</pre>
 </div>
@@ -2128,7 +2683,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-03 19:09:42 JST
+Last updated 2019-12-05 17:52:19 JST
 </div>
 </div>
 </body>
