@@ -985,16 +985,15 @@ ExChangeRateViewModel --o View
             return new ExChangeRate(id, from, to, rate);
           }
 
-          updateExChangeRate(id, from, to, rate, record) {
-            const start = record.findIndex(
-              i => parseInt(i.id) === parseInt(id)
-            );
-            if (start >= 0) record.splice(start, 1);
-
-            record.push(this.createExChangeRate(id, from, to, rate));
-            record.sort((a, b) => a.id - b.id);
-
-            return new ExChangeRateViewModel(record);
+          updateExChangeRate(from, to, rate, id) {
+            return new Promise((resolve, reject) => {
+              const entity = new ExChangeRate(from, to, rate, id);
+              return this._exChangeRateRepository.save(entity).then(() => {
+                return this._exChangeRateRepository.selectAll().then(result => {
+                  return resolve(new ExChangeRateViewModel(result));
+                });
+              });
+            });
           }
 
           addExChangeRate() {
@@ -1129,16 +1128,17 @@ ExChangeRateViewModel --o View
                 "input"
               )[2];
 
-              this._exChangeRate = this._service.updateExChangeRate(
-                from.value,
-                to.value,
-                rate.value,
-                id.innerHTML,
-                this._exChangeRate.record
-              );
-
-              this._selectTab = this.EXCHANGE;
-              this.render();
+              this._service
+                .updateExChangeRate(
+                  from.value,
+                  to.value,
+                  rate.value,
+                  id.innerHTML
+                )
+                .then(result => {
+                  this._selectTab = this.EXCHANGE;
+                  this.render();
+                });
             };
 
             const deleteAllExChangeRateEvent = e => {
