@@ -121,7 +121,7 @@
 ## ToDoリスト
 
 - [ ] レポートを保存する
-- [ ] 為替レートを保存する
+- [x] 為替レートを保存する
 `
         );
       </script>
@@ -201,10 +201,10 @@ class ExChangeRateViewModel {
 }
 class MoneyService {
   createReportViewModel(data): RepositoryViewModel
-  selectAllExChangeRate(): ExChangeRateViewModel 
-  createExChangeRate(id, from, to, rate): ExChangeRate 
-  updateExChangeRate(id, from, to, rate, record):  ExChangeRateViewModel
-  deleteExChangeRate(id, record): ExChangeRateViewModel
+  selectAllExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(): ExChangeRateViewModel
+  updateExChangeRate(id):  ExChangeRateViewModel
+  deleteExChangeRate(id): ExChangeRateViewModel
   deleteAllExChangeRate(): ExChangeRateViewModel
 }
 class ReportRepository {
@@ -780,7 +780,6 @@ ExChangeRateViewModel --o View
                 .query("upsert", data)
                 .exec()
                 .then(rows => {
-                  console.log(rows);
                   return resolve(
                     rows.map(
                       row =>
@@ -788,8 +787,8 @@ ExChangeRateViewModel --o View
                     )[0]
                   );
                 })
-                .catch(() => {
-                  return reject();
+                .catch(err => {
+                  return reject(err);
                 });
             });
           }
@@ -806,7 +805,6 @@ ExChangeRateViewModel --o View
                       .query("upsert", data)
                       .exec()
                       .then(rows => {
-                        console.log(rows);
                         return resolve(
                           rows.map(
                             row =>
@@ -836,7 +834,6 @@ ExChangeRateViewModel --o View
                 .query("select")
                 .exec()
                 .then(rows => {
-                  console.log(rows);
                   const result = rows.map(
                     row => new ExChangeRate(row.from, row.to, row.rate, row.id)
                   );
@@ -855,11 +852,10 @@ ExChangeRateViewModel --o View
                 .where(["id", "=", id])
                 .exec()
                 .then(rows => {
-                  console.log(rows);
                   return resolve();
                 })
-                .catch(() => {
-                  return reject();
+                .catch(err => {
+                  return reject(err);
                 });
             });
           }
@@ -871,7 +867,6 @@ ExChangeRateViewModel --o View
                 .where(["id", "=", id])
                 .exec()
                 .then(rows => {
-                  console.log(rows);
                   if (rows.length === 0) {
                     return resolve([]);
                   } else {
@@ -885,8 +880,8 @@ ExChangeRateViewModel --o View
                     );
                   }
                 })
-                .catch(() => {
-                  return reject();
+                .catch(err => {
+                  return reject(err);
                 });
             });
           }
@@ -897,13 +892,15 @@ ExChangeRateViewModel --o View
                 .query("upsert", list)
                 .exec()
                 .then(rows => {
-                  console.log(rows);
                   return resolve(
                     rows.map(
                       row =>
                         new ExChangeRate(row.from, row.to, row.rate, row.id)
                     )
                   );
+                })
+                .catch(err => {
+                  reject(err);
                 });
             });
           }
@@ -916,8 +913,8 @@ ExChangeRateViewModel --o View
                 .then(() => {
                   resolve();
                 })
-                .catch(() => {
-                  reject();
+                .catch(err => {
+                  reject(err);
                 });
             });
           }
@@ -945,14 +942,12 @@ ExChangeRateViewModel --o View
 
           setUpDb() {
             return new Promise((resolve, reject) => {
-              const list = [new ExChangeRate("CHF", "USD", "1.5", 1)];
               const dbList = nSQL().listDatabases();
               if (dbList.length > 0) resolve();
 
               this._exChangeRateRepository
                 .setup()
                 .then(() => {
-                  this._exChangeRateRepository.createBatch(list);
                   resolve();
                 })
                 .catch(err => {
@@ -981,10 +976,6 @@ ExChangeRateViewModel --o View
             });
           }
 
-          createExChangeRate(id, from, to, rate) {
-            return new ExChangeRate(id, from, to, rate);
-          }
-
           updateExChangeRate(from, to, rate, id) {
             return new Promise((resolve, reject) => {
               const entity = new ExChangeRate(from, to, rate, id);
@@ -998,7 +989,8 @@ ExChangeRateViewModel --o View
 
           addExChangeRate() {
             return new Promise((resolve, reject) => {
-              const entity = new ExChangeRate("", "", 0);
+              const entity = new ExChangeRate("CHF", "USD", 1.5);
+
               return this._exChangeRateRepository.create(entity).then(() => {
                 return this._exChangeRateRepository.selectAll().then(result => {
                   return resolve(new ExChangeRateViewModel(result));
@@ -1007,17 +999,24 @@ ExChangeRateViewModel --o View
             });
           }
 
-          deleteExChangeRate(id, record) {
-            const start = record.findIndex(
-              i => parseInt(i.id) === parseInt(id)
-            );
-            if (start >= 0) record.splice(start, 1);
-
-            return new ExChangeRateViewModel(record);
+          deleteExChangeRate(id) {
+            return new Promise((resolve, reject) => {
+              this._exChangeRateRepository.delete(id).then(() => {
+                this._exChangeRateRepository.selectAll().then(result => {
+                  return resolve(new ExChangeRateViewModel(result));
+                });
+              });
+            });
           }
 
           deleteAllExChangeRate() {
-            return new ExChangeRateViewModel([]);
+            return new Promise((resolve, reject) => {
+              this._exChangeRateRepository.destroy().then(() => {
+                this._exChangeRateRepository.selectAll().then(result => {
+                  return resolve(new ExChangeRateViewModel(result));
+                });
+              });
+            });
           }
         }
 
@@ -1142,10 +1141,10 @@ ExChangeRateViewModel --o View
             };
 
             const deleteAllExChangeRateEvent = e => {
-              this._exChangeRate = this._service.deleteAllExChangeRate();
-
-              this._selectTab = this.EXCHANGE;
-              this.render();
+              this._service.deleteAllExChangeRate().then(() => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
             };
 
             const delteExhangeRateEvent = e => {
@@ -1153,13 +1152,10 @@ ExChangeRateViewModel --o View
                 "td"
               )[0];
 
-              this._exChangeRate = this._service.deleteExChangeRate(
-                id.innerText,
-                this._exChangeRate.record
-              );
-
-              this._selectTab = this.EXCHANGE;
-              this.render();
+              this._service.deleteExChangeRate(id.innerText).then(() => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
             };
 
             document
