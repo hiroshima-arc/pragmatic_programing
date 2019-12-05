@@ -843,8 +843,8 @@ ExChangeRateViewModel --o View
                   );
                   return resolve(result);
                 })
-                .catch(() => {
-                  return reject();
+                .catch(err => {
+                  return reject(err);
                 });
             });
           }
@@ -926,7 +926,10 @@ ExChangeRateViewModel --o View
 
         class MoneyService {
           constructor() {
-            this._exChangeRateRepository = new ExChangeRateRepository();
+            this._exChangeRateRepository = new ExChangeRateRepository(
+              "money",
+              "exchange_rates"
+            );
           }
 
           createReportViewModel(data) {
@@ -941,9 +944,39 @@ ExChangeRateViewModel --o View
             return new ReportViewModel(items);
           }
 
+          setUpDb() {
+            return new Promise((resolve, reject) => {
+              const list = [new ExChangeRate("CHF", "USD", "1.5", 1)];
+              this._exChangeRateRepository
+                .setup()
+                .then(() => {
+                  this._exChangeRateRepository.createBatch(list);
+                  resolve();
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            });
+          }
+
           selectAllExChangeRate() {
-            const list = [new ExChangeRate("CHF", "USD", "1.5", 1)];
-            return new ExChangeRateViewModel(list);
+            return new Promise((resolve, reject) => {
+              this._exChangeRateRepository
+                .connect()
+                .then(() => {
+                  this._exChangeRateRepository
+                    .selectAll()
+                    .then(result => {
+                      return resolve(new ExChangeRateViewModel(result));
+                    })
+                    .catch(err => {
+                      reject(err);
+                    });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            });
           }
 
           createExChangeRate(id, from, to, rate) {
@@ -983,7 +1016,6 @@ ExChangeRateViewModel --o View
 
             this._service = new MoneyService();
             this._report = this._service.createReportViewModel([]);
-            this._exChangeRate = this._service.selectAllExChangeRate();
             this._selectTab = this.REPORT;
           }
 
@@ -1189,8 +1221,8 @@ ExChangeRateViewModel --o View
                       </div>
                   `;
 
-            const tabContent = (() => {
-              const report = (() => {
+            const tabContent = exChangeRateRecord => {
+              const report = () => {
                 const activeShow = reportSelect ? "active show" : "";
 
                 const table = () => {
@@ -1303,9 +1335,9 @@ ExChangeRateViewModel --o View
                           </dvi>
                         </div>
                     `;
-              })();
+              };
 
-              const exChangeRate = (record => {
+              const exChangeRate = record => {
                 const activeShow = exChangeSelect ? "active show" : "";
 
                 const table = record => {
@@ -1443,27 +1475,34 @@ ExChangeRateViewModel --o View
                           </dvi>
                         </div>
                     `;
-              })(this._exChangeRate.record);
+              };
 
               return `
-                      <div class="tab-content" id="panel-menus">
-                        ${report}
-                        ${exChangeRate}
-                      </div>
-                  `;
-            })();
+              <div class="tab-content" id="panel-menus">
+                ${report()}
+                ${exChangeRate(exChangeRateRecord)}
+              </div>
+              `;
+            };
 
-            const result = `
+            this._service.setUpDb().then(() => {
+              this._service.selectAllExChangeRate().then(data => {
+                this._exChangeRate = data;
+                const content = tabContent(this._exChangeRate.record);
+                const result = `
                       <section id="menu">
                         <div class="container">
                           <div id="message"></div>
                           ${tabNav}
-                          ${tabContent}
+                          ${tabContent(this._exChangeRate.record)}
                         </div>
                       </section>
                     `;
-            document.querySelector("#money-app").innerHTML = result;
-            this.dispatchEvent();
+
+                document.querySelector("#money-app").innerHTML = result;
+                this.dispatchEvent();
+              });
+            });
           }
         }
 
