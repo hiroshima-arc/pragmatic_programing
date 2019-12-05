@@ -435,7 +435,6 @@ ExChangeRateViewModel --o View
         suite("ExChangeRepositoryTest", () => {
           let repository;
           setup(() => {
-            console.log("Called");
             repository = new ExChangeRateRepository(
               "money_test",
               "exchange_rates"
@@ -445,7 +444,7 @@ ExChangeRateViewModel --o View
           test("Setup", () => {
             return repository.setup().then(result => {
               const dbList = nSQL().listDatabases();
-              assert.equal("money_test", dbList[0]);
+              assert.equal("money_test", dbList[1]);
             });
           });
 
@@ -825,8 +824,8 @@ ExChangeRateViewModel --o View
                       })
                   );
                 })
-                .catch(() => {
-                  return reject();
+                .catch(err => {
+                  return reject(err);
                 });
             });
           }
@@ -947,6 +946,9 @@ ExChangeRateViewModel --o View
           setUpDb() {
             return new Promise((resolve, reject) => {
               const list = [new ExChangeRate("CHF", "USD", "1.5", 1)];
+              const dbList = nSQL().listDatabases();
+              if (dbList.length > 0) resolve();
+
               this._exChangeRateRepository
                 .setup()
                 .then(() => {
@@ -993,6 +995,17 @@ ExChangeRateViewModel --o View
             record.sort((a, b) => a.id - b.id);
 
             return new ExChangeRateViewModel(record);
+          }
+
+          addExChangeRate() {
+            return new Promise((resolve, reject) => {
+              const entity = new ExChangeRate("", "", 0);
+              return this._exChangeRateRepository.create(entity).then(() => {
+                return this._exChangeRateRepository.selectAll().then(result => {
+                  return resolve(new ExChangeRateViewModel(result));
+                });
+              });
+            });
           }
 
           deleteExChangeRate(id, record) {
@@ -1072,25 +1085,10 @@ ExChangeRateViewModel --o View
             };
 
             const addExChangeRateEvent = e => {
-              let id = Math.max.apply(
-                Math,
-                this._exChangeRate.record.map(o => {
-                  return parseInt(o.id) + 1;
-                })
-              );
-
-              if (!isFinite(id)) id = 1;
-
-              this._exChangeRate = this._service.updateExChangeRate(
-                "",
-                "",
-                "",
-                id,
-                this._exChangeRate.record
-              );
-
-              this._selectTab = this.EXCHANGE;
-              this.render();
+              this._service.addExChangeRate().then(data => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
             };
 
             const editExChangeRateEvent = e => {
