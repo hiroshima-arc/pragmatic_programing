@@ -434,6 +434,28 @@ MoneyService --o View
             });
           });
 
+          test("Update", () => {
+            const entitiy = new ExChangeRate("CHF", "USD", 1.5);
+            const repository = new ExChangeRateRepository(
+              "money_test",
+              "exchange_rates"
+            );
+            return repository.connect().then(() => {
+              return repository.create(entitiy).then(result => {
+                const id = result.id;
+                const updateEntity = new ExChangeRate("USD", "CHF", 3.0, id);
+                return repository.save(updateEntity).then(() => {
+                  return repository.find(id).then(result => {
+                    assert.equal(id, result.id);
+                    assert.equal("USD", result.from);
+                    assert.equal("CHF", result.to);
+                    assert.equal(3, result.rate);
+                  });
+                });
+              });
+            });
+          });
+
           test("Delete", () => {
             const entitiy = new ExChangeRate("CHF", "USD", 1.5);
             const repository = new ExChangeRateRepository(
@@ -739,7 +761,48 @@ MoneyService --o View
                 .exec()
                 .then(rows => {
                   console.log(rows);
-                  return resolve();
+                  return resolve(
+                    rows.map(
+                      row =>
+                        new ExChangeRate(row.from, row.to, row.rate, row.id)
+                    )[0]
+                  );
+                })
+                .catch(() => {
+                  return reject();
+                });
+            });
+          }
+
+          save(data) {
+            return new Promise((resolve, reject) => {
+              nSQL(this.table)
+                .query("delete")
+                .where(["id", "=", data.id])
+                .exec()
+                .then(rows => {
+                  return resolve(
+                    nSQL(this.table)
+                      .query("upsert", data)
+                      .exec()
+                      .then(rows => {
+                        console.log(rows);
+                        return resolve(
+                          rows.map(
+                            row =>
+                              new ExChangeRate(
+                                row.from,
+                                row.to,
+                                row.rate,
+                                row.id
+                              )
+                          )[0]
+                        );
+                      })
+                      .catch(() => {
+                        return reject();
+                      })
+                  );
                 })
                 .catch(() => {
                   return reject();
