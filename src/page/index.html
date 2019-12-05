@@ -515,6 +515,43 @@ ExChangeRateViewModel --o View
           });
         });
 
+        suite("ReportRepositoryTest", () => {
+          let repository;
+          setup(() => {
+            repository = new ReportRepository("money_report_test", "report");
+          });
+
+          test("Setup", () => {
+            return repository.setup().then(result => {
+              const dbList = nSQL().listDatabases();
+              assert.equal("money_test", dbList[1]);
+            });
+          });
+
+          test("Create", () => {
+            const data = [
+              { 銘柄: "IBM", 株数: "1000", 価格: "25", 通貨: "USD" },
+              { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
+            ];
+            const items = data.map(
+              i =>
+                new ReportViewModelItem(
+                  i.銘柄,
+                  i.株数,
+                  new Money(i.価格, i.通貨)
+                )
+            );
+            const report = new ReportViewModel(items);
+
+            return repository.save(report).then(() => {
+              return repository.get().then(result => {
+                assert.equal("Money Report", result.title);
+                assert.equal("65000 USD", result.total());
+              });
+            });
+          });
+        });
+
         class Pair {
           constructor(from, to) {
             this._from = from;
@@ -652,9 +689,13 @@ ExChangeRateViewModel --o View
 
         class ReportViewModel {
           constructor(items) {
+            this._title = "Money Report";
             this._items = items;
             this._bank = new Bank();
             this._bank.addRate("CHF", "USD", 1.5);
+          }
+          get title() {
+            return this._title;
           }
           get items() {
             return this._items;
@@ -724,6 +765,80 @@ ExChangeRateViewModel --o View
           }
         }
 
+        class ReportRepository {
+          constructor(db, table) {
+            this._db = db;
+            this._table = table;
+          }
+
+          get db() {
+            return this._db;
+          }
+          get table() {
+            return this._table;
+          }
+
+          setup() {
+            return new Promise((resolve, reject) => {
+              // Persistent Database
+              nSQL()
+                .createDatabase({
+                  id: this.db,
+                  mode: "PERM",
+                  tables: [
+                    {
+                      name: this.table,
+                      model: {
+                        "title:string": {},
+                        "total:obj": {},
+                        "items:obj[]": { default: [] }
+                      },
+                      indexes: {}
+                    }
+                  ]
+                })
+                .then(() => {
+                  return resolve();
+                })
+                .catch(() => {
+                  return reject();
+                });
+            });
+          }
+
+          save(data) {
+            return new Promise((resolve, reject) => {
+              nSQL(this.table)
+                .query("upsert", data)
+                .exec()
+                .then(rows => {
+                  console.log(rows);
+                  return resolve(rows);
+                })
+                .catch(err => {
+                  return reject(err);
+                });
+            });
+          }
+
+          get() {
+            return new Promise((resolve, reject) => {
+              nSQL(this.table)
+                .query("select")
+                .exec()
+                .then(rows => {
+                  console.log(rows);
+                  const result = rows.map(
+                    row => new ReportViewModel(row.items)
+                  )[0];
+                  return resolve(result);
+                })
+                .catch(err => {
+                  return reject(err);
+                });
+            });
+          }
+        }
         class ExChangeRateRepository {
           constructor(db, table) {
             this._db = db;
