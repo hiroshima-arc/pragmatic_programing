@@ -187,8 +187,11 @@ class ExChangeRate {
   id: int
 }
 class ReportViewModel {
+  title: String
+  sum: int
+  currenty: String
   items<ReportViewModelItem>: List
-  total: Sum
+  total(): Sum
 }
 class ReportViewModelItem {
   stockName: String
@@ -208,6 +211,12 @@ class MoneyService {
   deleteAllExChangeRate(): ExChangeRateViewModel
 }
 class ReportRepository {
+  db: String
+  table: String
+  save(): void
+  setup(): void
+  connect(): void
+  get(): ReporViewModel
 }
 class ExChangeRateRepository {
   db: String
@@ -546,7 +555,8 @@ ExChangeRateViewModel --o View
             return repository.save(report).then(() => {
               return repository.get().then(result => {
                 assert.equal("Money Report", result.title);
-                assert.equal("65000 USD", result.total());
+                assert.equal(65000, result.sum);
+                assert.equal("USD", result.currency);
               });
             });
           });
@@ -688,14 +698,27 @@ ExChangeRateViewModel --o View
         }
 
         class ReportViewModel {
-          constructor(items) {
-            this._title = "Money Report";
+          constructor(
+            items,
+            title = "Money Report",
+            sum = 0,
+            currency = "USD"
+          ) {
             this._items = items;
+            this._title = title;
+            this._sum = sum;
+            this._currency = currency;
             this._bank = new Bank();
             this._bank.addRate("CHF", "USD", 1.5);
           }
           get title() {
             return this._title;
+          }
+          get sum() {
+            return this._sum;
+          }
+          get currency() {
+            return this._currency;
           }
           get items() {
             return this._items;
@@ -806,17 +829,28 @@ ExChangeRateViewModel --o View
             });
           }
 
+          connect() {
+            return new Promise((resolve, reject) => {
+              nSQL().useDatabase(this.db);
+              resolve();
+            });
+          }
+
           save(data) {
             return new Promise((resolve, reject) => {
               nSQL(this.table)
-                .query("upsert", data)
+                .query("delete")
                 .exec()
-                .then(rows => {
-                  console.log(rows);
-                  return resolve(rows);
-                })
-                .catch(err => {
-                  return reject(err);
+                .then(() => {
+                  nSQL(this.table)
+                    .query("upsert", data)
+                    .exec()
+                    .then(rows => {
+                      return resolve(rows);
+                    })
+                    .catch(err => {
+                      return reject(err);
+                    });
                 });
             });
           }
@@ -827,9 +861,16 @@ ExChangeRateViewModel --o View
                 .query("select")
                 .exec()
                 .then(rows => {
-                  console.log(rows);
+                  if (rows.length === 0) return resolve();
+
                   const result = rows.map(
-                    row => new ReportViewModel(row.items)
+                    row =>
+                      new ReportViewModel(
+                        row.items,
+                        row.title,
+                        row.total._amount,
+                        row.total._currency
+                      )
                   )[0];
                   return resolve(result);
                 })
