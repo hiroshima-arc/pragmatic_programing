@@ -527,7 +527,7 @@ ExChangeRateViewModel --o View
         suite("ReportRepositoryTest", () => {
           let repository;
           setup(() => {
-            repository = new ReportRepository("money_report_test", "report");
+            repository = new ReportRepository("money_test", "report");
           });
 
           test("Setup", () => {
@@ -834,6 +834,9 @@ ExChangeRateViewModel --o View
 
           setup() {
             return new Promise((resolve, reject) => {
+              const dbList = nSQL().listDatabases();
+              if (dbList.includes(this.db)) return resolve();
+
               // Persistent Database
               nSQL()
                 .createDatabase({
@@ -841,11 +844,21 @@ ExChangeRateViewModel --o View
                   mode: "PERM",
                   tables: [
                     {
-                      name: this.table,
+                      name: "report",
                       model: {
                         "title:string": {},
                         "total:obj": {},
                         "items:obj[]": { default: [] }
+                      },
+                      indexes: {}
+                    },
+                    {
+                      name: "exchange_rates",
+                      model: {
+                        "id:uuid": { pk: true },
+                        "from:string": {},
+                        "to:string": {},
+                        "rate:float:": {}
                       },
                       indexes: {}
                     }
@@ -925,6 +938,7 @@ ExChangeRateViewModel --o View
             });
           }
         }
+
         class ExChangeRateRepository {
           constructor(db, table) {
             this._db = db;
@@ -941,6 +955,9 @@ ExChangeRateViewModel --o View
 
           setup() {
             return new Promise((resolve, reject) => {
+              const dbList = nSQL().listDatabases();
+              if (dbList.includes(this.db)) return resolve();
+
               // Persistent Database
               nSQL()
                 .createDatabase({
@@ -948,7 +965,16 @@ ExChangeRateViewModel --o View
                   mode: "PERM",
                   tables: [
                     {
-                      name: this.table,
+                      name: "report",
+                      model: {
+                        "title:string": {},
+                        "total:obj": {},
+                        "items:obj[]": { default: [] }
+                      },
+                      indexes: {}
+                    },
+                    {
+                      name: "exchange_rates",
                       model: {
                         "id:uuid": { pk: true },
                         "from:string": {},
@@ -1123,13 +1149,10 @@ ExChangeRateViewModel --o View
 
         class MoneyService {
           constructor() {
+            this._reportRepository = new ReportRepository("money", "report");
             this._exChangeRateRepository = new ExChangeRateRepository(
               "money",
               "exchange_rates"
-            );
-            this._reportRepository = new ReportRepository(
-              "money_report",
-              "report"
             );
           }
 
