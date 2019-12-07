@@ -555,7 +555,9 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            const report = new ReportViewModel(items);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            const report = new ReportViewModel(items, bank);
 
             return repository.save(report).then(() => {
               return repository.get().then(result => {
@@ -590,7 +592,9 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            const report = new ReportViewModel(items);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            const report = new ReportViewModel(items, bank);
 
             return service.deleteReport().then(() => {
               return service.saveReport(report).then(() => {
@@ -615,7 +619,9 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            const report = new ReportViewModel(items);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            const report = new ReportViewModel(items, bank);
 
             return service.addExChangeRate().then(() => {
               return service.saveReport(report).then(() => {
@@ -769,6 +775,7 @@ ExChangeRateViewModel --o View
         class ReportViewModel {
           constructor(
             items,
+            bank,
             title = "Money Report",
             sum = 0,
             currency = "USD"
@@ -777,8 +784,7 @@ ExChangeRateViewModel --o View
             this._title = title;
             this._sum = sum;
             this._currency = currency;
-            this._bank = new Bank();
-            this._bank.addRate("CHF", "USD", 1.5);
+            this._bank = bank;
           }
           get title() {
             return this._title;
@@ -939,17 +945,21 @@ ExChangeRateViewModel --o View
 
           get() {
             return new Promise((resolve, reject) => {
+              const bank = new Bank();
+              bank.addRate("CHF", "USD", 1.5);
+
               nSQL(this.table)
                 .query("select")
                 .exec()
                 .then(rows => {
                   if (rows.length === 0)
-                    return resolve(new ReportViewModel([]));
+                    return resolve(new ReportViewModel([], bank));
 
                   const result = rows.map(
                     row =>
                       new ReportViewModel(
                         row.items,
+                        bank,
                         row.title,
                         row.total._amount,
                         row.total._currency
@@ -1204,7 +1214,9 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            return new ReportViewModel(items);
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            return new ReportViewModel(items, bank);
           }
 
           saveReport(report) {
@@ -1226,7 +1238,9 @@ ExChangeRateViewModel --o View
                       new Money(i._price._amount, i._price._currency)
                     )
                 );
-                return resolve(new ReportViewModel(items));
+                const bank = new Bank();
+                bank.addRate("CHF", "USD", 1.5);
+                return resolve(new ReportViewModel(items, bank));
               });
             });
           }
