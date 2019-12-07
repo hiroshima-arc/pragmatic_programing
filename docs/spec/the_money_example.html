@@ -670,7 +670,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>&#10003; 為替レートを画面で削除する</p>
 </li>
 <li>
-<p>&#10063; レポートを保存する</p>
+<p>&#10003; レポートを保存する</p>
 </li>
 <li>
 <p>&#10003; 為替レートを保存する</p>
@@ -686,7 +686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-d838c1713c589448c690f0223c6871f2.png" alt="diag d838c1713c589448c690f0223c6871f2" width="958" height="939">
+<img src="diag-1a2298977e0b5737ee76ccfb0f2bc340.png" alt="diag 1a2298977e0b5737ee76ccfb0f2bc340" width="958" height="952">
 </div>
 </div>
 </div>
@@ -853,7 +853,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>&#10063; レポートを保存する</p>
+<p>&#10003; レポートを保存する</p>
 </li>
 <li>
 <p>&#10003; 為替レートを保存する
@@ -926,8 +926,11 @@ class ExChangeRate {
   id: int
 }
 class ReportViewModel {
+  title: String
+  sum: int
+  currenty: String
   items&lt;ReportViewModelItem&gt;: List
-  total: Sum
+  total(): Sum
 }
 class ReportViewModelItem {
   stockName: String
@@ -939,14 +942,25 @@ class ExChangeRateViewModel {
   record: List&lt;ExChangeRate&gt;
 }
 class MoneyService {
+  setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  selectAllExChangeRate(): ExChangeRateViewModel
   addExChangeRate(): ExChangeRateViewModel
+  selectAllExChangeRate(): ExChangeRateViewModel
   updateExChangeRate(id):  ExChangeRateViewModel
   deleteExChangeRate(id): ExChangeRateViewModel
   deleteAllExChangeRate(): ExChangeRateViewModel
+  saveReport(): void
+  getReport(): ReportViewModle
+  deleteReport(): void
 }
 class ReportRepository {
+  db: String
+  table: String
+  setup(): void
+  connect(): void
+  get(): ReporViewModel
+  save(): void
+  destroy(): void
 }
 class ExChangeRateRepository {
   db: String
@@ -1341,6 +1355,110 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>suite("ReportRepositoryTest", () =&gt; {
+  let repository;
+  setup(() =&gt; {
+    repository = new ReportRepository("money_test", "report");
+  });</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Setup", () =&gt; {
+  return repository.setup().then(result =&gt; {
+    const dbList = nSQL().listDatabases();
+    assert.equal("money_test", dbList[1]);
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("Create", () =&gt; {
+  const data = [
+    { 銘柄: "IBM", 株数: "1000", 価格: "25", 通貨: "USD" },
+    { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
+  ];
+  const items = data.map(
+    i =&gt;
+      new ReportViewModelItem(
+        i.銘柄,
+        i.株数,
+        new Money(i.価格, i.通貨)
+      )
+  );
+  const report = new ReportViewModel(items);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return repository.save(report).then(() =&gt; {
+    return repository.get().then(result =&gt; {
+      assert.equal("Money Report", result.title);
+      assert.equal(65000, result.sum);
+      assert.equal("USD", result.currency);
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("Destroy", () =&gt; {
+    return repository.destroy();
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>suite("MoneyServiceTest", () =&gt; {
+  let service;
+  setup(() =&gt; {
+    service = new MoneyService();
+  });</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("GetReport", () =&gt; {
+  const data = [
+    { 銘柄: "IBM", 株数: "1000", 価格: "25", 通貨: "USD" },
+    { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
+  ];
+  const items = data.map(
+    i =&gt;
+      new ReportViewModelItem(
+        i.銘柄,
+        i.株数,
+        new Money(i.価格, i.通貨)
+      )
+  );
+  const report = new ReportViewModel(items);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return service.deleteReport().then(() =&gt; {
+    return service.saveReport(report).then(() =&gt; {
+      return service.getReport().then(result =&gt; {
+        assert.equal("Money Report", result.title);
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  test("DeleteReport", () =&gt; {
+    return service.deleteReport();
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>class Pair {
   constructor(from, to) {
     this._from = from;
@@ -1555,10 +1673,27 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>class ReportViewModel {
-  constructor(items) {
+  constructor(
+    items,
+    title = "Money Report",
+    sum = 0,
+    currency = "USD"
+  ) {
     this._items = items;
+    this._title = title;
+    this._sum = sum;
+    this._currency = currency;
     this._bank = new Bank();
     this._bank.addRate("CHF", "USD", 1.5);
+  }
+  get title() {
+    return this._title;
+  }
+  get sum() {
+    return this._sum;
+  }
+  get currency() {
+    return this._currency;
   }
   get items() {
     return this._items;
@@ -1655,6 +1790,154 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>class ReportRepository {
+  constructor(db, table) {
+    this._db = db;
+    this._table = table;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get db() {
+  return this._db;
+}
+get table() {
+  return this._table;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>setup() {
+  return new Promise((resolve, reject) =&gt; {
+    const dbList = nSQL().listDatabases();
+    if (dbList.includes(this.db)) return resolve();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    // Persistent Database
+    nSQL()
+      .createDatabase({
+        id: this.db,
+        mode: "PERM",
+        tables: [
+          {
+            name: "report",
+            model: {
+              "title:string": {},
+              "total:obj": {},
+              "items:obj[]": { default: [] }
+            },
+            indexes: {}
+          },
+          {
+            name: "exchange_rates",
+            model: {
+              "id:uuid": { pk: true },
+              "from:string": {},
+              "to:string": {},
+              "rate:float:": {}
+            },
+            indexes: {}
+          }
+        ]
+      })
+      .then(() =&gt; {
+        return resolve();
+      })
+      .catch(() =&gt; {
+        return reject();
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>connect() {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL().useDatabase(this.db);
+    resolve();
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>save(data) {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("delete")
+      .exec()
+      .then(() =&gt; {
+        nSQL(this.table)
+          .query("upsert", data)
+          .exec()
+          .then(rows =&gt; {
+            return resolve(rows);
+          })
+          .catch(err =&gt; {
+            return reject(err);
+          });
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>get() {
+  return new Promise((resolve, reject) =&gt; {
+    nSQL(this.table)
+      .query("select")
+      .exec()
+      .then(rows =&gt; {
+        if (rows.length === 0)
+          return resolve(new ReportViewModel([]));</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        const result = rows.map(
+          row =&gt;
+            new ReportViewModel(
+              row.items,
+              row.title,
+              row.total._amount,
+              row.total._currency
+            )
+        )[0];
+        return resolve(result);
+      })
+      .catch(err =&gt; {
+        return reject(err);
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  destroy() {
+    return new Promise((resolve, reject) =&gt; {
+      nSQL(this.table)
+        .query("delete")
+        .exec()
+        .then(() =&gt; {
+          return resolve();
+        })
+        .catch(err =&gt; {
+          return reject(err);
+        });
+    });
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>class ExChangeRateRepository {
   constructor(db, table) {
     this._db = db;
@@ -1680,14 +1963,29 @@ if (deflater) {
 <div class="content">
 <pre>setup() {
   return new Promise((resolve, reject) =&gt; {
-    // Persistent Database
+    const dbList = nSQL().listDatabases();
+    if (dbList.includes(this.db)) return resolve();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    // Persistent Database
     nSQL()
       .createDatabase({
         id: this.db,
         mode: "PERM",
         tables: [
           {
-            name: this.table,
+            name: "report",
+            model: {
+              "title:string": {},
+              "total:obj": {},
+              "items:obj[]": { default: [] }
+            },
+            indexes: {}
+          },
+          {
+            name: "exchange_rates",
             model: {
               "id:uuid": { pk: true },
               "from:string": {},
@@ -1889,6 +2187,7 @@ if (deflater) {
 <div class="content">
 <pre>class MoneyService {
   constructor() {
+    this._reportRepository = new ReportRepository("money", "report");
     this._exChangeRateRepository = new ExChangeRateRepository(
       "money",
       "exchange_rates"
@@ -1913,6 +2212,47 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>saveReport(report) {
+  return new Promise((resolve, reject) =&gt; {
+    this._reportRepository.save(report).then(() =&gt; {
+      resolve();
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>getReport() {
+  return new Promise((resolve, reject) =&gt; {
+    this._reportRepository.get().then(result =&gt; {
+      const items = result.items.map(
+        i =&gt;
+          new ReportViewModelItem(
+            i._stockName,
+            i._stockAmount,
+            new Money(i._price._amount, i._price._currency)
+          )
+      );
+      return resolve(new ReportViewModel(items));
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>deleteReport() {
+  return new Promise((resolve, reject) =&gt; {
+    this._reportRepository.destroy().then(() =&gt; {
+      return resolve();
+    });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>setUpDb() {
   return new Promise((resolve, reject) =&gt; {
     const dbList = nSQL().listDatabases();
@@ -1921,10 +2261,17 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>    this._exChangeRateRepository
+<pre>    this._reportRepository
       .setup()
       .then(() =&gt; {
-        resolve();
+        this._exChangeRateRepository
+          .setup()
+          .then(() =&gt; {
+            resolve();
+          })
+          .catch(err =&gt; {
+            reject(err);
+          });
       })
       .catch(err =&gt; {
         reject(err);
@@ -2026,7 +2373,6 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>  this._service = new MoneyService();
-  this._report = this._service.createReportViewModel([]);
   this._selectTab = this.REPORT;
 }</pre>
 </div>
@@ -2069,15 +2415,17 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>this._report = this._service.createReportViewModel(
+<pre>const report = this._service.createReportViewModel(
   parseData.data
 );</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._selectTab = this.REPORT;
-  this.render();
+<pre>  this._service.saveReport(report).then(() =&gt; {
+    this._selectTab = this.REPORT;
+    this.render();
+  });
 };</pre>
 </div>
 </div>
@@ -2134,10 +2482,7 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-  "td"
-)[0];
-const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+<pre>const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
   "td"
 )[1];
 const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
@@ -2159,9 +2504,6 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>const saveExChangeRateEvent = e =&gt; {
-  const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-    "td"
-  )[0];
   const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
     "input"
   )[0];
@@ -2170,18 +2512,16 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
   )[1];
   const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
     "input"
-  )[2];</pre>
+  )[2];
+  const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+    "input"
+  )[3].value;</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  this._service
-    .updateExChangeRate(
-      from.value,
-      to.value,
-      rate.value,
-      id.innerHTML
-    )
+    .updateExChangeRate(from.value, to.value, rate.value, id)
     .then(result =&gt; {
       this._selectTab = this.EXCHANGE;
       this.render();
@@ -2203,14 +2543,24 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const delteExhangeRateEvent = e =&gt; {
   const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-    "td"
-  )[0];</pre>
+    "input"
+  )[0].value;</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._service.deleteExChangeRate(id.innerText).then(() =&gt; {
+<pre>  this._service.deleteExChangeRate(id).then(() =&gt; {
     this._selectTab = this.EXCHANGE;
+    this.render();
+  });
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const selectReportTabEvent = e =&gt; {
+  this._service.getReport().then(result =&gt; {
+    this._selectTab = this.REPORT;
     this.render();
   });
 };</pre>
@@ -2252,6 +2602,9 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
       .querySelector(`#button-delete-${k}`)
       .addEventListener("click", delteExhangeRateEvent);
   });
+  document
+    .querySelector("#tab-menu01")
+    .addEventListener("click", selectReportTabEvent);
   document
     .querySelector("#tab-menu02")
     .addEventListener("click", selectExChangeRateTabEvent);
@@ -2513,7 +2866,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>  return `
               &lt;tr&gt;
-                &lt;td&gt;${item.id}&lt;/td&gt;
+                &lt;td&gt;${item.id.slice(0, 5)}...&lt;/td&gt;
                 &lt;td&gt;${item.from}&lt;/td&gt;
                 &lt;td&gt;${item.to}&lt;/td&gt;
                 &lt;td&gt;${item.rate}&lt;/td&gt;
@@ -2523,6 +2876,9 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
                     ${save()}
                     ${delet()}
                   &lt;/span&gt;
+                &lt;/td&gt;
+                &lt;td&gt;
+                  &lt;input type="hidden" value=${item.id}&gt;
                 &lt;/td&gt;
               &lt;/tr&gt;
           `;
@@ -2625,10 +2981,12 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>this._service.setUpDb().then(() =&gt; {
-  this._service.selectAllExChangeRate().then(data =&gt; {
-    this._exChangeRate = data;
-    const content = tabContent(this._exChangeRate.record);
-    const result = `
+  this._service.getReport().then(data =&gt; {
+    this._report = data;
+    this._service.selectAllExChangeRate().then(data =&gt; {
+      this._exChangeRate = data;
+      const content = tabContent(this._exChangeRate.record);
+      const result = `
           &lt;section id="menu"&gt;
             &lt;div class="container"&gt;
               &lt;div id="message"&gt;&lt;/div&gt;
@@ -2641,8 +2999,9 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>        document.querySelector("#money-app").innerHTML = result;
-        this.dispatchEvent();
+<pre>          document.querySelector("#money-app").innerHTML = result;
+          this.dispatchEvent();
+        });
       });
     });
   }
@@ -2683,7 +3042,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-05 17:52:19 JST
+Last updated 2019-12-07 13:52:33 JST
 </div>
 </div>
 </body>

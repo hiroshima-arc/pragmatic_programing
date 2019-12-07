@@ -67,7 +67,7 @@
 * [x] 為替レートを画面で新規追加する
 * [x] 為替レートを画面で更新する
 * [x] 為替レートを画面で削除する
-* [ ] レポートを保存する
+* [x] レポートを保存する
 * [x] 為替レートを保存する
 
 === ユースケース図
@@ -117,8 +117,11 @@ class ExChangeRate {
   id: int
 }
 class ReportViewModel {
+  title: String
+  sum: int
+  currenty: String
   items<ReportViewModelItem>: List
-  total: Sum
+  total(): Sum
 }
 class ReportViewModelItem {
   stockName: String
@@ -130,14 +133,25 @@ class ExChangeRateViewModel {
   record: List<ExChangeRate>
 }
 class MoneyService {
+  setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  selectAllExChangeRate(): ExChangeRateViewModel
   addExChangeRate(): ExChangeRateViewModel
+  selectAllExChangeRate(): ExChangeRateViewModel
   updateExChangeRate(id):  ExChangeRateViewModel
   deleteExChangeRate(id): ExChangeRateViewModel
   deleteAllExChangeRate(): ExChangeRateViewModel
+  saveReport(): void
+  getReport(): ReportViewModle
+  deleteReport(): void
 }
 class ReportRepository {
+  db: String
+  table: String
+  setup(): void
+  connect(): void
+  get(): ReporViewModel
+  save(): void
+  destroy(): void
 }
 class ExChangeRateRepository {
   db: String
