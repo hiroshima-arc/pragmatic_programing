@@ -601,6 +601,31 @@ ExChangeRateViewModel --o View
             });
           });
 
+          test("CreateReportViewModel", () => {
+            const entitiy = new ExChangeRate("CHF", "USD", 2);
+
+            const data = [
+              { 銘柄: "Novartis", 株数: "1", 価格: "150", 通貨: "CHF" }
+            ];
+            const items = data.map(
+              i =>
+                new ReportViewModelItem(
+                  i.銘柄,
+                  i.株数,
+                  new Money(i.価格, i.通貨)
+                )
+            );
+            const report = new ReportViewModel(items);
+
+            return service.addExChangeRate().then(() => {
+              return service.saveReport(report).then(() => {
+                return service.getReport().then(result => {
+                  assert.equal("75 USD", result.total.toString());
+                });
+              });
+            });
+          });
+
           test("DeleteReport", () => {
             return service.deleteReport();
           });
