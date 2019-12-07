@@ -1203,6 +1203,9 @@ ExChangeRateViewModel --o View
               "money",
               "exchange_rates"
             );
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            this._bank = bank;
           }
 
           createReportViewModel(data) {
@@ -1214,9 +1217,7 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            const bank = new Bank();
-            bank.addRate("CHF", "USD", 1.5);
-            return new ReportViewModel(items, bank);
+            return new ReportViewModel(items, this._bank);
           }
 
           saveReport(report) {
@@ -1238,9 +1239,7 @@ ExChangeRateViewModel --o View
                       new Money(i._price._amount, i._price._currency)
                     )
                 );
-                const bank = new Bank();
-                bank.addRate("CHF", "USD", 1.5);
-                return resolve(new ReportViewModel(items, bank));
+                return resolve(new ReportViewModel(items, this._bank));
               });
             });
           }
