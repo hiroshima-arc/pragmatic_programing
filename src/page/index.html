@@ -575,8 +575,11 @@ ExChangeRateViewModel --o View
 
         suite("MoneyServiceTest", () => {
           let service;
+          let bank;
           setup(() => {
-            service = new MoneyService();
+            bank = new Bank();
+            bank.addRate("CHF", "USD", 2);
+            service = new MoneyService(bank);
           });
 
           test("GetReport", () => {
@@ -619,8 +622,6 @@ ExChangeRateViewModel --o View
                   new Money(i.価格, i.通貨)
                 )
             );
-            const bank = new Bank();
-            bank.addRate("CHF", "USD", 1.5);
             const report = new ReportViewModel(items, bank);
 
             return service.addExChangeRate().then(() => {
@@ -1197,14 +1198,12 @@ ExChangeRateViewModel --o View
         }
 
         class MoneyService {
-          constructor() {
+          constructor(bank) {
             this._reportRepository = new ReportRepository("money", "report");
             this._exChangeRateRepository = new ExChangeRateRepository(
               "money",
               "exchange_rates"
             );
-            const bank = new Bank();
-            bank.addRate("CHF", "USD", 1.5);
             this._bank = bank;
           }
 
@@ -1344,7 +1343,9 @@ ExChangeRateViewModel --o View
             this.REPORT = 1;
             this.EXCHANGE = 2;
 
-            this._service = new MoneyService();
+            const bank = new Bank();
+            bank.addRate("CHF", "USD", 1.5);
+            this._service = new MoneyService(bank);
             this._selectTab = this.REPORT;
           }
 
