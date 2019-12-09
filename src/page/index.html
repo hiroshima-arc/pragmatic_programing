@@ -202,17 +202,17 @@ class ReportViewModelItem {
   price: Money
   sum: Money
 }
-class ExChangeRateViewModel {
+class ExChangeRates {
   record: List<ExChangeRate>
 }
 class MoneyService {
   setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  addExChangeRate(entity): ExChangeRateViewModel
-  selectAllExChangeRate(): ExChangeRateViewModel
-  updateExChangeRate(id):  ExChangeRateViewModel
-  deleteExChangeRate(id): ExChangeRateViewModel
-  deleteAllExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(entity): ExChangeRates
+  selectAllExChangeRate(): ExChangeRates
+  updateExChangeRate(id):  ExChangeRates
+  deleteExChangeRate(id): ExChangeRates
+  deleteAllExChangeRate(): ExChangeRates
   saveReport(): void
   getReport(): ReportViewModle
   deleteReport(): void
@@ -244,7 +244,7 @@ class View {
   EXCHANGE: 2
   _service: MoneyService
   _report: ReportViewModel
-  _exChangeRate: ExChangeRateViewModel
+  _exChangeRate: ExChangeRates
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -257,8 +257,8 @@ Bank -> Pair
 Bank <-- ReportViewModel
 Sum <-- ReportViewModel
 Money <-- ReportViewModelItem
-ExChangeRate --o ExChangeRateViewModel
-ExChangeRateViewModel <-- MoneyService
+ExChangeRate --o ExChangeRates
+ExChangeRates <-- MoneyService
 ExChangeRate <- ExChangeRateRepository
 ReportRepository -o MoneyService
 ReportViewModel <- ReportRepository
@@ -268,7 +268,7 @@ ReportViewModel <-- MoneyService
 Bank <-- MoneyService
 MoneyService --o View
 ReportViewModel --o View
-ExChangeRateViewModel --o View
+ExChangeRates --o View
           `;
           compress(source, outputId);
         })();
@@ -814,7 +814,7 @@ ExChangeRateViewModel --o View
           }
         }
 
-        class ExChangeRateViewModel {
+        class ExChangeRates {
           constructor(exChangeRateRecord) {
             this._record = exChangeRateRecord;
           }
@@ -1280,7 +1280,7 @@ ExChangeRateViewModel --o View
                   this._exChangeRateRepository
                     .selectAll()
                     .then(result => {
-                      return resolve(new ExChangeRateViewModel(result));
+                      return resolve(new ExChangeRates(result));
                     })
                     .catch(err => {
                       reject(err);
@@ -1297,7 +1297,7 @@ ExChangeRateViewModel --o View
               const entity = new ExChangeRate(from, to, rate, id);
               return this._exChangeRateRepository.save(entity).then(() => {
                 return this._exChangeRateRepository.selectAll().then(result => {
-                  return resolve(new ExChangeRateViewModel(result));
+                  return resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1307,7 +1307,7 @@ ExChangeRateViewModel --o View
             return new Promise((resolve, reject) => {
               return this._exChangeRateRepository.create(entity).then(() => {
                 return this._exChangeRateRepository.selectAll().then(result => {
-                  return resolve(new ExChangeRateViewModel(result));
+                  return resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1317,7 +1317,7 @@ ExChangeRateViewModel --o View
             return new Promise((resolve, reject) => {
               this._exChangeRateRepository.delete(id).then(() => {
                 this._exChangeRateRepository.selectAll().then(result => {
-                  return resolve(new ExChangeRateViewModel(result));
+                  return resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1327,7 +1327,7 @@ ExChangeRateViewModel --o View
             return new Promise((resolve, reject) => {
               this._exChangeRateRepository.destroy().then(() => {
                 this._exChangeRateRepository.selectAll().then(result => {
-                  return resolve(new ExChangeRateViewModel(result));
+                  return resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1838,7 +1838,7 @@ ExChangeRateViewModel --o View
       </script>
       <script>
         mocha.globals(["jQuery"]);
-        //mocha.run();
+        mocha.run();
       </script>
     </div>
   </body>
