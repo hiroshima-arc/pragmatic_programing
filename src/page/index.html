@@ -125,7 +125,8 @@
 - [x] DB生成メソッドの重複
 - [x] 大きなサービスクラス
 - [ ] 大きなビュークラス
-
+  - [ ] レポート画面を分割する
+  - [ ] 為替レート画面を分割する
 `
         );
       </script>
@@ -255,11 +256,17 @@ class ExChangeRateRepository {
   delete(): void
   destroy(): void
 }
-class View {
+class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  _service: MoneyService
-  _selectTab: int
+  dispatchEvent(): void
+  render(): void
+}
+class ReportView {
+  dispatchEvent(): void
+  render(): void
+}
+class ExChangeRateView {
   dispatchEvent(): void
   render(): void
 }
@@ -284,7 +291,9 @@ ExChangeRateRepository --|> MoneyRepository
 ReportLineItem -o Report
 Report <-- ReportService
 Bank <-- ReportService
-MoneyService ---o View
+MoneyService ---o MoneyView
+ReportView -o MoneyView
+MoneyView o- ExChangeRateView
           `;
           compress(source, outputId);
         })();
