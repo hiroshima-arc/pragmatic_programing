@@ -259,8 +259,6 @@ class View {
   REPORT: 1
   EXCHANGE: 2
   _service: MoneyService
-  _report: Report
-  _exChangeRate: ExChangeRates
   _selectTab: int
   dispatchEvent(): void
   render(): void
@@ -273,22 +271,20 @@ Bank -> Pair
 Bank <-- Report
 Sum <-- Report
 Money <-- ReportLineItem
-ExChangeRate -o ExChangeRates
+ExChangeRates o- ExChangeRate
 ReportService -o MoneyService 
 MoneyService o- ExChangeRateService
-ExChangeRates <-- MoneyService
-ExChangeRate <- ExChangeRateRepository
+ExChangeRates <-- ExChangeRateService
+ExChangeRate <-- ExChangeRateRepository
 ReportRepository -o ReportService
 Report <- ReportRepository
 ExChangeRateService o- ExChangeRateRepository
-MoneyRepository <|- ReportRepository 
-MoneyRepository <|- ExChangeRateRepository 
+ReportRepository --|> MoneyRepository 
+ExChangeRateRepository --|> MoneyRepository 
 ReportLineItem -o Report
-Report <-- MoneyService
-Bank <-- MoneyService
+Report <-- ReportService
+Bank <-- ReportService
 MoneyService ---o View
-Report --o View
-ExChangeRates --o View
           `;
           compress(source, outputId);
         })();
@@ -596,7 +592,7 @@ ExChangeRates --o View
           let service;
           let bank;
           setup(() => {
-            service = new MoneyService();
+            service = new MoneyServiceMock();
           });
 
           test("GetReport", () => {
@@ -1389,6 +1385,31 @@ ExChangeRates --o View
                 });
               });
             });
+          }
+        }
+
+        class MoneyServiceMock extends MoneyService {
+          constructor() {
+            super();
+            this._reportService = new ReportServiceMock();
+            this._exChangeRateService = new ExChangeRateServiceMock();
+          }
+        }
+
+        class ReportServiceMock extends ReportService {
+          constructor() {
+            super();
+            this._repository = new ReportRepository("money_test", "report");
+          }
+        }
+
+        class ExChangeRateServiceMock extends ExChangeRateService {
+          constructor() {
+            super();
+            this._repository = new ExChangeRateRepository(
+              "money_test",
+              "exchange_rates"
+            );
           }
         }
 
