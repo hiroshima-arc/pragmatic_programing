@@ -25,9 +25,7 @@ describe('The Money Example', () => {
   describe('為替レート', () => {
     it('為替レートを追加する', () => {
       cy.get('#tab-menu02').click()
-      cy.wait(1000)
       cy.get('#button-add').click()
-      cy.wait(1000)
       cy.get('#exchange-rate-table > tbody > tr > :nth-child(4)').should('contain', 1.5)
     })
 
@@ -47,12 +45,25 @@ describe('The Money Example', () => {
 
     it('為替レートを削除する', () => {
       cy.get('#button-delete-0').click()
-      cy.wait(1000)
       cy.get('#exchange-rate-table > tbody > tr > :nth-child(4)').should('not.contain', '3')
     })
 
     it('為替レートを全て削除する', () => {
       cy.get('#button-delete').click()
+    })
+  })
+
+  describe('為替レートを更新してレポートを集計する', () => {
+    it('総計が設定した為替レートで計算される', () => {
+      cy.get('#tab-menu02').click()
+      cy.get('#button-add').click()
+      cy.get('#button-edit-0').click()
+      cy.get('tr > :nth-child(4) > input').clear()
+      cy.get('tr > :nth-child(4) > input').type(2)
+      cy.get('#button-save-0').click()
+
+      cy.get('#tab-menu01').click()
+      cy.get(':nth-child(4) > p').should('contain', '55000 USD')
     })
   })
 })
