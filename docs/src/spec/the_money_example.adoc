@@ -69,6 +69,7 @@
 * [x] 為替レートを画面で削除する
 * [x] レポートを保存する
 * [x] 為替レートを保存する
+* [x] 登録した為替レートを元にレポートを集計する
 
 === ユースケース図
 
@@ -135,7 +136,7 @@ class ExChangeRateViewModel {
 class MoneyService {
   setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  addExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(entity): ExChangeRateViewModel
   selectAllExChangeRate(): ExChangeRateViewModel
   updateExChangeRate(id):  ExChangeRateViewModel
   deleteExChangeRate(id): ExChangeRateViewModel
@@ -192,6 +193,7 @@ ReportViewModel <- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel <-- MoneyService
+Bank <-- MoneyService
 MoneyService --o View
 ReportViewModel --o View
 ExChangeRateViewModel --o View

@@ -675,6 +675,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10003; 為替レートを保存する</p>
 </li>
+<li>
+<p>&#10003; 登録した為替レートを元にレポートを集計する</p>
+</li>
 </ul>
 </div>
 </div>
@@ -686,7 +689,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-1a2298977e0b5737ee76ccfb0f2bc340.png" alt="diag 1a2298977e0b5737ee76ccfb0f2bc340" width="958" height="952">
+<img src="diag-bbaf31f61a9fb1143d4fbabfc49651f1.png" alt="diag bbaf31f61a9fb1143d4fbabfc49651f1" width="954" height="952">
 </div>
 </div>
 </div>
@@ -850,16 +853,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_todoリスト_2">6. ToDoリスト</h2>
 <div class="sectionbody">
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p>&#10003; レポートを保存する</p>
-</li>
-<li>
-<p>&#10003; 為替レートを保存する
-`
+<div class="paragraph">
+<p>`
         );
       &lt;/script&gt;</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>&lt;!-- mermaid --&gt;
@@ -944,7 +942,7 @@ class ExChangeRateViewModel {
 class MoneyService {
   setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  addExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(entity): ExChangeRateViewModel
   selectAllExChangeRate(): ExChangeRateViewModel
   updateExChangeRate(id):  ExChangeRateViewModel
   deleteExChangeRate(id): ExChangeRateViewModel
@@ -1001,6 +999,7 @@ ReportViewModel &lt;- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel &lt;-- MoneyService
+Bank &lt;-- MoneyService
 MoneyService --o View
 ReportViewModel --o View
 ExChangeRateViewModel --o View
@@ -1387,7 +1386,9 @@ if (deflater) {
         new Money(i.価格, i.通貨)
       )
   );
-  const report = new ReportViewModel(items);</pre>
+  const bank = new Bank();
+  bank.addRate("CHF", "USD", 1.5);
+  const report = new ReportViewModel(items, bank);</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1414,6 +1415,7 @@ if (deflater) {
 <div class="content">
 <pre>suite("MoneyServiceTest", () =&gt; {
   let service;
+  let bank;
   setup(() =&gt; {
     service = new MoneyService();
   });</pre>
@@ -1425,24 +1427,40 @@ if (deflater) {
   const data = [
     { 銘柄: "IBM", 株数: "1000", 価格: "25", 通貨: "USD" },
     { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
-  ];
-  const items = data.map(
-    i =&gt;
-      new ReportViewModelItem(
-        i.銘柄,
-        i.株数,
-        new Money(i.価格, i.通貨)
-      )
-  );
-  const report = new ReportViewModel(items);</pre>
+  ];</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  return service.deleteReport().then(() =&gt; {
-    return service.saveReport(report).then(() =&gt; {
-      return service.getReport().then(result =&gt; {
-        assert.equal("Money Report", result.title);
+    return service.createReportViewModel(data).then(report =&gt; {
+      return service.saveReport(report).then(() =&gt; {
+        return service.getReport().then(result =&gt; {
+          assert.equal("Money Report", result.title);
+        });
+      });
+    });
+  });
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>test("CreateReportViewModel", () =&gt; {
+  const entitiy = new ExChangeRate("CHF", "USD", 2);
+  const data = [
+    { 銘柄: "Novartis", 株数: "1", 価格: "150", 通貨: "CHF" }
+  ];</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return service.addExChangeRate(entitiy).then(() =&gt; {
+    return service.createReportViewModel(data).then(report =&gt; {
+      return service.saveReport(report).then(() =&gt; {
+        return service.getReport().then(result =&gt; {
+          assert.equal("75 USD", result.total.toString());
+        });
       });
     });
   });
@@ -1675,6 +1693,7 @@ if (deflater) {
 <pre>class ReportViewModel {
   constructor(
     items,
+    bank,
     title = "Money Report",
     sum = 0,
     currency = "USD"
@@ -1683,8 +1702,7 @@ if (deflater) {
     this._title = title;
     this._sum = sum;
     this._currency = currency;
-    this._bank = new Bank();
-    this._bank.addRate("CHF", "USD", 1.5);
+    this._bank = bank;
   }
   get title() {
     return this._title;
@@ -1890,12 +1908,18 @@ get table() {
 <div class="content">
 <pre>get() {
   return new Promise((resolve, reject) =&gt; {
-    nSQL(this.table)
-      .query("select")
-      .exec()
-      .then(rows =&gt; {
-        if (rows.length === 0)
-          return resolve(new ReportViewModel([]));</pre>
+    const bank = new Bank();
+    bank.addRate("CHF", "USD", 1.5);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>nSQL(this.table)
+  .query("select")
+  .exec()
+  .then(rows =&gt; {
+    if (rows.length === 0)
+      return resolve(new ReportViewModel([], bank));</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1904,6 +1928,7 @@ get table() {
           row =&gt;
             new ReportViewModel(
               row.items,
+              bank,
               row.title,
               row.total._amount,
               row.total._currency
@@ -2198,15 +2223,29 @@ get table() {
 <div class="literalblock">
 <div class="content">
 <pre>createReportViewModel(data) {
-  const items = data.map(
-    i =&gt;
-      new ReportViewModelItem(
-        i.銘柄,
-        i.株数,
-        new Money(i.価格, i.通貨)
-      )
-  );
-  return new ReportViewModel(items);
+  return new Promise((resolve, reject) =&gt; {
+    this._exChangeRateRepository.selectAll().then(result =&gt; {
+      const bank = new Bank();
+      result.map(i =&gt; bank.addRate(i.from, i.to, i.rate));</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const items = data.map(
+  i =&gt;
+    new ReportViewModelItem(
+      i.銘柄,
+      i.株数,
+      new Money(i.価格, i.通貨)
+    )
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>      return resolve(new ReportViewModel(items, bank));
+    });
+  });
 }</pre>
 </div>
 </div>
@@ -2225,16 +2264,28 @@ get table() {
 <div class="content">
 <pre>getReport() {
   return new Promise((resolve, reject) =&gt; {
-    this._reportRepository.get().then(result =&gt; {
-      const items = result.items.map(
-        i =&gt;
-          new ReportViewModelItem(
-            i._stockName,
-            i._stockAmount,
-            new Money(i._price._amount, i._price._currency)
-          )
-      );
-      return resolve(new ReportViewModel(items));
+    this._exChangeRateRepository.selectAll().then(result =&gt; {
+      const bank = new Bank();
+      result.map(i =&gt; bank.addRate(i.from, i.to, i.rate));</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this._reportRepository.get().then(result =&gt; {
+  const items = result.items.map(
+    i =&gt;
+      new ReportViewModelItem(
+        i._stockName,
+        i._stockAmount,
+        new Money(i._price._amount, i._price._currency)
+      )
+  );</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        return resolve(new ReportViewModel(items, bank));
+      });
     });
   });
 }</pre>
@@ -2319,14 +2370,9 @@ get table() {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>addExChangeRate() {
+<pre>addExChangeRate(entity = new ExChangeRate("CHF", "USD", 1.5)) {
   return new Promise((resolve, reject) =&gt; {
-    const entity = new ExChangeRate("CHF", "USD", 1.5);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    return this._exChangeRateRepository.create(entity).then(() =&gt; {
+    return this._exChangeRateRepository.create(entity).then(() =&gt; {
       return this._exChangeRateRepository.selectAll().then(result =&gt; {
         return resolve(new ExChangeRateViewModel(result));
       });
@@ -2415,17 +2461,14 @@ get table() {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const report = this._service.createReportViewModel(
-  parseData.data
-);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  this._service.saveReport(report).then(() =&gt; {
-    this._selectTab = this.REPORT;
-    this.render();
-  });
+<pre>  this._service
+    .createReportViewModel(parseData.data)
+    .then(report =&gt; {
+      this._service.saveReport(report).then(() =&gt; {
+        this._selectTab = this.REPORT;
+        this.render();
+      });
+    });
 };</pre>
 </div>
 </div>
@@ -3022,9 +3065,6 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 &lt;/html&gt;</pre>
 </div>
 </div>
-</li>
-</ul>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -3042,7 +3082,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-07 13:52:33 JST
+Last updated 2019-12-09 13:35:03 JST
 </div>
 </div>
 </body>
