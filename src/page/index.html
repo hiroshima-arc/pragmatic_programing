@@ -1434,76 +1434,6 @@ MoneyView o- ExChangeRateView
           }
 
           dispatchEvent() {
-            this._report.dispatchEvent.bind(this)();
-
-            const addExChangeRateEvent = e => {
-              this._service.addExChangeRate().then(data => {
-                this._selectTab = this.EXCHANGE;
-                this.render();
-              });
-            };
-
-            const editExChangeRateEvent = e => {
-              e.target.disabled = true;
-              e.target.parentElement.getElementsByTagName(
-                "button"
-              )[1].disabled = false;
-
-              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[1];
-              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[2];
-              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "td"
-              )[3];
-
-              from.innerHTML = `<input type="text" size="10" value=${from.innerText}>`;
-              to.innerHTML = `<input type="text" size="10" value=${to.innerText}>`;
-              rate.innerHTML = `<input type="text" size="10" value=${rate.innerText}>`;
-            };
-
-            const saveExChangeRateEvent = e => {
-              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "input"
-              )[0];
-              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "input"
-              )[1];
-              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "input"
-              )[2];
-              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "input"
-              )[3].value;
-
-              this._service
-                .updateExChangeRate(from.value, to.value, rate.value, id)
-                .then(result => {
-                  this._selectTab = this.EXCHANGE;
-                  this.render();
-                });
-            };
-
-            const deleteAllExChangeRateEvent = e => {
-              this._service.deleteAllExChangeRate().then(() => {
-                this._selectTab = this.EXCHANGE;
-                this.render();
-              });
-            };
-
-            const delteExhangeRateEvent = e => {
-              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
-                "input"
-              )[0].value;
-
-              this._service.deleteExChangeRate(id).then(() => {
-                this._selectTab = this.EXCHANGE;
-                this.render();
-              });
-            };
-
             const selectReportTabEvent = e => {
               this._service.getReport().then(result => {
                 this._selectTab = this.REPORT;
@@ -1519,29 +1449,15 @@ MoneyView o- ExChangeRateView
             };
 
             document
-              .querySelector("#button-add")
-              .addEventListener("click", addExChangeRateEvent);
-            document
-              .querySelector("#button-delete")
-              .addEventListener("click", deleteAllExChangeRateEvent);
-            this._exChangeRate.record.forEach((v, k) => {
-              document
-                .querySelector(`#button-edit-${k}`)
-                .addEventListener("click", editExChangeRateEvent);
-              document
-                .querySelector(`#button-save-${k}`)
-                .addEventListener("click", saveExChangeRateEvent);
-              document.querySelector(`#button-save-${k}`).disabled = true;
-              document
-                .querySelector(`#button-delete-${k}`)
-                .addEventListener("click", delteExhangeRateEvent);
-            });
-            document
               .querySelector("#tab-menu01")
               .addEventListener("click", selectReportTabEvent);
             document
               .querySelector("#tab-menu02")
               .addEventListener("click", selectExChangeRateTabEvent);
+
+            this._report.dispatchEvent.bind(this)();
+
+            this._exChangeRate.dispatchEvent.bind(this)();
           }
 
           render() {
@@ -1575,8 +1491,8 @@ MoneyView o- ExChangeRateView
                       </div>
                   `;
 
-            const tabContent = (report, exChangeRateRecord) => {
-              const exChangeRate = record => {
+            const tabContent = (report, exChangeRate) => {
+              const exChangeRate_ = record => {
                 const activeShow = exChangeSelect ? "active show" : "";
 
                 const table = record => {
@@ -1722,7 +1638,7 @@ MoneyView o- ExChangeRateView
               return `
               <div class="tab-content" id="panel-menus">
                 ${report(reportSelect)}
-                ${exChangeRate(exChangeRateRecord)}
+                ${exChangeRate(exChangeSelect)}
               </div>
               `;
             };
@@ -1732,13 +1648,14 @@ MoneyView o- ExChangeRateView
                 this._report = new ReportView(data);
                 this._service.selectAllExChangeRate().then(data => {
                   const report = this._report.render();
-                  this._exChangeRate = data;
+                  this._exChangeRate = new ExChangeRateView(data);
+                  const exChangeRate = this._exChangeRate.render();
                   const result = `
                       <section id="menu">
                         <div class="container">
                           <div id="message"></div>
                           ${tabNav}
-                          ${tabContent(report, this._exChangeRate.record)}
+                          ${tabContent(report, exChangeRate)}
                         </div>
                       </section>
                     `;
@@ -1937,9 +1854,242 @@ MoneyView o- ExChangeRateView
         }
 
         class ExChangeRateView {
-          dispatchEvent() {}
+          constructor(data) {
+            this._record = data;
+          }
+          dispatchEvent() {
+            const addExChangeRateEvent = e => {
+              this._service.addExChangeRate().then(data => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
+            };
 
-          render() {}
+            const editExChangeRateEvent = e => {
+              e.target.disabled = true;
+              e.target.parentElement.getElementsByTagName(
+                "button"
+              )[1].disabled = false;
+
+              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[1];
+              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[2];
+              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "td"
+              )[3];
+
+              from.innerHTML = `<input type="text" size="10" value=${from.innerText}>`;
+              to.innerHTML = `<input type="text" size="10" value=${to.innerText}>`;
+              rate.innerHTML = `<input type="text" size="10" value=${rate.innerText}>`;
+            };
+
+            const saveExChangeRateEvent = e => {
+              const from = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[0];
+              const to = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[1];
+              const rate = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[2];
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[3].value;
+
+              this._service
+                .updateExChangeRate(from.value, to.value, rate.value, id)
+                .then(result => {
+                  this._selectTab = this.EXCHANGE;
+                  this.render();
+                });
+            };
+
+            const deleteAllExChangeRateEvent = e => {
+              this._service.deleteAllExChangeRate().then(() => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
+            };
+
+            const delteExhangeRateEvent = e => {
+              const id = e.target.parentElement.parentElement.parentElement.getElementsByTagName(
+                "input"
+              )[0].value;
+
+              this._service.deleteExChangeRate(id).then(() => {
+                this._selectTab = this.EXCHANGE;
+                this.render();
+              });
+            };
+
+            document
+              .querySelector("#button-add")
+              .addEventListener("click", addExChangeRateEvent);
+            document
+              .querySelector("#button-delete")
+              .addEventListener("click", deleteAllExChangeRateEvent);
+            this._exChangeRate._record._record.forEach((v, k) => {
+              document
+                .querySelector(`#button-edit-${k}`)
+                .addEventListener("click", editExChangeRateEvent);
+              document
+                .querySelector(`#button-save-${k}`)
+                .addEventListener("click", saveExChangeRateEvent);
+              document.querySelector(`#button-save-${k}`).disabled = true;
+              document
+                .querySelector(`#button-delete-${k}`)
+                .addEventListener("click", delteExhangeRateEvent);
+            });
+          }
+
+          render() {
+            return exChangeSelect => {
+              const activeShow = exChangeSelect ? "active show" : "";
+
+              const table = record => {
+                const header = () => {
+                  const th = ["ID", "換算元", "換算先", "レート", ""]
+                    .map(i => `<th>${i}</th>`)
+                    .join(" ");
+
+                  return `
+                                <thead>
+                                  <tr>
+                                    ${th}
+                                  </tr>
+                                </thead>
+                            `;
+                };
+
+                const body = () => {
+                  const line = (item, key) => {
+                    const edit = () => {
+                      return `
+                                        <button
+                                          id="button-edit-${key}"
+                                          type="button"
+                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          編集
+                                        </button>
+                              `;
+                    };
+
+                    const save = () => {
+                      return `
+                                        <button
+                                          id="button-save-${key}"
+                                          type="button"
+                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          保存
+                                        </button>
+                              `;
+                    };
+
+                    const delet = () => {
+                      return `
+                                        <button
+                                          id="button-delete-${key}"
+                                          type="button"
+                                          class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+                                        >
+                                          削除
+                                        </button>
+                              `;
+                    };
+
+                    return `
+                                  <tr>
+                                    <td>${item.id.slice(0, 5)}...</td>
+                                    <td>${item.from}</td>
+                                    <td>${item.to}</td>
+                                    <td>${item.rate}</td>
+                                    <td>
+                                      <span class="button">
+                                        ${edit()}
+                                        ${save()}
+                                        ${delet()}
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <input type="hidden" value=${item.id}>
+                                    </td>
+                                  </tr>
+                              `;
+                  };
+
+                  return `
+                                <tbody>
+                                  ${record.map((v, k) => line(v, k)).join("")}
+                                </tbody>
+                            `;
+                };
+
+                return `
+                              <table
+                                id="exchange-rate-table"
+                                class="table table-striped"
+                              >
+                                ${header()}
+                                ${body()}
+                              </table>
+                          `;
+              };
+
+              const button = () => {
+                const add = () => {
+                  return `
+                                <button
+                                  id="button-add"
+                                  type="button"
+                                  class="btn btn-primary btn-rounded btn-sm my-0"
+                                >
+                                  追加
+                                </button>
+                            `;
+                };
+
+                const deletAll = () => {
+                  return `
+                                <button
+                                  id="button-delete"
+                                  type="button"
+                                  class="btn btn-danger btn-rounded btn-sm my-0"
+                                >
+                                  全削除
+                                </button>
+                            `;
+                };
+                return `
+                              <div id="button">
+                                ${add()}
+                                ${deletAll()}
+                              </div>
+                          `;
+              };
+
+              return `
+                        <div
+                          aria-labelledby="tab-menu02"
+                          class="tab-pane fade border border-top-0 ${activeShow}"
+                          id="panel-menu02"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div id="exchange-rate" class="col-md-12 order-md-2">
+                              ${table(this._record._record)}
+                              ${button()}
+                            </div>
+                          </dvi>
+                        </div>
+                    `;
+            };
+          }
         }
 
         const view = new MoneyView();
