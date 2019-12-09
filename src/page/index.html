@@ -577,9 +577,7 @@ ExChangeRateViewModel --o View
           let service;
           let bank;
           setup(() => {
-            bank = new Bank();
-            bank.addRate("CHF", "USD", 2);
-            service = new MoneyService(bank);
+            service = new MoneyService();
           });
 
           test("GetReport", () => {
@@ -587,22 +585,13 @@ ExChangeRateViewModel --o View
               { 銘柄: "IBM", 株数: "1000", 価格: "25", 通貨: "USD" },
               { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
             ];
-            const items = data.map(
-              i =>
-                new ReportViewModelItem(
-                  i.銘柄,
-                  i.株数,
-                  new Money(i.価格, i.通貨)
-                )
-            );
-            const bank = new Bank();
-            bank.addRate("CHF", "USD", 1.5);
-            const report = new ReportViewModel(items, bank);
 
             return service.deleteReport().then(() => {
-              return service.saveReport(report).then(() => {
-                return service.getReport().then(result => {
-                  assert.equal("Money Report", result.title);
+              return service.createReportViewModel(data).then(report => {
+                return service.saveReport(report).then(() => {
+                  return service.getReport().then(result => {
+                    assert.equal("Money Report", result.title);
+                  });
                 });
               });
             });
@@ -614,20 +603,13 @@ ExChangeRateViewModel --o View
             const data = [
               { 銘柄: "Novartis", 株数: "1", 価格: "150", 通貨: "CHF" }
             ];
-            const items = data.map(
-              i =>
-                new ReportViewModelItem(
-                  i.銘柄,
-                  i.株数,
-                  new Money(i.価格, i.通貨)
-                )
-            );
-            const report = new ReportViewModel(items, bank);
 
             return service.addExChangeRate().then(() => {
-              return service.saveReport(report).then(() => {
-                return service.getReport().then(result => {
-                  assert.equal("75 USD", result.total.toString());
+              return service.createReportViewModel(data).then(report => {
+                return service.saveReport(report).then(() => {
+                  return service.getReport().then(result => {
+                    assert.equal("75 USD", result.total.toString());
+                  });
                 });
               });
             });
@@ -1198,25 +1180,32 @@ ExChangeRateViewModel --o View
         }
 
         class MoneyService {
-          constructor(bank) {
+          constructor() {
             this._reportRepository = new ReportRepository("money", "report");
             this._exChangeRateRepository = new ExChangeRateRepository(
               "money",
               "exchange_rates"
             );
-            this._bank = bank;
           }
 
           createReportViewModel(data) {
-            const items = data.map(
-              i =>
-                new ReportViewModelItem(
-                  i.銘柄,
-                  i.株数,
-                  new Money(i.価格, i.通貨)
-                )
-            );
-            return new ReportViewModel(items, this._bank);
+            return new Promise((resolve, reject) => {
+              this._exChangeRateRepository.selectAll().then(result => {
+                const bank = new Bank();
+                result.map(i => bank.addRate(i.from, i.to, i.rate));
+
+                const items = data.map(
+                  i =>
+                    new ReportViewModelItem(
+                      i.銘柄,
+                      i.株数,
+                      new Money(i.価格, i.通貨)
+                    )
+                );
+
+                return resolve(new ReportViewModel(items, bank));
+              });
+            });
           }
 
           saveReport(report) {
@@ -1229,16 +1218,22 @@ ExChangeRateViewModel --o View
 
           getReport() {
             return new Promise((resolve, reject) => {
-              this._reportRepository.get().then(result => {
-                const items = result.items.map(
-                  i =>
-                    new ReportViewModelItem(
-                      i._stockName,
-                      i._stockAmount,
-                      new Money(i._price._amount, i._price._currency)
-                    )
-                );
-                return resolve(new ReportViewModel(items, this._bank));
+              this._exChangeRateRepository.selectAll().then(result => {
+                const bank = new Bank();
+                result.map(i => bank.addRate(i.from, i.to, i.rate));
+
+                this._reportRepository.get().then(result => {
+                  const items = result.items.map(
+                    i =>
+                      new ReportViewModelItem(
+                        i._stockName,
+                        i._stockAmount,
+                        new Money(i._price._amount, i._price._currency)
+                      )
+                  );
+
+                  return resolve(new ReportViewModel(items, bank));
+                });
               });
             });
           }
@@ -1343,9 +1338,7 @@ ExChangeRateViewModel --o View
             this.REPORT = 1;
             this.EXCHANGE = 2;
 
-            const bank = new Bank();
-            bank.addRate("CHF", "USD", 1.5);
-            this._service = new MoneyService(bank);
+            this._service = new MoneyService();
             this._selectTab = this.REPORT;
           }
 
@@ -1373,14 +1366,14 @@ ExChangeRateViewModel --o View
                     skipEmptyLines: true
                   });
 
-                  const report = this._service.createReportViewModel(
-                    parseData.data
-                  );
-
-                  this._service.saveReport(report).then(() => {
-                    this._selectTab = this.REPORT;
-                    this.render();
-                  });
+                  this._service
+                    .createReportViewModel(parseData.data)
+                    .then(report => {
+                      this._service.saveReport(report).then(() => {
+                        this._selectTab = this.REPORT;
+                        this.render();
+                      });
+                    });
                 };
 
                 reader.readAsText(fileData, "utf-8");
