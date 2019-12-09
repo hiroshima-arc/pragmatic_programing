@@ -599,12 +599,11 @@ ExChangeRateViewModel --o View
 
           test("CreateReportViewModel", () => {
             const entitiy = new ExChangeRate("CHF", "USD", 2);
-
             const data = [
               { 銘柄: "Novartis", 株数: "1", 価格: "150", 通貨: "CHF" }
             ];
 
-            return service.addExChangeRate().then(() => {
+            return service.addExChangeRate(entitiy).then(() => {
               return service.createReportViewModel(data).then(report => {
                 return service.saveReport(report).then(() => {
                   return service.getReport().then(result => {
@@ -1300,10 +1299,8 @@ ExChangeRateViewModel --o View
             });
           }
 
-          addExChangeRate() {
+          addExChangeRate(entity = new ExChangeRate("CHF", "USD", 1.5)) {
             return new Promise((resolve, reject) => {
-              const entity = new ExChangeRate("CHF", "USD", 1.5);
-
               return this._exChangeRateRepository.create(entity).then(() => {
                 return this._exChangeRateRepository.selectAll().then(result => {
                   return resolve(new ExChangeRateViewModel(result));
