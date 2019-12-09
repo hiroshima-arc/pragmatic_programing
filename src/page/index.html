@@ -121,7 +121,8 @@
 
 ## ToDoリスト
 
-- [ ] ファーストクラスコレクション
+- [x] ファーストクラスコレクション
+- [x] DB生成メソッドの重複
 - [ ] 大きなサービスクラス
 - [ ] 大きなビュークラス
 
@@ -217,19 +218,19 @@ class MoneyService {
   getReport(): ReportViewModle
   deleteReport(): void
 }
-class ReportRepository {
+class MoneyRepository {
   db: String
+  setup()
+}
+class ReportRepository {
   table: String
-  setup(): void
   connect(): void
   get(): ReporViewModel
   save(): void
   destroy(): void
 }
 class ExChangeRateRepository {
-  db: String
   table: String
-  setup(): void
   connect(): void
   create(): ExChangeRate
   createBatch(): List<ExChangeRate>
@@ -263,6 +264,8 @@ ExChangeRate <- ExChangeRateRepository
 ReportRepository -o MoneyService
 Report <- ReportRepository
 MoneyService o- ExChangeRateRepository
+MoneyRepository <|- ReportRepository 
+MoneyRepository <|- ExChangeRateRepository 
 ReportLineItem -o Report
 Report <-- MoneyService
 Bank <-- MoneyService
@@ -844,17 +847,13 @@ ExChangeRates --o View
           }
         }
 
-        class ReportRepository {
-          constructor(db, table) {
+        class MoneyRepository {
+          constructor(db) {
             this._db = db;
-            this._table = table;
           }
 
           get db() {
             return this._db;
-          }
-          get table() {
-            return this._table;
           }
 
           setup() {
@@ -896,6 +895,17 @@ ExChangeRates --o View
                   return reject();
                 });
             });
+          }
+        }
+
+        class ReportRepository extends MoneyRepository {
+          constructor(db, table) {
+            super(db);
+            this._table = table;
+          }
+
+          get table() {
+            return this._table;
           }
 
           connect() {
@@ -968,59 +978,14 @@ ExChangeRates --o View
           }
         }
 
-        class ExChangeRateRepository {
+        class ExChangeRateRepository extends MoneyRepository {
           constructor(db, table) {
-            this._db = db;
+            super(db);
             this._table = table;
-          }
-
-          get db() {
-            return this._db;
           }
 
           get table() {
             return this._table;
-          }
-
-          setup() {
-            return new Promise((resolve, reject) => {
-              const dbList = nSQL().listDatabases();
-              if (dbList.includes(this.db)) return resolve();
-
-              // Persistent Database
-              nSQL()
-                .createDatabase({
-                  id: this.db,
-                  mode: "PERM",
-                  tables: [
-                    {
-                      name: "report",
-                      model: {
-                        "title:string": {},
-                        "total:obj": {},
-                        "items:obj[]": { default: [] }
-                      },
-                      indexes: {}
-                    },
-                    {
-                      name: "exchange_rates",
-                      model: {
-                        "id:uuid": { pk: true },
-                        "from:string": {},
-                        "to:string": {},
-                        "rate:float:": {}
-                      },
-                      indexes: {}
-                    }
-                  ]
-                })
-                .then(() => {
-                  return resolve();
-                })
-                .catch(() => {
-                  return reject();
-                });
-            });
           }
 
           connect() {
