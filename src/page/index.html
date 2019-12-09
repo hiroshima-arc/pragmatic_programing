@@ -1428,62 +1428,13 @@ MoneyView o- ExChangeRateView
             this.EXCHANGE = 2;
 
             this._service = new MoneyService();
+            this._report = new ReportView();
+            this._exChangeRate = new ExChangeRateView();
             this._selectTab = this.REPORT;
           }
 
           dispatchEvent() {
-            const uploadEvent = e => {
-              if (
-                window.File &&
-                window.FileReader &&
-                window.FileList &&
-                window.Blob
-              ) {
-                const fileData = e.target.files[0];
-
-                if (!fileData.name.match(".csv$")) {
-                  alert("CSVファイルを選択してください");
-                  return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = () => {
-                  const data = reader.result;
-                  const parseData = Papa.parse(data, {
-                    header: true,
-                    skipEmptyLines: true
-                  });
-
-                  this._service
-                    .createReportViewModel(parseData.data)
-                    .then(report => {
-                      this._service.saveReport(report).then(() => {
-                        this._selectTab = this.REPORT;
-                        this.render();
-                      });
-                    });
-                };
-
-                reader.readAsText(fileData, "utf-8");
-              } else {
-                alert("File APIに対応したブラウザでご確認ください");
-              }
-            };
-
-            const downloadEvent = e => {
-              const csv = Papa.unparse(this._report.items);
-              const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-              const blog = new Blob([bom, csv], { type: "text/csv" });
-              const url = URL.createObjectURL(blog);
-              const a = document.createElement("a");
-
-              a.href = url;
-              a.target = "_blank";
-              a.download = "data.csv";
-
-              a.click();
-            };
+            this._report.dispatchEvent.bind(this)();
 
             const addExChangeRateEvent = e => {
               this._service.addExChangeRate().then(data => {
@@ -1568,12 +1519,6 @@ MoneyView o- ExChangeRateView
             };
 
             document
-              .querySelector("#app-money-upload")
-              .addEventListener("change", uploadEvent);
-            document
-              .querySelector("#app-money-download")
-              .addEventListener("click", downloadEvent);
-            document
               .querySelector("#button-add")
               .addEventListener("click", addExChangeRateEvent);
             document
@@ -1630,122 +1575,7 @@ MoneyView o- ExChangeRateView
                       </div>
                   `;
 
-            const tabContent = exChangeRateRecord => {
-              const report = () => {
-                const activeShow = reportSelect ? "active show" : "";
-
-                const table = () => {
-                  const header = () => {
-                    const line = ["銘柄", "株数", "価格", "合計"]
-                      .map(i => `<th>${i}</th>`)
-                      .join(" ");
-
-                    return `
-                                  <thead>
-                                    <tr>
-                                      ${line}
-                                    </tr>
-                                  </thead>
-                            `;
-                  };
-
-                  const body = () => {
-                    const items = this._report.items;
-                    const line = items
-                      .map(
-                        i => `
-                            <tr>
-                              <td>${i.stockName}</td>
-                              <td>${i.stockAmount}</td>
-                              <td>${i.price}</td>
-                              <td>${i.sum}</td>
-                            </tr>
-                            `
-                      )
-                      .join(" ");
-                    const total = `
-                                    <tr>
-                                      <td></td>
-                                      <td></td>
-                                      <td>
-                                        <p>総計</p>
-                                      </td>
-                                      <td>
-                                        <p>${this._report.total}</p>
-                                      </td>
-                                    </tr>
-                            `;
-                    return `
-                                  <tbody>
-                                    ${line}
-                                    ${total}
-                                  </tbody>
-                            `;
-                  };
-
-                  return `
-                                <table id="report-table" class="table table-striped">
-                                    ${header()}
-                                    ${body()}
-                                </table>
-                          `;
-                };
-
-                const upload = () => {
-                  return `
-                                <div class="col-md-12">
-                                  <form>
-                                    <div class="form-group">
-                                      <p>
-                                        CSVファイルを選択して下さい。<br />
-                                      </p>
-                                      <input
-                                        type="file"
-                                        class="form-control-file"
-                                        id="app-money-upload"
-                                      />
-                                    </div>
-                                  </form>
-                                </div>
-                          `;
-                };
-
-                const download = () => {
-                  return `
-                                <button
-                                  type="button"
-                                  class="btn btn-primary btn"
-                                  id="app-money-download"
-                                >
-                                  CSVダウンロード
-                                </button>
-                          `;
-                };
-
-                return `
-                        <div
-                          aria-labelledby="tab-menu01"
-                          class="tab-pane fade border border-top-0 ${activeShow}"
-                          id="panel-menu01"
-                          role="tabpanel"
-                        >
-                          <dvi class="row p-3">
-                            <div id="report" class="col-md-12 order-md-2">
-                              <div class="row">
-                                ${upload()}
-                              </div>
-                              <div class="row">
-                                ${table()}
-                              </div>
-                              <div class="col-md-12 py-2">
-                                ${download()}
-                              </div>
-                            </div>
-                          </dvi>
-                        </div>
-                    `;
-              };
-
+            const tabContent = (report, exChangeRateRecord) => {
               const exChangeRate = record => {
                 const activeShow = exChangeSelect ? "active show" : "";
 
@@ -1891,7 +1721,7 @@ MoneyView o- ExChangeRateView
 
               return `
               <div class="tab-content" id="panel-menus">
-                ${report()}
+                ${report(reportSelect)}
                 ${exChangeRate(exChangeRateRecord)}
               </div>
               `;
@@ -1899,16 +1729,16 @@ MoneyView o- ExChangeRateView
 
             this._service.setUpDb().then(() => {
               this._service.getReport().then(data => {
-                this._report = data;
+                this._report = new ReportView(data);
                 this._service.selectAllExChangeRate().then(data => {
+                  const report = this._report.render();
                   this._exChangeRate = data;
-                  const content = tabContent(this._exChangeRate.record);
                   const result = `
                       <section id="menu">
                         <div class="container">
                           <div id="message"></div>
                           ${tabNav}
-                          ${tabContent(this._exChangeRate.record)}
+                          ${tabContent(report, this._exChangeRate.record)}
                         </div>
                       </section>
                     `;
@@ -1921,12 +1751,203 @@ MoneyView o- ExChangeRateView
           }
         }
 
+        class ReportView {
+          constructor(data) {
+            this._report = data;
+          }
+
+          dispatchEvent() {
+            const uploadEvent = e => {
+              if (
+                window.File &&
+                window.FileReader &&
+                window.FileList &&
+                window.Blob
+              ) {
+                const fileData = e.target.files[0];
+
+                if (!fileData.name.match(".csv$")) {
+                  alert("CSVファイルを選択してください");
+                  return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                  const data = reader.result;
+                  const parseData = Papa.parse(data, {
+                    header: true,
+                    skipEmptyLines: true
+                  });
+
+                  this._service
+                    .createReportViewModel(parseData.data)
+                    .then(report => {
+                      this._service.saveReport(report).then(() => {
+                        this._selectTab = this.REPORT;
+                        this.render();
+                      });
+                    });
+                };
+
+                reader.readAsText(fileData, "utf-8");
+              } else {
+                alert("File APIに対応したブラウザでご確認ください");
+              }
+            };
+
+            const downloadEvent = e => {
+              const csv = Papa.unparse(this._report._report.items);
+              const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+              const blog = new Blob([bom, csv], { type: "text/csv" });
+              const url = URL.createObjectURL(blog);
+              const a = document.createElement("a");
+
+              a.href = url;
+              a.target = "_blank";
+              a.download = "data.csv";
+
+              a.click();
+            };
+
+            document
+              .querySelector("#app-money-upload")
+              .addEventListener("change", uploadEvent);
+            document
+              .querySelector("#app-money-download")
+              .addEventListener("click", downloadEvent);
+          }
+
+          render() {
+            return reportSelect => {
+              const activeShow = reportSelect ? "active show" : "";
+
+              const table = () => {
+                const header = () => {
+                  const line = ["銘柄", "株数", "価格", "合計"]
+                    .map(i => `<th>${i}</th>`)
+                    .join(" ");
+
+                  return `
+                                  <thead>
+                                    <tr>
+                                      ${line}
+                                    </tr>
+                                  </thead>
+                            `;
+                };
+
+                const body = () => {
+                  const items = this._report.items;
+                  const line = items
+                    .map(
+                      i => `
+                            <tr>
+                              <td>${i.stockName}</td>
+                              <td>${i.stockAmount}</td>
+                              <td>${i.price}</td>
+                              <td>${i.sum}</td>
+                            </tr>
+                            `
+                    )
+                    .join(" ");
+                  const total = `
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td>
+                                        <p>総計</p>
+                                      </td>
+                                      <td>
+                                        <p>${this._report.total}</p>
+                                      </td>
+                                    </tr>
+                            `;
+                  return `
+                                  <tbody>
+                                    ${line}
+                                    ${total}
+                                  </tbody>
+                            `;
+                };
+
+                return `
+                                <table id="report-table" class="table table-striped">
+                                    ${header()}
+                                    ${body()}
+                                </table>
+                          `;
+              };
+
+              const upload = () => {
+                return `
+                                <div class="col-md-12">
+                                  <form>
+                                    <div class="form-group">
+                                      <p>
+                                        CSVファイルを選択して下さい。<br />
+                                      </p>
+                                      <input
+                                        type="file"
+                                        class="form-control-file"
+                                        id="app-money-upload"
+                                      />
+                                    </div>
+                                  </form>
+                                </div>
+                          `;
+              };
+
+              const download = () => {
+                return `
+                                <button
+                                  type="button"
+                                  class="btn btn-primary btn"
+                                  id="app-money-download"
+                                >
+                                  CSVダウンロード
+                                </button>
+                          `;
+              };
+
+              return `
+                        <div
+                          aria-labelledby="tab-menu01"
+                          class="tab-pane fade border border-top-0 ${activeShow}"
+                          id="panel-menu01"
+                          role="tabpanel"
+                        >
+                          <dvi class="row p-3">
+                            <div id="report" class="col-md-12 order-md-2">
+                              <div class="row">
+                                ${upload()}
+                              </div>
+                              <div class="row">
+                                ${table()}
+                              </div>
+                              <div class="col-md-12 py-2">
+                                ${download()}
+                              </div>
+                            </div>
+                          </dvi>
+                        </div>
+                    `;
+            };
+          }
+        }
+
+        class ExChangeRateView {
+          dispatchEvent() {}
+
+          render() {}
+        }
+
         const view = new MoneyView();
         view.render();
       </script>
       <script>
         mocha.globals(["jQuery"]);
-        mocha.run();
+        //mocha.run();
       </script>
     </div>
   </body>
