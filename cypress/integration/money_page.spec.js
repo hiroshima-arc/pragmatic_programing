@@ -25,26 +25,30 @@ describe('The Money Example', () => {
   describe('為替レート', () => {
     it('為替レートを追加する', () => {
       cy.get('#tab-menu02').click()
+      cy.wait(1000)
       cy.get('#button-add').click()
-      cy.get('#button-add').click()
+      cy.wait(1000)
       cy.get('#exchange-rate-table > tbody > tr > :nth-child(4)').should('contain', 1.5)
     })
 
     it('為替レートを更新する', () => {
-      cy.get('#button-add').click()
-      cy.get('#button-edit-1').click()
-      cy.get(':nth-child(2) > :nth-child(2) > input').type('USD')
-      cy.get(':nth-child(3) > input').type('CHF')
-      cy.get(':nth-child(4) > input').type(3)
-      cy.get('#button-save-1').click()
-      cy.get('#exchange-rate-table > tbody > :nth-child(2) > :nth-child(2)').should('contain', 'USD')
-      cy.get('#exchange-rate-table > tbody > :nth-child(2) > :nth-child(3)').should('contain', 'CHF')
-      cy.get('#exchange-rate-table > tbody > :nth-child(2) > :nth-child(4)').should('contain', 3)
+      cy.get('#button-edit-0').click()
+      cy.get('tr > :nth-child(2) > input').clear()
+      cy.get('tr > :nth-child(2) > input').type('USD')
+      cy.get('tr > :nth-child(3) > input').clear()
+      cy.get('tr > :nth-child(3) > input').type('CHF')
+      cy.get('tr > :nth-child(4) > input').clear()
+      cy.get('tr > :nth-child(4) > input').type(3)
+      cy.get('#button-save-0').click()
+      cy.get('#exchange-rate-table > tbody > :nth-child(1) > :nth-child(2)').should('contain', 'USD')
+      cy.get('#exchange-rate-table > tbody > :nth-child(1) > :nth-child(3)').should('contain', 'CHF')
+      cy.get('#exchange-rate-table > tbody > :nth-child(1) > :nth-child(4)').should('contain', 3)
     })
 
     it('為替レートを削除する', () => {
-      cy.get('#button-delete-1').click()
-      cy.get('#exchange-rate-table > tbody > :nth-child(1) > :nth-child(4)').should('contain', '1.5')
+      cy.get('#button-delete-0').click()
+      cy.wait(1000)
+      cy.get('#exchange-rate-table > tbody > tr > :nth-child(4)').should('not.contain', '3')
     })
 
     it('為替レートを全て削除する', () => {
