@@ -120,7 +120,7 @@
 
 ## ToDoリスト
 
-- [ ] 登録した為替レートを元にレポートを集計する
+- [x] 登録した為替レートを元にレポートを集計する
 
 `
         );
@@ -205,7 +205,7 @@ class ExChangeRateViewModel {
 class MoneyService {
   setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  addExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(entity): ExChangeRateViewModel
   selectAllExChangeRate(): ExChangeRateViewModel
   updateExChangeRate(id):  ExChangeRateViewModel
   deleteExChangeRate(id): ExChangeRateViewModel
@@ -262,6 +262,7 @@ ReportViewModel <- ReportRepository
 MoneyService o- ExChangeRateRepository
 ReportViewModelItem -o ReportViewModel
 ReportViewModel <-- MoneyService
+Bank <-- MoneyService
 MoneyService --o View
 ReportViewModel --o View
 ExChangeRateViewModel --o View
