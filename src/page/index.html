@@ -189,14 +189,14 @@ class ExChangeRate {
   rate: float
   id: int
 }
-class ReportViewModel {
+class Report {
   title: String
   sum: int
   currenty: String
-  items<ReportViewModelItem>: List
+  items<ReportLineItem>: List
   total(): Sum
 }
-class ReportViewModelItem {
+class ReportLineItem {
   stockName: String
   stockAmount: int
   price: Money
@@ -243,7 +243,7 @@ class View {
   REPORT: 1
   EXCHANGE: 2
   _service: MoneyService
-  _report: ReportViewModel
+  _report: Report
   _exChangeRate: ExChangeRates
   _selectTab: int
   dispatchEvent(): void
@@ -254,20 +254,20 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
-Bank <-- ReportViewModel
-Sum <-- ReportViewModel
-Money <-- ReportViewModelItem
+Bank <-- Report
+Sum <-- Report
+Money <-- ReportLineItem
 ExChangeRate --o ExChangeRates
 ExChangeRates <-- MoneyService
 ExChangeRate <- ExChangeRateRepository
 ReportRepository -o MoneyService
-ReportViewModel <- ReportRepository
+Report <- ReportRepository
 MoneyService o- ExChangeRateRepository
-ReportViewModelItem -o ReportViewModel
-ReportViewModel <-- MoneyService
+ReportLineItem -o Report
+Report <-- MoneyService
 Bank <-- MoneyService
 MoneyService --o View
-ReportViewModel --o View
+Report --o View
 ExChangeRates --o View
           `;
           compress(source, outputId);
@@ -552,16 +552,11 @@ ExChangeRates --o View
               { 銘柄: "Novartis", 株数: "400", 価格: "150", 通貨: "CHF" }
             ];
             const items = data.map(
-              i =>
-                new ReportViewModelItem(
-                  i.銘柄,
-                  i.株数,
-                  new Money(i.価格, i.通貨)
-                )
+              i => new ReportLineItem(i.銘柄, i.株数, new Money(i.価格, i.通貨))
             );
             const bank = new Bank();
             bank.addRate("CHF", "USD", 1.5);
-            const report = new ReportViewModel(items, bank);
+            const report = new Report(items, bank);
 
             return repository.save(report).then(() => {
               return repository.get().then(result => {
@@ -601,7 +596,7 @@ ExChangeRates --o View
             });
           });
 
-          test("CreateReportViewModel", () => {
+          test("CreateReport", () => {
             const entitiy = new ExChangeRate("CHF", "USD", 2);
             const data = [
               { 銘柄: "Novartis", 株数: "1", 価格: "150", 通貨: "CHF" }
@@ -758,7 +753,7 @@ ExChangeRates --o View
           }
         }
 
-        class ReportViewModel {
+        class Report {
           constructor(
             items,
             bank,
@@ -793,7 +788,7 @@ ExChangeRates --o View
           }
         }
 
-        class ReportViewModelItem {
+        class ReportLineItem {
           constructor(stockName, stockAmount, price) {
             this._stockName = stockName;
             this._stockAmount = stockAmount;
@@ -938,12 +933,11 @@ ExChangeRates --o View
                 .query("select")
                 .exec()
                 .then(rows => {
-                  if (rows.length === 0)
-                    return resolve(new ReportViewModel([], bank));
+                  if (rows.length === 0) return resolve(new Report([], bank));
 
                   const result = rows.map(
                     row =>
-                      new ReportViewModel(
+                      new Report(
                         row.items,
                         bank,
                         row.title,
@@ -1199,14 +1193,14 @@ ExChangeRates --o View
 
                 const items = data.map(
                   i =>
-                    new ReportViewModelItem(
+                    new ReportLineItem(
                       i.銘柄,
                       i.株数,
                       new Money(i.価格, i.通貨)
                     )
                 );
 
-                return resolve(new ReportViewModel(items, bank));
+                return resolve(new Report(items, bank));
               });
             });
           }
@@ -1228,14 +1222,14 @@ ExChangeRates --o View
                 this._reportRepository.get().then(result => {
                   const items = result.items.map(
                     i =>
-                      new ReportViewModelItem(
+                      new ReportLineItem(
                         i._stockName,
                         i._stockAmount,
                         new Money(i._price._amount, i._price._currency)
                       )
                   );
 
-                  return resolve(new ReportViewModel(items, bank));
+                  return resolve(new Report(items, bank));
                 });
               });
             });
