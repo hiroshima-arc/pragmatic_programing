@@ -277,6 +277,9 @@ class TabComponent {
 class TableComponent {
   render(): String
 }
+class ButtonComponent {
+  render(): String
+}
 Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
@@ -304,9 +307,13 @@ MoneyView o-- ReportView
 MoneyView -> TabComponent
 ReportView --> TableComponent
 ReportView --> ButtonComponent 
+ReportView --> InputComponent
 ExChangeRateView --> TableComponent
 ExChangeRateView --> ButtonComponent
 ExChangeRateView --> InputComponent
+ButtonComponent <|-- DefaultButtonComponent
+ButtonComponent <|-- DefaultMiniButtonComponent
+ButtonComponent <|-- DangerMiniButtonComponent
           `;
           compress(source, outputId);
         })();
@@ -1713,15 +1720,12 @@ ExChangeRateView --> InputComponent
               };
 
               const download = () => {
-                return `
-                                <button
-                                  type="button"
-                                  class="btn btn-primary btn"
-                                  id=${this._css.id.report.download}
-                                >
-                                  CSVダウンロード
-                                </button>
-                          `;
+                const button = new PrimaryButtonComponent(
+                  this._css.id.report.download,
+                  "CSVダウンロード"
+                );
+
+                return button.render();
               };
 
               return `
@@ -1871,39 +1875,27 @@ ExChangeRateView --> InputComponent
                 const body = () => {
                   const line = (item, key) => {
                     const edit = () => {
-                      return `
-                                        <button
-                                          id="${this._css.id.exchange_rate.button.edit}-${key}"
-                                          type="button"
-                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                        >
-                                          編集
-                                        </button>
-                              `;
+                      const button = new PrimaryMiniButtonComponent(
+                        `${this._css.id.exchange_rate.button.edit}-${key}`,
+                        "編集"
+                      );
+                      return button.render();
                     };
 
                     const save = () => {
-                      return `
-                                        <button
-                                          id="${this._css.id.exchange_rate.button.save}-${key}"
-                                          type="button"
-                                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                                        >
-                                          保存
-                                        </button>
-                              `;
+                      const button = new PrimaryMiniButtonComponent(
+                        `${this._css.id.exchange_rate.button.save}-${key}`,
+                        "保存"
+                      );
+                      return button.render();
                     };
 
                     const delet = () => {
-                      return `
-                                        <button
-                                          id="${this._css.id.exchange_rate.button.delete}-${key}"
-                                          type="button"
-                                          class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                                        >
-                                          削除
-                                        </button>
-                              `;
+                      const button = new DangerMiniButtonComponent(
+                        `${this._css.id.exchange_rate.button.delete}-${key}`,
+                        "削除"
+                      );
+                      return button.render();
                     };
 
                     return `
@@ -1944,27 +1936,19 @@ ExChangeRateView --> InputComponent
 
               const button = () => {
                 const add = () => {
-                  return `
-                                <button
-                                  id=${this._css.id.exchange_rate.button.add}
-                                  type="button"
-                                  class="btn btn-primary btn-rounded btn-sm my-0"
-                                >
-                                  追加
-                                </button>
-                            `;
+                  const button = new PrimaryMiniButtonComponent(
+                    this._css.id.exchange_rate.button.add,
+                    "追加"
+                  );
+                  return button.render();
                 };
 
                 const deletAll = () => {
-                  return `
-                                <button
-                                  id=${this._css.id.exchange_rate.button.destroy}
-                                  type="button"
-                                  class="btn btn-danger btn-rounded btn-sm my-0"
-                                >
-                                  全削除
-                                </button>
-                            `;
+                  const button = new DangerMiniButtonComponent(
+                    this._css.id.exchange_rate.button.destroy,
+                    "全削除"
+                  );
+                  return button.render();
                 };
                 return `
                               <div id="button">
@@ -2057,18 +2041,58 @@ ExChangeRateView --> InputComponent
 
           render() {
             return `
-                        <table id=${this._id} class="table table-striped">
-                            ${this._header()}
-                            ${this._body()}
-                        </table>
+                    <table id=${this._id} class="table table-striped">
+                        ${this._header()}
+                        ${this._body()}
+                    </table>
                   `;
           }
         }
 
         class ButtonComponent {
-          constructor() {}
+          constructor(id, label, style = "btn") {
+            this._id = id;
+            this._label = label;
+            this._style = style;
+          }
 
-          render() {}
+          render() {
+            return `
+                        <button
+                          type="button"
+                          class="${this._style}"
+                          id="${this._id}"
+                        >
+                        ${this._label}
+                        </button>
+                  `;
+          }
+        }
+
+        class PrimaryButtonComponent extends ButtonComponent {
+          constructor(id, label) {
+            super(id, label, "btn btn-primary");
+          }
+        }
+
+        class PrimaryMiniButtonComponent extends ButtonComponent {
+          constructor(id, label) {
+            super(
+              id,
+              label,
+              "btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+            );
+          }
+        }
+
+        class DangerMiniButtonComponent extends ButtonComponent {
+          constructor(id, label) {
+            super(
+              id,
+              label,
+              "btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+            );
+          }
         }
 
         const view = new MoneyView();
