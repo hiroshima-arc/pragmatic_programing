@@ -121,7 +121,8 @@
 
 ## ToDoリスト
 - [ ] 表示部品のコンポーネント化
-- [ ] CSSセレクターのパラメータ化
+- [x] CSSセレクターのパラメータ化
+- [ ] 処理メッセージの表示
 `
         );
       </script>
@@ -259,15 +260,15 @@ class ExChangeRateRepository {
 class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  dispatchEvent(): void
+  dispatchEvent(css): void
   render(): void
 }
 class ReportView {
-  dispatchEvent(): void
+  dispatchEvent(css): void
   render(): void
 }
 class ExChangeRateView {
-  dispatchEvent(): void
+  dispatchEvent(css): void
   render(): void
 }
 Expression <|.. Money
@@ -1450,9 +1451,46 @@ MoneyView o-- ReportView
             this._report = new ReportView();
             this._exChangeRate = new ExChangeRateView();
             this._selectTab = this.REPORT;
+            this._css = {
+              id: {
+                application: "money-app",
+                section: {
+                  menu: "menu"
+                },
+                message: "message",
+                tab_menus: {
+                  name: "tab-menus",
+                  no1: "tab-menu01",
+                  no2: "tab-menu02"
+                },
+                panel_menus: {
+                  name: "panel-menus",
+                  no1: "panel-menu01",
+                  no2: "panel-menu02"
+                },
+                report: {
+                  name: "report",
+                  upload: "app-money-upload",
+                  download: "app-money-download",
+                  table: "report-table"
+                },
+                exchange_rate: {
+                  name: "exchange-rate",
+                  table: "exchange-rate-table",
+                  button: {
+                    name: "exchange-rate-button",
+                    add: "exchange-rate-button-add",
+                    destroy: "exchange-rate-button-destroy",
+                    edit: "exchange-rate-button-edit",
+                    save: "exchange-rate-button-save",
+                    delete: "exchange-rate-button-delete"
+                  }
+                }
+              }
+            };
           }
 
-          dispatchEvent() {
+          dispatchEvent(css) {
             const selectReportTabEvent = e => {
               this._service.getReport().then(result => {
                 this._selectTab = this.REPORT;
@@ -1468,15 +1506,15 @@ MoneyView o-- ReportView
             };
 
             document
-              .querySelector("#tab-menu01")
+              .querySelector(`#${css.id.tab_menus.no1}`)
               .addEventListener("click", selectReportTabEvent);
             document
-              .querySelector("#tab-menu02")
+              .querySelector(`#${css.id.tab_menus.no2}`)
               .addEventListener("click", selectExChangeRateTabEvent);
 
-            this._report.dispatchEvent.bind(this)();
+            this._report.dispatchEvent.bind(this)(css);
 
-            this._exChangeRate.dispatchEvent.bind(this)();
+            this._exChangeRate.dispatchEvent.bind(this)(css);
           }
 
           render() {
@@ -1486,14 +1524,14 @@ MoneyView o-- ReportView
               this._selectTab === this.EXCHANGE ? "active" : "";
 
             const tabNav = `
-                      <div class="nav nav-tabs" id="tab-menus" role="tablist">
+                      <div class="nav nav-tabs" id=${this._css.id.tab_menus.name} role="tablist">
                         <a
                           aria-controls="panel-menu01"
                           aria-selected="true"
                           class="nav-item nav-link ${reportSelect}"
                           data-toggle="tab"
                           href="#panel-menu01"
-                          id="tab-menu01"
+                          id=${this._css.id.tab_menus.no1}
                           role="tab"
                           >レポート</a
                         >
@@ -1503,7 +1541,7 @@ MoneyView o-- ReportView
                           class="nav-item nav-link ${exChangeSelect}"
                           data-toggle="tab"
                           href="#panel-menu02"
-                          id="tab-menu02"
+                          id=${this._css.id.tab_menus.no2}
                           role="tab"
                           >為替レート</a
                         >
@@ -1512,7 +1550,7 @@ MoneyView o-- ReportView
 
             const tabContent = (report, exChangeRate) => {
               return `
-              <div class="tab-content" id="panel-menus">
+              <div class="tab-content" id=${this._css.id.panel_menus.name}>
                 ${report(reportSelect)}
                 ${exChangeRate(exChangeSelect)}
               </div>
@@ -1521,23 +1559,26 @@ MoneyView o-- ReportView
 
             this._service.setUpDb().then(() => {
               this._service.getReport().then(data => {
-                this._report = new ReportView(data);
+                this._report = new ReportView(data, this._css);
+                const report = this._report.render();
                 this._service.selectAllExChangeRate().then(data => {
-                  const report = this._report.render();
-                  this._exChangeRate = new ExChangeRateView(data);
+                  this._exChangeRate = new ExChangeRateView(data, this._css);
                   const exChangeRate = this._exChangeRate.render();
+
                   const result = `
-                      <section id="menu">
+                      <section id=${this._css.id.section.menu}>
                         <div class="container">
-                          <div id="message"></div>
+                          <div id=${this._css.id.message}></div>
                           ${tabNav}
                           ${tabContent(report, exChangeRate)}
                         </div>
                       </section>
                     `;
 
-                  document.querySelector("#money-app").innerHTML = result;
-                  this.dispatchEvent();
+                  document.querySelector(
+                    `#${this._css.id.application}`
+                  ).innerHTML = result;
+                  this.dispatchEvent(this._css);
                 });
               });
             });
@@ -1545,11 +1586,12 @@ MoneyView o-- ReportView
         }
 
         class ReportView {
-          constructor(data) {
+          constructor(data, css) {
             this._report = data;
+            this._css = css;
           }
 
-          dispatchEvent() {
+          dispatchEvent(css) {
             const uploadEvent = e => {
               if (
                 window.File &&
@@ -1604,10 +1646,10 @@ MoneyView o-- ReportView
             };
 
             document
-              .querySelector("#app-money-upload")
+              .querySelector(`#${css.id.report.upload}`)
               .addEventListener("change", uploadEvent);
             document
-              .querySelector("#app-money-download")
+              .querySelector(`#${css.id.report.download}`)
               .addEventListener("click", downloadEvent);
           }
 
@@ -1665,7 +1707,9 @@ MoneyView o-- ReportView
                 };
 
                 return `
-                                <table id="report-table" class="table table-striped">
+                                <table id=${
+                                  this._css.id.report.table
+                                } class="table table-striped">
                                     ${header()}
                                     ${body()}
                                 </table>
@@ -1683,7 +1727,7 @@ MoneyView o-- ReportView
                                       <input
                                         type="file"
                                         class="form-control-file"
-                                        id="app-money-upload"
+                                        id=${this._css.id.report.upload}
                                       />
                                     </div>
                                   </form>
@@ -1696,7 +1740,7 @@ MoneyView o-- ReportView
                                 <button
                                   type="button"
                                   class="btn btn-primary btn"
-                                  id="app-money-download"
+                                  id=${this._css.id.report.download}
                                 >
                                   CSVダウンロード
                                 </button>
@@ -1707,11 +1751,13 @@ MoneyView o-- ReportView
                         <div
                           aria-labelledby="tab-menu01"
                           class="tab-pane fade border border-top-0 ${activeShow}"
-                          id="panel-menu01"
+                          id=${this._css.id.panel_menus.no1}
                           role="tabpanel"
                         >
                           <dvi class="row p-3">
-                            <div id="report" class="col-md-12 order-md-2">
+                            <div id=${
+                              this._css.id.report.name
+                            } class="col-md-12 order-md-2">
                               <div class="row">
                                 ${upload()}
                               </div>
@@ -1730,10 +1776,12 @@ MoneyView o-- ReportView
         }
 
         class ExChangeRateView {
-          constructor(data) {
+          constructor(data, css) {
             this._record = data;
+            this._css = css;
           }
-          dispatchEvent() {
+
+          dispatchEvent(css) {
             const addExChangeRateEvent = e => {
               this._service.addExChangeRate().then(data => {
                 this._selectTab = this.EXCHANGE;
@@ -1803,21 +1851,23 @@ MoneyView o-- ReportView
             };
 
             document
-              .querySelector("#button-add")
+              .querySelector(`#${css.id.exchange_rate.button.add}`)
               .addEventListener("click", addExChangeRateEvent);
             document
-              .querySelector("#button-delete")
+              .querySelector(`#${css.id.exchange_rate.button.destroy}`)
               .addEventListener("click", deleteAllExChangeRateEvent);
             this._exChangeRate._record._record.forEach((v, k) => {
               document
-                .querySelector(`#button-edit-${k}`)
+                .querySelector(`#${css.id.exchange_rate.button.edit}-${k}`)
                 .addEventListener("click", editExChangeRateEvent);
               document
-                .querySelector(`#button-save-${k}`)
+                .querySelector(`#${css.id.exchange_rate.button.save}-${k}`)
                 .addEventListener("click", saveExChangeRateEvent);
-              document.querySelector(`#button-save-${k}`).disabled = true;
+              document.querySelector(
+                `#${css.id.exchange_rate.button.save}-${k}`
+              ).disabled = true;
               document
-                .querySelector(`#button-delete-${k}`)
+                .querySelector(`#${css.id.exchange_rate.button.delete}-${k}`)
                 .addEventListener("click", delteExhangeRateEvent);
             });
           }
@@ -1846,7 +1896,7 @@ MoneyView o-- ReportView
                     const edit = () => {
                       return `
                                         <button
-                                          id="button-edit-${key}"
+                                          id="${this._css.id.exchange_rate.button.edit}-${key}"
                                           type="button"
                                           class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1858,7 +1908,7 @@ MoneyView o-- ReportView
                     const save = () => {
                       return `
                                         <button
-                                          id="button-save-${key}"
+                                          id="${this._css.id.exchange_rate.button.save}-${key}"
                                           type="button"
                                           class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1870,7 +1920,7 @@ MoneyView o-- ReportView
                     const delet = () => {
                       return `
                                         <button
-                                          id="button-delete-${key}"
+                                          id="${this._css.id.exchange_rate.button.delete}-${key}"
                                           type="button"
                                           class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
                                         >
@@ -1908,7 +1958,7 @@ MoneyView o-- ReportView
 
                 return `
                               <table
-                                id="exchange-rate-table"
+                                id=${this._css.id.exchange_rate.table}
                                 class="table table-striped"
                               >
                                 ${header()}
@@ -1921,7 +1971,7 @@ MoneyView o-- ReportView
                 const add = () => {
                   return `
                                 <button
-                                  id="button-add"
+                                  id=${this._css.id.exchange_rate.button.add}
                                   type="button"
                                   class="btn btn-primary btn-rounded btn-sm my-0"
                                 >
@@ -1933,7 +1983,7 @@ MoneyView o-- ReportView
                 const deletAll = () => {
                   return `
                                 <button
-                                  id="button-delete"
+                                  id=${this._css.id.exchange_rate.button.destroy}
                                   type="button"
                                   class="btn btn-danger btn-rounded btn-sm my-0"
                                 >
@@ -1953,7 +2003,7 @@ MoneyView o-- ReportView
                         <div
                           aria-labelledby="tab-menu02"
                           class="tab-pane fade border border-top-0 ${activeShow}"
-                          id="panel-menu02"
+                          id=${this._css.id.panel_menus.no2}
                           role="tabpanel"
                         >
                           <dvi class="row p-3">
