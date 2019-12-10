@@ -921,6 +921,13 @@ MoneyView o-- ReportView
                 });
             });
           }
+
+          connect() {
+            return new Promise((resolve, reject) => {
+              nSQL().useDatabase(this._db);
+              resolve();
+            });
+          }
         }
 
         class ReportRepository {
@@ -941,8 +948,7 @@ MoneyView o-- ReportView
 
           connect() {
             return new Promise((resolve, reject) => {
-              nSQL().useDatabase(this._db.db);
-              resolve();
+              resolve(this._db.connect());
             });
           }
 
@@ -1027,8 +1033,7 @@ MoneyView o-- ReportView
 
           connect() {
             return new Promise((resolve, reject) => {
-              nSQL().useDatabase(this._db.db);
-              resolve();
+              resolve(this._db.connect());
             });
           }
 
