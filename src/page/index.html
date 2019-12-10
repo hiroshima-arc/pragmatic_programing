@@ -1520,6 +1520,10 @@ InputComponent <|--- TextInputComponent
               }
             };
             this._message = new MessageComponent();
+            this._state = {
+              reportSelect: "",
+              exChangeSelect: ""
+            };
             this._results = null;
           }
 
@@ -1552,33 +1556,37 @@ InputComponent <|--- TextInputComponent
             this._exChangeRate.dispatchEvent.bind(this)(css);
           }
 
+          create(report, exChangeRate) {
+            return new TabCompnent({
+              report: report,
+              exChangeRate: exChangeRate,
+              css: this._css,
+              state: {
+                reportSelect: this._state.reportSelect,
+                exChangeSelect: this._state.exChangeSelect
+              }
+            });
+          }
+
           render() {
-            const reportSelect =
+            this._state.reportSelect =
               this._selectTab === this.REPORT ? "active" : "";
-            const exChangeSelect =
+            this._state.exChangeSelect =
               this._selectTab === this.EXCHANGE ? "active" : "";
 
             this._service.setUpDb().then(() => {
               this._service.getReport().then(data => {
                 this._report = new ReportView(data, this._css);
                 const report = this._report.render();
+
                 this._service.selectAllExChangeRate().then(data => {
                   this._exChangeRate = new ExChangeRateView(data, this._css);
                   const exChangeRate = this._exChangeRate.render();
 
-                  const tab = new TabCompnent({
-                    report: report,
-                    exChangeRate: exChangeRate,
-                    css: this._css,
-                    state: {
-                      reportSelect: reportSelect,
-                      exChangeSelect: exChangeSelect
-                    }
-                  });
-
                   document.querySelector(
                     `#${this._css.id.application}`
-                  ).innerHTML = tab.render();
+                  ).innerHTML = this.create(report, exChangeRate).render();
+
                   this.dispatchEvent(this._css);
 
                   if (this._results !== null)
@@ -1686,7 +1694,7 @@ InputComponent <|--- TextInputComponent
               .addEventListener("click", downloadEvent);
           }
 
-          render() {
+          create() {
             return reportSelect => {
               const activeShow = reportSelect ? "active show" : "";
 
@@ -1800,6 +1808,10 @@ InputComponent <|--- TextInputComponent
                         </div>
                     `;
             };
+          }
+
+          render() {
+            return this.create();
           }
         }
 
@@ -1919,7 +1931,7 @@ InputComponent <|--- TextInputComponent
             });
           }
 
-          render() {
+          create() {
             return exChangeSelect => {
               const activeShow = exChangeSelect ? "active show" : "";
 
@@ -2040,6 +2052,10 @@ InputComponent <|--- TextInputComponent
                         </div>
                     `;
             };
+          }
+
+          render() {
+            return this.create();
           }
         }
 
