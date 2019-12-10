@@ -235,11 +235,15 @@ class ExChangeRateService {
   deleteAllExChangeRate(): ExChangeRates
 }
 class MoneyDB {
-  db: String
-  setup()
+  name: String
+  {static}REPORT
+  {static}EXCHANGE_RATS
+  setup(): void
+  connect(): void
 }
 class ReportRepository {
   table: String
+  setup(): void
   connect(): void
   get(): ReporViewModel
   save(): void
@@ -247,6 +251,7 @@ class ReportRepository {
 }
 class ExChangeRateRepository {
   table: String
+  setup(): void
   connect(): void
   create(): ExChangeRate
   createBatch(): List<ExChangeRate>
@@ -479,7 +484,7 @@ MoneyView o-- ReportView
           let repository;
           setup(() => {
             const db = new MoneyDB("money_test", "TEMP");
-            repository = new ExChangeRateRepository(db, "exchange_rates");
+            repository = new ExChangeRateRepository(db, MoneyDB.EXCHANGE_RATES);
           });
 
           test("Setup", () => {
@@ -560,7 +565,7 @@ MoneyView o-- ReportView
           let repository;
           setup(() => {
             const db = new MoneyDB("money_test", "TEMP");
-            repository = new ReportRepository(db, "report");
+            repository = new ReportRepository(db, MoneyDB.REPORT);
           });
 
           test("Setup", () => {
@@ -873,8 +878,8 @@ MoneyView o-- ReportView
         }
 
         class MoneyDB {
-          constructor(db, mode = "PERM") {
-            this._db = db;
+          constructor(name, mode = "PERM") {
+            this._name = name;
             this._mode = mode;
           }
 
@@ -889,11 +894,11 @@ MoneyView o-- ReportView
           setup() {
             return new Promise((resolve, reject) => {
               const dbList = nSQL().listDatabases();
-              if (dbList.includes(this._db)) return resolve();
+              if (dbList.includes(this._name)) return resolve();
 
               nSQL()
                 .createDatabase({
-                  id: this._db,
+                  id: this._name,
                   mode: this._mode,
                   tables: [
                     {
@@ -928,7 +933,7 @@ MoneyView o-- ReportView
 
           connect() {
             return new Promise((resolve, reject) => {
-              nSQL().useDatabase(this._db);
+              nSQL().useDatabase(this._name);
               resolve();
             });
           }
@@ -1427,14 +1432,17 @@ MoneyView o-- ReportView
         class ReportServiceMock extends ReportService {
           constructor(db) {
             super();
-            this._repository = new ReportRepository(db, "report");
+            this._repository = new ReportRepository(db, MoneyDB.REPORT);
           }
         }
 
         class ExChangeRateServiceMock extends ExChangeRateService {
           constructor(db) {
             super();
-            this._repository = new ExChangeRateRepository(db, "exchange_rates");
+            this._repository = new ExChangeRateRepository(
+              db,
+              MoneyDB.EXCHANGE_RATES
+            );
           }
         }
 
