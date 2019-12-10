@@ -122,7 +122,7 @@
 ## ToDoリスト
 - [x] 表示部品のコンポーネント化
 - [x] CSSセレクターのパラメータ化
-- [ ] 処理メッセージの表示
+- [x] 処理メッセージの表示
 `
         );
       </script>
@@ -283,6 +283,12 @@ class ButtonComponent {
 class InputComponent {
   render(): String
 }
+class MessageComponent {
+  WARNING: 1
+  SUCCESS: 2
+  DANGER: 3
+  render() : String
+}
 Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
@@ -308,6 +314,7 @@ MoneyService ---o MoneyView
 MoneyView o-- ExChangeRateView
 MoneyView o-- ReportView
 MoneyView -> TabComponent
+MessageComponent -o MoneyView
 ReportView --> TableComponent
 ReportView --> ButtonComponent 
 ReportView --> InputComponent
@@ -1481,7 +1488,7 @@ InputComponent <|--- TextInputComponent
                 section: {
                   menu: "menu"
                 },
-                message: "message",
+                message: MessageComponent.selectorId,
                 tab_menus: {
                   name: "tab-menus",
                   no1: "tab-menu01",
@@ -1512,11 +1519,14 @@ InputComponent <|--- TextInputComponent
                 }
               }
             };
+            this._message = new MessageComponent();
+            this._results = null;
           }
 
           dispatchEvent(css) {
             const selectReportTabEvent = e => {
               this._service.getReport().then(result => {
+                this._results = null;
                 this._selectTab = this.REPORT;
                 this.render();
               });
@@ -1524,6 +1534,7 @@ InputComponent <|--- TextInputComponent
 
             const selectExChangeRateTabEvent = e => {
               this._service.selectAllExChangeRate().then(result => {
+                this._results = null;
                 this._selectTab = this.EXCHANGE;
                 this.render();
               });
@@ -1569,6 +1580,12 @@ InputComponent <|--- TextInputComponent
                     `#${this._css.id.application}`
                   ).innerHTML = tab.render();
                   this.dispatchEvent(this._css);
+
+                  if (this._results !== null)
+                    this._message.render(
+                      this._results.message,
+                      this._results.type
+                    );
                 });
               });
             });
@@ -1583,6 +1600,11 @@ InputComponent <|--- TextInputComponent
 
           dispatchEvent(css) {
             const uploadEvent = e => {
+              this._message.render(
+                "レポートを生成しています...",
+                MessageComponent.WARNING
+              );
+
               if (
                 window.File &&
                 window.FileReader &&
@@ -1608,10 +1630,26 @@ InputComponent <|--- TextInputComponent
                   this._service
                     .createReportViewModel(parseData.data)
                     .then(report => {
-                      this._service.saveReport(report).then(() => {
-                        this._selectTab = this.REPORT;
-                        this.render();
-                      });
+                      this._service
+                        .saveReport(report)
+                        .then(() => {
+                          this._results = {
+                            message: "レポートを読み込みました",
+                            type: MessageComponent.SUCCESS
+                          };
+
+                          this._selectTab = this.REPORT;
+                          this.render();
+                        })
+                        .catch(err => {
+                          this._results = {
+                            message: `レポートを読み込めませんでした:${err}`,
+                            type: MessageComponent.DANGER
+                          };
+
+                          this._selectTab = this.REPORT;
+                          this.render();
+                        });
                     });
                 };
 
@@ -1633,6 +1671,11 @@ InputComponent <|--- TextInputComponent
               a.download = "data.csv";
 
               a.click();
+
+              this._message.render(
+                "CSVファイルダウンロード完了しました",
+                MessageComponent.SUCCESS
+              );
             };
 
             document
@@ -1769,6 +1812,10 @@ InputComponent <|--- TextInputComponent
           dispatchEvent(css) {
             const addExChangeRateEvent = e => {
               this._service.addExChangeRate().then(data => {
+                this._results = {
+                  message: "為替レートを追加しました",
+                  type: MessageComponent.SUCCESS
+                };
                 this._selectTab = this.EXCHANGE;
                 this.render();
               });
@@ -1815,6 +1862,10 @@ InputComponent <|--- TextInputComponent
               this._service
                 .updateExChangeRate(from.value, to.value, rate.value, id)
                 .then(result => {
+                  this._results = {
+                    message: "為替レートを保存しました",
+                    type: MessageComponent.SUCCESS
+                  };
                   this._selectTab = this.EXCHANGE;
                   this.render();
                 });
@@ -1822,6 +1873,10 @@ InputComponent <|--- TextInputComponent
 
             const deleteAllExChangeRateEvent = e => {
               this._service.deleteAllExChangeRate().then(() => {
+                this._results = {
+                  message: "為替レートを全て削除しました",
+                  type: MessageComponent.WARNING
+                };
                 this._selectTab = this.EXCHANGE;
                 this.render();
               });
@@ -1833,6 +1888,10 @@ InputComponent <|--- TextInputComponent
               )[0].value;
 
               this._service.deleteExChangeRate(id).then(() => {
+                this._results = {
+                  message: "為替レートを削除しました",
+                  type: MessageComponent.WARNING
+                };
                 this._selectTab = this.EXCHANGE;
                 this.render();
               });
@@ -2133,6 +2192,79 @@ InputComponent <|--- TextInputComponent
         class TextInputComponent extends InputComponent {
           constructor(id, size, value) {
             super(id, "text", "", size, value);
+          }
+        }
+
+        class MessageComponent {
+          constructor() {}
+
+          static get WARNING() {
+            return 1;
+          }
+
+          static get SUCCESS() {
+            return 2;
+          }
+
+          static get DANGER() {
+            return 3;
+          }
+
+          static get selectorId() {
+            return "app__message";
+          }
+
+          static create(message, type) {
+            switch (type) {
+              case 1:
+                return `
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+              case 2:
+                return `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+              case 3:
+                return `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+              default:
+                return `
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              `;
+            }
+          }
+
+          clear() {
+            document.querySelector(
+              `#${MessageComponent.selectorId}`
+            ).innerHTML = "";
+          }
+
+          render(message, type) {
+            document.querySelector(
+              `#${MessageComponent.selectorId}`
+            ).innerHTML = MessageComponent.create(message, type);
           }
         }
 
