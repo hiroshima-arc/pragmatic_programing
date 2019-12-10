@@ -274,6 +274,9 @@ class ExChangeRateView {
 class TabComponent {
   render(): String
 }
+class TableComponent {
+  render(): String
+}
 Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
@@ -1681,14 +1684,13 @@ ExChangeRateView --> InputComponent
                             `;
                 };
 
-                return `
-                                <table id=${
-                                  this._css.id.report.table
-                                } class="table table-striped">
-                                    ${header()}
-                                    ${body()}
-                                </table>
-                          `;
+                const component = new TableComponent(
+                  this._css.id.report.table,
+                  header,
+                  body
+                );
+
+                return component.render();
               };
 
               const upload = () => {
@@ -1931,15 +1933,13 @@ ExChangeRateView --> InputComponent
                             `;
                 };
 
-                return `
-                              <table
-                                id=${this._css.id.exchange_rate.table}
-                                class="table table-striped"
-                              >
-                                ${header()}
-                                ${body()}
-                              </table>
-                          `;
+                const component = new TableComponent(
+                  this._css.id.exchange_rate.table,
+                  header,
+                  body
+                );
+
+                return component.render();
               };
 
               const button = () => {
@@ -2048,13 +2048,24 @@ ExChangeRateView --> InputComponent
           }
         }
 
-        class ButtonComponent {
-          constructor() {}
+        class TableComponent {
+          constructor(id, header, body) {
+            this._id = id;
+            this._header = header;
+            this._body = body;
+          }
 
-          render() {}
+          render() {
+            return `
+                        <table id=${this._id} class="table table-striped">
+                            ${this._header()}
+                            ${this._body()}
+                        </table>
+                  `;
+          }
         }
 
-        class TableComponent {
+        class ButtonComponent {
           constructor() {}
 
           render() {}
