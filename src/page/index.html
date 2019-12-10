@@ -260,28 +260,25 @@ class ExChangeRateRepository {
 class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  dispatchEvent(css): void
   render(): String
 }
 class ReportView {
-  dispatchEvent(css): void
   render(): String
 }
 class ExChangeRateView {
-  dispatchEvent(css): String
   render(): String
 }
 class TabComponent {
-  render(): String
+  create(): String
 }
 class TableComponent {
-  render(): String
+  create(): String
 }
 class ButtonComponent {
-  render(): String
+  create(): String
 }
 class InputComponent {
-  render(): String
+  create(): String
 }
 class MessageComponent {
   WARNING: 1
@@ -1585,7 +1582,7 @@ InputComponent <|--- TextInputComponent
 
                   document.querySelector(
                     `#${this._css.id.application}`
-                  ).innerHTML = this.create(report, exChangeRate).render();
+                  ).innerHTML = this.create(report, exChangeRate).create();
 
                   this.dispatchEvent(this._css);
 
@@ -1753,7 +1750,7 @@ InputComponent <|--- TextInputComponent
                   body
                 );
 
-                return component.render();
+                return component.create();
               };
 
               const upload = () => {
@@ -1767,7 +1764,7 @@ InputComponent <|--- TextInputComponent
                                       <p>
                                         CSVファイルを選択して下さい。<br />
                                       </p>
-                                      ${button.render()}
+                                      ${button.create()}
                                     </div>
                                   </form>
                                 </div>
@@ -1780,7 +1777,7 @@ InputComponent <|--- TextInputComponent
                   "CSVダウンロード"
                 );
 
-                return button.render();
+                return button.create();
               };
 
               return `
@@ -1852,9 +1849,9 @@ InputComponent <|--- TextInputComponent
               const fromInput = new TextInputComponent("", 10, from.innerText);
               const toInput = new TextInputComponent("", 10, to.innerText);
               const rateInput = new TextInputComponent("", 10, rate.innerText);
-              from.innerHTML = fromInput.render();
-              to.innerHTML = toInput.render();
-              rate.innerHTML = rateInput.render();
+              from.innerHTML = fromInput.create();
+              to.innerHTML = toInput.create();
+              rate.innerHTML = rateInput.create();
             };
 
             const saveExChangeRateEvent = e => {
@@ -1957,7 +1954,7 @@ InputComponent <|--- TextInputComponent
                         `${this._css.id.exchange_rate.button.edit}-${key}`,
                         "編集"
                       );
-                      return button.render();
+                      return button.create();
                     };
 
                     const save = () => {
@@ -1965,7 +1962,7 @@ InputComponent <|--- TextInputComponent
                         `${this._css.id.exchange_rate.button.save}-${key}`,
                         "保存"
                       );
-                      return button.render();
+                      return button.create();
                     };
 
                     const delet = () => {
@@ -1973,7 +1970,7 @@ InputComponent <|--- TextInputComponent
                         `${this._css.id.exchange_rate.button.delete}-${key}`,
                         "削除"
                       );
-                      return button.render();
+                      return button.create();
                     };
 
                     return `
@@ -2009,7 +2006,7 @@ InputComponent <|--- TextInputComponent
                   body
                 );
 
-                return component.render();
+                return component.create();
               };
 
               const button = () => {
@@ -2018,7 +2015,7 @@ InputComponent <|--- TextInputComponent
                     this._css.id.exchange_rate.button.add,
                     "追加"
                   );
-                  return button.render();
+                  return button.create();
                 };
 
                 const deletAll = () => {
@@ -2026,7 +2023,7 @@ InputComponent <|--- TextInputComponent
                     this._css.id.exchange_rate.button.destroy,
                     "全削除"
                   );
-                  return button.render();
+                  return button.create();
                 };
                 return `
                               <div id="button">
@@ -2067,7 +2064,7 @@ InputComponent <|--- TextInputComponent
             this._state = params.state;
           }
 
-          render() {
+          create() {
             const tabNav = `
                       <div class="nav nav-tabs" id=${this._css.id.tab_menus.name} role="tablist">
                         <a
@@ -2121,7 +2118,7 @@ InputComponent <|--- TextInputComponent
             this._body = body;
           }
 
-          render() {
+          create() {
             return `
                     <table id=${this._id} class="table table-striped">
                         ${this._header()}
@@ -2138,7 +2135,7 @@ InputComponent <|--- TextInputComponent
             this._style = style;
           }
 
-          render() {
+          create() {
             return `
                         <button
                           type="button"
@@ -2186,7 +2183,7 @@ InputComponent <|--- TextInputComponent
             this._value = value;
           }
 
-          render() {
+          create() {
             return `
               <input
                 value="${this._value}"
