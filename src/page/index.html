@@ -234,7 +234,7 @@ class ExChangeRateService {
   deleteExChangeRate(id): ExChangeRates
   deleteAllExChangeRate(): ExChangeRates
 }
-class MoneyRepository {
+class MoneyDB {
   db: String
   setup()
 }
@@ -286,8 +286,8 @@ ExChangeRate <-- ExChangeRateRepository
 ReportRepository -o ReportService
 Report <- ReportRepository
 ExChangeRateService o- ExChangeRateRepository
-ReportRepository *-- MoneyRepository 
-ExChangeRateRepository *-- MoneyRepository 
+ReportRepository *-- MoneyDB 
+ExChangeRateRepository *-- MoneyDB 
 ReportLineItem -o Report
 Report <-- ReportService
 Bank <-- ReportService
@@ -478,7 +478,7 @@ MoneyView o-- ReportView
         suite("ExChangeRepositoryTest", () => {
           let repository;
           setup(() => {
-            const db = new MoneyRepository("money_test", "TEMP");
+            const db = new MoneyDB("money_test", "TEMP");
             repository = new ExChangeRateRepository(db, "exchange_rates");
           });
 
@@ -559,7 +559,7 @@ MoneyView o-- ReportView
         suite("ReportRepositoryTest", () => {
           let repository;
           setup(() => {
-            const db = new MoneyRepository("money_test", "TEMP");
+            const db = new MoneyDB("money_test", "TEMP");
             repository = new ReportRepository(db, "report");
           });
 
@@ -872,28 +872,32 @@ MoneyView o-- ReportView
           }
         }
 
-        class MoneyRepository {
+        class MoneyDB {
           constructor(db, mode = "PERM") {
             this._db = db;
             this._mode = mode;
           }
 
-          get db() {
-            return this._db;
+          static get REPORT() {
+            return "report";
+          }
+
+          static get EXCHANGE_RATES() {
+            return "exchange_rates";
           }
 
           setup() {
             return new Promise((resolve, reject) => {
               const dbList = nSQL().listDatabases();
-              if (dbList.includes(this.db)) return resolve();
+              if (dbList.includes(this._db)) return resolve();
 
               nSQL()
                 .createDatabase({
-                  id: this.db,
+                  id: this._db,
                   mode: this._mode,
                   tables: [
                     {
-                      name: "report",
+                      name: MoneyDB.REPORT,
                       model: {
                         "title:string": {},
                         "total:obj": {},
@@ -902,7 +906,7 @@ MoneyView o-- ReportView
                       indexes: {}
                     },
                     {
-                      name: "exchange_rates",
+                      name: MoneyDB.EXCHANGE_RATES,
                       model: {
                         "id:uuid": { pk: true },
                         "from:string": {},
@@ -1185,7 +1189,7 @@ MoneyView o-- ReportView
 
         class MoneyService {
           constructor() {
-            const db = new MoneyRepository("money");
+            const db = new MoneyDB("money");
             this._reportService = new ReportService(db);
             this._exChangeRateService = new ExChangeRateService(db);
           }
@@ -1414,7 +1418,7 @@ MoneyView o-- ReportView
         class MoneyServiceMock extends MoneyService {
           constructor() {
             super();
-            const db = new MoneyRepository("money_test", "TEMP");
+            const db = new MoneyDB("money_test", "TEMP");
             this._reportService = new ReportServiceMock(db);
             this._exChangeRateService = new ExChangeRateServiceMock(db);
           }
