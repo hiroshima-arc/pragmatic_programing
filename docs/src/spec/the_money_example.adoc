@@ -76,6 +76,9 @@
 * [x] 大きなビュークラス
 * [x] レポート画面を分割する
 * [x] 為替レート画面を分割する
+* [x] 表示部品のコンポーネント化
+* [x] CSSセレクターのパラメータ化
+* [x] 処理メッセージの表示
 
 === ユースケース図
 
@@ -166,12 +169,16 @@ class ExChangeRateService {
   deleteExChangeRate(id): ExChangeRates
   deleteAllExChangeRate(): ExChangeRates
 }
-class MoneyRepository {
-  db: String
-  setup()
+class MoneyDB {
+  name: String
+  {static}REPORT
+  {static}EXCHANGE_RATS
+  setup(): void
+  connect(): void
 }
 class ReportRepository {
   table: String
+  setup(): void
   connect(): void
   get(): ReporViewModel
   save(): void
@@ -179,6 +186,7 @@ class ReportRepository {
 }
 class ExChangeRateRepository {
   table: String
+  setup(): void
   connect(): void
   create(): ExChangeRate
   createBatch(): List<ExChangeRate>
@@ -191,16 +199,31 @@ class ExChangeRateRepository {
 class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  dispatchEvent(): void
-  render(): void
+  render(): String
 }
 class ReportView {
-  dispatchEvent(): void
-  render(): void
+  render(): String
 }
 class ExChangeRateView {
-  dispatchEvent(): void
-  render(): void
+  render(): String
+}
+class TabComponent {
+  create(): String
+}
+class TableComponent {
+  create(): String
+}
+class ButtonComponent {
+  create(): String
+}
+class InputComponent {
+  create(): String
+}
+class MessageView {
+  WARNING: 1
+  SUCCESS: 2
+  DANGER: 3
+  render() : String
 }
 Expression <|.. Money
 Expression <|.. Sum
@@ -218,14 +241,27 @@ ExChangeRate <-- ExChangeRateRepository
 ReportRepository -o ReportService
 Report <- ReportRepository
 ExChangeRateService o- ExChangeRateRepository
-ReportRepository --|> MoneyRepository 
-ExChangeRateRepository --|> MoneyRepository 
+ReportRepository *-- MoneyDB 
+ExChangeRateRepository *-- MoneyDB 
 ReportLineItem -o Report
 Report <-- ReportService
 Bank <-- ReportService
 MoneyService ---o MoneyView
 MoneyView o-- ExChangeRateView
 MoneyView o-- ReportView
+MoneyView -> TabComponent
+MessageView -o MoneyView
+ReportView --> TableComponent
+ReportView --> ButtonComponent 
+ReportView --> InputComponent
+ExChangeRateView --> TableComponent
+ExChangeRateView --> ButtonComponent
+ExChangeRateView --> InputComponent
+ButtonComponent <|-- DefaultButtonComponent
+ButtonComponent <|-- DefaultMiniButtonComponent
+ButtonComponent <|-- DangerMiniButtonComponent
+InputComponent <|--- FileInputComponent
+InputComponent <|--- TextInputComponent
 ----
 
 

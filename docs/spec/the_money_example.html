@@ -696,6 +696,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>&#10003; 為替レート画面を分割する</p>
 </li>
+<li>
+<p>&#10003; 表示部品のコンポーネント化</p>
+</li>
+<li>
+<p>&#10003; CSSセレクターのパラメータ化</p>
+</li>
+<li>
+<p>&#10003; 処理メッセージの表示</p>
+</li>
 </ul>
 </div>
 </div>
@@ -707,7 +716,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_クラス図">2.5. クラス図</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-b9ba5f7da1671c7f0f4fc2c1fc864fe5.png" alt="diag b9ba5f7da1671c7f0f4fc2c1fc864fe5" width="1457" height="1155">
+<img src="diag-05667d8de86b05f18b4b68f25b300e29.png" alt="diag 05667d8de86b05f18b4b68f25b300e29" width="1457" height="1519">
 </div>
 </div>
 </div>
@@ -872,28 +881,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_todoリスト_2">6. ToDoリスト</h2>
 <div class="sectionbody">
-<div class="ulist checklist">
-<ul class="checklist">
-<li>
-<p>&#10003; ファーストクラスコレクション</p>
-</li>
-<li>
-<p>&#10003; DB生成メソッドの重複</p>
-</li>
-<li>
-<p>&#10003; 大きなサービスクラス</p>
-</li>
-<li>
-<p>&#10003; 大きなビュークラス</p>
-</li>
-<li>
-<p>&#10003; レポート画面を分割する</p>
-</li>
-<li>
-<p>&#10003; 為替レート画面を分割する
-`
+<div class="paragraph">
+<p>`
         );
       &lt;/script&gt;</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>&lt;!-- mermaid --&gt;
@@ -1002,12 +994,16 @@ class ExChangeRateService {
   deleteExChangeRate(id): ExChangeRates
   deleteAllExChangeRate(): ExChangeRates
 }
-class MoneyRepository {
-  db: String
-  setup()
+class MoneyDB {
+  name: String
+  {static}REPORT
+  {static}EXCHANGE_RATS
+  setup(): void
+  connect(): void
 }
 class ReportRepository {
   table: String
+  setup(): void
   connect(): void
   get(): ReporViewModel
   save(): void
@@ -1015,6 +1011,7 @@ class ReportRepository {
 }
 class ExChangeRateRepository {
   table: String
+  setup(): void
   connect(): void
   create(): ExChangeRate
   createBatch(): List&lt;ExChangeRate&gt;
@@ -1027,16 +1024,31 @@ class ExChangeRateRepository {
 class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  dispatchEvent(): void
-  render(): void
+  render(): String
 }
 class ReportView {
-  dispatchEvent(): void
-  render(): void
+  render(): String
 }
 class ExChangeRateView {
-  dispatchEvent(): void
-  render(): void
+  render(): String
+}
+class TabComponent {
+  create(): String
+}
+class TableComponent {
+  create(): String
+}
+class ButtonComponent {
+  create(): String
+}
+class InputComponent {
+  create(): String
+}
+class MessageView {
+  WARNING: 1
+  SUCCESS: 2
+  DANGER: 3
+  render() : String
 }
 Expression &lt;|.. Money
 Expression &lt;|.. Sum
@@ -1054,14 +1066,27 @@ ExChangeRate &lt;-- ExChangeRateRepository
 ReportRepository -o ReportService
 Report &lt;- ReportRepository
 ExChangeRateService o- ExChangeRateRepository
-ReportRepository --|&gt; MoneyRepository
-ExChangeRateRepository --|&gt; MoneyRepository
+ReportRepository *-- MoneyDB
+ExChangeRateRepository *-- MoneyDB
 ReportLineItem -o Report
 Report &lt;-- ReportService
 Bank &lt;-- ReportService
 MoneyService ---o MoneyView
 MoneyView o-- ExChangeRateView
 MoneyView o-- ReportView
+MoneyView -&gt; TabComponent
+MessageView -o MoneyView
+ReportView --&gt; TableComponent
+ReportView --&gt; ButtonComponent
+ReportView --&gt; InputComponent
+ExChangeRateView --&gt; TableComponent
+ExChangeRateView --&gt; ButtonComponent
+ExChangeRateView --&gt; InputComponent
+ButtonComponent &lt;|-- DefaultButtonComponent
+ButtonComponent &lt;|-- DefaultMiniButtonComponent
+ButtonComponent &lt;|-- DangerMiniButtonComponent
+InputComponent &lt;|--- FileInputComponent
+InputComponent &lt;|--- TextInputComponent
           `;
           compress(source, outputId);
         })();</pre>
@@ -1303,10 +1328,8 @@ if (deflater) {
 <pre>suite("ExChangeRepositoryTest", () =&gt; {
   let repository;
   setup(() =&gt; {
-    repository = new ExChangeRateRepository(
-      "money_test",
-      "exchange_rates"
-    );
+    const db = new MoneyDB("money_test", "TEMP");
+    repository = new ExChangeRateRepository(db, MoneyDB.EXCHANGE_RATES);
   });</pre>
 </div>
 </div>
@@ -1416,7 +1439,8 @@ if (deflater) {
 <pre>suite("ReportRepositoryTest", () =&gt; {
   let repository;
   setup(() =&gt; {
-    repository = new ReportRepository("money_test", "report");
+    const db = new MoneyDB("money_test", "TEMP");
+    repository = new ReportRepository(db, MoneyDB.REPORT);
   });</pre>
 </div>
 </div>
@@ -1869,16 +1893,24 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class MoneyRepository {
-  constructor(db) {
-    this._db = db;
+<pre>class MoneyDB {
+  constructor(name, mode = "PERM") {
+    this._name = name;
+    this._mode = mode;
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>get db() {
-  return this._db;
+<pre>static get REPORT() {
+  return "report";
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static get EXCHANGE_RATES() {
+  return "exchange_rates";
 }</pre>
 </div>
 </div>
@@ -1887,44 +1919,53 @@ if (deflater) {
 <pre>setup() {
   return new Promise((resolve, reject) =&gt; {
     const dbList = nSQL().listDatabases();
-    if (dbList.includes(this.db)) return resolve();</pre>
+    if (dbList.includes(this._name)) return resolve();</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>      // Persistent Database
-      nSQL()
-        .createDatabase({
-          id: this.db,
-          mode: "PERM",
-          tables: [
-            {
-              name: "report",
-              model: {
-                "title:string": {},
-                "total:obj": {},
-                "items:obj[]": { default: [] }
-              },
-              indexes: {}
+<pre>    nSQL()
+      .createDatabase({
+        id: this._name,
+        mode: this._mode,
+        tables: [
+          {
+            name: MoneyDB.REPORT,
+            model: {
+              "title:string": {},
+              "total:obj": {},
+              "items:obj[]": { default: [] }
             },
-            {
-              name: "exchange_rates",
-              model: {
-                "id:uuid": { pk: true },
-                "from:string": {},
-                "to:string": {},
-                "rate:float:": {}
-              },
-              indexes: {}
-            }
-          ]
-        })
-        .then(() =&gt; {
-          return resolve();
-        })
-        .catch(() =&gt; {
-          return reject();
-        });
+            indexes: {}
+          },
+          {
+            name: MoneyDB.EXCHANGE_RATES,
+            model: {
+              "id:uuid": { pk: true },
+              "from:string": {},
+              "to:string": {},
+              "rate:float:": {}
+            },
+            indexes: {}
+          }
+        ]
+      })
+      .then(() =&gt; {
+        resolve();
+      })
+      .catch(() =&gt; {
+        reject();
+      });
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  connect() {
+    return new Promise((resolve, reject) =&gt; {
+      nSQL().useDatabase(this._name);
+      resolve();
     });
   }
 }</pre>
@@ -1932,9 +1973,9 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class ReportRepository extends MoneyRepository {
+<pre>class ReportRepository {
   constructor(db, table) {
-    super(db);
+    this._db = db;
     this._table = table;
   }</pre>
 </div>
@@ -1948,10 +1989,18 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>setup() {
+  return new Promise((resolve, reject) =&gt; {
+    resolve(this._db.setup());
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>connect() {
   return new Promise((resolve, reject) =&gt; {
-    nSQL().useDatabase(this.db);
-    resolve();
+    resolve(this._db.connect());
   });
 }</pre>
 </div>
@@ -1968,10 +2017,10 @@ if (deflater) {
           .query("upsert", data)
           .exec()
           .then(rows =&gt; {
-            return resolve(rows);
+            resolve(rows);
           })
           .catch(err =&gt; {
-            return reject(err);
+            reject(err);
           });
       });
   });
@@ -2007,10 +2056,10 @@ if (deflater) {
               row.total._currency
             )
         )[0];
-        return resolve(result);
+        resolve(result);
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2024,10 +2073,10 @@ if (deflater) {
         .query("delete")
         .exec()
         .then(() =&gt; {
-          return resolve();
+          resolve();
         })
         .catch(err =&gt; {
-          return reject(err);
+          reject(err);
         });
     });
   }
@@ -2036,9 +2085,9 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>class ExChangeRateRepository extends MoneyRepository {
+<pre>class ExChangeRateRepository {
   constructor(db, table) {
-    super(db);
+    this._db = db;
     this._table = table;
   }</pre>
 </div>
@@ -2052,10 +2101,18 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
+<pre>setup() {
+  return new Promise((resolve, reject) =&gt; {
+    resolve(this._db.setup());
+  });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
 <pre>connect() {
   return new Promise((resolve, reject) =&gt; {
-    nSQL().useDatabase(this.db);
-    resolve();
+    resolve(this._db.connect());
   });
 }</pre>
 </div>
@@ -2068,7 +2125,7 @@ if (deflater) {
       .query("upsert", data)
       .exec()
       .then(rows =&gt; {
-        return resolve(
+        resolve(
           rows.map(
             row =&gt;
               new ExChangeRate(row.from, row.to, row.rate, row.id)
@@ -2076,7 +2133,7 @@ if (deflater) {
         );
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2091,12 +2148,12 @@ if (deflater) {
       .where(["id", "=", data.id])
       .exec()
       .then(rows =&gt; {
-        return resolve(
+        resolve(
           nSQL(this.table)
             .query("upsert", data)
             .exec()
             .then(rows =&gt; {
-              return resolve(
+              resolve(
                 rows.map(
                   row =&gt;
                     new ExChangeRate(
@@ -2109,12 +2166,12 @@ if (deflater) {
               );
             })
             .catch(() =&gt; {
-              return reject();
+              reject();
             })
         );
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2131,10 +2188,10 @@ if (deflater) {
         const result = rows.map(
           row =&gt; new ExChangeRate(row.from, row.to, row.rate, row.id)
         );
-        return resolve(result);
+        resolve(result);
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2149,10 +2206,10 @@ if (deflater) {
       .where(["id", "=", id])
       .exec()
       .then(rows =&gt; {
-        return resolve();
+        resolve();
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2168,9 +2225,9 @@ if (deflater) {
       .exec()
       .then(rows =&gt; {
         if (rows.length === 0) {
-          return resolve([]);
+          resolve([]);
         } else {
-          return resolve(
+          resolve(
             new ExChangeRate(
               rows[0].from,
               rows[0].to,
@@ -2181,7 +2238,7 @@ if (deflater) {
         }
       })
       .catch(err =&gt; {
-        return reject(err);
+        reject(err);
       });
   });
 }</pre>
@@ -2195,7 +2252,7 @@ if (deflater) {
       .query("upsert", list)
       .exec()
       .then(rows =&gt; {
-        return resolve(
+        resolve(
           rows.map(
             row =&gt;
               new ExChangeRate(row.from, row.to, row.rate, row.id)
@@ -2231,8 +2288,9 @@ if (deflater) {
 <div class="content">
 <pre>class MoneyService {
   constructor() {
-    this._reportService = new ReportService();
-    this._exChangeRateService = new ExChangeRateService();
+    const db = new MoneyDB("money");
+    this._reportService = new ReportService(db);
+    this._exChangeRateService = new ExChangeRateService(db);
   }</pre>
 </div>
 </div>
@@ -2362,8 +2420,8 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>class ReportService {
-  constructor() {
-    this._repository = new ReportRepository("money", "report");
+  constructor(db) {
+    this._repository = new ReportRepository(db, "report");
   }</pre>
 </div>
 </div>
@@ -2431,7 +2489,7 @@ if (deflater) {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>      return resolve(new Report(items, bank));
+<pre>      resolve(new Report(items, bank));
     });
   });
 }</pre>
@@ -2442,7 +2500,7 @@ if (deflater) {
 <pre>  deleteReport() {
     return new Promise((resolve, reject) =&gt; {
       this._repository.destroy().then(() =&gt; {
-        return resolve();
+        resolve();
       });
     });
   }
@@ -2452,11 +2510,8 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>class ExChangeRateService {
-  constructor() {
-    this._repository = new ExChangeRateRepository(
-      "money",
-      "exchange_rates"
-    );
+  constructor(db) {
+    this._repository = new ExChangeRateRepository(db, "exchange_rates");
   }</pre>
 </div>
 </div>
@@ -2477,7 +2532,7 @@ if (deflater) {
         this._repository
           .selectAll()
           .then(result =&gt; {
-            return resolve(new ExChangeRates(result));
+            resolve(new ExChangeRates(result));
           })
           .catch(err =&gt; {
             reject(err);
@@ -2497,7 +2552,7 @@ if (deflater) {
     const entity = new ExChangeRate(from, to, rate, id);
     return this._repository.save(entity).then(() =&gt; {
       return this._repository.selectAll().then(result =&gt; {
-        return resolve(new ExChangeRates(result));
+        resolve(new ExChangeRates(result));
       });
     });
   });
@@ -2510,7 +2565,7 @@ if (deflater) {
   return new Promise((resolve, reject) =&gt; {
     return this._repository.create(entity).then(() =&gt; {
       return this._repository.selectAll().then(result =&gt; {
-        return resolve(new ExChangeRates(result));
+        resolve(new ExChangeRates(result));
       });
     });
   });
@@ -2523,7 +2578,7 @@ if (deflater) {
   return new Promise((resolve, reject) =&gt; {
     this._repository.delete(id).then(() =&gt; {
       this._repository.selectAll().then(result =&gt; {
-        return resolve(new ExChangeRates(result));
+        resolve(new ExChangeRates(result));
       });
     });
   });
@@ -2536,7 +2591,7 @@ if (deflater) {
     return new Promise((resolve, reject) =&gt; {
       this._repository.destroy().then(() =&gt; {
         this._repository.selectAll().then(result =&gt; {
-          return resolve(new ExChangeRates(result));
+          resolve(new ExChangeRates(result));
         });
       });
     });
@@ -2549,8 +2604,9 @@ if (deflater) {
 <pre>class MoneyServiceMock extends MoneyService {
   constructor() {
     super();
-    this._reportService = new ReportServiceMock();
-    this._exChangeRateService = new ExChangeRateServiceMock();
+    const db = new MoneyDB("money_test", "TEMP");
+    this._reportService = new ReportServiceMock(db);
+    this._exChangeRateService = new ExChangeRateServiceMock(db);
   }
 }</pre>
 </div>
@@ -2558,9 +2614,9 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>class ReportServiceMock extends ReportService {
-  constructor() {
+  constructor(db) {
     super();
-    this._repository = new ReportRepository("money_test", "report");
+    this._repository = new ReportRepository(db, MoneyDB.REPORT);
   }
 }</pre>
 </div>
@@ -2568,11 +2624,11 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>class ExChangeRateServiceMock extends ExChangeRateService {
-  constructor() {
+  constructor(db) {
     super();
     this._repository = new ExChangeRateRepository(
-      "money_test",
-      "exchange_rates"
+      db,
+      MoneyDB.EXCHANGE_RATES
     );
   }
 }</pre>
@@ -2592,14 +2648,58 @@ if (deflater) {
   this._report = new ReportView();
   this._exChangeRate = new ExChangeRateView();
   this._selectTab = this.REPORT;
+  this._css = {
+    id: {
+      application: "money-app",
+      section: {
+        menu: "menu"
+      },
+      message: MessageView.selectorId,
+      tab_menus: {
+        name: "tab-menus",
+        no1: "tab-menu01",
+        no2: "tab-menu02"
+      },
+      panel_menus: {
+        name: "panel-menus",
+        no1: "panel-menu01",
+        no2: "panel-menu02"
+      },
+      report: {
+        name: "report",
+        upload: "app-money-upload",
+        download: "app-money-download",
+        table: "report-table"
+      },
+      exchange_rate: {
+        name: "exchange-rate",
+        table: "exchange-rate-table",
+        button: {
+          name: "exchange-rate-button",
+          add: "exchange-rate-button-add",
+          destroy: "exchange-rate-button-destroy",
+          edit: "exchange-rate-button-edit",
+          save: "exchange-rate-button-save",
+          delete: "exchange-rate-button-delete"
+        }
+      }
+    }
+  };
+  this._message = new MessageView();
+  this._state = {
+    reportSelect: "",
+    exChangeSelect: ""
+  };
+  this._results = null;
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>dispatchEvent() {
+<pre>dispatchEvent(css) {
   const selectReportTabEvent = e =&gt; {
     this._service.getReport().then(result =&gt; {
+      this._results = null;
       this._selectTab = this.REPORT;
       this.render();
     });
@@ -2610,6 +2710,7 @@ if (deflater) {
 <div class="content">
 <pre>const selectExChangeRateTabEvent = e =&gt; {
   this._service.selectAllExChangeRate().then(result =&gt; {
+    this._results = null;
     this._selectTab = this.EXCHANGE;
     this.render();
   });
@@ -2619,276 +2720,82 @@ if (deflater) {
 <div class="literalblock">
 <div class="content">
 <pre>document
-  .querySelector("#tab-menu01")
+  .querySelector(`#${css.id.tab_menus.no1}`)
   .addEventListener("click", selectReportTabEvent);
 document
-  .querySelector("#tab-menu02")
+  .querySelector(`#${css.id.tab_menus.no2}`)
   .addEventListener("click", selectExChangeRateTabEvent);</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>this._report.dispatchEvent.bind(this)();</pre>
+<pre>this._report.dispatchEvent.bind(this)(css);</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._exChangeRate.dispatchEvent.bind(this)();
+<pre>  this._exChangeRate.dispatchEvent.bind(this)(css);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>create(report, exChangeRate) {
+  return new TabCompnent({
+    report: report,
+    exChangeRate: exChangeRate,
+    css: this._css,
+    state: {
+      reportSelect: this._state.reportSelect,
+      exChangeSelect: this._state.exChangeSelect
+    }
+  });
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>render() {
-  const reportSelect =
+  this._state.reportSelect =
     this._selectTab === this.REPORT ? "active" : "";
-  const exChangeSelect =
+  this._state.exChangeSelect =
     this._selectTab === this.EXCHANGE ? "active" : "";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const tabNav = `
-          &lt;div class="nav nav-tabs" id="tab-menus" role="tablist"&gt;
-            &lt;a
-              aria-controls="panel-menu01"
-              aria-selected="true"
-              class="nav-item nav-link ${reportSelect}"
-              data-toggle="tab"
-              href="#panel-menu01"
-              id="tab-menu01"
-              role="tab"
-              &gt;レポート&lt;/a
-            &gt;
-            &lt;a
-              aria-controls="panel-menu02"
-              aria-selected="false"
-              class="nav-item nav-link ${exChangeSelect}"
-              data-toggle="tab"
-              href="#panel-menu02"
-              id="tab-menu02"
-              role="tab"
-              &gt;為替レート&lt;/a
-            &gt;
-          &lt;/div&gt;
-      `;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const tabContent = (report, exChangeRate) =&gt; {
-  const exChangeRate_ = record =&gt; {
-    const activeShow = exChangeSelect ? "active show" : "";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const table = record =&gt; {
-  const header = () =&gt; {
-    const th = ["ID", "換算元", "換算先", "レート", ""]
-      .map(i =&gt; `&lt;th&gt;${i}&lt;/th&gt;`)
-      .join(" ");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-              &lt;thead&gt;
-                &lt;tr&gt;
-                  ${th}
-                &lt;/tr&gt;
-              &lt;/thead&gt;
-          `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const body = () =&gt; {
-  const line = (item, key) =&gt; {
-    const edit = () =&gt; {
-      return `
-                      &lt;button
-                        id="button-edit-${key}"
-                        type="button"
-                        class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                      &gt;
-                        編集
-                      &lt;/button&gt;
-            `;
-    };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const save = () =&gt; {
-  return `
-                  &lt;button
-                    id="button-save-${key}"
-                    type="button"
-                    class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                  &gt;
-                    保存
-                  &lt;/button&gt;
-        `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const delet = () =&gt; {
-  return `
-                  &lt;button
-                    id="button-delete-${key}"
-                    type="button"
-                    class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                  &gt;
-                    削除
-                  &lt;/button&gt;
-        `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-              &lt;tr&gt;
-                &lt;td&gt;${item.id.slice(0, 5)}...&lt;/td&gt;
-                &lt;td&gt;${item.from}&lt;/td&gt;
-                &lt;td&gt;${item.to}&lt;/td&gt;
-                &lt;td&gt;${item.rate}&lt;/td&gt;
-                &lt;td&gt;
-                  &lt;span class="button"&gt;
-                    ${edit()}
-                    ${save()}
-                    ${delet()}
-                  &lt;/span&gt;
-                &lt;/td&gt;
-                &lt;td&gt;
-                  &lt;input type="hidden" value=${item.id}&gt;
-                &lt;/td&gt;
-              &lt;/tr&gt;
-          `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-              &lt;tbody&gt;
-                ${record.map((v, k) =&gt; line(v, k)).join("")}
-              &lt;/tbody&gt;
-          `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-              &lt;table
-                id="exchange-rate-table"
-                class="table table-striped"
-              &gt;
-                ${header()}
-                ${body()}
-              &lt;/table&gt;
-          `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const button = () =&gt; {
-  const add = () =&gt; {
-    return `
-                &lt;button
-                  id="button-add"
-                  type="button"
-                  class="btn btn-primary btn-rounded btn-sm my-0"
-                &gt;
-                  追加
-                &lt;/button&gt;
-            `;
-  };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  const deletAll = () =&gt; {
-    return `
-                &lt;button
-                  id="button-delete"
-                  type="button"
-                  class="btn btn-danger btn-rounded btn-sm my-0"
-                &gt;
-                  全削除
-                &lt;/button&gt;
-            `;
-  };
-  return `
-              &lt;div id="button"&gt;
-                ${add()}
-                ${deletAll()}
-              &lt;/div&gt;
-          `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-          &lt;div
-            aria-labelledby="tab-menu02"
-            class="tab-pane fade border border-top-0 ${activeShow}"
-            id="panel-menu02"
-            role="tabpanel"
-          &gt;
-            &lt;dvi class="row p-3"&gt;
-              &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
-                ${table(record)}
-                ${button()}
-              &lt;/div&gt;
-            &lt;/dvi&gt;
-          &lt;/div&gt;
-      `;
-};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>  return `
-  &lt;div class="tab-content" id="panel-menus"&gt;
-    ${report(reportSelect)}
-    ${exChangeRate(exChangeSelect)}
-  &lt;/div&gt;
-  `;
-};</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>this._service.setUpDb().then(() =&gt; {
   this._service.getReport().then(data =&gt; {
-    this._report = new ReportView(data);
-    this._service.selectAllExChangeRate().then(data =&gt; {
-      const report = this._report.render();
-      this._exChangeRate = new ExChangeRateView(data);
-      const exChangeRate = this._exChangeRate.render();
-      const result = `
-          &lt;section id="menu"&gt;
-            &lt;div class="container"&gt;
-              &lt;div id="message"&gt;&lt;/div&gt;
-              ${tabNav}
-              ${tabContent(report, exChangeRate)}
-            &lt;/div&gt;
-          &lt;/section&gt;
-        `;</pre>
+    this._report = new ReportView(data, this._css);
+    const report = this._report.render();</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>          document.querySelector("#money-app").innerHTML = result;
-          this.dispatchEvent();
+<pre>this._service.selectAllExChangeRate().then(data =&gt; {
+  this._exChangeRate = new ExChangeRateView(data, this._css);
+  const exChangeRate = this._exChangeRate.render();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>document.querySelector(
+  `#${this._css.id.application}`
+).innerHTML = this.create(report, exChangeRate).create();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this.dispatchEvent(this._css);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>          if (this._results !== null)
+            this._message.render(
+              this._results.message,
+              this._results.type
+            );
         });
       });
     });
@@ -2899,22 +2806,31 @@ document
 <div class="literalblock">
 <div class="content">
 <pre>class ReportView {
-  constructor(data) {
+  constructor(data, css) {
     this._report = data;
+    this._css = css;
   }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>dispatchEvent() {
+<pre>dispatchEvent(css) {
   const uploadEvent = e =&gt; {
-    if (
-      window.File &amp;&amp;
-      window.FileReader &amp;&amp;
-      window.FileList &amp;&amp;
-      window.Blob
-    ) {
-      const fileData = e.target.files[0];</pre>
+    this._message.render(
+      "レポートを生成しています...",
+      MessageView.WARNING
+    );</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>if (
+  window.File &amp;&amp;
+  window.FileReader &amp;&amp;
+  window.FileList &amp;&amp;
+  window.Blob
+) {
+  const fileData = e.target.files[0];</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -2942,13 +2858,35 @@ document
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  this._service
-    .createReportViewModel(parseData.data)
-    .then(report =&gt; {
-      this._service.saveReport(report).then(() =&gt; {
-        this._selectTab = this.REPORT;
-        this.render();
-      });
+<pre>this._service
+  .createReportViewModel(parseData.data)
+  .then(report =&gt; {
+    this._service
+      .saveReport(report)
+      .then(() =&gt; {
+        this._results = {
+          message: "レポートを読み込みました",
+          type: MessageView.SUCCESS
+        };</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._selectTab = this.REPORT;
+  this.render();
+})
+.catch(err =&gt; {
+  this._results = {
+    message: `レポートを読み込めませんでした:${err}`,
+    type: MessageView.DANGER
+  };</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>          this._selectTab = this.REPORT;
+          this.render();
+        });
     });
 };</pre>
 </div>
@@ -2981,24 +2919,32 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  a.click();
+<pre>a.click();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  this._message.render(
+    "CSVファイルダウンロード完了しました",
+    MessageView.SUCCESS
+  );
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  document
-    .querySelector("#app-money-upload")
+    .querySelector(`#${css.id.report.upload}`)
     .addEventListener("change", uploadEvent);
   document
-    .querySelector("#app-money-download")
+    .querySelector(`#${css.id.report.download}`)
     .addEventListener("click", downloadEvent);
 }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>render() {
+<pre>create() {
   return reportSelect =&gt; {
     const activeShow = reportSelect ? "active show" : "";</pre>
 </div>
@@ -3063,18 +3009,25 @@ a.download = "data.csv";</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  return `
-                  &lt;table id="report-table" class="table table-striped"&gt;
-                      ${header()}
-                      ${body()}
-                  &lt;/table&gt;
-            `;
+<pre>const component = new TableComponent(
+  this._css.id.report.table,
+  header,
+  body
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return component.create();
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>const upload = () =&gt; {
+  const button = new FileInputComponent(
+    this._css.id.report.upload
+  );
   return `
                   &lt;div class="col-md-12"&gt;
                     &lt;form&gt;
@@ -3082,11 +3035,7 @@ a.download = "data.csv";</pre>
                         &lt;p&gt;
                           CSVファイルを選択して下さい。&lt;br /&gt;
                         &lt;/p&gt;
-                        &lt;input
-                          type="file"
-                          class="form-control-file"
-                          id="app-money-upload"
-                        /&gt;
+                        ${button.create()}
                       &lt;/div&gt;
                     &lt;/form&gt;
                   &lt;/div&gt;
@@ -3097,43 +3046,52 @@ a.download = "data.csv";</pre>
 <div class="literalblock">
 <div class="content">
 <pre>const download = () =&gt; {
-  return `
-                  &lt;button
-                    type="button"
-                    class="btn btn-primary btn"
-                    id="app-money-download"
-                  &gt;
-                    CSVダウンロード
-                  &lt;/button&gt;
-            `;
+  const button = new PrimaryButtonComponent(
+    this._css.id.report.download,
+    "CSVダウンロード"
+  );</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return button.create();
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>      return `
-                &lt;div
-                  aria-labelledby="tab-menu01"
-                  class="tab-pane fade border border-top-0 ${activeShow}"
-                  id="panel-menu01"
-                  role="tabpanel"
-                &gt;
-                  &lt;dvi class="row p-3"&gt;
-                    &lt;div id="report" class="col-md-12 order-md-2"&gt;
-                      &lt;div class="row"&gt;
-                        ${upload()}
-                      &lt;/div&gt;
-                      &lt;div class="row"&gt;
-                        ${table()}
-                      &lt;/div&gt;
-                      &lt;div class="col-md-12 py-2"&gt;
-                        ${download()}
-                      &lt;/div&gt;
+<pre>    return `
+              &lt;div
+                aria-labelledby="tab-menu01"
+                class="tab-pane fade border border-top-0 ${activeShow}"
+                id=${this._css.id.panel_menus.no1}
+                role="tabpanel"
+              &gt;
+                &lt;dvi class="row p-3"&gt;
+                  &lt;div id=${
+                    this._css.id.report.name
+                  } class="col-md-12 order-md-2"&gt;
+                    &lt;div class="row"&gt;
+                      ${upload()}
                     &lt;/div&gt;
-                  &lt;/dvi&gt;
-                &lt;/div&gt;
-            `;
-    };
+                    &lt;div class="row"&gt;
+                      ${table()}
+                    &lt;/div&gt;
+                    &lt;div class="col-md-12 py-2"&gt;
+                      ${download()}
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/dvi&gt;
+              &lt;/div&gt;
+          `;
+  };
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  render() {
+    return this.create();
   }
 }</pre>
 </div>
@@ -3141,16 +3099,25 @@ a.download = "data.csv";</pre>
 <div class="literalblock">
 <div class="content">
 <pre>class ExChangeRateView {
-  constructor(data) {
+  constructor(data, css) {
     this._record = data;
-  }
-  dispatchEvent() {
-    const addExChangeRateEvent = e =&gt; {
-      this._service.addExChangeRate().then(data =&gt; {
-        this._selectTab = this.EXCHANGE;
-        this.render();
-      });
-    };</pre>
+    this._css = css;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>dispatchEvent(css) {
+  const addExChangeRateEvent = e =&gt; {
+    this._service.addExChangeRate().then(data =&gt; {
+      this._results = {
+        message: "為替レートを追加しました",
+        type: MessageView.SUCCESS
+      };
+      this._selectTab = this.EXCHANGE;
+      this.render();
+    });
+  };</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -3177,9 +3144,12 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  from.innerHTML = `&lt;input type="text" size="10" value=${from.innerText}&gt;`;
-  to.innerHTML = `&lt;input type="text" size="10" value=${to.innerText}&gt;`;
-  rate.innerHTML = `&lt;input type="text" size="10" value=${rate.innerText}&gt;`;
+<pre>  const fromInput = new TextInputComponent("", 10, from.innerText);
+  const toInput = new TextInputComponent("", 10, to.innerText);
+  const rateInput = new TextInputComponent("", 10, rate.innerText);
+  from.innerHTML = fromInput.create();
+  to.innerHTML = toInput.create();
+  rate.innerHTML = rateInput.create();
 };</pre>
 </div>
 </div>
@@ -3205,6 +3175,10 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <pre>  this._service
     .updateExChangeRate(from.value, to.value, rate.value, id)
     .then(result =&gt; {
+      this._results = {
+        message: "為替レートを保存しました",
+        type: MessageView.SUCCESS
+      };
       this._selectTab = this.EXCHANGE;
       this.render();
     });
@@ -3215,6 +3189,10 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const deleteAllExChangeRateEvent = e =&gt; {
   this._service.deleteAllExChangeRate().then(() =&gt; {
+    this._results = {
+      message: "為替レートを全て削除しました",
+      type: MessageView.WARNING
+    };
     this._selectTab = this.EXCHANGE;
     this.render();
   });
@@ -3232,6 +3210,10 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>  this._service.deleteExChangeRate(id).then(() =&gt; {
+    this._results = {
+      message: "為替レートを削除しました",
+      type: MessageView.WARNING
+    };
     this._selectTab = this.EXCHANGE;
     this.render();
   });
@@ -3241,21 +3223,23 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="literalblock">
 <div class="content">
 <pre>  document
-    .querySelector("#button-add")
+    .querySelector(`#${css.id.exchange_rate.button.add}`)
     .addEventListener("click", addExChangeRateEvent);
   document
-    .querySelector("#button-delete")
+    .querySelector(`#${css.id.exchange_rate.button.destroy}`)
     .addEventListener("click", deleteAllExChangeRateEvent);
   this._exChangeRate._record._record.forEach((v, k) =&gt; {
     document
-      .querySelector(`#button-edit-${k}`)
+      .querySelector(`#${css.id.exchange_rate.button.edit}-${k}`)
       .addEventListener("click", editExChangeRateEvent);
     document
-      .querySelector(`#button-save-${k}`)
+      .querySelector(`#${css.id.exchange_rate.button.save}-${k}`)
       .addEventListener("click", saveExChangeRateEvent);
-    document.querySelector(`#button-save-${k}`).disabled = true;
+    document.querySelector(
+      `#${css.id.exchange_rate.button.save}-${k}`
+    ).disabled = true;
     document
-      .querySelector(`#button-delete-${k}`)
+      .querySelector(`#${css.id.exchange_rate.button.delete}-${k}`)
       .addEventListener("click", delteExhangeRateEvent);
   });
 }</pre>
@@ -3263,7 +3247,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>render() {
+<pre>create() {
   return exChangeSelect =&gt; {
     const activeShow = exChangeSelect ? "active show" : "";</pre>
 </div>
@@ -3294,45 +3278,33 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <pre>const body = () =&gt; {
   const line = (item, key) =&gt; {
     const edit = () =&gt; {
-      return `
-                        &lt;button
-                          id="button-edit-${key}"
-                          type="button"
-                          class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                        &gt;
-                          編集
-                        &lt;/button&gt;
-              `;
+      const button = new PrimaryMiniButtonComponent(
+        `${this._css.id.exchange_rate.button.edit}-${key}`,
+        "編集"
+      );
+      return button.create();
     };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>const save = () =&gt; {
-  return `
-                    &lt;button
-                      id="button-save-${key}"
-                      type="button"
-                      class="btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
-                    &gt;
-                      保存
-                    &lt;/button&gt;
-          `;
+  const button = new PrimaryMiniButtonComponent(
+    `${this._css.id.exchange_rate.button.save}-${key}`,
+    "保存"
+  );
+  return button.create();
 };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>const delet = () =&gt; {
-  return `
-                    &lt;button
-                      id="button-delete-${key}"
-                      type="button"
-                      class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
-                    &gt;
-                      削除
-                    &lt;/button&gt;
-          `;
+  const button = new DangerMiniButtonComponent(
+    `${this._css.id.exchange_rate.button.delete}-${key}`,
+    "削除"
+  );
+  return button.create();
 };</pre>
 </div>
 </div>
@@ -3371,15 +3343,16 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>  return `
-                &lt;table
-                  id="exchange-rate-table"
-                  class="table table-striped"
-                &gt;
-                  ${header()}
-                  ${body()}
-                &lt;/table&gt;
-            `;
+<pre>const component = new TableComponent(
+  this._css.id.exchange_rate.table,
+  header,
+  body
+);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  return component.create();
 };</pre>
 </div>
 </div>
@@ -3387,30 +3360,22 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 <div class="content">
 <pre>const button = () =&gt; {
   const add = () =&gt; {
-    return `
-                  &lt;button
-                    id="button-add"
-                    type="button"
-                    class="btn btn-primary btn-rounded btn-sm my-0"
-                  &gt;
-                    追加
-                  &lt;/button&gt;
-              `;
+    const button = new PrimaryMiniButtonComponent(
+      this._css.id.exchange_rate.button.add,
+      "追加"
+    );
+    return button.create();
   };</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>  const deletAll = () =&gt; {
-    return `
-                  &lt;button
-                    id="button-delete"
-                    type="button"
-                    class="btn btn-danger btn-rounded btn-sm my-0"
-                  &gt;
-                    全削除
-                  &lt;/button&gt;
-              `;
+    const button = new DangerMiniButtonComponent(
+      this._css.id.exchange_rate.button.destroy,
+      "全削除"
+    );
+    return button.create();
   };
   return `
                 &lt;div id="button"&gt;
@@ -3423,22 +3388,321 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>      return `
-                &lt;div
-                  aria-labelledby="tab-menu02"
-                  class="tab-pane fade border border-top-0 ${activeShow}"
-                  id="panel-menu02"
-                  role="tabpanel"
+<pre>    return `
+              &lt;div
+                aria-labelledby="tab-menu02"
+                class="tab-pane fade border border-top-0 ${activeShow}"
+                id=${this._css.id.panel_menus.no2}
+                role="tabpanel"
+              &gt;
+                &lt;dvi class="row p-3"&gt;
+                  &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
+                    ${table(this._record._record)}
+                    ${button()}
+                  &lt;/div&gt;
+                &lt;/dvi&gt;
+              &lt;/div&gt;
+          `;
+  };
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  render() {
+    return this.create();
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class TabCompnent {
+  constructor(params) {
+    this._css = params.css;
+    this._report = params.report;
+    this._exChangeRate = params.exChangeRate;
+    this._state = params.state;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>create() {
+  const tabNav = `
+            &lt;div class="nav nav-tabs" id=${this._css.id.tab_menus.name} role="tablist"&gt;
+              &lt;a
+                aria-controls="panel-menu01"
+                aria-selected="true"
+                class="nav-item nav-link ${this._state.reportSelect}"
+                data-toggle="tab"
+                href="#panel-menu01"
+                id=${this._css.id.tab_menus.no1}
+                role="tab"
+                &gt;レポート&lt;/a
+              &gt;
+              &lt;a
+                aria-controls="panel-menu02"
+                aria-selected="false"
+                class="nav-item nav-link ${this._state.exChangeSelect}"
+                data-toggle="tab"
+                href="#panel-menu02"
+                id=${this._css.id.tab_menus.no2}
+                role="tab"
+                &gt;為替レート&lt;/a
+              &gt;
+            &lt;/div&gt;
+        `;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const tabContent = (report, exChangeRate) =&gt; {
+  return `
+  &lt;div class="tab-content" id=${this._css.id.panel_menus.name}&gt;
+    ${report(this._state.reportSelect)}
+    ${exChangeRate(this._state.exChangeSelect)}
+  &lt;/div&gt;
+  `;
+};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    return `
+      &lt;section id=${this._css.id.section.menu}&gt;
+        &lt;div class="container"&gt;
+          &lt;div id=${this._css.id.message}&gt;&lt;/div&gt;
+          ${tabNav}
+          ${tabContent(this._report, this._exChangeRate)}
+        &lt;/div&gt;
+      &lt;/section&gt;
+    `;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class TableComponent {
+  constructor(id, header, body) {
+    this._id = id;
+    this._header = header;
+    this._body = body;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  create() {
+    return `
+            &lt;table id=${this._id} class="table table-striped"&gt;
+                ${this._header()}
+                ${this._body()}
+            &lt;/table&gt;
+          `;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class ButtonComponent {
+  constructor(id, label, style = "btn") {
+    this._id = id;
+    this._label = label;
+    this._style = style;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  create() {
+    return `
+                &lt;button
+                  type="button"
+                  class="${this._style}"
+                  id="${this._id}"
                 &gt;
-                  &lt;dvi class="row p-3"&gt;
-                    &lt;div id="exchange-rate" class="col-md-12 order-md-2"&gt;
-                      ${table(this._record._record)}
-                      ${button()}
-                    &lt;/div&gt;
-                  &lt;/dvi&gt;
-                &lt;/div&gt;
-            `;
-    };
+                ${this._label}
+                &lt;/button&gt;
+          `;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class PrimaryButtonComponent extends ButtonComponent {
+  constructor(id, label) {
+    super(id, label, "btn btn-primary");
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class PrimaryMiniButtonComponent extends ButtonComponent {
+  constructor(id, label) {
+    super(
+      id,
+      label,
+      "btn btn-primary btn-rounded btn-sm my-0 waves-effect waves-light"
+    );
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class DangerMiniButtonComponent extends ButtonComponent {
+  constructor(id, label) {
+    super(
+      id,
+      label,
+      "btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
+    );
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class InputComponent {
+  constructor(id, type, style, size, value) {
+    this._id = id;
+    this._type = type;
+    this._sytle = style;
+    this._size = size;
+    this._value = value;
+  }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  create() {
+    return `
+      &lt;input
+        value="${this._value}"
+        size="${this._size}"
+        type="${this._type}"
+        class="${this._sytle}"
+        id=${this._id}
+      /&gt;
+   `;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class FileInputComponent extends InputComponent {
+  constructor(id) {
+    super(id, "file", "form-control-file");
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class TextInputComponent extends InputComponent {
+  constructor(id, size, value) {
+    super(id, "text", "", size, value);
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class MessageView {
+  constructor() {}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static get WARNING() {
+  return 1;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static get SUCCESS() {
+  return 2;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static get DANGER() {
+  return 3;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static get selectorId() {
+  return "app__message";
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static create(message, type) {
+  switch (type) {
+    case 1:
+      return `
+          &lt;div class="alert alert-warning alert-dismissible fade show" role="alert"&gt;
+              ${message}
+              &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                  &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+              &lt;/button&gt;
+          &lt;/div&gt;
+    `;
+    case 2:
+      return `
+          &lt;div class="alert alert-success alert-dismissible fade show" role="alert"&gt;
+              ${message}
+              &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                  &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+              &lt;/button&gt;
+          &lt;/div&gt;
+    `;
+    case 3:
+      return `
+          &lt;div class="alert alert-danger alert-dismissible fade show" role="alert"&gt;
+              ${message}
+              &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                  &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+              &lt;/button&gt;
+          &lt;/div&gt;
+    `;
+    default:
+      return `
+          &lt;div class="alert alert-primary alert-dismissible fade show" role="alert"&gt;
+              ${message}
+              &lt;button type="button" class="close" data-dismiss="alert" aria-label="Close"&gt;
+                  &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+              &lt;/button&gt;
+          &lt;/div&gt;
+    `;
+  }
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>clear() {
+  document.querySelector(`#${MessageView.selectorId}`).innerHTML = "";
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  render(message, type) {
+    document.querySelector(
+      `#${MessageView.selectorId}`
+    ).innerHTML = MessageView.create(message, type);
   }
 }</pre>
 </div>
@@ -3457,9 +3721,6 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 &lt;/html&gt;</pre>
 </div>
 </div>
-</li>
-</ul>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -3477,7 +3738,7 @@ const rate = e.target.parentElement.parentElement.parentElement.getElementsByTag
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-10 11:41:06 JST
+Last updated 2019-12-10 18:52:53 JST
 </div>
 </div>
 </body>
