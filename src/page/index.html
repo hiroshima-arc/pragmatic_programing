@@ -120,7 +120,7 @@
 | string  |  int  | int | int |
 
 ## ToDoリスト
-- [ ] 表示部品のコンポーネント化
+- [x] 表示部品のコンポーネント化
 - [x] CSSセレクターのパラメータ化
 - [ ] 処理メッセージの表示
 `
@@ -280,6 +280,9 @@ class TableComponent {
 class ButtonComponent {
   render(): String
 }
+class InputComponent {
+  render(): String
+}
 Expression <|.. Money
 Expression <|.. Sum
 Money <- Sum
@@ -314,6 +317,8 @@ ExChangeRateView --> InputComponent
 ButtonComponent <|-- DefaultButtonComponent
 ButtonComponent <|-- DefaultMiniButtonComponent
 ButtonComponent <|-- DangerMiniButtonComponent
+InputComponent <|--- FileInputComponent
+InputComponent <|--- TextInputComponent
           `;
           compress(source, outputId);
         })();
@@ -1701,6 +1706,9 @@ ButtonComponent <|-- DangerMiniButtonComponent
               };
 
               const upload = () => {
+                const button = new FileInputComponent(
+                  this._css.id.report.upload
+                );
                 return `
                                 <div class="col-md-12">
                                   <form>
@@ -1708,11 +1716,7 @@ ButtonComponent <|-- DangerMiniButtonComponent
                                       <p>
                                         CSVファイルを選択して下さい。<br />
                                       </p>
-                                      <input
-                                        type="file"
-                                        class="form-control-file"
-                                        id=${this._css.id.report.upload}
-                                      />
+                                      ${button.render()}
                                     </div>
                                   </form>
                                 </div>
@@ -1786,9 +1790,12 @@ ButtonComponent <|-- DangerMiniButtonComponent
                 "td"
               )[3];
 
-              from.innerHTML = `<input type="text" size="10" value=${from.innerText}>`;
-              to.innerHTML = `<input type="text" size="10" value=${to.innerText}>`;
-              rate.innerHTML = `<input type="text" size="10" value=${rate.innerText}>`;
+              const fromInput = new TextInputComponent("", 10, from.innerText);
+              const toInput = new TextInputComponent("", 10, to.innerText);
+              const rateInput = new TextInputComponent("", 10, rate.innerText);
+              from.innerHTML = fromInput.render();
+              to.innerHTML = toInput.render();
+              rate.innerHTML = rateInput.render();
             };
 
             const saveExChangeRateEvent = e => {
@@ -2092,6 +2099,40 @@ ButtonComponent <|-- DangerMiniButtonComponent
               label,
               "btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light"
             );
+          }
+        }
+
+        class InputComponent {
+          constructor(id, type, style, size, value) {
+            this._id = id;
+            this._type = type;
+            this._sytle = style;
+            this._size = size;
+            this._value = value;
+          }
+
+          render() {
+            return `
+              <input
+                value="${this._value}"
+                size="${this._size}"
+                type="${this._type}"
+                class="${this._sytle}"
+                id=${this._id}
+              />
+           `;
+          }
+        }
+
+        class FileInputComponent extends InputComponent {
+          constructor(id) {
+            super(id, "file", "form-control-file");
+          }
+        }
+
+        class TextInputComponent extends InputComponent {
+          constructor(id, size, value) {
+            super(id, "text", "", size, value);
           }
         }
 
