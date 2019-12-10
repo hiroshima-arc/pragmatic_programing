@@ -286,8 +286,8 @@ ExChangeRate <-- ExChangeRateRepository
 ReportRepository -o ReportService
 Report <- ReportRepository
 ExChangeRateService o- ExChangeRateRepository
-ReportRepository --|> MoneyRepository 
-ExChangeRateRepository --|> MoneyRepository 
+ReportRepository *-- MoneyRepository 
+ExChangeRateRepository *-- MoneyRepository 
 ReportLineItem -o Report
 Report <-- ReportService
 Bank <-- ReportService
@@ -478,10 +478,8 @@ MoneyView o-- ReportView
         suite("ExChangeRepositoryTest", () => {
           let repository;
           setup(() => {
-            repository = new ExChangeRateRepository(
-              "money_test",
-              "exchange_rates"
-            );
+            const db = new MoneyRepository("money_test", "TEMP");
+            repository = new ExChangeRateRepository(db, "exchange_rates");
           });
 
           test("Setup", () => {
@@ -561,7 +559,8 @@ MoneyView o-- ReportView
         suite("ReportRepositoryTest", () => {
           let repository;
           setup(() => {
-            repository = new ReportRepository("money_test", "report");
+            const db = new MoneyRepository("money_test", "TEMP");
+            repository = new ReportRepository(db, "report");
           });
 
           test("Setup", () => {
@@ -874,8 +873,9 @@ MoneyView o-- ReportView
         }
 
         class MoneyRepository {
-          constructor(db) {
+          constructor(db, mode = "PERM") {
             this._db = db;
+            this._mode = mode;
           }
 
           get db() {
@@ -887,11 +887,10 @@ MoneyView o-- ReportView
               const dbList = nSQL().listDatabases();
               if (dbList.includes(this.db)) return resolve();
 
-              // Persistent Database
               nSQL()
                 .createDatabase({
                   id: this.db,
-                  mode: "PERM",
+                  mode: this._mode,
                   tables: [
                     {
                       name: "report",
@@ -924,9 +923,9 @@ MoneyView o-- ReportView
           }
         }
 
-        class ReportRepository extends MoneyRepository {
+        class ReportRepository {
           constructor(db, table) {
-            super(db);
+            this._db = db;
             this._table = table;
           }
 
@@ -934,9 +933,15 @@ MoneyView o-- ReportView
             return this._table;
           }
 
+          setup() {
+            return new Promise((resolve, reject) => {
+              return resolve(this._db.setup());
+            });
+          }
+
           connect() {
             return new Promise((resolve, reject) => {
-              nSQL().useDatabase(this.db);
+              nSQL().useDatabase(this._db.db);
               resolve();
             });
           }
@@ -1004,9 +1009,9 @@ MoneyView o-- ReportView
           }
         }
 
-        class ExChangeRateRepository extends MoneyRepository {
+        class ExChangeRateRepository {
           constructor(db, table) {
-            super(db);
+            this._db = db;
             this._table = table;
           }
 
@@ -1014,9 +1019,15 @@ MoneyView o-- ReportView
             return this._table;
           }
 
+          setup() {
+            return new Promise((resolve, reject) => {
+              return resolve(this._db.setup());
+            });
+          }
+
           connect() {
             return new Promise((resolve, reject) => {
-              nSQL().useDatabase(this.db);
+              nSQL().useDatabase(this._db.db);
               resolve();
             });
           }
@@ -1169,8 +1180,9 @@ MoneyView o-- ReportView
 
         class MoneyService {
           constructor() {
-            this._reportService = new ReportService();
-            this._exChangeRateService = new ExChangeRateService();
+            const db = new MoneyRepository("money");
+            this._reportService = new ReportService(db);
+            this._exChangeRateService = new ExChangeRateService(db);
           }
 
           setUpDb() {
@@ -1264,8 +1276,8 @@ MoneyView o-- ReportView
         }
 
         class ReportService {
-          constructor() {
-            this._repository = new ReportRepository("money", "report");
+          constructor(db) {
+            this._repository = new ReportRepository(db, "report");
           }
 
           get repository() {
@@ -1324,11 +1336,8 @@ MoneyView o-- ReportView
         }
 
         class ExChangeRateService {
-          constructor() {
-            this._repository = new ExChangeRateRepository(
-              "money",
-              "exchange_rates"
-            );
+          constructor(db) {
+            this._repository = new ExChangeRateRepository(db, "exchange_rates");
           }
 
           get repository() {
@@ -1400,25 +1409,23 @@ MoneyView o-- ReportView
         class MoneyServiceMock extends MoneyService {
           constructor() {
             super();
-            this._reportService = new ReportServiceMock();
-            this._exChangeRateService = new ExChangeRateServiceMock();
+            const db = new MoneyRepository("money_test", "TEMP");
+            this._reportService = new ReportServiceMock(db);
+            this._exChangeRateService = new ExChangeRateServiceMock(db);
           }
         }
 
         class ReportServiceMock extends ReportService {
-          constructor() {
+          constructor(db) {
             super();
-            this._repository = new ReportRepository("money_test", "report");
+            this._repository = new ReportRepository(db, "report");
           }
         }
 
         class ExChangeRateServiceMock extends ExChangeRateService {
-          constructor() {
+          constructor(db) {
             super();
-            this._repository = new ExChangeRateRepository(
-              "money_test",
-              "exchange_rates"
-            );
+            this._repository = new ExChangeRateRepository(db, "exchange_rates");
           }
         }
 
