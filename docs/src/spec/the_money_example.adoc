@@ -70,6 +70,12 @@
 * [x] レポートを保存する
 * [x] 為替レートを保存する
 * [x] 登録した為替レートを元にレポートを集計する
+* [x] ファーストクラスコレクション
+* [x] DB生成メソッドの重複
+* [x] 大きなサービスクラス
+* [x] 大きなビュークラス
+* [x] レポート画面を分割する
+* [x] 為替レート画面を分割する
 
 === ユースケース図
 
@@ -117,47 +123,62 @@ class ExChangeRate {
   rate: float
   id: int
 }
-class ReportViewModel {
+class Report {
   title: String
   sum: int
   currenty: String
-  items<ReportViewModelItem>: List
+  items<ReportLineItem>: List
   total(): Sum
 }
-class ReportViewModelItem {
+class ReportLineItem {
   stockName: String
   stockAmount: int
   price: Money
   sum: Money
 }
-class ExChangeRateViewModel {
+class ExChangeRates {
   record: List<ExChangeRate>
 }
 class MoneyService {
   setupDb(): void
   createReportViewModel(data): RepositoryViewModel
-  addExChangeRate(entity): ExChangeRateViewModel
-  selectAllExChangeRate(): ExChangeRateViewModel
-  updateExChangeRate(id):  ExChangeRateViewModel
-  deleteExChangeRate(id): ExChangeRateViewModel
-  deleteAllExChangeRate(): ExChangeRateViewModel
+  addExChangeRate(entity): ExChangeRates
+  selectAllExChangeRate(): ExChangeRates
+  updateExChangeRate(id):  ExChangeRates
+  deleteExChangeRate(id): ExChangeRates
+  deleteAllExChangeRate(): ExChangeRates
   saveReport(): void
   getReport(): ReportViewModle
   deleteReport(): void
 }
-class ReportRepository {
+class ReportService {
+  repository: ReportRepository
+  createReportViewModel(data): RepositoryViewModel
+  saveReport(): void
+  getReport(): ReportViewModle
+  deleteReport(): void
+}
+class ExChangeRateService {
+  repository: ExChangeRateRepository
+  addExChangeRate(entity): ExChangeRates
+  selectAllExChangeRate(): ExChangeRates
+  updateExChangeRate(id):  ExChangeRates
+  deleteExChangeRate(id): ExChangeRates
+  deleteAllExChangeRate(): ExChangeRates
+}
+class MoneyRepository {
   db: String
+  setup()
+}
+class ReportRepository {
   table: String
-  setup(): void
   connect(): void
   get(): ReporViewModel
   save(): void
   destroy(): void
 }
 class ExChangeRateRepository {
-  db: String
   table: String
-  setup(): void
   connect(): void
   create(): ExChangeRate
   createBatch(): List<ExChangeRate>
@@ -167,13 +188,17 @@ class ExChangeRateRepository {
   delete(): void
   destroy(): void
 }
-class View {
+class MoneyView {
   REPORT: 1
   EXCHANGE: 2
-  _service: MoneyService
-  _report: ReportViewModel
-  _exChangeRate: ExChangeRateViewModel
-  _selectTab: int
+  dispatchEvent(): void
+  render(): void
+}
+class ReportView {
+  dispatchEvent(): void
+  render(): void
+}
+class ExChangeRateView {
   dispatchEvent(): void
   render(): void
 }
@@ -182,21 +207,25 @@ Expression <|.. Sum
 Money <- Sum
 Sum <- Bank
 Bank -> Pair
-Bank <-- ReportViewModel
-Sum <-- ReportViewModel
-Money <-- ReportViewModelItem
-ExChangeRate --o ExChangeRateViewModel
-ExChangeRateViewModel <-- MoneyService
-ExChangeRate <- ExChangeRateRepository
-ReportRepository -o MoneyService
-ReportViewModel <- ReportRepository
-MoneyService o- ExChangeRateRepository
-ReportViewModelItem -o ReportViewModel
-ReportViewModel <-- MoneyService
-Bank <-- MoneyService
-MoneyService --o View
-ReportViewModel --o View
-ExChangeRateViewModel --o View
+Bank <-- Report
+Sum <-- Report
+Money <-- ReportLineItem
+ExChangeRates o- ExChangeRate
+ReportService -o MoneyService 
+MoneyService o- ExChangeRateService
+ExChangeRates <-- ExChangeRateService
+ExChangeRate <-- ExChangeRateRepository
+ReportRepository -o ReportService
+Report <- ReportRepository
+ExChangeRateService o- ExChangeRateRepository
+ReportRepository --|> MoneyRepository 
+ExChangeRateRepository --|> MoneyRepository 
+ReportLineItem -o Report
+Report <-- ReportService
+Bank <-- ReportService
+MoneyService ---o MoneyView
+MoneyView o-- ExChangeRateView
+MoneyView o-- ReportView
 ----
 
 

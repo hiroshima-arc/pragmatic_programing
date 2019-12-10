@@ -124,9 +124,9 @@
 - [x] ファーストクラスコレクション
 - [x] DB生成メソッドの重複
 - [x] 大きなサービスクラス
-- [ ] 大きなビュークラス
-  - [ ] レポート画面を分割する
-  - [ ] 為替レート画面を分割する
+- [x] 大きなビュークラス
+  - [x] レポート画面を分割する
+  - [x] 為替レート画面を分割する
 `
         );
       </script>
@@ -292,8 +292,8 @@ ReportLineItem -o Report
 Report <-- ReportService
 Bank <-- ReportService
 MoneyService ---o MoneyView
-ReportView -o MoneyView
-MoneyView o- ExChangeRateView
+MoneyView o-- ExChangeRateView
+MoneyView o-- ReportView
           `;
           compress(source, outputId);
         })();
@@ -2097,7 +2097,7 @@ MoneyView o- ExChangeRateView
       </script>
       <script>
         mocha.globals(["jQuery"]);
-        //mocha.run();
+        mocha.run();
       </script>
     </div>
   </body>
