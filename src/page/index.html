@@ -280,7 +280,7 @@ class ButtonComponent {
 class InputComponent {
   create(): String
 }
-class MessageComponent {
+class MessageView {
   WARNING: 1
   SUCCESS: 2
   DANGER: 3
@@ -311,7 +311,7 @@ MoneyService ---o MoneyView
 MoneyView o-- ExChangeRateView
 MoneyView o-- ReportView
 MoneyView -> TabComponent
-MessageComponent -o MoneyView
+MessageView -o MoneyView
 ReportView --> TableComponent
 ReportView --> ButtonComponent 
 ReportView --> InputComponent
@@ -1485,7 +1485,7 @@ InputComponent <|--- TextInputComponent
                 section: {
                   menu: "menu"
                 },
-                message: MessageComponent.selectorId,
+                message: MessageView.selectorId,
                 tab_menus: {
                   name: "tab-menus",
                   no1: "tab-menu01",
@@ -1516,7 +1516,7 @@ InputComponent <|--- TextInputComponent
                 }
               }
             };
-            this._message = new MessageComponent();
+            this._message = new MessageView();
             this._state = {
               reportSelect: "",
               exChangeSelect: ""
@@ -1607,7 +1607,7 @@ InputComponent <|--- TextInputComponent
             const uploadEvent = e => {
               this._message.render(
                 "レポートを生成しています...",
-                MessageComponent.WARNING
+                MessageView.WARNING
               );
 
               if (
@@ -1640,7 +1640,7 @@ InputComponent <|--- TextInputComponent
                         .then(() => {
                           this._results = {
                             message: "レポートを読み込みました",
-                            type: MessageComponent.SUCCESS
+                            type: MessageView.SUCCESS
                           };
 
                           this._selectTab = this.REPORT;
@@ -1649,7 +1649,7 @@ InputComponent <|--- TextInputComponent
                         .catch(err => {
                           this._results = {
                             message: `レポートを読み込めませんでした:${err}`,
-                            type: MessageComponent.DANGER
+                            type: MessageView.DANGER
                           };
 
                           this._selectTab = this.REPORT;
@@ -1679,7 +1679,7 @@ InputComponent <|--- TextInputComponent
 
               this._message.render(
                 "CSVファイルダウンロード完了しました",
-                MessageComponent.SUCCESS
+                MessageView.SUCCESS
               );
             };
 
@@ -1823,7 +1823,7 @@ InputComponent <|--- TextInputComponent
               this._service.addExChangeRate().then(data => {
                 this._results = {
                   message: "為替レートを追加しました",
-                  type: MessageComponent.SUCCESS
+                  type: MessageView.SUCCESS
                 };
                 this._selectTab = this.EXCHANGE;
                 this.render();
@@ -1873,7 +1873,7 @@ InputComponent <|--- TextInputComponent
                 .then(result => {
                   this._results = {
                     message: "為替レートを保存しました",
-                    type: MessageComponent.SUCCESS
+                    type: MessageView.SUCCESS
                   };
                   this._selectTab = this.EXCHANGE;
                   this.render();
@@ -1884,7 +1884,7 @@ InputComponent <|--- TextInputComponent
               this._service.deleteAllExChangeRate().then(() => {
                 this._results = {
                   message: "為替レートを全て削除しました",
-                  type: MessageComponent.WARNING
+                  type: MessageView.WARNING
                 };
                 this._selectTab = this.EXCHANGE;
                 this.render();
@@ -1899,7 +1899,7 @@ InputComponent <|--- TextInputComponent
               this._service.deleteExChangeRate(id).then(() => {
                 this._results = {
                   message: "為替レートを削除しました",
-                  type: MessageComponent.WARNING
+                  type: MessageView.WARNING
                 };
                 this._selectTab = this.EXCHANGE;
                 this.render();
@@ -2208,7 +2208,7 @@ InputComponent <|--- TextInputComponent
           }
         }
 
-        class MessageComponent {
+        class MessageView {
           constructor() {}
 
           static get WARNING() {
@@ -2269,15 +2269,13 @@ InputComponent <|--- TextInputComponent
           }
 
           clear() {
-            document.querySelector(
-              `#${MessageComponent.selectorId}`
-            ).innerHTML = "";
+            document.querySelector(`#${MessageView.selectorId}`).innerHTML = "";
           }
 
           render(message, type) {
             document.querySelector(
-              `#${MessageComponent.selectorId}`
-            ).innerHTML = MessageComponent.create(message, type);
+              `#${MessageView.selectorId}`
+            ).innerHTML = MessageView.create(message, type);
           }
         }
 
