@@ -261,15 +261,18 @@ class MoneyView {
   REPORT: 1
   EXCHANGE: 2
   dispatchEvent(css): void
-  render(): void
+  render(): String
 }
 class ReportView {
   dispatchEvent(css): void
-  render(): void
+  render(): String
 }
 class ExChangeRateView {
-  dispatchEvent(css): void
-  render(): void
+  dispatchEvent(css): String
+  render(): String
+}
+class TabComponent {
+  render(): String
 }
 Expression <|.. Money
 Expression <|.. Sum
@@ -295,6 +298,12 @@ Bank <-- ReportService
 MoneyService ---o MoneyView
 MoneyView o-- ExChangeRateView
 MoneyView o-- ReportView
+MoneyView -> TabComponent
+ReportView --> TableComponent
+ReportView --> ButtonComponent 
+ExChangeRateView --> TableComponent
+ExChangeRateView --> ButtonComponent
+ExChangeRateView --> InputComponent
           `;
           compress(source, outputId);
         })();
@@ -1523,40 +1532,6 @@ MoneyView o-- ReportView
             const exChangeSelect =
               this._selectTab === this.EXCHANGE ? "active" : "";
 
-            const tabNav = `
-                      <div class="nav nav-tabs" id=${this._css.id.tab_menus.name} role="tablist">
-                        <a
-                          aria-controls="panel-menu01"
-                          aria-selected="true"
-                          class="nav-item nav-link ${reportSelect}"
-                          data-toggle="tab"
-                          href="#panel-menu01"
-                          id=${this._css.id.tab_menus.no1}
-                          role="tab"
-                          >レポート</a
-                        >
-                        <a
-                          aria-controls="panel-menu02"
-                          aria-selected="false"
-                          class="nav-item nav-link ${exChangeSelect}"
-                          data-toggle="tab"
-                          href="#panel-menu02"
-                          id=${this._css.id.tab_menus.no2}
-                          role="tab"
-                          >為替レート</a
-                        >
-                      </div>
-                  `;
-
-            const tabContent = (report, exChangeRate) => {
-              return `
-              <div class="tab-content" id=${this._css.id.panel_menus.name}>
-                ${report(reportSelect)}
-                ${exChangeRate(exChangeSelect)}
-              </div>
-              `;
-            };
-
             this._service.setUpDb().then(() => {
               this._service.getReport().then(data => {
                 this._report = new ReportView(data, this._css);
@@ -1565,19 +1540,19 @@ MoneyView o-- ReportView
                   this._exChangeRate = new ExChangeRateView(data, this._css);
                   const exChangeRate = this._exChangeRate.render();
 
-                  const result = `
-                      <section id=${this._css.id.section.menu}>
-                        <div class="container">
-                          <div id=${this._css.id.message}></div>
-                          ${tabNav}
-                          ${tabContent(report, exChangeRate)}
-                        </div>
-                      </section>
-                    `;
+                  const tab = new TabCompnent({
+                    report: report,
+                    exChangeRate: exChangeRate,
+                    css: this._css,
+                    state: {
+                      reportSelect: reportSelect,
+                      exChangeSelect: exChangeSelect
+                    }
+                  });
 
                   document.querySelector(
                     `#${this._css.id.application}`
-                  ).innerHTML = result;
+                  ).innerHTML = tab.render();
                   this.dispatchEvent(this._css);
                 });
               });
@@ -2016,6 +1991,73 @@ MoneyView o-- ReportView
                     `;
             };
           }
+        }
+
+        class TabCompnent {
+          constructor(params) {
+            this._css = params.css;
+            this._report = params.report;
+            this._exChangeRate = params.exChangeRate;
+            this._state = params.state;
+          }
+
+          render() {
+            const tabNav = `
+                      <div class="nav nav-tabs" id=${this._css.id.tab_menus.name} role="tablist">
+                        <a
+                          aria-controls="panel-menu01"
+                          aria-selected="true"
+                          class="nav-item nav-link ${this._state.reportSelect}"
+                          data-toggle="tab"
+                          href="#panel-menu01"
+                          id=${this._css.id.tab_menus.no1}
+                          role="tab"
+                          >レポート</a
+                        >
+                        <a
+                          aria-controls="panel-menu02"
+                          aria-selected="false"
+                          class="nav-item nav-link ${this._state.exChangeSelect}"
+                          data-toggle="tab"
+                          href="#panel-menu02"
+                          id=${this._css.id.tab_menus.no2}
+                          role="tab"
+                          >為替レート</a
+                        >
+                      </div>
+                  `;
+
+            const tabContent = (report, exChangeRate) => {
+              return `
+              <div class="tab-content" id=${this._css.id.panel_menus.name}>
+                ${report(this._state.reportSelect)}
+                ${exChangeRate(this._state.exChangeSelect)}
+              </div>
+              `;
+            };
+
+            return `
+              <section id=${this._css.id.section.menu}>
+                <div class="container">
+                  <div id=${this._css.id.message}></div>
+                  ${tabNav}
+                  ${tabContent(this._report, this._exChangeRate)}
+                </div>
+              </section>
+            `;
+          }
+        }
+
+        class ButtonComponent {
+          constructor() {}
+
+          render() {}
+        }
+
+        class TableComponent {
+          constructor() {}
+
+          render() {}
         }
 
         const view = new MoneyView();
