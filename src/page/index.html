@@ -923,10 +923,10 @@ MoneyView o-- ReportView
                   ]
                 })
                 .then(() => {
-                  return resolve();
+                  resolve();
                 })
                 .catch(() => {
-                  return reject();
+                  reject();
                 });
             });
           }
@@ -951,7 +951,7 @@ MoneyView o-- ReportView
 
           setup() {
             return new Promise((resolve, reject) => {
-              return resolve(this._db.setup());
+              resolve(this._db.setup());
             });
           }
 
@@ -971,10 +971,10 @@ MoneyView o-- ReportView
                     .query("upsert", data)
                     .exec()
                     .then(rows => {
-                      return resolve(rows);
+                      resolve(rows);
                     })
                     .catch(err => {
-                      return reject(err);
+                      reject(err);
                     });
                 });
             });
@@ -1001,10 +1001,10 @@ MoneyView o-- ReportView
                         row.total._currency
                       )
                   )[0];
-                  return resolve(result);
+                  resolve(result);
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1015,10 +1015,10 @@ MoneyView o-- ReportView
                 .query("delete")
                 .exec()
                 .then(() => {
-                  return resolve();
+                  resolve();
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1036,7 +1036,7 @@ MoneyView o-- ReportView
 
           setup() {
             return new Promise((resolve, reject) => {
-              return resolve(this._db.setup());
+              resolve(this._db.setup());
             });
           }
 
@@ -1052,7 +1052,7 @@ MoneyView o-- ReportView
                 .query("upsert", data)
                 .exec()
                 .then(rows => {
-                  return resolve(
+                  resolve(
                     rows.map(
                       row =>
                         new ExChangeRate(row.from, row.to, row.rate, row.id)
@@ -1060,7 +1060,7 @@ MoneyView o-- ReportView
                   );
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1072,12 +1072,12 @@ MoneyView o-- ReportView
                 .where(["id", "=", data.id])
                 .exec()
                 .then(rows => {
-                  return resolve(
+                  resolve(
                     nSQL(this.table)
                       .query("upsert", data)
                       .exec()
                       .then(rows => {
-                        return resolve(
+                        resolve(
                           rows.map(
                             row =>
                               new ExChangeRate(
@@ -1090,12 +1090,12 @@ MoneyView o-- ReportView
                         );
                       })
                       .catch(() => {
-                        return reject();
+                        reject();
                       })
                   );
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1109,10 +1109,10 @@ MoneyView o-- ReportView
                   const result = rows.map(
                     row => new ExChangeRate(row.from, row.to, row.rate, row.id)
                   );
-                  return resolve(result);
+                  resolve(result);
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1124,10 +1124,10 @@ MoneyView o-- ReportView
                 .where(["id", "=", id])
                 .exec()
                 .then(rows => {
-                  return resolve();
+                  resolve();
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1140,9 +1140,9 @@ MoneyView o-- ReportView
                 .exec()
                 .then(rows => {
                   if (rows.length === 0) {
-                    return resolve([]);
+                    resolve([]);
                   } else {
-                    return resolve(
+                    resolve(
                       new ExChangeRate(
                         rows[0].from,
                         rows[0].to,
@@ -1153,7 +1153,7 @@ MoneyView o-- ReportView
                   }
                 })
                 .catch(err => {
-                  return reject(err);
+                  reject(err);
                 });
             });
           }
@@ -1164,7 +1164,7 @@ MoneyView o-- ReportView
                 .query("upsert", list)
                 .exec()
                 .then(rows => {
-                  return resolve(
+                  resolve(
                     rows.map(
                       row =>
                         new ExChangeRate(row.from, row.to, row.rate, row.id)
@@ -1335,7 +1335,7 @@ MoneyView o-- ReportView
                     )
                 );
 
-                return resolve(new Report(items, bank));
+                resolve(new Report(items, bank));
               });
             });
           }
@@ -1343,7 +1343,7 @@ MoneyView o-- ReportView
           deleteReport() {
             return new Promise((resolve, reject) => {
               this._repository.destroy().then(() => {
-                return resolve();
+                resolve();
               });
             });
           }
@@ -1366,7 +1366,7 @@ MoneyView o-- ReportView
                   this._repository
                     .selectAll()
                     .then(result => {
-                      return resolve(new ExChangeRates(result));
+                      resolve(new ExChangeRates(result));
                     })
                     .catch(err => {
                       reject(err);
@@ -1383,7 +1383,7 @@ MoneyView o-- ReportView
               const entity = new ExChangeRate(from, to, rate, id);
               return this._repository.save(entity).then(() => {
                 return this._repository.selectAll().then(result => {
-                  return resolve(new ExChangeRates(result));
+                  resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1393,7 +1393,7 @@ MoneyView o-- ReportView
             return new Promise((resolve, reject) => {
               return this._repository.create(entity).then(() => {
                 return this._repository.selectAll().then(result => {
-                  return resolve(new ExChangeRates(result));
+                  resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1403,7 +1403,7 @@ MoneyView o-- ReportView
             return new Promise((resolve, reject) => {
               this._repository.delete(id).then(() => {
                 this._repository.selectAll().then(result => {
-                  return resolve(new ExChangeRates(result));
+                  resolve(new ExChangeRates(result));
                 });
               });
             });
@@ -1413,7 +1413,7 @@ MoneyView o-- ReportView
             return new Promise((resolve, reject) => {
               this._repository.destroy().then(() => {
                 this._repository.selectAll().then(result => {
-                  return resolve(new ExChangeRates(result));
+                  resolve(new ExChangeRates(result));
                 });
               });
             });
