@@ -1,3 +1,4 @@
+/* eslint-disable */
 const spec = document.getElementById('spec')
 if (spec) {
   // eslint-disable-next-line no-undef

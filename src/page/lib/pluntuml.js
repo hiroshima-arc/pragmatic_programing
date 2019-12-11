@@ -1,3 +1,4 @@
+/* eslint-disable */
 const classDiagram = (() => {
   const inputId = "class-diagram-input";
   const outputId = "class-im";

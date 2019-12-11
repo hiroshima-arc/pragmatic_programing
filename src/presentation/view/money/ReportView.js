@@ -176,29 +176,29 @@ export default class ReportView {
       }
 
       return `
-                        <div
-                          aria-labelledby="tab-menu01"
-                          class="tab-pane fade border border-top-0 ${activeShow}"
-                          id=${this._css.id.panel_menus.no1}
-                          role="tabpanel"
-                        >
-                          <dvi class="row p-3">
-                            <div id=${
-                              this._css.id.report.name
-                            } class="col-md-12 order-md-2">
-                              <div class="row">
-                                ${upload()}
-                              </div>
-                              <div class="row">
-                                ${table()}
-                              </div>
-                              <div class="col-md-12 py-2">
-                                ${download()}
-                              </div>
-                            </div>
-                          </dvi>
-                        </div>
-                    `
+        <div
+          aria-labelledby="tab-menu01"
+          class="tab-pane fade border border-top-0 ${activeShow}"
+          id=${this._css.id.panel_menus.no1}
+          role="tabpanel"
+        >
+          <dvi class="row p-3">
+            <div id=${
+              this._css.id.report.name
+            } class="col-md-12 order-md-2">
+              <div class="row">
+                ${upload()}
+              </div>
+              <div class="row">
+                ${table()}
+              </div>
+              <div class="col-md-12 py-2">
+                ${download()}
+              </div>
+            </div>
+          </dvi>
+        </div>
+    `
     }
   }
 
