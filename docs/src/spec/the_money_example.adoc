@@ -1,0 +1,490 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+= The Money Example
+
+== 仕様
+
+既存レポート
+
+|====================
+|銘柄|株数|価格|合計|
+|IBM |1000|25  |25000|
+|GE  |400 |100 |40000|
+|    |    |総計 |65000|
+|====================
+
+レポートを多国籍通貨対応させるために、通貨の情報を加えなければならない。
+
+|====================
+|銘柄       |株数  |価格  |合計  |
+|IBM       |1000|25 USD  |25000 USD|
+|Novartis  |400 |150 CHF |60000 CHF|
+|          |    |総計 |65000 USD|
+|====================
+
+加えて、為替レートも規定しなければならない
+
+|====================
+|換算元|換算先|レート|
+|CHF|USD|1.5|
+|====================
+
+[quote]
+----
+テスト駆動開発 第1章 仮実装より
+----
+
+* 通貨の異なる２つの金額を足し、通貨間の為替レートに基づいて換算された金額を得る。
+
+* 金額（通貨単位あたりの額）に数値（通貨単位数）を掛け、金額を得る。
+
+== 設計
+
+=== 入力CSVファイル仕様
+
+|====================
+|銘柄       |株数  |価格  |通貨
+|string    |int   |int  |string
+|====================
+
+=== 出力CSVファイル仕様
+
+|====================
+|銘柄       |株数  |価格  |合計
+|string    |int   |int  |int
+|====================
+
+=== TODOリスト
+
+* [x] $5 + 10 CHF = $10(レートが2:1の場合)
+* [x] $5 + $5 = $10
+* [x] $5 + $5がMoneyを返す
+* [x] Bank.reduce(Money)
+* [x] Moneyを変換して換算を行う
+* [x] Reduce(Bank, String)
+* [x] Sum.plus
+* [x] Expression.times
+* [x] レポートを画面に表示する
+* [x] レポートをアップロードする
+* [x] レポートをダウンロードする
+* [x] 為替レートを画面で新規追加する
+* [x] 為替レートを画面で更新する
+* [x] 為替レートを画面で削除する
+* [x] レポートを保存する
+* [x] 為替レートを保存する
+* [x] 登録した為替レートを元にレポートを集計する
+* [x] ファーストクラスコレクション
+* [x] DB生成メソッドの重複
+* [x] 大きなサービスクラス
+* [x] 大きなビュークラス
+* [x] レポート画面を分割する
+* [x] 為替レート画面を分割する
+* [x] 表示部品のコンポーネント化
+* [x] CSSセレクターのパラメータ化
+* [x] 処理メッセージの表示
+
+=== ユースケース図
+
+=== クラス図
+
+==== パッケージ構成
+[plantuml]
+----
+package Presentaion {
+    package View {
+    }
+}
+
+
+package Application {
+    package Service {
+    }
+}
+
+package Infrastructure {
+}
+
+
+package Domain {
+    package Model {
+    }
+}
+
+Presentaion -> Application
+Application --> Domain
+Application -> Infrastructure
+----
+
+=== クラス関連
+[plantuml]
+----
+Expression <|.. Money
+Expression <|.. Sum
+Money <- Sum
+Sum <- Bank
+Bank -> Pair
+Bank <-- Report
+Sum <-- Report
+Money <-- ReportLineItem
+ExChangeRates o- ExChangeRate
+ReportLineItem -o Report
+ReportService -o MoneyService
+MoneyService o- ExChangeRateService
+ExChangeRates <-- ExChangeRateService
+ExChangeRate <-- ExChangeRateRepository
+ReportRepository -o ReportService
+Report <- ReportRepository
+ExChangeRateService o- ExChangeRateRepository
+ReportRepository *-- MoneyDB
+ExChangeRateRepository *-- MoneyDB
+Report <-- ReportService
+Bank <-- ReportService
+MoneyService ---o MoneyView
+MoneyView o-- ExChangeRateView
+MoneyView o-- ReportView
+MoneyView -> TabComponent
+MessageView -o MoneyView
+ReportView --> TableComponent
+ReportView --> ButtonComponent 
+ReportView --> InputComponent
+ExChangeRateView --> TableComponent
+ExChangeRateView --> ButtonComponent
+ExChangeRateView --> InputComponent
+ButtonComponent <|-- DefaultButtonComponent
+ButtonComponent <|-- DefaultMiniButtonComponent
+ButtonComponent <|-- DangerMiniButtonComponent
+InputComponent <|--- FileInputComponent
+InputComponent <|--- TextInputComponent
+----
+
+==== Presentaion
+===== View
+
+[plantuml]
+----
+class MoneyView {
+  REPORT: 1
+  EXCHANGE: 2
+  render(): String
+}
+class ReportView {
+  render(): String
+}
+class ExChangeRateView {
+  render(): String
+}
+class TabComponent {
+  create(): String
+}
+class TableComponent {
+  create(): String
+}
+class ButtonComponent {
+  create(): String
+}
+class InputComponent {
+  create(): String
+}
+class MessageView {
+  WARNING: 1
+  SUCCESS: 2
+  DANGER: 3
+  render() : String
+}
+MoneyService ---o MoneyView
+MoneyView o-- ExChangeRateView
+MoneyView o-- ReportView
+MoneyView -> TabComponent
+MessageView -o MoneyView
+ReportView --> TableComponent
+ReportView --> ButtonComponent 
+ReportView --> InputComponent
+ExChangeRateView --> TableComponent
+ExChangeRateView --> ButtonComponent
+ExChangeRateView --> InputComponent
+ButtonComponent <|-- DefaultButtonComponent
+ButtonComponent <|-- DefaultMiniButtonComponent
+ButtonComponent <|-- DangerMiniButtonComponent
+InputComponent <|--- FileInputComponent
+InputComponent <|--- TextInputComponent
+----
+
+==== Application
+
+===== Service
+[plantuml]
+----
+class MoneyService {
+  setupDb(): void
+  createReportViewModel(data): RepositoryViewModel
+  addExChangeRate(entity): ExChangeRates
+  selectAllExChangeRate(): ExChangeRates
+  updateExChangeRate(id):  ExChangeRates
+  deleteExChangeRate(id): ExChangeRates
+  deleteAllExChangeRate(): ExChangeRates
+  saveReport(): void
+  getReport(): ReportViewModle
+  deleteReport(): void
+}
+class ReportService {
+  repository: ReportRepository
+  createReportViewModel(data): RepositoryViewModel
+  saveReport(): void
+  getReport(): ReportViewModle
+  deleteReport(): void
+}
+class ExChangeRateService {
+  repository: ExChangeRateRepository
+  addExChangeRate(entity): ExChangeRates
+  selectAllExChangeRate(): ExChangeRates
+  updateExChangeRate(id):  ExChangeRates
+  deleteExChangeRate(id): ExChangeRates
+  deleteAllExChangeRate(): ExChangeRates
+}
+
+ReportService -o MoneyService 
+MoneyService o- ExChangeRateService
+----
+
+==== Infrastructure
+
+[plantuml]
+----
+class MoneyDB {
+  name: String
+  {static}REPORT
+  {static}EXCHANGE_RATS
+  setup(): void
+  connect(): void
+}
+class ReportRepository {
+  table: String
+  setup(): void
+  connect(): void
+  get(): ReporViewModel
+  save(): void
+  destroy(): void
+}
+class ExChangeRateRepository {
+  table: String
+  setup(): void
+  connect(): void
+  create(): ExChangeRate
+  createBatch(): List<ExChangeRate>
+  save(): ExChangeRate
+  find(): ExChangeRate
+  seletAll(): List<ExChangeRate>
+  delete(): void
+  destroy(): void
+}
+MoneyDB <-- ReportRepository
+MoneyDB <-- ExChangeRateRepository
+----
+
+==== Domain
+===== Model
+[plantuml]
+----
+
+class Expression {
+  times(multiplier)
+  plus(addend)
+  reduce(bank, to)
+}
+class Sum {
+  augend: Expression
+  addend: Expression
+  times(multiplier): Expression
+  reduce(to): Money
+  plus(added): Expression
+}
+class Bank {
+  rates: Map
+  reduce(source, to): Money
+  addRate(from, to, rate): void
+  rate(from, to): int
+}
+class Pair {
+  from: String
+  to: String
+  equlas(object): boolean
+  hashCode(): int
+  toString(): String
+}
+class Money {
+  amount: int
+  currency() :String
+  times(multiplier) :Money
+  plus(addend) :Expression
+  equals(object) :boolean
+  reduce(to) :Money
+  {static} dollar(amount): Dollar
+  {static} franc(amount): Franc
+}
+class ExChangeRate {
+  from: String
+  to: String
+  rate: float
+  id: int
+}
+class Report {
+  title: String
+  sum: int
+  currenty: String
+  items<ReportLineItem>: List
+  total(): Sum
+}
+class ReportLineItem {
+  stockName: String
+  stockAmount: int
+  price: Money
+  sum: Money
+}
+class ExChangeRates {
+  record: List<ExChangeRate>
+}
+Expression <|.. Money
+Expression <|.. Sum
+Money <- Sum
+Sum <- Bank
+Bank -> Pair
+Bank <-- Report
+Sum <-- Report
+Money <-- ReportLineItem
+ExChangeRates o- ExChangeRate
+ReportLineItem -o Report
+----
+
+
+=== シーケンス図
+
+== 開発
+
+[source, javascript]
+=== Infrastracture
+----
+include::../../../src/infrastructure/MoneyDB.js[]
+----
+
+----
+include::../../../src/infrastructure/ExChangeRateRepository.js[]
+----
+
+----
+include::../../../src/infrastructure/ReportRepository.js[]
+----
+
+
+
+=== Application
+==== Service
+----
+include::../../../src/application/service/money/MoneyService.js[]
+----
+
+----
+include::../../../src/application/service/money/ExChangeRateService.js[]
+----
+
+----
+include::../../../src/application/service/money/ReportService.js[]
+----
+
+=== Domain
+==== Model
+----
+include::../../../src/domain/model/money/Bank.js[]
+----
+
+----
+include::../../../src/domain/model/money/ExChangeRates.js[]
+----
+
+----
+include::../../../src/domain/model/money/ExChangeRate.js[]
+----
+
+----
+include::../../../src/domain/model/money/Expression.js[]
+----
+
+----
+include::../../../src/domain/model/money/Money.js[]
+----
+
+----
+include::../../../src/domain/model/money/Pair.js[]
+----
+
+----
+include::../../../src/domain/model/money/Report.js[]
+----
+
+----
+include::../../../src/domain/model/money/ReportLineItem.js[]
+----
+
+----
+include::../../../src/domain/model/money/Sum.js[]
+----
+
+=== Presentation
+==== View
+
+----
+include::../../../src/presentation/view/money/ExChangeRateView.js[]
+----
+
+----
+include::../../../src/presentation/view/money/MessageView.js[]
+----
+
+----
+include::../../../src/presentation/view/money/MoneyView.js[]
+----
+
+----
+include::../../../src/presentation/view/money/ReportView.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/ButtonComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/DangerMiniButtonComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/FileInputComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/InputComponeent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/PrimaryButtonComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/PrimaryMiniButtonComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/TabComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/TableComponent.js[]
+----
+
+----
+include::../../../src/presentation/view/money/component/TextInputComponent.js[]
+----
+
+
+== 参照
+
+* https://www.amazon.co.jp/%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA-Kent-Beck/dp/4274217884/ref=sr_1_1?hvadid=335138641345&hvdev=c&jp-ad-ap=0&keywords=%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA&qid=1574297266&sr=8-1[テスト駆動開発]

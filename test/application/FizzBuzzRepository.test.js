@@ -2,8 +2,8 @@
 require('fake-indexeddb/auto')
 const chai = require('chai')
 const assert = chai.assert
-const fizzBuzzRepository = require('../../../src/application/repository/FizzBuzzRepository')
-const fizzBuzzEntity = require('../../../src/domain/model/fizz-buzz/FizzBuzzEntity')
+const fizzBuzzRepository = require('../../src/application/repository/FizzBuzzRepository')
+const fizzBuzzEntity = require('../../src/domain/model/fizz-buzz/FizzBuzzEntity')
 
 describe('FizzBuzzRepositoryTest', () => {
   let repository
