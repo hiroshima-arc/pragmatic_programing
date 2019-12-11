@@ -1,7 +1,7 @@
 import MoneyDB from '../../../infrastructure/MoneyDB'
 import ReportService from './ReportService'
 import ExChangeRateService from './ExChangeRateService'
-import ExChangeRate from '../../../domain/model/money/Expression'
+import ExChangeRate from '../../../domain/model/money/ExChangeRate'
 
 export default class MoneyService {
   constructor () {

@@ -4,6 +4,12 @@ describe('The Money Example', () => {
     cy.visit('http://localhost:8080') // change URL to match your dev URL
   })
 
+  it('機能名が表示される', () => {
+    cy.get('#navbarDropdown').click()
+    cy.get('#money-app-menu').click()
+    cy.get('#function-name').should('contain', 'Money')
+  })
+
   describe('レポート', () => {
     it('CSVファイルをアップロードする', () => {
       const fileName = 'report.csv'
