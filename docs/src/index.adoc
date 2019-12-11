@@ -2,7 +2,7 @@
 :toclevels: 5
 :sectnums:
 
-= ToyBox 
+= Pragmatic Programing
 
 == 目的
 開発ドキュメントの管理
@@ -16,10 +16,12 @@
 == 構成
 * <<anchor-1,HelloWorld>>
 * <<anchor-2,FizzBuzz>>
+* <<anchor-3,TheMoneyExample>>
 
 == 詳細
 === link:./spec/hello_world.html[HelloWorld][[anchor-1]]
 === link:./spec/fizz_buzz.html[FizzBuzz][[anchor-2]]
+=== link:./spec/the_money_example.html[TheMoneyExample][[anchor-3]]
 
 == 参照
 * http://asciidoctor.org/[Asciidoctor]

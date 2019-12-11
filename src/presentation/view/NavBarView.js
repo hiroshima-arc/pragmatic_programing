@@ -1,4 +1,5 @@
 import FizzBuzzView from './fizz-buzz/FizzBuzzView'
+import MoneyView from './money/MoneyView'
 import NoticeView from './NoticeView'
 import AboutView from './AboutView'
 
@@ -7,6 +8,7 @@ export default class NavBarView {
     this._notice = new NoticeView()
     this._about = new AboutView()
     this._fizzBuzz = new FizzBuzzView()
+    this._money = new MoneyView()
   }
 
   topEvent (e) {
@@ -21,11 +23,16 @@ export default class NavBarView {
     this._fizzBuzz.render()
   }
 
+  moneyEvent (e) {
+    this._money.render()
+  }
+
   renderComponent () {
     const selector = {
       notice: 'notice-app-menu',
       about: 'about-app-menu',
-      fizzBuzz: 'fizz-buzz-app-menu'
+      fizzBuzz: 'fizz-buzz-app-menu',
+      money: 'money-app-menu'
     }
 
     const dispatchEvent = () => {
@@ -38,6 +45,9 @@ export default class NavBarView {
       document
         .querySelector(`#${selector.fizzBuzz}`)
         .addEventListener('click', this.fizzBuzzEvent.bind(this))
+      document
+        .querySelector(`#${selector.money}`)
+        .addEventListener('click', this.moneyEvent.bind(this))
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -54,9 +64,10 @@ export default class NavBarView {
         <a href="#" id="${selector.about}" class="nav-link">About</a>
       </li>
       `
-      const fizzBuzz = `
+      const contents = `
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a href="#" id="${selector.fizzBuzz}" class="dropdown-item">FizzBuzz</a>
+          <a href="#" id="${selector.money}" class="dropdown-item">Money</a>
         </div>
       `
       document.querySelector('#navbar').innerHTML = `
@@ -95,7 +106,7 @@ export default class NavBarView {
                   >
                     Contents
                   </a>
-                  ${fizzBuzz}
+                  ${contents}
                 </li>
               </ul>
               <!-- /ナビゲーションメニュー -->
