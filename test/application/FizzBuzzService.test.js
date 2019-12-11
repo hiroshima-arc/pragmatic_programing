@@ -1,8 +1,8 @@
 /* eslint-disable new-cap */
 const chai = require('chai')
 const assert = chai.assert
-const service = require('../../../src/application/service/fizz-buzz/FizzBuzzService')
-const type = require('../../../src/domain/type/fizz-buzz/FizzBuzzTypeEnum')
+const service = require('../../src/application/service/fizz-buzz/FizzBuzzService')
+const type = require('../../src/domain/type/fizz-buzz/FizzBuzzTypeEnum')
 
 describe('FizzBuzzTest', () => {
   describe('タイプ1の場合', () => {

@@ -1,12 +1,12 @@
 const chai = require('chai')
 const assert = chai.assert
-const ExChangeRate = require('../../../src/domain/model/money/ExChangeRate').default
-const MoneyDB = require('../../../src/infrastructure/MoneyDB').default
-const MoneyService = require('../../../src/application/service/money/MoneyService').default
-const ReportService = require('../../../src/application/service/money/ReportService').default
-const ExChangeRateService = require('../../../src/application/service/money/ExChangeRateService').default
-const ReportRepository = require('../../../src/infrastructure/ReportRepository').default
-const ExChangeRateRepository = require('../../../src/infrastructure/ExChangeRateRepository').default
+const ExChangeRate = require('../../src/domain/model/money/ExChangeRate').default
+const MoneyDB = require('../../src/infrastructure/MoneyDB').default
+const MoneyService = require('../../src/application/service/money/MoneyService').default
+const ReportService = require('../../src/application/service/money/ReportService').default
+const ExChangeRateService = require('../../src/application/service/money/ExChangeRateService').default
+const ReportRepository = require('../../src/infrastructure/ReportRepository').default
+const ExChangeRateRepository = require('../../src/infrastructure/ExChangeRateRepository').default
 
 export default class MoneyServiceMock extends MoneyService {
   constructor () {

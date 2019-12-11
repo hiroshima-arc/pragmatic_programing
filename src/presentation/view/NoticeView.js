@@ -47,7 +47,6 @@ export default class NoticeView {
                     <dd class="col-md-9"><a href="#" id="${selector.fizzBuzz}">FizzBuzz</a>リリース</dd>
                   </dl>
               </div>
-            </section>
           </div>
         `
         events()

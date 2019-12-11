@@ -10,10 +10,12 @@ export default class AboutView {
       このサイトについて
       `
       document.querySelector('#app').innerHTML = `
-      <div class="container">
-        <h3 id="function-name" class="mb-3">${about}</h3>
-        <div></div>
-      </div>
+          <div class="py-3">
+            <div class="container">
+              <h3 id="function-name" class="mb-3">${about}</h3>
+              <div></div>
+            </div>
+          </div>
       `
       events()
     })(dispatchEvent)
