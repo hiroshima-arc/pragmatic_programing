@@ -1,11 +1,6 @@
 name: NodeCI
 
-on:
-  push:
-    branches:
-      - master
-      - develop
-      - 'releases/**'
+on: [push]
 
 jobs:
   build:

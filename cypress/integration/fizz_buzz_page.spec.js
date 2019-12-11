@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 describe('FizzBuzz Page', () => {
   it('successfully loads', () => {
+    cy.wait(1000)
     cy.visit('http://localhost:8080') // change URL to match your dev URL
   })
 
