@@ -1,5 +1,7 @@
-document.getElementById("spec").innerHTML = marked(
-  `
+const spec = document.getElementById("spec");
+if (spec) {
+  spec.innerHTML = marked(
+    `
 ## 仕様
 
 通貨の異なる２つの金額を足し、通貨間の為替レートに基づいて換算された金額を得る。
@@ -20,4 +22,5 @@ document.getElementById("spec").innerHTML = marked(
 
 ## ToDoリスト
 `
-);
+  );
+}

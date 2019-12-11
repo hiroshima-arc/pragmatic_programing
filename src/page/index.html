@@ -1170,7 +1170,7 @@
             this._selectTab = this.REPORT;
             this._css = {
               id: {
-                application: "money-app",
+                application: "app",
                 section: {
                   menu: "menu"
                 },
@@ -1968,7 +1968,10 @@
           }
         }
 
-        document.querySelector("#app-dev").innerHTML = `
+        const dev = document.querySelector("#app-dev");
+
+        if (dev !== null) {
+          document.querySelector("#app-dev").innerHTML = `
           <div class="container">
             <div class="row">
               <h2>TheMoneyExample</h2>
@@ -1983,13 +1986,14 @@
             </div>
             <div class="py-3">
               <h2>アプリケーション</h2>
-              <div id="money-app"></div>
+              <div id="app"></div>
             </div>
           </div>
         `;
 
-        const view = new MoneyView();
-        view.render();
+          const view = new MoneyView();
+          view.render();
+        }
       </script>
       <script src="./lib/markdown.js"></script>
       <script src="./lib/pluntuml.js"></script>
