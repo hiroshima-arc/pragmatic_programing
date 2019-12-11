@@ -34,19 +34,21 @@ export default class NoticeView {
     const createComponent = (events => {
       if (document.querySelector('#app')) {
         document.querySelector('#app').innerHTML = `
-        <div class="container">
-          <h3 id="function-name" class="mb-3">お知らせ</h3>
-            <div class="col-md-10">
-              <dl class="row">
-                <dt class="col-md-3">2019年12月11日</dt>
-                <dd class="col-md-9"><a href="#" id="${selector.money}">Money</a>リリース</dd>
-              </dl>
-              <dl class="row">
-                <dt class="col-md-3">2019年11月20日</dt>
-                <dd class="col-md-9"><a href="#" id="${selector.fizzBuzz}">FizzBuzz</a>リリース</dd>
-              </dl>
+          <div class="py-3">
+            <div class="container">
+              <h3 id="function-name" class="mb-3">お知らせ</h3>
+                <div class="col-md-10">
+                  <dl class="row">
+                    <dt class="col-md-3">2019年12月11日</dt>
+                    <dd class="col-md-9"><a href="#" id="${selector.money}">Money</a>リリース</dd>
+                  </dl>
+                  <dl class="row">
+                    <dt class="col-md-3">2019年11月20日</dt>
+                    <dd class="col-md-9"><a href="#" id="${selector.fizzBuzz}">FizzBuzz</a>リリース</dd>
+                  </dl>
+              </div>
+            </section>
           </div>
-        </div>
         `
         events()
       }

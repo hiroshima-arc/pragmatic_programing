@@ -1,5 +1,6 @@
-const spec = document.getElementById("spec");
+const spec = document.getElementById('spec')
 if (spec) {
+  // eslint-disable-next-line no-undef
   spec.innerHTML = marked(
     `
 ## 仕様
@@ -22,5 +23,5 @@ if (spec) {
 
 ## ToDoリスト
 `
-  );
+  )
 }

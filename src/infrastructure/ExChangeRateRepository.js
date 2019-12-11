@@ -1,5 +1,5 @@
 import { nSQL } from '@nano-sql/core'
-import ExChangeRate from '../domain/model/money/Expression'
+import ExChangeRate from '../domain/model/money/ExChangeRate'
 
 export default class ExChangeRateRepository {
   constructor (db, table) {
