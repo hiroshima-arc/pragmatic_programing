@@ -633,6 +633,29 @@
             });
           }
 
+          create(report, exChangeRate) {
+            return new Promise((resolve, reject) => {
+              const dbList = nSQL().listDatabases();
+              if (dbList.length > 0) resolve();
+
+              report
+                .setup()
+                .then(() => {
+                  exChangeRate
+                    .setup()
+                    .then(() => {
+                      resolve();
+                    })
+                    .catch(err => {
+                      reject(err);
+                    });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            });
+          }
+
           connect() {
             return new Promise((resolve, reject) => {
               nSQL().useDatabase(this._name);
@@ -896,31 +919,19 @@
 
         class MoneyService {
           constructor() {
-            const db = new MoneyDB("money");
-            this._reportService = new ReportService(db);
-            this._exChangeRateService = new ExChangeRateService(db);
+            this._db = new MoneyDB("money");
+            this._reportService = new ReportService(this._db);
+            this._exChangeRateService = new ExChangeRateService(this._db);
           }
 
           setUpDb() {
             return new Promise((resolve, reject) => {
-              const dbList = nSQL().listDatabases();
-              if (dbList.length > 0) resolve();
-
-              this._reportService.repository
-                .setup()
-                .then(() => {
+              resolve(
+                this._db.create(
+                  this._reportService.repository,
                   this._exChangeRateService.repository
-                    .setup()
-                    .then(() => {
-                      resolve();
-                    })
-                    .catch(err => {
-                      reject(err);
-                    });
-                })
-                .catch(err => {
-                  reject(err);
-                });
+                )
+              );
             });
           }
 
