@@ -23,7 +23,8 @@
     <header class="py-4"></header>
     <!-- /ヘッダー -->
     <div class="container text-center">
-      <h1>アプリケーションプログラマのための練習プログラム集</h1>
+      <h1>アプリケーションプログラマのための</h1>
+      <h1>練習プログラム集</h1>
     </div>
     <!-- ナビゲーションバー -->
     <div id="navbar"></div>
@@ -31,9 +32,7 @@
     <!-- メイン -->
     <main>
       <!-- コンテンツ01 -->
-      <div class="py-4">
-        <section id="app"></section>
-      </div>
+      <div id="app"></div>
       <!-- /コンテンツ01 -->
     </main>
     <!-- /メイン -->
@@ -59,12 +58,70 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"
       ></script>
+      <!-- PapaParse -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>
+
+      <!-- nanoSQL2 -->
+      <!-- ES6 Only (Faster & Smaller) -->
+      <script
+        src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.js"
+        integrity="sha256-W1pVgKda7GC4fwXqq9jfOrssBDJJXZqck+ultRPVzmc="
+        crossorigin="anonymous"
+      ></script>
+      <!-- ES5 (Internet Explorer/Old Browser Support) -->
+      <!-- Promise must be polyfilled as well -->
+      <script
+        src="https://cdn.jsdelivr.net/npm/@nano-sql/core@2.3.7/dist/nano-sql.min.es5.js"
+        integrity="sha256-1t9VlpFUgHaxlLQy6HM9ROQvTiuUv2M12Fp1oTh3+yg="
+        crossorigin="anonymous"
+      ></script>
+
+      <!-- markdown -->
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+      <!-- mermaid -->
+      <script
+        src="https://unpkg.com/mermaid/dist/mermaid.min.js"
+        charset="UTF-8"
+      ></script>
+      <script src="./lib/marmaid.js"></script>
+
+      <!-- PluntUML -->
+      <!--  taken from https://github.com/johan/js-deflate -->
+      <script src="./lib/rawdeflate.js"></script>
+
+      <!-- mocha, chai -->
       <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
       <script>
         mocha.setup("tdd");
       </script>
-      <script></script>
+      <script>
+        const dev = document.querySelector("#app-dev");
+        if (dev !== null) {
+          dev.innerHTML = `
+          <div class="container">
+            <div class="row">
+              <h2>TheMoneyExample</h2>
+            </div>
+            <div class="row p-3">
+              <div id="spec"></div>
+            </div>
+            <div class="row p-3">
+              <h2>クラス図</h2>
+              <img id="class-im"
+              src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
+            </div>
+            <div class="py-3">
+              <h2>アプリケーション</h2>
+              <div id="app"></div>
+            </div>
+          </div>
+        `;
+        }
+      </script>
+      <script src="./lib/markdown.js"></script>
+      <script src="./lib/pluntuml.js"></script>
       <script>
         mocha.globals(["jQuery"]);
         mocha.run();
