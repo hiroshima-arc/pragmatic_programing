@@ -1,6 +1,6 @@
 [![Actions Status](https://github.com/hiroshima-arc/pragmatic_programing/workflows/NodeCI/badge.svg)](https://github.com/hiroshima-arc/pragmatic_programing/actions)
 [![Actions Status](https://github.com/hiroshima-arc/pragmatic_programing/workflows/NodeIntegration/badge.svg)](https://github.com/hiroshima-arc/pragmatic_programing/actions)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6d8012c01d9549b397a9158fe184caeb)](https://www.codacy.com/manual/kakimomokuri/pragmatic_programing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hiroshima-arc/pragmatic_programing&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6d8012c01d9549b397a9158fe184caeb)](https://www.codacy.com/manual/kakimomokuri/pragmatic_programing?utm_source=github.com&utm_medium=referral&utm_content=hiroshima-arc/pragmatic_programing&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/6d8012c01d9549b397a9158fe184caeb)](https://www.codacy.com/manual/kakimomokuri/pragmatic_programing?utm_source=github.com&utm_medium=referral&utm_content=hiroshima-arc/pragmatic_programing&utm_campaign=Badge_Coverage)
 
 # アプリケーションプログラマのための練習プログラム集
@@ -89,5 +89,6 @@ npm run docs:slide:start
 
 ## 参照
 
-- [FizzBuzz](http://www.hiroshima-arc.org/pragmatic_programing/spec/fizz_buzz.html)
+-  [FizzBuzz](http://www.hiroshima-arc.org/pragmatic_programing/spec/fizz_buzz.html)
 
+-  [Money](http://www.hiroshima-arc.org/pragmatic_programing/spec/the_money_example.html)
