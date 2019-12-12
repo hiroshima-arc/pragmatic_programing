@@ -4,7 +4,7 @@
 
 = ユーザーガイド
 
-== link:./guide/hello_world.html[HelloWorld][[anchor-2-1]]
-== link:./guide/fizz_buzz.html[FizzBuzz][[anchor-2-2]]
-== link:./guide/the_money_example.html[TheMoneyExample][[anchor-2-3]]
+== link:./hello_world.html[HelloWorld][[anchor-2-1]]
+== link:./fizz_buzz.html[FizzBuzz][[anchor-2-2]]
+== link:./the_money_example.html[TheMoneyExample][[anchor-2-3]]
 
