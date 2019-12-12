@@ -32,7 +32,7 @@
     <!-- メイン -->
     <main>
       <!-- コンテンツ01 -->
-      <div id="app"></div>
+      <div id="app-dev"></div>
       <!-- /コンテンツ01 -->
     </main>
     <!-- /メイン -->
@@ -102,19 +102,29 @@
           dev.innerHTML = `
           <div class="container">
             <div class="row">
-              <h2>TheMoneyExample</h2>
+              <h2>VideoRental</h2>
             </div>
             <div class="row p-3">
               <div id="spec"></div>
             </div>
+            <h2>ユースケース図</h2>
             <div class="row p-3">
-              <h2>クラス図</h2>
+              <img id="usecase-im"
+              src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
+            </div>
+            <h2>クラス図</h2>
+            <div class="row p-3">
               <img id="class-im"
               src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
             </div>
+            <h2>シーケンス図</h2>
+            <div class="row p-3">
+              <img id="sequence-im"
+              src=http://www.plantuml.com/plantuml/img/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000>
+            </div>
+            <h2>アプリケーション</h2>
             <div class="py-3">
-              <h2>アプリケーション</h2>
-              <div id="app"></div>
+              <div id="video-rental-app"></div>
             </div>
           </div>
         `;
