@@ -69,7 +69,15 @@ export default class NavBarView {
           <a href="#" id="${selector.fizzBuzz}" class="dropdown-item">FizzBuzz</a>
           <a href="#" id="${selector.money}" class="dropdown-item">Money</a>
         </div>
-      `
+        `
+
+      const documents = `
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a href="http://www.hiroshima-arc.org/pragmatic_programing/spec" target="_blank" class="dropdown-item">開発ガイド</a>
+          <a href="http://www.hiroshima-arc.org/pragmatic_programing/guide" target="_blank" class="dropdown-item">ユーザーガイド</a>
+        </div>
+        `
+
       document.querySelector('#navbar').innerHTML = `
         <nav class="navbar navbar-expand-md navbar-dark bg-dark stick-top">
           <!-- サブコンポーネント -->
@@ -107,6 +115,19 @@ export default class NavBarView {
                     Contents
                   </a>
                   ${contents}
+                <li class="nav-item dropdown">
+                  <a
+                    href="#"
+                    class="nav-link dropdown-toggle"
+                    id="navbarDropdown"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-hhaspopup="true"
+                    aria-expanded="false"
+                  >
+                    Documents
+                  </a>
+                  ${documents}
                 </li>
               </ul>
               <!-- /ナビゲーションメニュー -->
