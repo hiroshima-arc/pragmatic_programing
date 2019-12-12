@@ -14,16 +14,32 @@
 |===
 
 == 構成
-* <<anchor-1,HelloWorld>>
-* <<anchor-2,FizzBuzz>>
-* <<anchor-3,TheMoneyExample>>
+
+=== 開発ガイド
+* <<anchor-1-1,HelloWorld>>
+* <<anchor-1-2,FizzBuzz>>
+* <<anchor-1-3,TheMoneyExample>>
+
+=== ユーザーガイド
+* <<anchor-2-1,HelloWorld>>
+* <<anchor-2-2,FizzBuzz>>
+* <<anchor-2-3,TheMoneyExample>>
 
 == 詳細
-=== link:./spec/hello_world.html[HelloWorld][[anchor-1]]
-=== link:./spec/fizz_buzz.html[FizzBuzz][[anchor-2]]
-=== link:./spec/the_money_example.html[TheMoneyExample][[anchor-3]]
+
+=== link:./spec/index.html[開発ガイド]
+
+==== link:./spec/hello_world.html[HelloWorld][[anchor-1-1]]
+==== link:./spec/fizz_buzz.html[FizzBuzz][[anchor-1-2]]
+==== link:./spec/the_money_example.html[TheMoneyExample][[anchor-1-3]]
+
+=== link:./guide/index.html[ユーザーガイド]
+
+==== link:./guide/hello_world.html[HelloWorld][[anchor-2-1]]
+==== link:./guide/fizz_buzz.html[FizzBuzz][[anchor-2-2]]
+==== link:./guide/the_money_example.html[TheMoneyExample][[anchor-2-3]]
 
 == 参照
-* http://asciidoctor.org/[Asciidoctor]
-* http://www.plantuml.com[PlantUML]
-* https://about.draw.io/[draw.io]
+* http://asciidoctor.org/[Asciidoctor^]
+* http://www.plantuml.com[PlantUML^]
+* https://about.draw.io/[draw.io^]

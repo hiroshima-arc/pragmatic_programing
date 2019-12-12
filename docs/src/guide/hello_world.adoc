@@ -1,0 +1,47 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+= Hello World
+
+== はじめに
+
+=== 用語一覧
+
+|===
+|Name |Description 
+|顧客  |
+|店員    |
+|===
+
+=== 概要
+
+[plantuml]
+----
+left to right direction
+skinparam packageStyle rectangle
+actor 顧客
+actor 店員
+rectangle HelloWorld {
+  顧客 -- (チェックアウト)
+  (チェックアウト) .> (支払い) : include
+  (ヘルプ) .> (チェックアウト) : extends
+  (チェックアウト) -- 店員
+}
+----
+
+|===
+|項番 |機能 | 内容
+|1   |チェックアウト |
+|2   |支払い |
+|===
+
+
+== 共通の操作
+
+== チェックアウト
+
+== 支払い
+
+== 参照
+
+* https://doc.cloud.global.fujitsu.com/lib/sbpf/jp/template/detail-42.html[サンプルWebアプリケーション操作マニュアル　　シェア✕スキル^]

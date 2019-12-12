@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Pragmatic Programing</title>
+<title>Hello World</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -427,52 +427,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Pragmatic Programing</h1>
+<h1>Hello World</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_目的">1. 目的</a></li>
-<li><a href="#_前提">2. 前提</a></li>
-<li><a href="#_構成">3. 構成</a>
+<li><a href="#_はじめに">1. はじめに</a>
 <ul class="sectlevel2">
-<li><a href="#_開発ガイド">3.1. 開発ガイド</a></li>
-<li><a href="#_ユーザーガイド">3.2. ユーザーガイド</a></li>
+<li><a href="#_用語一覧">1.1. 用語一覧</a></li>
+<li><a href="#_概要">1.2. 概要</a></li>
 </ul>
 </li>
-<li><a href="#_詳細">4. 詳細</a>
-<ul class="sectlevel2">
-<li><a href="#_a_href_spec_index_html_開発ガイド_a">4.1. <a href="./spec/index.html">開発ガイド</a></a>
-<ul class="sectlevel3">
-<li><a href="#_a_href_spec_hello_world_html_helloworld_a_a_id_anchor_1_1_a">4.1.1. <a href="./spec/hello_world.html">HelloWorld</a><a id="anchor-1-1"></a></a></li>
-<li><a href="#_a_href_spec_fizz_buzz_html_fizzbuzz_a_a_id_anchor_1_2_a">4.1.2. <a href="./spec/fizz_buzz.html">FizzBuzz</a><a id="anchor-1-2"></a></a></li>
-<li><a href="#_a_href_spec_the_money_example_html_themoneyexample_a_a_id_anchor_1_3_a">4.1.3. <a href="./spec/the_money_example.html">TheMoneyExample</a><a id="anchor-1-3"></a></a></li>
-</ul>
-</li>
-<li><a href="#_a_href_guide_index_html_ユーザーガイド_a">4.2. <a href="./guide/index.html">ユーザーガイド</a></a>
-<ul class="sectlevel3">
-<li><a href="#_a_href_guide_hello_world_html_helloworld_a_a_id_anchor_2_1_a">4.2.1. <a href="./guide/hello_world.html">HelloWorld</a><a id="anchor-2-1"></a></a></li>
-<li><a href="#_a_href_guide_fizz_buzz_html_fizzbuzz_a_a_id_anchor_2_2_a">4.2.2. <a href="./guide/fizz_buzz.html">FizzBuzz</a><a id="anchor-2-2"></a></a></li>
-<li><a href="#_a_href_guide_the_money_example_html_themoneyexample_a_a_id_anchor_2_3_a">4.2.3. <a href="./guide/the_money_example.html">TheMoneyExample</a><a id="anchor-2-3"></a></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#_共通の操作">2. 共通の操作</a></li>
+<li><a href="#_チェックアウト">3. チェックアウト</a></li>
+<li><a href="#_支払い">4. 支払い</a></li>
 <li><a href="#_参照">5. 参照</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_目的">1. 目的</h2>
+<h2 id="_はじめに">1. はじめに</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>開発ドキュメントの管理</p>
+<div class="sect2">
+<h3 id="_用語一覧">1.1. 用語一覧</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">顧客</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">店員</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_概要">1.2. 概要</h3>
+<div class="imageblock">
+<div class="content">
+<img src="diag-e86368dedc4b2655fce083ac3dc14abf.png" alt="diag e86368dedc4b2655fce083ac3dc14abf" width="332" height="255">
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_前提">2. 前提</h2>
-<div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -481,89 +486,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ソフトウェア</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">バージョン</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">備考</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">項番</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">機能</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">内容</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AsciiDoc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">チェックアウト</p></td>
 <td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">支払い</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_構成">3. 構成</h2>
+<h2 id="_共通の操作">2. 共通の操作</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_開発ガイド">3.1. 開発ガイド</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="#anchor-1-1">HelloWorld</a></p>
-</li>
-<li>
-<p><a href="#anchor-1-2">FizzBuzz</a></p>
-</li>
-<li>
-<p><a href="#anchor-1-3">TheMoneyExample</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_ユーザーガイド">3.2. ユーザーガイド</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="#anchor-2-1">HelloWorld</a></p>
-</li>
-<li>
-<p><a href="#anchor-2-2">FizzBuzz</a></p>
-</li>
-<li>
-<p><a href="#anchor-2-3">TheMoneyExample</a></p>
-</li>
-</ul>
-</div>
-</div>
+
 </div>
 </div>
 <div class="sect1">
-<h2 id="_詳細">4. 詳細</h2>
+<h2 id="_チェックアウト">3. チェックアウト</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_a_href_spec_index_html_開発ガイド_a">4.1. <a href="./spec/index.html">開発ガイド</a></h3>
-<div class="sect3">
-<h4 id="_a_href_spec_hello_world_html_helloworld_a_a_id_anchor_1_1_a">4.1.1. <a href="./spec/hello_world.html">HelloWorld</a><a id="anchor-1-1"></a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="_a_href_spec_fizz_buzz_html_fizzbuzz_a_a_id_anchor_1_2_a">4.1.2. <a href="./spec/fizz_buzz.html">FizzBuzz</a><a id="anchor-1-2"></a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="_a_href_spec_the_money_example_html_themoneyexample_a_a_id_anchor_1_3_a">4.1.3. <a href="./spec/the_money_example.html">TheMoneyExample</a><a id="anchor-1-3"></a></h4>
 
 </div>
 </div>
-<div class="sect2">
-<h3 id="_a_href_guide_index_html_ユーザーガイド_a">4.2. <a href="./guide/index.html">ユーザーガイド</a></h3>
-<div class="sect3">
-<h4 id="_a_href_guide_hello_world_html_helloworld_a_a_id_anchor_2_1_a">4.2.1. <a href="./guide/hello_world.html">HelloWorld</a><a id="anchor-2-1"></a></h4>
+<div class="sect1">
+<h2 id="_支払い">4. 支払い</h2>
+<div class="sectionbody">
 
-</div>
-<div class="sect3">
-<h4 id="_a_href_guide_fizz_buzz_html_fizzbuzz_a_a_id_anchor_2_2_a">4.2.2. <a href="./guide/fizz_buzz.html">FizzBuzz</a><a id="anchor-2-2"></a></h4>
-
-</div>
-<div class="sect3">
-<h4 id="_a_href_guide_the_money_example_html_themoneyexample_a_a_id_anchor_2_3_a">4.2.3. <a href="./guide/the_money_example.html">TheMoneyExample</a><a id="anchor-2-3"></a></h4>
-
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -572,13 +529,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://asciidoctor.org/" target="_blank" rel="noopener">Asciidoctor</a></p>
-</li>
-<li>
-<p><a href="http://www.plantuml.com" target="_blank" rel="noopener">PlantUML</a></p>
-</li>
-<li>
-<p><a href="https://about.draw.io/" target="_blank" rel="noopener">draw.io</a></p>
+<p><a href="https://doc.cloud.global.fujitsu.com/lib/sbpf/jp/template/detail-42.html" target="_blank" rel="noopener">サンプルWebアプリケーション操作マニュアル　　シェア✕スキル</a></p>
 </li>
 </ul>
 </div>
@@ -587,7 +538,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-12 16:44:43 JST
+Last updated 2019-12-12 15:55:38 JST
 </div>
 </div>
 </body>

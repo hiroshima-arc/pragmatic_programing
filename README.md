@@ -89,6 +89,4 @@ npm run docs:slide:start
 
 ## 参照
 
--  [FizzBuzz](http://www.hiroshima-arc.org/pragmatic_programing/spec/fizz_buzz.html)
-
--  [Money](http://www.hiroshima-arc.org/pragmatic_programing/spec/the_money_example.html)
+- [ドキュメント](http://www.hiroshima-arc.org/pragmatic_programing/)

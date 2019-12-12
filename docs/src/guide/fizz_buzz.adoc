@@ -1,0 +1,62 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+= Fizz Buzz
+
+== はじめに
+
+=== 用語一覧
+
+|===
+|Name |Description 
+|ユーザー  |
+|===
+
+=== 概要
+
+[plantuml]
+----
+left to right direction
+skinparam packageStyle rectangle
+actor ユーザー
+rectangle FizzBuzz {
+  ユーザー -- (カウンター)
+  ユーザー -- (テーブル作成)
+  ユーザー -- (テーブル更新)
+  ユーザー -- (テーブル読込)
+  ユーザー -- (テーブル削除)
+}
+----
+
+|===
+|項番 |機能 | 内容
+|1   |カウンター|
+|2   |テーブル作成|
+|3   |テーブル更新|
+|4   |テーブル読込|
+|5   |テーブル削除|
+|===
+
+== カウンター
+
+image::../images/fizz_buzz/feat_01.gif[]
+
+== テーブル作成
+
+image::../images/fizz_buzz/feat_02.gif[]
+
+== テーブル更新
+
+image::../images/fizz_buzz/feat_03.gif[]
+
+== テーブル読込
+
+image::../images/fizz_buzz/feat_04.gif[]
+
+== テーブル削除
+
+image::../images/fizz_buzz/feat_05.gif[]
+
+== 参照
+
+https://ja.wikipedia.org/wiki/Fizz_Buzz[Fizz Buzz^]

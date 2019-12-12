@@ -1,0 +1,70 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+= The Money Example
+
+== はじめに
+
+=== 用語一覧
+
+|===
+|Name |Description 
+|ユーザー  |
+|為替レート  |
+|レポート  |
+|===
+
+=== 概要
+
+[plantuml]
+----
+left to right direction
+skinparam packageStyle rectangle
+actor ユーザー
+rectangle HelloWorld {
+  ユーザー -- (為替レート登録)
+  ユーザー -- (レポート登録)
+  ユーザー -- (レポートダウンロード)
+  ユーザー -- (為替レート編集)
+  ユーザー -- (為替レート追加)
+  ユーザー -- (為替レート削除)
+}
+----
+
+|===
+|項番 |機能 | 内容
+|1   |為替レート登録|
+|2   |レポート登録|
+|3   |レポートダウンロード|
+|4   |為替レート編集|
+|5   |為替レート追加|
+|6   |為替レート削除|
+|===
+
+
+== 為替レート登録
+
+image::../images/money/feat_01.gif[]
+
+== レポート登録
+
+image::../images/money/feat_02.gif[]
+
+== レポートダウンロード
+
+image::../images/money/feat_03.gif[]
+
+== 為替レート編集
+
+image::../images/money/feat_04.gif[]
+
+== 為替レート追加
+
+image::../images/money/feat_05.gif[]
+
+== 為替レート削除
+
+image::../images/money/feat_06.gif[]
+
+
+== 参照
