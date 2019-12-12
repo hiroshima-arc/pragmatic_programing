@@ -23,6 +23,7 @@
 === ユーザーガイド
 * <<anchor-2-1,HelloWorld>>
 * <<anchor-2-2,FizzBuzz>>
+* <<anchor-2-3,TheMoneyExample>>
 
 == 詳細
 
@@ -36,8 +37,9 @@
 
 ==== link:./guide/hello_world.html[HelloWorld][[anchor-2-1]]
 ==== link:./guide/fizz_buzz.html[FizzBuzz][[anchor-2-2]]
+==== link:./guide/the_money_example.html[TheMoneyExample][[anchor-2-3]]
 
 == 参照
-* http://asciidoctor.org/[Asciidoctor]
-* http://www.plantuml.com[PlantUML]
-* https://about.draw.io/[draw.io]
+* http://asciidoctor.org/[Asciidoctor^]
+* http://www.plantuml.com[PlantUML^]
+* https://about.draw.io/[draw.io^]

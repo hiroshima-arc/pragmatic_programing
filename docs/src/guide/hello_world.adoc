@@ -44,4 +44,4 @@ rectangle HelloWorld {
 
 == 参照
 
-* https://doc.cloud.global.fujitsu.com/lib/sbpf/jp/template/detail-42.html[サンプルWebアプリケーション操作マニュアル　　シェア✕スキル]
+* https://doc.cloud.global.fujitsu.com/lib/sbpf/jp/template/detail-42.html[サンプルWebアプリケーション操作マニュアル　　シェア✕スキル^]

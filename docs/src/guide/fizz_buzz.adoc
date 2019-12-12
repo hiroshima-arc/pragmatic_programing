@@ -59,4 +59,4 @@ image::../images/fizz_buzz/feat_05.gif[]
 
 == 参照
 
-https://ja.wikipedia.org/wiki/Fizz_Buzz[Fizz Buzz]
+https://ja.wikipedia.org/wiki/Fizz_Buzz[Fizz Buzz^]

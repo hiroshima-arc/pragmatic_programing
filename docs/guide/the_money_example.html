@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Fizz Buzz</title>
+<title>The Money Example</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -427,7 +427,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Fizz Buzz</h1>
+<h1>The Money Example</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -437,12 +437,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_概要">1.2. 概要</a></li>
 </ul>
 </li>
-<li><a href="#_カウンター">2. カウンター</a></li>
-<li><a href="#_テーブル作成">3. テーブル作成</a></li>
-<li><a href="#_テーブル更新">4. テーブル更新</a></li>
-<li><a href="#_テーブル読込">5. テーブル読込</a></li>
-<li><a href="#_テーブル削除">6. テーブル削除</a></li>
-<li><a href="#_参照">7. 参照</a></li>
+<li><a href="#_為替レート登録">2. 為替レート登録</a></li>
+<li><a href="#_レポート登録">3. レポート登録</a></li>
+<li><a href="#_レポートダウンロード">4. レポートダウンロード</a></li>
+<li><a href="#_為替レート編集">5. 為替レート編集</a></li>
+<li><a href="#_為替レート追加">6. 為替レート追加</a></li>
+<li><a href="#_為替レート削除">7. 為替レート削除</a></li>
+<li><a href="#_参照">8. 参照</a></li>
 </ul>
 </div>
 </div>
@@ -466,6 +467,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">ユーザー</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">為替レート</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">レポート</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -473,7 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_概要">1.2. 概要</h3>
 <div class="imageblock">
 <div class="content">
-<img src="diag-8551e77182cdfa8dc3d108577b8b9db4.png" alt="diag 8551e77182cdfa8dc3d108577b8b9db4" width="264" height="351">
+<img src="diag-43f722faf077124754bfec43838eccf6.png" alt="diag 43f722faf077124754bfec43838eccf6" width="308" height="432">
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -490,27 +499,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">カウンター</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">為替レート登録</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">テーブル作成</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">レポート登録</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">テーブル更新</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">レポートダウンロード</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">テーブル読込</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">為替レート編集</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">テーブル削除</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">為替レート追加</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">為替レート削除</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -519,67 +533,75 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_カウンター">2. カウンター</h2>
+<h2 id="_為替レート登録">2. 為替レート登録</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="../images/fizz_buzz/feat_01.gif" alt="feat 01">
+<img src="../images/money/feat_01.gif" alt="feat 01">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_テーブル作成">3. テーブル作成</h2>
+<h2 id="_レポート登録">3. レポート登録</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="../images/fizz_buzz/feat_02.gif" alt="feat 02">
+<img src="../images/money/feat_02.gif" alt="feat 02">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_テーブル更新">4. テーブル更新</h2>
+<h2 id="_レポートダウンロード">4. レポートダウンロード</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="../images/fizz_buzz/feat_03.gif" alt="feat 03">
+<img src="../images/money/feat_03.gif" alt="feat 03">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_テーブル読込">5. テーブル読込</h2>
+<h2 id="_為替レート編集">5. 為替レート編集</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="../images/fizz_buzz/feat_04.gif" alt="feat 04">
+<img src="../images/money/feat_04.gif" alt="feat 04">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_テーブル削除">6. テーブル削除</h2>
+<h2 id="_為替レート追加">6. 為替レート追加</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="../images/fizz_buzz/feat_05.gif" alt="feat 05">
+<img src="../images/money/feat_05.gif" alt="feat 05">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_参照">7. 参照</h2>
+<h2 id="_為替レート削除">7. 為替レート削除</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><a href="https://ja.wikipedia.org/wiki/Fizz_Buzz" target="_blank" rel="noopener">Fizz Buzz</a></p>
+<div class="imageblock">
+<div class="content">
+<img src="../images/money/feat_06.gif" alt="feat 06">
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_参照">8. 参照</h2>
+<div class="sectionbody">
+
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-12 15:51:18 JST
+Last updated 2019-12-12 16:16:13 JST
 </div>
 </div>
 </body>
