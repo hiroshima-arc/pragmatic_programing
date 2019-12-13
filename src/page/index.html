@@ -141,6 +141,40 @@
           });
         });
 
+        suite("CustomerTest", () => {
+          let customer;
+          setup(() => {
+            customer = new Customer("ミスターX");
+          });
+
+          test("名前を保持する", () => {
+            assert.equal("ミスターX", customer.name);
+          });
+
+          suite("レンタル情報を保持する", () => {
+            setup(() => {
+              movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+              rental = new Rental(movie, 3);
+              customer.addRental(rental);
+            });
+
+            test("借りたビデオのタイトルを保持する", () => {
+              assert.equal(
+                "アタック・オブ・ザ・キラートマト",
+                customer.rental[0].movie.title
+              );
+              assert.equal(3, customer.rental[0].daysRented);
+            });
+
+            test("借りたビデオのプライスコードを保持する", () => {
+              assert.equal(100, customer.rental[0].movie.priceCode);
+            });
+
+            test("借りる日数を保持する", () => {
+              assert.equal(3, customer.rental[0].daysRented);
+            });
+          });
+        });
         class Movie {
           constructor(title, priceCode) {
             this._title = title;
@@ -185,6 +219,27 @@
           get daysRented() {
             return this._daysRented;
           }
+        }
+
+        class Customer {
+          constructor(name) {
+            this._name = name;
+            this._rentals = [];
+          }
+
+          get name() {
+            return this._name;
+          }
+
+          get rental() {
+            return this._rentals;
+          }
+
+          addRental(arg) {
+            this._rentals.push(arg);
+          }
+
+          static statement() {}
         }
       </script>
       <script>

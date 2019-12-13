@@ -31,7 +31,9 @@ class Rental {
   daysRented:int
 }
 class Customer {
-  statement()
+  name:String
+  rental:Rental
+  {static}statement()
 }
 Movie "1"<-"*" Rental
 Rental "*"<-"1" Customer
