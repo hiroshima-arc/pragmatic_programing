@@ -100,10 +100,13 @@
         suite("MovieTest", () => {
           let movie;
           setup(() => {
-            movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+            movie = new Movie(
+              "アタック・オブ・ザ・キラートマト",
+              Movie.REGULAR
+            );
           });
 
-          test("区分を持っている", () => {
+          test("価格区分を定義している", () => {
             assert.equal(2, Movie.CHILDRENS);
             assert.equal(0, Movie.REGULAR);
             assert.equal(1, Movie.NEW_RELEASE);
@@ -113,13 +116,13 @@
             assert.equal("アタック・オブ・ザ・キラートマト", movie.title);
           });
 
-          test("プライスコードを保持する", () => {
-            assert.equal(100, movie.priceCode);
+          test("価格区分を保持する", () => {
+            assert.equal(0, movie.priceCode);
           });
 
-          test("プライスコードを変更する", () => {
-            movie.priceCode = 10;
-            assert.equal(10, movie.priceCode);
+          test("価格区分を変更する", () => {
+            movie.priceCode = Movie.CHILDRENS;
+            assert.equal(2, movie.priceCode);
           });
         });
 
