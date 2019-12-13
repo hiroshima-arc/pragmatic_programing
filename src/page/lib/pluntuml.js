@@ -33,7 +33,7 @@ class Rental {
 class Customer {
   name:String
   rental:Rental
-  {static}statement()
+  statement()
 }
 Movie "1"<-"*" Rental
 Rental "*"<-"1" Customer

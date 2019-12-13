@@ -129,7 +129,10 @@
         suite("RentalTest", () => {
           let rental;
           setup(() => {
-            movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+            movie = new Movie(
+              "アタック・オブ・ザ・キラートマト",
+              Movie.REGULAR
+            );
             rental = new Rental(movie, 3);
           });
           test("借りたビデオを保持する", () => {
@@ -164,17 +167,38 @@
             test("借りたビデオのタイトルを保持する", () => {
               assert.equal(
                 "アタック・オブ・ザ・キラートマト",
-                customer.rental[0].movie.title
+                customer.rentals[0].movie.title
               );
-              assert.equal(3, customer.rental[0].daysRented);
+              assert.equal(3, customer.rentals[0].daysRented);
             });
 
-            test("借りたビデオのプライスコードを保持する", () => {
-              assert.equal(100, customer.rental[0].movie.priceCode);
+            test("借りたビデオの価格区分を保持する", () => {
+              assert.equal(100, customer.rentals[0].movie.priceCode);
             });
 
             test("借りる日数を保持する", () => {
-              assert.equal(3, customer.rental[0].daysRented);
+              assert.equal(3, customer.rentals[0].daysRented);
+            });
+          });
+
+          suite("計算書を生成する", () => {
+            setup(() => {
+              movie = new Movie(
+                "アタック・オブ・ザ・キラートマト",
+                Movie.REGULAR
+              );
+              rental = new Rental(movie, 3);
+              customer.addRental(rental);
+            });
+
+            test("一般向けを1日借りる", () => {
+              result =
+                "Rental Record for ミスターX\n" +
+                "\tアタック・オブ・ザ・キラートマト\t200\n" +
+                "Amount owed is 200\n" +
+                "You earned 0 frequent renter points";
+
+              assert.equal(result, customer.statement());
             });
           });
         });
@@ -234,7 +258,7 @@
             return this._name;
           }
 
-          get rental() {
+          get rentals() {
             return this._rentals;
           }
 
@@ -242,7 +266,28 @@
             this._rentals.push(arg);
           }
 
-          static statement() {}
+          statement() {
+            let totalAmount = 0;
+            let frequentRenterPoints = 0;
+            let result = `Rental Record for ${this.name}\n`;
+            this.rentals.forEach(each => {
+              let thisAmount = 0;
+              // 1行ごとに金額を計算
+              switch (each.movie.priceCode) {
+                case Movie.REGULAR:
+                  thisAmount += 200;
+              }
+              // この貸し出しに関する数値の表示
+              result += `\t${each.movie.title}\t${thisAmount}\n`;
+              totalAmount += thisAmount;
+            });
+            // フッタ部分の追加
+            result += `Amount owed is ${totalAmount}\n`;
+            result += `You earned ${frequentRenterPoints} frequent renter points`;
+
+            console.log(result);
+            return result;
+          }
         }
       </script>
       <script>
