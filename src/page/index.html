@@ -182,23 +182,52 @@
           });
 
           suite("計算書を生成する", () => {
-            setup(() => {
-              movie = new Movie(
-                "アタック・オブ・ザ・キラートマト",
-                Movie.REGULAR
-              );
-              rental = new Rental(movie, 3);
-              customer.addRental(rental);
-            });
+            suite("一般向け", () => {
+              setup(() => {
+                movie = new Movie(
+                  "アタック・オブ・ザ・キラートマト",
+                  Movie.REGULAR
+                );
+              });
 
-            test("一般向けを1日借りる", () => {
-              result =
-                "Rental Record for ミスターX\n" +
-                "\tアタック・オブ・ザ・キラートマト\t200\n" +
-                "Amount owed is 200\n" +
-                "You earned 0 frequent renter points";
+              test("1日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\tアタック・オブ・ザ・キラートマト\t200\n" +
+                  "Amount owed is 200\n" +
+                  "You earned 0 frequent renter points";
 
-              assert.equal(result, customer.statement());
+                rental = new Rental(movie, 1);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("3日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\tアタック・オブ・ザ・キラートマト\t350\n" +
+                  "Amount owed is 350\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 3);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("4日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\tアタック・オブ・ザ・キラートマト\t500\n" +
+                  "Amount owed is 500\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 4);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
             });
           });
         });
@@ -276,6 +305,8 @@
               switch (each.movie.priceCode) {
                 case Movie.REGULAR:
                   thisAmount += 200;
+                  if (each.daysRented > 2)
+                    thisAmount += (each.daysRented - 2) * 150;
               }
               // この貸し出しに関する数値の表示
               result += `\t${each.movie.title}\t${thisAmount}\n`;
