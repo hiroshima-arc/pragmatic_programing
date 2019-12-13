@@ -27,6 +27,7 @@ class Movie {
   priceCode:int
 }
 class Rental {
+  movie: Movie
   daysRented:int
 }
 class Customer {

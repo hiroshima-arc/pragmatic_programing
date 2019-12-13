@@ -123,6 +123,24 @@
           });
         });
 
+        suite("RentalTest", () => {
+          let rental;
+          setup(() => {
+            movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+            rental = new Rental(movie, 3);
+          });
+          test("借りたビデオを保持する", () => {
+            assert.equal(
+              "アタック・オブ・ザ・キラートマト",
+              rental.movie.title
+            );
+          });
+
+          test("借りる日数を保持する", () => {
+            assert.equal(3, rental.daysRented);
+          });
+        });
+
         class Movie {
           constructor(title, priceCode) {
             this._title = title;
@@ -151,6 +169,21 @@
 
           set priceCode(arg) {
             this._priceCode = arg;
+          }
+        }
+
+        class Rental {
+          constructor(movie, daysRented) {
+            this._movie = movie;
+            this._daysRented = daysRented;
+          }
+
+          get movie() {
+            return this._movie;
+          }
+
+          get daysRented() {
+            return this._daysRented;
           }
         }
       </script>
