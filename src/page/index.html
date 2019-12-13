@@ -195,7 +195,7 @@
                   "Rental Record for ミスターX\n" +
                   "\tアタック・オブ・ザ・キラートマト\t200\n" +
                   "Amount owed is 200\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 1);
                 customer.addRental(rental);
@@ -208,7 +208,7 @@
                   "Rental Record for ミスターX\n" +
                   "\tアタック・オブ・ザ・キラートマト\t350\n" +
                   "Amount owed is 350\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 3);
                 customer.addRental(rental);
@@ -221,7 +221,7 @@
                   "Rental Record for ミスターX\n" +
                   "\tアタック・オブ・ザ・キラートマト\t500\n" +
                   "Amount owed is 500\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 4);
                 customer.addRental(rental);
@@ -240,7 +240,7 @@
                   "Rental Record for ミスターX\n" +
                   "\t魔法少女まどか☆マギカ\t150\n" +
                   "Amount owed is 150\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 1);
                 customer.addRental(rental);
@@ -253,7 +253,7 @@
                   "Rental Record for ミスターX\n" +
                   "\t魔法少女まどか☆マギカ\t150\n" +
                   "Amount owed is 150\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 3);
                 customer.addRental(rental);
@@ -266,7 +266,7 @@
                   "Rental Record for ミスターX\n" +
                   "\t魔法少女まどか☆マギカ\t300\n" +
                   "Amount owed is 300\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
 
                 rental = new Rental(movie, 4);
                 customer.addRental(rental);
@@ -279,7 +279,39 @@
                   "Rental Record for ミスターX\n" +
                   "\t魔法少女まどか☆マギカ\t450\n" +
                   "Amount owed is 450\n" +
-                  "You earned 0 frequent renter points";
+                  "You earned 1 frequent renter points";
+
+                rental = new Rental(movie, 5);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+            });
+
+            suite("新作", () => {
+              setup(() => {
+                movie = new Movie("バタリアン6", Movie.NEW_RELEASE);
+              });
+
+              test("1日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\tバタリアン6\t300\n" +
+                  "Amount owed is 300\n" +
+                  "You earned 1 frequent renter points";
+
+                rental = new Rental(movie, 1);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("5日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\tバタリアン6\t1500\n" +
+                  "Amount owed is 1500\n" +
+                  "You earned 2 frequent renter points";
 
                 rental = new Rental(movie, 5);
                 customer.addRental(rental);
@@ -366,12 +398,23 @@
                   if (each.daysRented > 2)
                     thisAmount += (each.daysRented - 2) * 150;
                   break;
+                case Movie.NEW_RELEASE:
+                  thisAmount += each.daysRented * 300;
+                  break;
                 case Movie.CHILDRENS:
                   thisAmount += 150;
                   if (each.daysRented > 3)
                     thisAmount += (each.daysRented - 3) * 150;
                   break;
               }
+              // レンタルポイントを加算
+              frequentRenterPoints++;
+              // 新作を２日以上借りた場合はボーナスポイント
+              if (
+                each.movie.priceCode === Movie.NEW_RELEASE &&
+                each.daysRented > 1
+              )
+                frequentRenterPoints++;
               // この貸し出しに関する数値の表示
               result += `\t${each.movie.title}\t${thisAmount}\n`;
               totalAmount += thisAmount;
