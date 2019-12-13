@@ -49,9 +49,9 @@ const sequencDiagram = (() => {
    activate aCustomer
        aCustomer -> aCustomer :*[for all rental]
        activate aCustomer
-           aCustomer -> aRental :getMovie
-           aCustomer -> aMovie :getPriceCode
-           aCustomer -> aRental :getDaysRented
+           aCustomer -> aRental :movie
+           aCustomer -> aMovie :priceCode
+           aCustomer -> aRental :daysRented
        deactivate aCustomer
    deactivate aCustomer
           `;
