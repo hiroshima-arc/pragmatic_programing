@@ -319,6 +319,56 @@
                 assert.equal(result, customer.statement());
               });
             });
+
+            let regular;
+            let childrens;
+            let newRelease;
+            setup(() => {
+              regular = new Movie(
+                "アタック・オブ・ザ・キラートマト",
+                Movie.REGULAR
+              );
+              childrens = new Movie("魔法少女まどか☆マギカ", Movie.CHILDRENS);
+              newRelease = new Movie("バタリアン6", Movie.NEW_RELEASE);
+            });
+
+            test("一般向けと子供向けと新作を1日借りる", () => {
+              result =
+                "Rental Record for ミスターX\n" +
+                "\tアタック・オブ・ザ・キラートマト\t200\n" +
+                "\t魔法少女まどか☆マギカ\t150\n" +
+                "\tバタリアン6\t300\n" +
+                "Amount owed is 650\n" +
+                "You earned 3 frequent renter points";
+
+              rental = new Rental(regular, 1);
+              customer.addRental(rental);
+              rental = new Rental(childrens, 1);
+              customer.addRental(rental);
+              rental = new Rental(newRelease, 1);
+              customer.addRental(rental);
+
+              assert.equal(result, customer.statement());
+            });
+
+            test("一般向けと子供向けと新作を5日借りる", () => {
+              result =
+                "Rental Record for ミスターX\n" +
+                "\tアタック・オブ・ザ・キラートマト\t650\n" +
+                "\t魔法少女まどか☆マギカ\t450\n" +
+                "\tバタリアン6\t1500\n" +
+                "Amount owed is 2600\n" +
+                "You earned 4 frequent renter points";
+
+              rental = new Rental(regular, 5);
+              customer.addRental(rental);
+              rental = new Rental(childrens, 5);
+              customer.addRental(rental);
+              rental = new Rental(newRelease, 5);
+              customer.addRental(rental);
+
+              assert.equal(result, customer.statement());
+            });
           });
         });
         class Movie {
@@ -422,8 +472,6 @@
             // フッタ部分の追加
             result += `Amount owed is ${totalAmount}\n`;
             result += `You earned ${frequentRenterPoints} frequent renter points`;
-
-            console.log(result);
             return result;
           }
         }
