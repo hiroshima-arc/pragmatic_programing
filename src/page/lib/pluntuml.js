@@ -20,6 +20,10 @@ const classDiagram = (() => {
   const outputId = "class-im";
   const source = `
 class Movie {
+  {static} CHILDRENS
+  {static} REGULAR
+  {static} NEW_RELEASE
+  title:string
   priceCode:int
 }
 class Rental {

@@ -31,6 +31,7 @@
     <!-- /ナビゲーションバー -->
     <!-- メイン -->
     <main>
+      <section id="mocha"></section>
       <!-- コンテンツ01 -->
       <div id="app-dev"></div>
       <!-- /コンテンツ01 -->
@@ -40,7 +41,6 @@
     <div id="footer"></div>
     <!-- /フッター -->
     <div id="dev">
-      <section id="mocha"></section>
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script
@@ -95,6 +95,64 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
       <script>
         mocha.setup("tdd");
+
+        const assert = chai.assert;
+        suite("MovieTest", () => {
+          let movie;
+          setup(() => {
+            movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+          });
+
+          test("区分を持っている", () => {
+            assert.equal(2, Movie.CHILDRENS);
+            assert.equal(0, Movie.REGULAR);
+            assert.equal(1, Movie.NEW_RELEASE);
+          });
+
+          test("タイトルを保持する", () => {
+            assert.equal("アタック・オブ・ザ・キラートマト", movie.title);
+          });
+
+          test("プライスコードを保持する", () => {
+            assert.equal(100, movie.priceCode);
+          });
+
+          test("プライスコードを変更する", () => {
+            movie.priceCode = 10;
+            assert.equal(10, movie.priceCode);
+          });
+        });
+
+        class Movie {
+          constructor(title, priceCode) {
+            this._title = title;
+            this._priceCode = priceCode;
+          }
+
+          static get CHILDRENS() {
+            return 2;
+          }
+
+          static get REGULAR() {
+            return 0;
+          }
+
+          static get NEW_RELEASE() {
+            return 1;
+          }
+
+          get title() {
+            return this._title;
+          }
+
+          get priceCode() {
+            return this._priceCode;
+          }
+
+          set priceCode(arg) {
+            this._priceCode = arg;
+          }
+        }
       </script>
       <script>
         const dev = document.querySelector("#app-dev");
