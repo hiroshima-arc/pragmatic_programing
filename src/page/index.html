@@ -509,6 +509,23 @@
           </div>
         `;
         }
+
+        const customer = new Customer("ミスターX");
+        const regular = new Movie(
+          "アタック・オブ・ザ・キラートマト",
+          Movie.REGULAR
+        );
+        const childrens = new Movie("魔法少女まどか☆マギカ", Movie.CHILDRENS);
+        const newRelease = new Movie("バタリアン6", Movie.NEW_RELEASE);
+        let rental = new Rental(regular, 1);
+        customer.addRental(rental);
+        rental = new Rental(childrens, 1);
+        customer.addRental(rental);
+        rental = new Rental(newRelease, 1);
+        customer.addRental(rental);
+
+        document.querySelector("#video-rental-app").innerHTML =
+          "<pre>" + customer.statement() + "</pre>";
       </script>
       <script src="./lib/markdown.js"></script>
       <script src="./lib/pluntuml.js"></script>
