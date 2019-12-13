@@ -229,6 +229,64 @@
                 assert.equal(result, customer.statement());
               });
             });
+
+            suite("子供向け", () => {
+              setup(() => {
+                movie = new Movie("魔法少女まどか☆マギカ", Movie.CHILDRENS);
+              });
+
+              test("1日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\t魔法少女まどか☆マギカ\t150\n" +
+                  "Amount owed is 150\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 1);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("3日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\t魔法少女まどか☆マギカ\t150\n" +
+                  "Amount owed is 150\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 3);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("4日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\t魔法少女まどか☆マギカ\t300\n" +
+                  "Amount owed is 300\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 4);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+
+              test("5日借りる", () => {
+                result =
+                  "Rental Record for ミスターX\n" +
+                  "\t魔法少女まどか☆マギカ\t450\n" +
+                  "Amount owed is 450\n" +
+                  "You earned 0 frequent renter points";
+
+                rental = new Rental(movie, 5);
+                customer.addRental(rental);
+
+                assert.equal(result, customer.statement());
+              });
+            });
           });
         });
         class Movie {
@@ -307,6 +365,12 @@
                   thisAmount += 200;
                   if (each.daysRented > 2)
                     thisAmount += (each.daysRented - 2) * 150;
+                  break;
+                case Movie.CHILDRENS:
+                  thisAmount += 150;
+                  if (each.daysRented > 3)
+                    thisAmount += (each.daysRented - 3) * 150;
+                  break;
               }
               // この貸し出しに関する数値の表示
               result += `\t${each.movie.title}\t${thisAmount}\n`;
