@@ -652,6 +652,28 @@
             return result;
           }
         }
+
+        class Price {
+          getPriceCode() {}
+        }
+
+        class ChildrensPrice extends Price {
+          getPriceCode() {
+            return Movie.CHILDRENS;
+          }
+        }
+
+        class NewReleeeasePrice extends Price {
+          getPriceCode() {
+            return Movie.NEW_RELEASE;
+          }
+        }
+
+        class RegularPrice extends Price {
+          getPriceCode() {
+            return Movie.REGULAR;
+          }
+        }
       </script>
       <script>
         const dev = document.querySelector("#app-dev");
