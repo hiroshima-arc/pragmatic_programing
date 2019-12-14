@@ -522,23 +522,8 @@
             let frequentRenterPoints = 0;
             let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
-              let thisAmount = 0;
-              // 1行ごとに金額を計算
-              switch (each.movie.priceCode) {
-                case Movie.REGULAR:
-                  thisAmount += 200;
-                  if (each.daysRented > 2)
-                    thisAmount += (each.daysRented - 2) * 150;
-                  break;
-                case Movie.NEW_RELEASE:
-                  thisAmount += each.daysRented * 300;
-                  break;
-                case Movie.CHILDRENS:
-                  thisAmount += 150;
-                  if (each.daysRented > 3)
-                    thisAmount += (each.daysRented - 3) * 150;
-                  break;
-              }
+              let thisAmount = this.amountFor(each);
+
               // レンタルポイントを加算
               frequentRenterPoints++;
               // 新作を２日以上借りた場合はボーナスポイント
@@ -555,6 +540,26 @@
             result += `請求額 ${totalAmount}\n`;
             result += `獲得ポイント ${frequentRenterPoints}`;
             return result;
+          }
+
+          amountFor(each) {
+            let thisAmount = 0;
+            switch (each.movie.priceCode) {
+              case Movie.REGULAR:
+                thisAmount += 200;
+                if (each.daysRented > 2)
+                  thisAmount += (each.daysRented - 2) * 150;
+                break;
+              case Movie.NEW_RELEASE:
+                thisAmount += each.daysRented * 300;
+                break;
+              case Movie.CHILDRENS:
+                thisAmount += 150;
+                if (each.daysRented > 3)
+                  thisAmount += (each.daysRented - 3) * 150;
+                break;
+            }
+            return thisAmount;
           }
         }
       </script>
