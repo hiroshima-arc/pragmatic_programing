@@ -540,8 +540,6 @@
             let frequentRenterPoints = 0;
             let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
-              let thisAmount = each.getCharge();
-
               // レンタルポイントを加算
               frequentRenterPoints++;
               // 新作を２日以上借りた場合はボーナスポイント
@@ -551,8 +549,8 @@
               )
                 frequentRenterPoints++;
               // この貸し出しに関する数値の表示
-              result += `\t${each.movie.title}\t${thisAmount}\n`;
-              totalAmount += thisAmount;
+              result += `\t${each.movie.title}\t${each.getCharge()}\n`;
+              totalAmount += each.getCharge();
             });
             // フッタ部分の追加
             result += `請求額 ${totalAmount}\n`;
