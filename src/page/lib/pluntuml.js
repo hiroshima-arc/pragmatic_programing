@@ -36,6 +36,8 @@ class Customer {
   name:String
   rental:Rental
   statement()
+  _getTotalCharge()
+  _getTotalFrequentRenterPoints()
 }
 Movie "1"<-"*" Rental
 Rental "*"<-"1" Customer
@@ -49,13 +51,16 @@ const sequencDiagram = (() => {
   const source = `
 -> aCustomer: statement
    activate aCustomer
-       aCustomer -> aCustomer :*[for all rental]
+       aCustomer -> aCustomer :getTotalCharge
        activate aCustomer
-           aCustomer -> aRental :getCharge
+           aCustomer -> aRental :*[for all rentals] getCharge
            activate aRental
               aRental -> aMovie :priceCode
            deactivate aRental
-           aCustomer -> aRental :getFrequentRenterPoints
+       deactivate aCustomer
+       aCustomer -> aCustomer :getTotalFrequentRentalPoints
+       activate aCustomer
+           aCustomer -> aRental :*[for all rentals] getFrequentRenterPoints
            activate aRental
               aRental -> aMovie :priceCode
            deactivate aRental
