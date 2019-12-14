@@ -515,6 +515,17 @@
             }
             return result;
           }
+
+          getFrequentRenterPoints() {
+            if (
+              this.movie.priceCode === Movie.NEW_RELEASE &&
+              this.daysRented > 1
+            ) {
+              return 2;
+            } else {
+              return 1;
+            }
+          }
         }
 
         class Customer {
@@ -540,14 +551,8 @@
             let frequentRenterPoints = 0;
             let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
-              // レンタルポイントを加算
-              frequentRenterPoints++;
-              // 新作を２日以上借りた場合はボーナスポイント
-              if (
-                each.movie.priceCode === Movie.NEW_RELEASE &&
-                each.daysRented > 1
-              )
-                frequentRenterPoints++;
+              frequentRenterPoints += each.getFrequentRenterPoints();
+
               // この貸し出しに関する数値の表示
               result += `\t${each.movie.title}\t${each.getCharge()}\n`;
               totalAmount += each.getCharge();
