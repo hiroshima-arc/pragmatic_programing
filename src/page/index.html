@@ -182,6 +182,23 @@
           });
 
           suite("計算書を生成する", () => {
+            function createExpectedResult(params) {
+              return (
+                "Rental Record for " +
+                params.customerName +
+                "\n" +
+                params.rentals
+                  .map(i => "\t" + i.movieTitleName + "\t" + i.price + "\n")
+                  .join("") +
+                "Amount owed is " +
+                params.totalPrice +
+                "\n" +
+                "You earned " +
+                params.point +
+                " frequent renter points"
+              );
+            }
+
             suite("一般向け", () => {
               setup(() => {
                 movie = new Movie(
@@ -191,11 +208,17 @@
               });
 
               test("1日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\tアタック・オブ・ザ・キラートマト\t200\n" +
-                  "Amount owed is 200\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "アタック・オブ・ザ・キラートマト",
+                      price: 200
+                    }
+                  ],
+                  totalPrice: 200,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 1);
                 customer.addRental(rental);
@@ -204,11 +227,17 @@
               });
 
               test("3日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\tアタック・オブ・ザ・キラートマト\t350\n" +
-                  "Amount owed is 350\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "アタック・オブ・ザ・キラートマト",
+                      price: 350
+                    }
+                  ],
+                  totalPrice: 350,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 3);
                 customer.addRental(rental);
@@ -217,11 +246,17 @@
               });
 
               test("4日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\tアタック・オブ・ザ・キラートマト\t500\n" +
-                  "Amount owed is 500\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "アタック・オブ・ザ・キラートマト",
+                      price: 500
+                    }
+                  ],
+                  totalPrice: 500,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 4);
                 customer.addRental(rental);
@@ -236,11 +271,17 @@
               });
 
               test("1日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\t魔法少女まどか☆マギカ\t150\n" +
-                  "Amount owed is 150\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "魔法少女まどか☆マギカ",
+                      price: 150
+                    }
+                  ],
+                  totalPrice: 150,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 1);
                 customer.addRental(rental);
@@ -249,11 +290,17 @@
               });
 
               test("3日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\t魔法少女まどか☆マギカ\t150\n" +
-                  "Amount owed is 150\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "魔法少女まどか☆マギカ",
+                      price: 150
+                    }
+                  ],
+                  totalPrice: 150,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 3);
                 customer.addRental(rental);
@@ -262,11 +309,17 @@
               });
 
               test("4日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\t魔法少女まどか☆マギカ\t300\n" +
-                  "Amount owed is 300\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "魔法少女まどか☆マギカ",
+                      price: 300
+                    }
+                  ],
+                  totalPrice: 300,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 4);
                 customer.addRental(rental);
@@ -275,11 +328,17 @@
               });
 
               test("5日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\t魔法少女まどか☆マギカ\t450\n" +
-                  "Amount owed is 450\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "魔法少女まどか☆マギカ",
+                      price: 450
+                    }
+                  ],
+                  totalPrice: 450,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 5);
                 customer.addRental(rental);
@@ -294,11 +353,17 @@
               });
 
               test("1日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\tバタリアン6\t300\n" +
-                  "Amount owed is 300\n" +
-                  "You earned 1 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "バタリアン6",
+                      price: 300
+                    }
+                  ],
+                  totalPrice: 300,
+                  point: 1
+                });
 
                 rental = new Rental(movie, 1);
                 customer.addRental(rental);
@@ -307,11 +372,17 @@
               });
 
               test("5日借りる", () => {
-                result =
-                  "Rental Record for ミスターX\n" +
-                  "\tバタリアン6\t1500\n" +
-                  "Amount owed is 1500\n" +
-                  "You earned 2 frequent renter points";
+                result = createExpectedResult({
+                  customerName: "ミスターX",
+                  rentals: [
+                    {
+                      movieTitleName: "バタリアン6",
+                      price: 1500
+                    }
+                  ],
+                  totalPrice: 1500,
+                  point: 2
+                });
 
                 rental = new Rental(movie, 5);
                 customer.addRental(rental);
@@ -333,13 +404,19 @@
             });
 
             test("一般向けと子供向けと新作を1日借りる", () => {
-              result =
-                "Rental Record for ミスターX\n" +
-                "\tアタック・オブ・ザ・キラートマト\t200\n" +
-                "\t魔法少女まどか☆マギカ\t150\n" +
-                "\tバタリアン6\t300\n" +
-                "Amount owed is 650\n" +
-                "You earned 3 frequent renter points";
+              result = createExpectedResult({
+                customerName: "ミスターX",
+                rentals: [
+                  {
+                    movieTitleName: "アタック・オブ・ザ・キラートマト",
+                    price: 200
+                  },
+                  { movieTitleName: "魔法少女まどか☆マギカ", price: 150 },
+                  { movieTitleName: "バタリアン6", price: 300 }
+                ],
+                totalPrice: 650,
+                point: 3
+              });
 
               rental = new Rental(regular, 1);
               customer.addRental(rental);
@@ -352,13 +429,19 @@
             });
 
             test("一般向けと子供向けと新作を5日借りる", () => {
-              result =
-                "Rental Record for ミスターX\n" +
-                "\tアタック・オブ・ザ・キラートマト\t650\n" +
-                "\t魔法少女まどか☆マギカ\t450\n" +
-                "\tバタリアン6\t1500\n" +
-                "Amount owed is 2600\n" +
-                "You earned 4 frequent renter points";
+              result = createExpectedResult({
+                customerName: "ミスターX",
+                rentals: [
+                  {
+                    movieTitleName: "アタック・オブ・ザ・キラートマト",
+                    price: 650
+                  },
+                  { movieTitleName: "魔法少女まどか☆マギカ", price: 450 },
+                  { movieTitleName: "バタリアン6", price: 1500 }
+                ],
+                totalPrice: 2600,
+                point: 4
+              });
 
               rental = new Rental(regular, 5);
               customer.addRental(rental);
