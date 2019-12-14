@@ -542,24 +542,24 @@
             return result;
           }
 
-          amountFor(each) {
-            let thisAmount = 0;
-            switch (each.movie.priceCode) {
+          amountFor(aRental) {
+            let result = 0;
+            switch (aRental.movie.priceCode) {
               case Movie.REGULAR:
-                thisAmount += 200;
-                if (each.daysRented > 2)
-                  thisAmount += (each.daysRented - 2) * 150;
+                result += 200;
+                if (aRental.daysRented > 2)
+                  result += (aRental.daysRented - 2) * 150;
                 break;
               case Movie.NEW_RELEASE:
-                thisAmount += each.daysRented * 300;
+                result += aRental.daysRented * 300;
                 break;
               case Movie.CHILDRENS:
-                thisAmount += 150;
-                if (each.daysRented > 3)
-                  thisAmount += (each.daysRented - 3) * 150;
+                result += 150;
+                if (aRental.daysRented > 3)
+                  result += (aRental.daysRented - 3) * 150;
                 break;
             }
-            return thisAmount;
+            return result;
           }
         }
       </script>
