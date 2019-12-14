@@ -605,36 +605,14 @@
           }
 
           htmlStatement() {
-            let frequentRenterPoints = 0;
-            let result = `<H1>請求明細 <EM>${this.name} 様</EM></H1><P>\n`;
-            this.rentals.forEach(each => {
-              frequentRenterPoints += each.getFrequentRenterPoints();
-
-              // この貸し出しに関する数値の表示
-              result += `${each.movie.title}: ${each.getCharge()}<BR>\n`;
-            });
-            // フッタ部分の追加
-            result += `<P>請求額 <EM>${this._getTotalCharge()}</EM><P>\n`;
-            result += `獲得ポイント <EM>${this._getTotalFrequentRenterPoints()}</EM><P>`;
-            return result;
+            return new htmlStatement().value(this);
           }
 
           statement() {
-            let frequentRenterPoints = 0;
-            let result = `請求明細 ${this.name} 様\n`;
-            this.rentals.forEach(each => {
-              frequentRenterPoints += each.getFrequentRenterPoints();
-
-              // この貸し出しに関する数値の表示
-              result += `\t${each.movie.title}\t${each.getCharge()}\n`;
-            });
-            // フッタ部分の追加
-            result += `請求額 ${this._getTotalCharge()}\n`;
-            result += `獲得ポイント ${this._getTotalFrequentRenterPoints()}`;
-            return result;
+            return new TextStatement().value(this);
           }
 
-          _getTotalFrequentRenterPoints() {
+          getTotalFrequentRenterPoints() {
             let result = 0;
             this.rentals.forEach(each => {
               result += each.getFrequentRenterPoints();
@@ -642,7 +620,7 @@
             return result;
           }
 
-          _getTotalCharge() {
+          getTotalCharge() {
             let result = 0;
             this.rentals.forEach(each => {
               result += each.getCharge();
@@ -695,6 +673,42 @@
           getCharge(daysRented) {
             let result = 200;
             if (daysRented > 2) result += (daysRented - 2) * 150;
+            return result;
+          }
+        }
+
+        class Statement {}
+
+        class TextStatement extends Statement {
+          value(aCustomer) {
+            let frequentRenterPoints = 0;
+            let result = `請求明細 ${aCustomer.name} 様\n`;
+            aCustomer.rentals.forEach(each => {
+              frequentRenterPoints += each.getFrequentRenterPoints();
+
+              // この貸し出しに関する数値の表示
+              result += `\t${each.movie.title}\t${each.getCharge()}\n`;
+            });
+            // フッタ部分の追加
+            result += `請求額 ${aCustomer.getTotalCharge()}\n`;
+            result += `獲得ポイント ${aCustomer.getTotalFrequentRenterPoints()}`;
+            return result;
+          }
+        }
+
+        class htmlStatement extends Statement {
+          value(aCustomer) {
+            let frequentRenterPoints = 0;
+            let result = `<H1>請求明細 <EM>${aCustomer.name} 様</EM></H1><P>\n`;
+            aCustomer.rentals.forEach(each => {
+              frequentRenterPoints += each.getFrequentRenterPoints();
+
+              // この貸し出しに関する数値の表示
+              result += `${each.movie.title}: ${each.getCharge()}<BR>\n`;
+            });
+            // フッタ部分の追加
+            result += `<P>請求額 <EM>${aCustomer.getTotalCharge()}</EM><P>\n`;
+            result += `獲得ポイント <EM>${aCustomer.getTotalFrequentRenterPoints()}</EM><P>`;
             return result;
           }
         }
