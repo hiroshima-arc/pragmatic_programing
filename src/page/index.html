@@ -159,7 +159,10 @@
 
           suite("レンタル情報を保持する", () => {
             setup(() => {
-              movie = new Movie("アタック・オブ・ザ・キラートマト", 100);
+              movie = new Movie(
+                "アタック・オブ・ザ・キラートマト",
+                Movie.REGULAR
+              );
               rental = new Rental(movie, 3);
               customer.addRental(rental);
             });
@@ -173,7 +176,7 @@
             });
 
             test("借りたビデオの価格区分を保持する", () => {
-              assert.equal(100, customer.rentals[0].movie.priceCode);
+              assert.equal(0, customer.rentals[0].movie.priceCode);
             });
 
             test("借りる日数を保持する", () => {
@@ -531,11 +534,23 @@
           }
 
           get priceCode() {
-            return this._priceCode;
+            return this._price.getPriceCode();
           }
 
           set priceCode(arg) {
-            this._priceCode = arg;
+            switch (arg) {
+              case Movie.REGULAR:
+                this._price = new RegularPrice();
+                break;
+              case Movie.CHILDRENS:
+                this._price = new ChildrensPrice();
+                break;
+              case Movie.NEW_RELEASE:
+                this._price = new NewReleeeasePrice();
+                break;
+              default:
+                throw new Error("不正な料金コード");
+            }
           }
 
           getCharge(daysRented) {
