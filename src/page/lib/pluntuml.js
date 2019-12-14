@@ -19,6 +19,20 @@ const classDiagram = (() => {
   const inputId = "class-diagram-input";
   const outputId = "class-im";
   const source = `
+class Price {
+  getCharge(days: int)
+  getFrequentRenterPoints(days: int)
+}
+class ChildrensPrice {
+  getCharge(days: int)
+}
+class NewReleasePrice {
+  getCharge(days: int)
+  getFrequentRenterPoints(days: int)
+}
+class RegularPrice {
+  getCharge(days: int)
+}
 class Movie {
   {static} CHILDRENS
   {static} REGULAR
@@ -41,6 +55,10 @@ class Customer {
   _getTotalCharge()
   _getTotalFrequentRenterPoints()
 }
+Price <|-- ChildrensPrice
+Price <|-- NewReleasePrice
+Price <|-- RegularPrice
+Price "1"<- Movie
 Movie "1"<-"*" Rental
 Rental "*"<-"1" Customer
           `;
@@ -57,14 +75,20 @@ const sequencDiagram = (() => {
        activate aCustomer
            aCustomer -> aRental :*[for all rentals] getCharge
            activate aRental
-              aRental -> aMovie :priceCode
+              aRental -> aMovie :getCharge
+              activate aMovie
+                  aMovie -> aPrice :getCharge
+              deactivate aMovie
            deactivate aRental
        deactivate aCustomer
        aCustomer -> aCustomer :getTotalFrequentRentalPoints
        activate aCustomer
            aCustomer -> aRental :*[for all rentals] getFrequentRenterPoints
            activate aRental
-              aRental -> aMovie :priceCode
+              aRental -> aMovie :getFrequentRenterPoints
+              activate aMovie
+                  aMovie -> aPrice :getFrequentRenterPoints
+              deactivate aMovie
            deactivate aRental
        deactivate aCustomer
    deactivate aCustomer
