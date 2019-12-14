@@ -45,7 +45,7 @@ if (spec) {
 #### 計算書をHTMLで出力してWebブラウザで参照したい
 
 ## ToDoリスト
-- [ ] statementメソッドの分割、再配置
+- [x] statementメソッドの分割、再配置
 - [ ] 料金計算の条件式をポリモーフィズムに置き換える
 - [ ] Template Methodの形成
 `
