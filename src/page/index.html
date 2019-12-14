@@ -540,7 +540,7 @@
             let frequentRenterPoints = 0;
             let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
-              let thisAmount = this.amountFor(each);
+              let thisAmount = each.getCharge();
 
               // レンタルポイントを加算
               frequentRenterPoints++;
@@ -558,10 +558,6 @@
             result += `請求額 ${totalAmount}\n`;
             result += `獲得ポイント ${frequentRenterPoints}`;
             return result;
-          }
-
-          amountFor(aRental) {
-            return aRental.getCharge();
           }
         }
       </script>
