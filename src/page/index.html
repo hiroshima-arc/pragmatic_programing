@@ -537,6 +537,24 @@
           set priceCode(arg) {
             this._priceCode = arg;
           }
+
+          getCharge(daysRented) {
+            let result = 0;
+            switch (this.priceCode) {
+              case Movie.REGULAR:
+                result += 200;
+                if (daysRented > 2) result += (daysRented - 2) * 150;
+                break;
+              case Movie.NEW_RELEASE:
+                result += daysRented * 300;
+                break;
+              case Movie.CHILDRENS:
+                result += 150;
+                if (daysRented > 3) result += (daysRented - 3) * 150;
+                break;
+            }
+            return result;
+          }
         }
 
         class Rental {
@@ -554,21 +572,7 @@
           }
 
           getCharge() {
-            let result = 0;
-            switch (this.movie.priceCode) {
-              case Movie.REGULAR:
-                result += 200;
-                if (this.daysRented > 2) result += (this.daysRented - 2) * 150;
-                break;
-              case Movie.NEW_RELEASE:
-                result += this.daysRented * 300;
-                break;
-              case Movie.CHILDRENS:
-                result += 150;
-                if (this.daysRented > 3) result += (this.daysRented - 3) * 150;
-                break;
-            }
-            return result;
+            return this.movie.getCharge(this.daysRented);
           }
 
           getFrequentRenterPoints() {
