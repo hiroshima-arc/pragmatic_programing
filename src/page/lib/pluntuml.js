@@ -29,6 +29,8 @@ class Movie {
 class Rental {
   movie: Movie
   daysRented:int
+  getCharge()
+  getFrequentRenterPoints()
 }
 class Customer {
   name:String
@@ -49,9 +51,14 @@ const sequencDiagram = (() => {
    activate aCustomer
        aCustomer -> aCustomer :*[for all rental]
        activate aCustomer
-           aCustomer -> aRental :movie
-           aCustomer -> aMovie :priceCode
-           aCustomer -> aRental :daysRented
+           aCustomer -> aRental :getCharge
+           activate aRental
+              aRental -> aMovie :priceCode
+           deactivate aRental
+           aCustomer -> aRental :getFrequentRenterPoints
+           activate aRental
+              aRental -> aMovie :priceCode
+           deactivate aRental
        deactivate aCustomer
    deactivate aCustomer
           `;
