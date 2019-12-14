@@ -555,11 +555,18 @@
 
               // この貸し出しに関する数値の表示
               result += `\t${each.movie.title}\t${each.getCharge()}\n`;
-              totalAmount += each.getCharge();
             });
             // フッタ部分の追加
-            result += `請求額 ${totalAmount}\n`;
+            result += `請求額 ${this._getTotalCharge()}\n`;
             result += `獲得ポイント ${frequentRenterPoints}`;
+            return result;
+          }
+
+          _getTotalCharge() {
+            let result = 0;
+            this.rentals.forEach(each => {
+              result += each.getCharge();
+            });
             return result;
           }
         }
