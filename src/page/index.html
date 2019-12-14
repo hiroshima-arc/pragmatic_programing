@@ -184,18 +184,17 @@
           suite("計算書を生成する", () => {
             function createExpectedResult(params) {
               return (
-                "Rental Record for " +
+                "請求明細 " +
                 params.customerName +
-                "\n" +
+                " 様\n" +
                 params.rentals
                   .map(i => "\t" + i.movieTitleName + "\t" + i.price + "\n")
                   .join("") +
-                "Amount owed is " +
+                "請求額 " +
                 params.totalPrice +
                 "\n" +
-                "You earned " +
-                params.point +
-                " frequent renter points"
+                "獲得ポイント " +
+                params.point
               );
             }
 
@@ -521,7 +520,7 @@
           statement() {
             let totalAmount = 0;
             let frequentRenterPoints = 0;
-            let result = `Rental Record for ${this.name}\n`;
+            let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
               let thisAmount = 0;
               // 1行ごとに金額を計算
@@ -553,8 +552,8 @@
               totalAmount += thisAmount;
             });
             // フッタ部分の追加
-            result += `Amount owed is ${totalAmount}\n`;
-            result += `You earned ${frequentRenterPoints} frequent renter points`;
+            result += `請求額 ${totalAmount}\n`;
+            result += `獲得ポイント ${frequentRenterPoints}`;
             return result;
           }
         }
