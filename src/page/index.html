@@ -554,21 +554,7 @@
           }
 
           getCharge(daysRented) {
-            let result = 0;
-            switch (this.priceCode) {
-              case Movie.REGULAR:
-                result += 200;
-                if (daysRented > 2) result += (daysRented - 2) * 150;
-                break;
-              case Movie.NEW_RELEASE:
-                result += daysRented * 300;
-                break;
-              case Movie.CHILDRENS:
-                result += 150;
-                if (daysRented > 3) result += (daysRented - 3) * 150;
-                break;
-            }
-            return result;
+            return this._price.getCharge(daysRented);
           }
 
           getFrequentRenterPoints(daysRented) {
@@ -670,6 +656,24 @@
 
         class Price {
           getPriceCode() {}
+
+          getCharge(daysRented) {
+            let result = 0;
+            switch (this.getPriceCode()) {
+              case Movie.REGULAR:
+                result += 200;
+                if (daysRented > 2) result += (daysRented - 2) * 150;
+                break;
+              case Movie.NEW_RELEASE:
+                result += daysRented * 300;
+                break;
+              case Movie.CHILDRENS:
+                result += 150;
+                if (daysRented > 3) result += (daysRented - 3) * 150;
+                break;
+            }
+            return result;
+          }
         }
 
         class ChildrensPrice extends Price {
