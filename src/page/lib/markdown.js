@@ -47,7 +47,7 @@ if (spec) {
 ## ToDoリスト
 - [x] statementメソッドの分割、再配置
 - [x] 料金計算の条件式をポリモーフィズムに置き換える
-- [ ] Template Methodの形成
+- [x] Template Methodの形成
 `
   )
 }

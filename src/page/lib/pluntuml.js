@@ -55,12 +55,31 @@ class Customer {
   _getTotalCharge()
   _getTotalFrequentRenterPoints()
 }
+class Statement {
+  value(Customer)
+  headerString(Customer)
+  eachRentalString(Rental)
+  footerString(Customer)
+}
+class HtmlStatement {
+  headerString(Customer)
+  eachRentalString(Rental)
+  footerString(Customer)
+}
+class TextStatement {
+  headerString(Customer)
+  eachRentalString(Rental)
+  footerString(Customer)
+}
 Price <|-- ChildrensPrice
 Price <|-- NewReleasePrice
 Price <|-- RegularPrice
 Price "1"<- Movie
 Movie "1"<-"*" Rental
 Rental "*"<-"1" Customer
+Customer -> Statement
+Statement <|-- HtmlStatement
+Statement <|-- TextStatement
           `;
   compress(source, outputId);
 })();
@@ -71,26 +90,27 @@ const sequencDiagram = (() => {
   const source = `
 -> aCustomer: statement
    activate aCustomer
-       aCustomer -> aCustomer :getTotalCharge
-       activate aCustomer
-           aCustomer -> aRental :*[for all rentals] getCharge
+       aCustomer -> Statement :value
+       Statement -> Statement :getTotalCharge
+       activate Statement
+           Statement -> aRental :*[for all rentals] getCharge
            activate aRental
               aRental -> aMovie :getCharge
               activate aMovie
                   aMovie -> aPrice :getCharge
               deactivate aMovie
            deactivate aRental
-       deactivate aCustomer
-       aCustomer -> aCustomer :getTotalFrequentRentalPoints
-       activate aCustomer
-           aCustomer -> aRental :*[for all rentals] getFrequentRenterPoints
+       deactivate Statement
+       Statement -> Statement :getTotalFrequentRentalPoints
+       activate Statement
+           Statement -> aRental :*[for all rentals] getFrequentRenterPoints
            activate aRental
               aRental -> aMovie :getFrequentRenterPoints
               activate aMovie
                   aMovie -> aPrice :getFrequentRenterPoints
               deactivate aMovie
            deactivate aRental
-       deactivate aCustomer
+       deactivate Statement
    deactivate aCustomer
           `;
   compress(source, outputId);
