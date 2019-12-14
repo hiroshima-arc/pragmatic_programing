@@ -452,6 +452,61 @@
               assert.equal(result, customer.statement());
             });
           });
+
+          suite("HTML計算書を生成する", () => {
+            function createExpectedResult(params) {
+              return (
+                "<H1>請求明細 <EM>" +
+                params.customerName +
+                " 様</EM></H1><P>\n" +
+                params.rentals
+                  .map(i => i.movieTitleName + ": " + i.price + "<BR>\n")
+                  .join("") +
+                "<P>請求額 <EM>" +
+                params.totalPrice +
+                "</EM><P>\n" +
+                "獲得ポイント <EM>" +
+                params.point +
+                "</EM><P>"
+              );
+            }
+            let regular;
+            let childrens;
+            let newRelease;
+            setup(() => {
+              regular = new Movie(
+                "アタック・オブ・ザ・キラートマト",
+                Movie.REGULAR
+              );
+              childrens = new Movie("魔法少女まどか☆マギカ", Movie.CHILDRENS);
+              newRelease = new Movie("バタリアン6", Movie.NEW_RELEASE);
+            });
+
+            test("一般向けと子供向けと新作を1日借りる", () => {
+              result = createExpectedResult({
+                customerName: "ミスターX",
+                rentals: [
+                  {
+                    movieTitleName: "アタック・オブ・ザ・キラートマト",
+                    price: 200
+                  },
+                  { movieTitleName: "魔法少女まどか☆マギカ", price: 150 },
+                  { movieTitleName: "バタリアン6", price: 300 }
+                ],
+                totalPrice: 650,
+                point: 3
+              });
+
+              rental = new Rental(regular, 1);
+              customer.addRental(rental);
+              rental = new Rental(childrens, 1);
+              customer.addRental(rental);
+              rental = new Rental(newRelease, 1);
+              customer.addRental(rental);
+
+              assert.equal(result, customer.htmlStatement());
+            });
+          });
         });
         class Movie {
           constructor(title, priceCode) {
@@ -546,8 +601,22 @@
             this._rentals.push(arg);
           }
 
+          htmlStatement() {
+            let frequentRenterPoints = 0;
+            let result = `<H1>請求明細 <EM>${this.name} 様</EM></H1><P>\n`;
+            this.rentals.forEach(each => {
+              frequentRenterPoints += each.getFrequentRenterPoints();
+
+              // この貸し出しに関する数値の表示
+              result += `${each.movie.title}: ${each.getCharge()}<BR>\n`;
+            });
+            // フッタ部分の追加
+            result += `<P>請求額 <EM>${this._getTotalCharge()}</EM><P>\n`;
+            result += `獲得ポイント <EM>${this._getTotalFrequentRenterPoints()}</EM><P>`;
+            return result;
+          }
+
           statement() {
-            let totalAmount = 0;
             let frequentRenterPoints = 0;
             let result = `請求明細 ${this.name} 様\n`;
             this.rentals.forEach(each => {
@@ -627,8 +696,9 @@
         rental = new Rental(newRelease, 1);
         customer.addRental(rental);
 
-        document.querySelector("#video-rental-app").innerHTML =
-          "<pre>" + customer.statement() + "</pre>";
+        document.querySelector(
+          "#video-rental-app"
+        ).innerHTML = customer.htmlStatement();
       </script>
       <script src="./lib/markdown.js"></script>
       <script src="./lib/pluntuml.js"></script>
