@@ -497,6 +497,24 @@
           get daysRented() {
             return this._daysRented;
           }
+
+          getCharge() {
+            let result = 0;
+            switch (this.movie.priceCode) {
+              case Movie.REGULAR:
+                result += 200;
+                if (this.daysRented > 2) result += (this.daysRented - 2) * 150;
+                break;
+              case Movie.NEW_RELEASE:
+                result += this.daysRented * 300;
+                break;
+              case Movie.CHILDRENS:
+                result += 150;
+                if (this.daysRented > 3) result += (this.daysRented - 3) * 150;
+                break;
+            }
+            return result;
+          }
         }
 
         class Customer {
@@ -543,23 +561,7 @@
           }
 
           amountFor(aRental) {
-            let result = 0;
-            switch (aRental.movie.priceCode) {
-              case Movie.REGULAR:
-                result += 200;
-                if (aRental.daysRented > 2)
-                  result += (aRental.daysRented - 2) * 150;
-                break;
-              case Movie.NEW_RELEASE:
-                result += aRental.daysRented * 300;
-                break;
-              case Movie.CHILDRENS:
-                result += 150;
-                if (aRental.daysRented > 3)
-                  result += (aRental.daysRented - 3) * 150;
-                break;
-            }
-            return result;
+            return aRental.getCharge();
           }
         }
       </script>
