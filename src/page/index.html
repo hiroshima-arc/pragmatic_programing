@@ -559,11 +559,7 @@
           }
 
           getFrequentRenterPoints(daysRented) {
-            if (this.priceCode === Movie.NEW_RELEASE && daysRented > 1) {
-              return 2;
-            } else {
-              return 1;
-            }
+            return this._price.getFrequentRenterPoints(daysRented);
           }
         }
 
@@ -659,6 +655,10 @@
           getPriceCode() {}
 
           getCharge(daysRented) {}
+
+          getFrequentRenterPoints(daysRented) {
+            return 1;
+          }
         }
 
         class ChildrensPrice extends Price {
@@ -680,6 +680,10 @@
 
           getCharge(daysRented) {
             return daysRented * 300;
+          }
+
+          getFrequentRenterPoints(daysRented) {
+            return daysRented > 1 ? 2 : 1;
           }
         }
 
