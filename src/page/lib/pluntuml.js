@@ -25,6 +25,8 @@ class Movie {
   {static} NEW_RELEASE
   title:string
   priceCode:int
+  getCharge(days: int)
+  getFrequentRenterPoints(days: int)
 }
 class Rental {
   movie: Movie
