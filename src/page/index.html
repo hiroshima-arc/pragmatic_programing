@@ -677,22 +677,12 @@
           }
         }
 
-        class Statement {}
+        class Statement {
+          headerString(aCustomer) {}
 
-        class TextStatement extends Statement {
-          headerString(aCustomer) {
-            return `請求明細 ${aCustomer.name} 様\n`;
-          }
+          eachRentalString(aRental) {}
 
-          eachRentalString(aRental) {
-            return `\t${aRental.movie.title}\t${aRental.getCharge()}\n`;
-          }
-
-          footerString(aCustomer) {
-            let result = `請求額 ${aCustomer.getTotalCharge()}\n`;
-            result += `獲得ポイント ${aCustomer.getTotalFrequentRenterPoints()}`;
-            return result;
-          }
+          footerString(aCustomer) {}
 
           value(aCustomer) {
             let frequentRenterPoints = 0;
@@ -709,6 +699,22 @@
           }
         }
 
+        class TextStatement extends Statement {
+          headerString(aCustomer) {
+            return `請求明細 ${aCustomer.name} 様\n`;
+          }
+
+          eachRentalString(aRental) {
+            return `\t${aRental.movie.title}\t${aRental.getCharge()}\n`;
+          }
+
+          footerString(aCustomer) {
+            let result = `請求額 ${aCustomer.getTotalCharge()}\n`;
+            result += `獲得ポイント ${aCustomer.getTotalFrequentRenterPoints()}`;
+            return result;
+          }
+        }
+
         class htmlStatement extends Statement {
           headerString(aCustomer) {
             return `<H1>請求明細 <EM>${aCustomer.name} 様</EM></H1><P>\n`;
@@ -721,20 +727,6 @@
           footerString(aCustomer) {
             let result = `<P>請求額 <EM>${aCustomer.getTotalCharge()}</EM><P>\n`;
             result += `獲得ポイント <EM>${aCustomer.getTotalFrequentRenterPoints()}</EM><P>`;
-            return result;
-          }
-
-          value(aCustomer) {
-            let frequentRenterPoints = 0;
-            let result = this.headerString(aCustomer);
-            aCustomer.rentals.forEach(each => {
-              frequentRenterPoints += each.getFrequentRenterPoints();
-
-              // この貸し出しに関する数値の表示
-              result += this.eachRentalString(each);
-            });
-            result += this.footerString(aCustomer);
-            // フッタ部分の追加
             return result;
           }
         }
