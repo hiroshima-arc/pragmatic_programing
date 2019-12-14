@@ -558,7 +558,15 @@
             });
             // フッタ部分の追加
             result += `請求額 ${this._getTotalCharge()}\n`;
-            result += `獲得ポイント ${frequentRenterPoints}`;
+            result += `獲得ポイント ${this._getTotalFrequentRenterPoints()}`;
+            return result;
+          }
+
+          _getTotalFrequentRenterPoints() {
+            let result = 0;
+            this.rentals.forEach(each => {
+              result += each.getFrequentRenterPoints();
+            });
             return result;
           }
 
